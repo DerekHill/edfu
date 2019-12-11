@@ -17,8 +17,14 @@
             "polyfills": "apps/erya/src/polyfills.ts",
             "tsConfig": "apps/erya/tsconfig.app.json",
             "aot": false,
-            "assets": ["apps/erya/src/favicon.ico", "apps/erya/src/assets"],
-            "styles": ["apps/erya/src/styles.css"],
+            "assets": [
+              "apps/erya/src/favicon.ico",
+              "apps/erya/src/assets"
+            ],
+            "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+              "apps/erya/src/styles.css"
+            ],
             "scripts": []
           },
           "configurations": {
@@ -78,7 +84,10 @@
               "apps/erya/tsconfig.app.json",
               "apps/erya/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!apps/erya/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/erya/**"
+            ]
           }
         },
         "test": {
@@ -112,8 +121,13 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["apps/erya-e2e/tsconfig.e2e.json"],
-            "exclude": ["**/node_modules/**", "!apps/erya-e2e/**"]
+            "tsConfig": [
+              "apps/erya-e2e/tsconfig.e2e.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/erya-e2e/**"
+            ]
           }
         }
       }
@@ -131,7 +145,9 @@
             "outputPath": "dist/apps/api",
             "main": "apps/api/src/main.ts",
             "tsConfig": "apps/api/tsconfig.app.json",
-            "assets": ["apps/api/src/assets"]
+            "assets": [
+              "apps/api/src/assets"
+            ]
           },
           "configurations": {
             "production": {
@@ -160,7 +176,10 @@
               "apps/api/tsconfig.app.json",
               "apps/api/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!apps/api/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/api/**"
+            ]
           }
         },
         "test": {
@@ -185,7 +204,10 @@
               "libs/api-interfaces/tsconfig.lib.json",
               "libs/api-interfaces/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/api-interfaces/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/api-interfaces/**"
+            ]
           }
         },
         "test": {

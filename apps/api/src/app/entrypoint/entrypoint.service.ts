@@ -1,12 +1,12 @@
 import { Console, Command } from 'nestjs-console';
 import { OxfordApiService } from '../oxford-api/oxford-api.service';
-// import { BaseSearchesService } from '../oxford-searches/oxford-searches.service';
-// import { FixturesService } from './fixtures/fixtures.service';
+import { FixturesService } from './fixtures/fixtures.service';
 
 @Console()
 export class EntrypointService {
   constructor(
-    private readonly oxfordService: OxfordApiService // private readonly fixturesService: FixturesService
+    private readonly oxfordService: OxfordApiService,
+    private readonly fixturesService: FixturesService
   ) {}
 
   @Command({
@@ -34,15 +34,15 @@ export class EntrypointService {
     process.exit();
   }
 
-  // @Command({
-  //   command: 'fixtures'
-  // })
-  // async fixtures() {
-  //   try {
-  //     await this.fixturesService.create();
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-
-  //   process.exit();
+  @Command({
+    command: 'fixtures'
+  })
+  async fixtures() {
+    try {
+      await this.fixturesService.create();
+    } catch (error) {
+      console.error(error);
+    }
+    process.exit();
+  }
 }

@@ -13,10 +13,10 @@ import { EntrypointModule } from './entrypoint/entrypoint.module';
   imports: [
     ConsoleModule,
     // ConfigModule,
-    EntrypointModule
-    // MongooseModule.forRoot('mongodb://localhost/edfu', {
-    //   useNewUrlParser: true
-    // })
+    EntrypointModule,
+    MongooseModule.forRoot('mongodb://localhost/edfu', {
+      useNewUrlParser: true
+    })
     // GraphQLModule.forRoot({
     //   autoSchemaFile: "schema.gql"
     // }),

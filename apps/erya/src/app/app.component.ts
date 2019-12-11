@@ -4,8 +4,7 @@ import { Message } from '@edfu/api-interfaces';
 
 @Component({
   selector: 'edfu-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  templateUrl: './app.component.html'
 })
 export class AppComponent {
   hello$ = this.http.get<Message>('/api/hello');

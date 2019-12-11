@@ -4,15 +4,15 @@ import { Module } from '@nestjs/common';
 // import { AppService } from "./app.service";
 import { ConsoleModule } from 'nestjs-console';
 import { MongooseModule } from '@nestjs/mongoose';
-// import { OxfordApiModule } from "./oxford-api/oxford-api.module";
-// import { ConfigModule } from "./config/config.module";
+// import { OxfordApiModule } from './oxford-api/oxford-api.module';
+import { ConfigModule } from './config/config.module';
 import { EntrypointModule } from './entrypoint/entrypoint.module';
 // import { DictionaryModule } from "./dictionary/dictionary.module";
 
 @Module({
   imports: [
     ConsoleModule,
-    // ConfigModule,
+    ConfigModule,
     EntrypointModule,
     MongooseModule.forRoot('mongodb://localhost/edfu', {
       useNewUrlParser: true
@@ -20,7 +20,7 @@ import { EntrypointModule } from './entrypoint/entrypoint.module';
     // GraphQLModule.forRoot({
     //   autoSchemaFile: "schema.gql"
     // }),
-    // OxfordApiModule,
+    // OxfordApiModule
     // DictionaryModule
   ]
   //   controllers: [AppController],

@@ -1,18 +1,18 @@
-import { Injectable } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 import {
   ENTRY_SEARCH_COLLECTION_NAME,
   THESAURUS_SEARCH_COLLECTION_NAME
-} from "../constants";
-import { Model } from "mongoose";
+} from '../constants';
+import { Model } from 'mongoose';
 import {
   OxfordSearchDocument,
   OxfordSearchRecord
-} from "./interfaces/oxford-search.interface";
-import { CreateOxfordSearchDto } from "./dto/create-oxford-search.dto";
-import { OxfordApiService } from "../oxford-api/oxford-api.service";
-import { oc } from "ts-optchain";
-import { OxResult } from "../oxford-api/interfaces/oxford-api.interface";
+} from './interfaces/oxford-search.interface';
+import { CreateOxfordSearchDto } from './dto/create-oxford-search.dto';
+import { OxfordApiService } from '../oxford-api/oxford-api.service';
+import { oc } from 'ts-optchain';
+import { OxResult } from '../oxford-api/interfaces/oxford-api.interface';
 
 @Injectable()
 export class BaseSearchesService {
@@ -23,11 +23,11 @@ export class BaseSearchesService {
   ) {}
 
   protected getOxfordEntries(searchTerm: string) {
-    return Promise.resolve(["Overwrite in subclass"]);
+    return Promise.resolve(['Overwrite in subclass']);
   }
 
   async findOrFetch(searchTerm: string): Promise<OxfordSearchRecord[]> {
-    let existing = await this.searchModel
+    const existing = await this.searchModel
       .find({
         normalizedSearchTerm: searchTerm
       })
@@ -36,7 +36,7 @@ export class BaseSearchesService {
     if (existing.length) {
       return existing;
     } else {
-      let results: Array<any> = await this.getOxfordEntries(searchTerm);
+      const results: Array<any> = await this.getOxfordEntries(searchTerm);
       if (results.length === 0) {
         results.push(null);
       }
@@ -52,7 +52,7 @@ export class BaseSearchesService {
     searchTerm: string,
     result: OxResult
   ): Promise<OxfordSearchRecord> => {
-    let obj: CreateOxfordSearchDto = {
+    const obj: CreateOxfordSearchDto = {
       normalizedSearchTerm: searchTerm,
       result: result,
       homographC: this.extractHomographNumberC(result),
@@ -85,7 +85,7 @@ export class BaseSearchesService {
       result
     ).lexicalEntries[0].entries[0].homographNumber();
     if (homographNumber) {
-      return parseInt(homographNumber[0]);
+      return parseInt(homographNumber[0], 10);
     } else {
       return null;
     }

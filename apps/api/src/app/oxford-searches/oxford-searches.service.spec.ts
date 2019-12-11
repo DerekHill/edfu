@@ -142,9 +142,7 @@ describe('ThesaurusSearchesService', () => {
     }).compile();
 
     tss = app.get<ThesaurusSearchesService>(ThesaurusSearchesService);
-  });
 
-  it('is defined', () => {
-    return expect(tss).toBeDefined;
+    expect(tss).toBeDefined();
   });
 });

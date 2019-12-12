@@ -5,6 +5,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
+import { MONGOOSE_OPTIONS } from './mongoose-deprecations';
 
 @Module({
   imports: [
@@ -12,11 +13,14 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
       useFactory: async () => {
         const mongod = new MongoMemoryServer();
         const uri = await mongod.getConnectionString();
-        return {
-          uri: uri,
-        };
-      },
-    }),
-  ],
+        // return {
+        //   uri: uri,
+        //   useUnifiedTopology: true
+        // };
+
+        return { uri: uri, ...MONGOOSE_OPTIONS };
+      }
+    })
+  ]
 })
 export class TestDatabaseModule {}

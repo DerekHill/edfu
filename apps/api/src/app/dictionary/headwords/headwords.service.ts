@@ -202,7 +202,7 @@ export class HeadwordsService {
   };
 
   addOwnSense(oxId: string, homographC: number, senseId: string) {
-    return this.headwordModel.update(
+    return this.headwordModel.updateOne(
       { oxId: oxId, homographC: homographC },
       { $addToSet: { ownSenseIds: senseId } }
     );

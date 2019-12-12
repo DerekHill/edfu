@@ -8,15 +8,14 @@ import { OxfordApiModule } from './oxford-api/oxford-api.module';
 import { ConfigModule } from './config/config.module';
 import { EntrypointModule } from './entrypoint/entrypoint.module';
 import { DictionaryModule } from './dictionary/dictionary.module';
+import { MONGOOSE_OPTIONS } from './config/mongoose-deprecations';
 
 @Module({
   imports: [
     ConsoleModule,
     ConfigModule,
     EntrypointModule,
-    MongooseModule.forRoot('mongodb://localhost/edfu', {
-      useNewUrlParser: true
-    }),
+    MongooseModule.forRoot('mongodb://localhost/edfu', MONGOOSE_OPTIONS),
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql'
     }),

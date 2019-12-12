@@ -74,7 +74,7 @@ export class BaseSearchesService {
   };
 
   async count(normalizedSearchTerm: string, homographC: number) {
-    return await this.searchModel.count({
+    return await this.searchModel.countDocuments({
       normalizedSearchTerm: normalizedSearchTerm,
       homographC: homographC
     });

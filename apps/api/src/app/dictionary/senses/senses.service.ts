@@ -1,23 +1,22 @@
-import { Injectable, Inject, forwardRef } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
-import { SENSE_COLLECTION_NAME } from "../../constants";
-import { SenseDocument, SenseRecord } from "./interfaces/sense.interface";
-import { LexicalCategory, DictionaryOrThesaurus } from "../../enums";
-import { oc } from "ts-optchain";
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { SENSE_COLLECTION_NAME } from '../../constants';
+import { SenseDocument, SenseRecord } from './interfaces/sense.interface';
+import { LexicalCategory, DictionaryOrThesaurus } from '../../enums';
+import { oc } from 'ts-optchain';
 import {
   OxSense,
   OxThesaurusLink,
   OxSubsense
-} from "../../oxford-api/interfaces/oxford-api.interface";
-import { HeadwordsService } from "../headwords/headwords.service";
+} from '../../oxford-api/interfaces/oxford-api.interface';
 
 const PROSCRIBED_REGISTERS = [
-  "rare",
-  "literary",
-  "derogatory",
-  "dated",
-  "archaic"
+  'rare',
+  'literary',
+  'derogatory',
+  'dated',
+  'archaic'
   //   "informal",
 ];
 
@@ -25,23 +24,17 @@ const PROSCRIBED_REGISTERS = [
 export class SensesService {
   constructor(
     @InjectModel(SENSE_COLLECTION_NAME)
-    private readonly senseModel: Model<SenseDocument>,
-    @Inject(forwardRef(() => HeadwordsService))
-    private readonly headwordsService: HeadwordsService
+    private readonly senseModel: Model<SenseDocument>
   ) {}
 
   async findOrCreate(
     headwordOxId: string,
     headwordHomographC: number,
     lexicalCategory: LexicalCategory,
-    oxSense: OxSense,
-    topLevel: boolean
+    oxSense: OxSense
   ): Promise<SenseRecord> {
     const senseId = this.extractSenseId(oxSense);
-    const synonyms = await this.extractSynonymsAndCreateCorrespondingHeadwords(
-      oxSense,
-      topLevel
-    );
+
     const sense = {
       headwordOxId: headwordOxId,
       headwordHomographC: headwordHomographC,
@@ -51,14 +44,8 @@ export class SensesService {
       thesaurusLinks: this.extractThesaurusLinks(oxSense),
       example: this.extractExample(oxSense),
       definition: this.extractDefinition(oxSense),
-      synonyms: synonyms
+      synonyms: this.extractSynonyms(oxSense)
     };
-
-    await this.headwordsService.addOwnSense(
-      headwordOxId,
-      headwordHomographC,
-      senseId
-    );
 
     return this.senseModel
       .findOneAndUpdate({ senseId: senseId }, sense, {
@@ -69,53 +56,11 @@ export class SensesService {
       .exec();
   }
 
-  async extractSynonymsAndCreateCorrespondingHeadwords(
-    oxSense: OxSense,
-    topLevel: boolean
-  ): Promise<string[]> {
-    const synonyms = this.extractSynonyms(oxSense);
-    const senseId = this.extractSenseId(oxSense);
-    const promises = [];
-    if (topLevel) {
-      for (const synonym of synonyms) {
-        promises.push(
-          this.findOrCreateHeadwordAndUpdateSynonymSenseIds(synonym, senseId)
-        );
-      }
-    }
-    await Promise.all(promises);
-    return synonyms;
-  }
-
-  async findOrCreateHeadwordAndUpdateSynonymSenseIds(
-    synonym: string,
-    senseId: string
-  ): Promise<void> {
-    const words = await this.headwordsService.findOrCreateFromWord(
-      synonym,
-      false
-    );
-    if (words.length === 1) {
-      const word = words[0];
-      await this.headwordsService.addSynonymSense(
-        word.oxId,
-        word.homographC,
-        senseId
-      );
-    }
-  }
-
-  async findOrCreateHeadwordsForExistingSynonyms(
-    senseId: string
-  ): Promise<any> {
-    const record = await this.senseModel.findOne({ senseId: senseId });
-    const promises = [];
-    for (const synonym of record.synonyms) {
-      promises.push(
-        this.findOrCreateHeadwordAndUpdateSynonymSenseIds(synonym, senseId)
-      );
-    }
-    return Promise.all(promises);
+  findOne(senseId: string): Promise<SenseRecord> {
+    return this.senseModel
+      .findOne({ senseId: senseId })
+      .lean()
+      .exec();
   }
 
   extractSynonyms(oxSense: OxSense): string[] {

@@ -17,7 +17,11 @@ import { SensesService } from '../senses/senses.service';
 import { SenseSchema } from '../senses/schemas/sense.schema';
 import { OxfordSearchesServiceMock } from '../../oxford-searches/test/oxford-searches.service.mock';
 
-const entryRecord = (word: string, found = true): OxfordSearchRecord => {
+const entryRecord = (
+  word: string,
+  found = true,
+  homographC = 1
+): OxfordSearchRecord => {
   return {
     _id: new ObjectId(),
     normalizedSearchTerm: 'bank',
@@ -47,7 +51,7 @@ const entryRecord = (word: string, found = true): OxfordSearchRecord => {
       type: 'headword',
       word: word
     },
-    homographC: 1,
+    homographC: homographC,
     found: found
   };
 };
@@ -142,7 +146,16 @@ describe('HeadwordsService', () => {
     );
   });
 
-  describe('findOrCreateFromWord', () => {
+  describe('createHeadword', () => {
+    it('creates basic headword', async () => {
+      const record: OxfordSearchRecord = entryRecord('river');
+      const topLevel = true;
+      const origWord = await headwordsService.createHeadword(record, topLevel);
+      expect(origWord.topLevel).toBeTruthy();
+    });
+  });
+
+  describe('findOrCreate', () => {
     it('creates headword if found and adds ownSenseID', async () => {
       const word = 'food';
       const record = entryRecord(word);
@@ -153,9 +166,9 @@ describe('HeadwordsService', () => {
 
       const senseId = record.result.lexicalEntries[0].entries[0].senses[0].id;
 
-      const words = await headwordsService.findOrCreateFromWord(word);
+      const words = await headwordsService.findOrCreateAndUpdateSenses(word);
       expect(words[0].word).toEqual(word);
-      expect(words[0].ownSenseIds[0]).toEqual(senseId);
+      expect(words[0].ownSenseIds).toEqual(expect.arrayContaining([senseId]));
     });
 
     it('does not create headword if not found in dictionary', async () => {
@@ -167,8 +180,53 @@ describe('HeadwordsService', () => {
         .mockImplementation(() => Promise.resolve([record]));
 
       return expect(
-        headwordsService.findOrCreateFromWord(word)
-      ).rejects.toMatchObject({ message: expect.stringMatching(/not found/) });
+        headwordsService.findOrCreateAndUpdateSenses(word)
+      ).rejects.toMatchObject({
+        message: expect.stringMatching(/not found/)
+      });
+    });
+
+    it('adds synonymSenseId if headwords already existed without it', async () => {
+      const word = 'sheep';
+      const record = entryRecord(word);
+
+      jest
+        .spyOn(entrySearchesService, 'findOrFetch')
+        .mockImplementation(() => Promise.resolve([record]));
+
+      await headwordsService.findOrCreateAndUpdateSenses(word);
+
+      const synonymSenseId = 'my_id';
+
+      const words = await headwordsService.findOrCreateAndUpdateSenses(
+        word,
+        false,
+        synonymSenseId
+      );
+
+      expect(words[0].synonymSenseIds[0]).toEqual(synonymSenseId);
+    });
+
+    it('does not update the synonym sense ids if the headword has multiple homonyms', async () => {
+      const word = 'jaguar';
+      const jaguarCar = entryRecord(word, true, 1);
+      const jaguarCat = entryRecord(word, true, 2);
+
+      jest
+        .spyOn(entrySearchesService, 'findOrFetch')
+        .mockImplementation(() => Promise.resolve([jaguarCar, jaguarCat]));
+
+      await headwordsService.findOrCreateAndUpdateSenses(word);
+
+      const synonymSenseId = 'my_id';
+
+      const words = await headwordsService.findOrCreateAndUpdateSenses(
+        word,
+        false,
+        synonymSenseId
+      );
+
+      expect(words[0].synonymSenseIds).toEqual([]);
     });
   });
 
@@ -225,7 +283,6 @@ describe('HeadwordsService', () => {
       await headwordsService.createSenses(originalThesaurusRecord, true);
 
       const headwords_side = await headwordsService.find('side');
-
       expect(headwords_side.length).toEqual(1);
       expect(headwords_side[0].topLevel).toBeFalsy();
       expect(headwords_side[0].synonymSenseIds[0]).toBe(

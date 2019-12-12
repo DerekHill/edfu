@@ -6,7 +6,6 @@ import { HEADWORD_COLLECTION_NAME, SENSE_COLLECTION_NAME } from '../constants';
 import { HeadwordSchema } from './headwords/schemas/headword.schema';
 import { SensesService } from './senses/senses.service';
 import { HeadwordsResolver } from './headwords/headwords.resolver';
-import { HeadwordsSensesService } from './headwords-senses/headwords-senses.service';
 
 @Module({
   imports: [
@@ -18,7 +17,6 @@ import { HeadwordsSensesService } from './headwords-senses/headwords-senses.serv
       { name: SENSE_COLLECTION_NAME, schema: HeadwordSchema }
     ])
   ],
-  providers: [HeadwordsService, SensesService, HeadwordsResolver, HeadwordsSensesService]
-  //   exports: [HeadwordsService]
+  providers: [HeadwordsService, SensesService, HeadwordsResolver]
 })
 export class DictionaryModule {}

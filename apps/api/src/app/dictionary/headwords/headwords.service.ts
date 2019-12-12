@@ -1,4 +1,4 @@
-import { Injectable, Inject, forwardRef } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { HEADWORD_COLLECTION_NAME } from '../../constants';
 import { Model } from 'mongoose';
@@ -22,20 +22,28 @@ export class HeadwordsService {
     private readonly headwordModel: Model<HeadwordDocument>,
     private readonly entrySearchesService: EntrySearchesService,
     private readonly thesaurusSearchesService: ThesaurusSearchesService,
-    @Inject(forwardRef(() => SensesService))
     private readonly sensesService: SensesService
   ) {}
 
   //   Need to deal with stemming & normalisation
-  async findOrCreateFromWord(
+  async findOrCreateAndUpdateSenses(
     word: string,
-    topLevel = false
+    topLevel = false,
+    synonymSenseId = null
   ): Promise<HeadwordRecord[]> {
-    const existing = await this.headwordModel.find({
-      word: word
-    });
+    const existing: HeadwordRecord[] = await this.headwordModel
+      .find({
+        word: word
+      })
+      .lean();
 
     if (existing.length) {
+      if (existing.length === 1 && synonymSenseId) {
+        const record = existing[0];
+        return Promise.all([
+          this.addSynonymSense(record.oxId, record.homographC, synonymSenseId)
+        ]);
+      }
       return existing;
     } else {
       let entrySearchResults: OxfordSearchRecord[];
@@ -58,7 +66,9 @@ export class HeadwordsService {
       }
 
       const headwords = await Promise.all(
-        entrySearchResults.map(record => this.createHeadword(record, topLevel))
+        entrySearchResults.map(record =>
+          this.createHeadword(record, topLevel, synonymSenseId)
+        )
       );
 
       await Promise.all(
@@ -70,7 +80,6 @@ export class HeadwordsService {
             )
           )
       );
-
       return Promise.all(headwords.map(this.getLatest));
     }
   }
@@ -105,14 +114,21 @@ export class HeadwordsService {
     const promises = [];
 
     for (const senseId of updated.ownSenseIds) {
-      promises.push(
-        this.sensesService.findOrCreateHeadwordsForExistingSynonyms(senseId)
-      );
+      promises.push(this.findOrCreateHeadwordsForSense(senseId));
     }
 
     await Promise.all(promises);
 
     return updated;
+  }
+
+  async findOrCreateHeadwordsForSense(senseId: string): Promise<any> {
+    const record = await this.sensesService.findOne(senseId);
+    const promises = [];
+    for (const synonym of record.synonyms) {
+      promises.push(this.findOrCreateAndUpdateSenses(synonym, false, senseId));
+    }
+    return Promise.all(promises);
   }
 
   getLatest = (record: HeadwordRecord) => {
@@ -122,43 +138,67 @@ export class HeadwordsService {
       .exec();
   };
 
-  createHeadword = async (
+  createHeadword = (
     record: OxfordSearchRecord,
-    topLevel: boolean
+    topLevel: boolean,
+    synonymSenseId = null
   ): Promise<HeadwordRecord> => {
     const headword = {
       word: record.result.word,
       oxId: record.result.id,
       homographC: record.homographC,
-      topLevel: topLevel
+      topLevel: topLevel,
+      synonymSenseIds: synonymSenseId ? [synonymSenseId] : []
     };
-    const doc = await this.headwordModel.create(headword);
-    return doc.toObject();
+    return this.headwordModel.create(headword);
   };
 
   createSenses = async (
-    record: OxfordSearchRecord,
+    searchRecord: OxfordSearchRecord,
     topLevel: boolean
   ): Promise<SenseRecord[]> => {
     const promises = [];
-    for (const categoryEntries of record.result.lexicalEntries) {
+    for (const categoryEntries of searchRecord.result.lexicalEntries) {
       const lexicalCategory =
         LexicalCategory[categoryEntries.lexicalCategory.id];
       for (const entry of categoryEntries.entries) {
         for (const sense of entry.senses) {
           promises.push(
             this.sensesService.findOrCreate(
-              record.result.id,
-              record.homographC,
+              searchRecord.result.id,
+              searchRecord.homographC,
               lexicalCategory,
-              sense,
-              topLevel
+              sense
             )
           );
         }
       }
     }
-    return Promise.all(promises);
+    const senses: SenseRecord[] = await Promise.all(promises);
+
+    await Promise.all(
+      senses.map(record => {
+        return this.addOwnSense(
+          record.headwordOxId,
+          record.headwordHomographC,
+          record.senseId
+        );
+      })
+    );
+
+    if (topLevel) {
+      const headwords = [];
+      senses.map(record => {
+        record.synonyms.map(word => {
+          headwords.push(
+            this.findOrCreateAndUpdateSenses(word, false, record.senseId)
+          );
+        });
+      });
+      await Promise.all(headwords);
+    }
+
+    return senses;
   };
 
   addOwnSense(oxId: string, homographC: number, senseId: string) {
@@ -168,10 +208,22 @@ export class HeadwordsService {
     );
   }
 
-  addSynonymSense(oxId: string, homographC: number, senseId: string) {
-    return this.headwordModel.update(
-      { oxId: oxId, homographC: homographC },
-      { $addToSet: { synonymSenseIds: senseId } }
-    );
+  addSynonymSense(
+    oxId: string,
+    homographC: number,
+    senseId: string
+  ): Promise<HeadwordRecord> {
+    return this.headwordModel
+      .findOneAndUpdate(
+        { oxId: oxId, homographC: homographC },
+        {
+          $addToSet: { synonymSenseIds: senseId }
+        },
+        {
+          new: true
+        }
+      )
+      .lean()
+      .exec();
   }
 }

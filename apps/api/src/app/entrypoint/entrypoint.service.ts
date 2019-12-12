@@ -10,13 +10,6 @@ export class EntrypointService {
   ) {}
 
   @Command({
-    command: 'works'
-  })
-  works() {
-    console.log('works!');
-  }
-
-  @Command({
     command: 'oxfordEntries'
   })
   async oxfordEntries(): Promise<void> {

@@ -15,7 +15,6 @@ describe('AppController (e2e)', () => {
   });
 
   it('/ (GET)', () => {
-    console.log('This ran!!!!!!!!!!!!!!!!!!!');
     return request(app.getHttpServer())
       .get('/')
       .expect(200)

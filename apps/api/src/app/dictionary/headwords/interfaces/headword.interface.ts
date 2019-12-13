@@ -1,5 +1,5 @@
-import { Document } from "mongoose";
-import { ObjectId } from "bson";
+import { Document } from 'mongoose';
+import { ObjectId } from 'bson';
 
 export interface HeadwordRecord {
   readonly _id: ObjectId;

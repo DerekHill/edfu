@@ -11,25 +11,35 @@ export class FixturesService {
     private readonly headwordModel: Model<HeadwordDocument>
   ) {}
   create() {
-    const headword = {
-      oxId: 'food',
-      homographC: null,
-      word: 'food',
-      topLevel: true,
-      ownSenseIds: [],
-      synonymSenseIds: []
-    };
+    const headwords = [
+      {
+        oxId: 'food',
+        homographC: null,
+        word: 'food',
+        topLevel: true
+      },
+      {
+        oxId: 'drink',
+        homographC: null,
+        word: 'drink',
+        topLevel: true
+      }
+    ];
 
-    return this.headwordModel
-      .findOneAndUpdate(
-        { oxId: headword.oxId, homographC: headword.homographC },
-        headword,
-        {
-          upsert: true,
-          new: true
-        }
-      )
-      .lean()
-      .exec();
+    return Promise.all(
+      headwords.map(word => {
+        return this.headwordModel
+          .findOneAndUpdate(
+            { oxId: word.oxId, homographC: word.homographC },
+            word,
+            {
+              upsert: true,
+              new: true
+            }
+          )
+          .lean()
+          .exec();
+      })
+    );
   }
 }

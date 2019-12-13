@@ -2,14 +2,10 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'edfu-second',
-  templateUrl: './second.component.html',
-  styleUrls: ['./second.component.css']
+  templateUrl: './second.component.html'
 })
 export class SecondComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

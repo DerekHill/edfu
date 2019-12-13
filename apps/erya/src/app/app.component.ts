@@ -10,6 +10,6 @@ export class AppComponent {
   hello$ = this.http.get<Message>('/api/hello');
 
   constructor(private http: HttpClient) {
-    this.hello$.subscribe(a => console.log(a));
+    // this.hello$.subscribe(a => console.log(a));
   }
 }

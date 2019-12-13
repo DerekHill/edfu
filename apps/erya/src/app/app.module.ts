@@ -27,8 +27,8 @@ const appRoutes: Routes = [
     BasicModule,
     SecondModule,
     RouterModule.forRoot(
-      appRoutes,
-      { enableTracing: true } // <-- debugging purposes only
+      appRoutes
+      //   { enableTracing: true } // <-- debugging purposes only
     ),
     BrowserModule,
     HttpClientModule,

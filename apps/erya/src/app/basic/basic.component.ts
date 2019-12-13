@@ -1,3 +1,4 @@
+// https://stackblitz.com/edit/basic-apollo-angular-app
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Message } from '@edfu/api-interfaces';
@@ -5,7 +6,6 @@ import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { Subscription } from 'rxjs';
 import { untilDestroyed } from 'ngx-take-until-destroy';
-// import { UntilDestroy } from '@ngneat/until-destroy';
 
 const Hello = gql`
   query {
@@ -13,8 +13,6 @@ const Hello = gql`
   }
 `;
 
-// @UntilDestroy({ checkProperties: true })
-// @UntilDestroy()
 @Component({
   selector: 'edfu-basic',
   templateUrl: './basic.component.html'
@@ -25,6 +23,7 @@ export class BasicComponent implements OnInit, OnDestroy {
   loading = true;
   error: any;
   hello: any;
+  hello2: any;
 
   private querySubscription: Subscription;
 
@@ -61,9 +60,15 @@ export class BasicComponent implements OnInit, OnDestroy {
         this.loading = loading;
         this.hello = data;
       });
+
+    this.apollo
+      .query<any>({
+        query: Hello
+      })
+      .subscribe(({ data, loading }) => {
+        this.hello2 = data;
+      });
   }
 
-  ngOnDestroy() {
-    //   this.querySubscription.unsubscribe();
-  }
+  ngOnDestroy() {}
 }

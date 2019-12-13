@@ -1,3 +1,11 @@
 <p>basic works!</p>
 <div>Message: {{ hello$ | async | json }}</div>
-{{ message | json }}
+<div>{{ words | json }}</div>
+<div>{{ hello | json }}</div>
+
+<div *ngFor="let word of words">
+  <p>{{ word.word }}</p>
+</div>
+<div *ngIf="loading">
+  <h1>Loading...</h1>
+</div>

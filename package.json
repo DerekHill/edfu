@@ -46,6 +46,7 @@
     "@nestjs/mongoose": "^6.1.2",
     "@nestjs/platform-express": "^6.8.3",
     "@nrwl/angular": "8.9.0",
+    "apollo-angular": "^1.8.0",
     "apollo-server-express": "^2.9.13",
     "core-js": "^2.5.4",
     "mongoose": "^5.8.0",
@@ -53,7 +54,13 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "~6.4.0",
     "ts-optchain": "^0.1.8",
-    "zone.js": "^0.9.1"
+    "zone.js": "^0.9.1",
+    "apollo-angular-link-http": "^1.9.0",
+    "apollo-link": "^1.2.11",
+    "apollo-client": "^2.6.0",
+    "apollo-cache-inmemory": "^1.6.0",
+    "graphql-tag": "^2.10.0",
+    "graphql": "^14.5.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.803.14",

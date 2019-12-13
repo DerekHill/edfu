@@ -1,6 +1,7 @@
 // https://github.com/Pop-Code/nestjs-console
 // npm run console:dev -- --help
 // npm run console:dev oxfordEntries
+// npm run console:dev fixtures
 import { BootstrapConsole } from 'nestjs-console';
 import { AppModule } from './app/app.module';
 

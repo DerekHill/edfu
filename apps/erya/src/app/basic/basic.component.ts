@@ -13,6 +13,18 @@ const Hello = gql`
   }
 `;
 
+const GetById = gql`
+  query {
+    headword(id: "5df37add4b2f1813eff96309") {
+      _id
+      oxId
+      homographC
+      word
+      topLevel
+    }
+  }
+`;
+
 @Component({
   selector: 'edfu-basic',
   templateUrl: './basic.component.html'
@@ -24,6 +36,7 @@ export class BasicComponent implements OnInit, OnDestroy {
   error: any;
   hello: any;
   hello2: any;
+  byId: any;
 
   private querySubscription: Subscription;
 
@@ -31,7 +44,6 @@ export class BasicComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.apollo
-
       .watchQuery({
         query: gql`
           {
@@ -67,6 +79,14 @@ export class BasicComponent implements OnInit, OnDestroy {
       })
       .subscribe(({ data, loading }) => {
         this.hello2 = data;
+      });
+
+    this.apollo
+      .query<any>({
+        query: GetById
+      })
+      .subscribe(({ data, loading }) => {
+        this.byId = data;
       });
   }
 

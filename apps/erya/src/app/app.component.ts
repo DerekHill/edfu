@@ -9,7 +9,5 @@ import { Message } from '@edfu/api-interfaces';
 export class AppComponent {
   hello$ = this.http.get<Message>('/api/hello');
 
-  constructor(private http: HttpClient) {
-    // this.hello$.subscribe(a => console.log(a));
-  }
+  constructor(private http: HttpClient) {}
 }

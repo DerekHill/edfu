@@ -10,7 +10,7 @@ export class HeadwordsResolver {
 
   @Query(() => String)
   async hello() {
-    return 'hello there';
+    return 'hello there people!';
   }
 
   @Query(returns => HeadwordDto)

@@ -99,6 +99,12 @@ export class HeadwordsService {
     return this.headwordModel.find({}).exec();
   }
 
+  search(chars: string): Promise<HeadwordRecord[]> {
+    return this.headwordModel
+      .find({ word: { $regex: `^${chars}`, $options: '$i' } })
+      .exec();
+  }
+
   async makeTopLevel(
     oxId: string,
     homographC: number

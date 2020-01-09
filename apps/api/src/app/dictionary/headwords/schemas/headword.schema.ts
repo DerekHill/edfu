@@ -1,4 +1,4 @@
-import * as mongoose from "mongoose";
+import * as mongoose from 'mongoose';
 
 export const HeadwordSchema = new mongoose.Schema({
   oxId: {
@@ -16,3 +16,4 @@ export const HeadwordSchema = new mongoose.Schema({
 });
 
 HeadwordSchema.index({ oxId: 1, homographC: 1 }, { unique: true });
+HeadwordSchema.index({ word: 1 });

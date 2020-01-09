@@ -341,4 +341,22 @@ describe('HeadwordsService', () => {
       expect(quick2.length).toBeTruthy();
     });
   });
+
+  describe('search', () => {
+    beforeEach(async () => {
+      await headwordsService.createHeadword(entryRecord('river'), true);
+    });
+    it('matches if characters match', async () => {
+      expect(await headwordsService.search('ri')).toHaveLength(1);
+    });
+    it('does not match if characters do not match', async () => {
+      expect(await headwordsService.search('wrong_string')).toHaveLength(0);
+    });
+    it('is case insenstivie', async () => {
+      expect(await headwordsService.search('RI')).toHaveLength(1);
+    });
+    it('does not return match if not at start of word', async () => {
+      expect(await headwordsService.search('ver')).toHaveLength(0);
+    });
+  });
 });

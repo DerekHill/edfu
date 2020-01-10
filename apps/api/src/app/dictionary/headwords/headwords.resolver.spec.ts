@@ -8,7 +8,22 @@ export class HeadwordsServiceMock {
   findOneById(id: string): Promise<HeadwordRecord> {
     return Promise.resolve(null);
   }
+  search(chars: string): Promise<HeadwordRecord[]> {
+    return Promise.resolve(null);
+  }
 }
+
+const headwordRecord = (wordAndOxId: string): HeadwordRecord => {
+  return {
+    _id: new ObjectId(),
+    oxId: wordAndOxId,
+    homographC: null,
+    word: wordAndOxId,
+    topLevel: true,
+    ownSenseIds: [],
+    synonymSenseIds: []
+  };
+};
 
 describe('HeadwordsResolver', () => {
   let resolver: HeadwordsResolver;
@@ -31,22 +46,24 @@ describe('HeadwordsResolver', () => {
 
   it('finds object by id', async () => {
     const oxId = 'food';
-    const word: HeadwordRecord = {
-      _id: new ObjectId(),
-      oxId: oxId,
-      homographC: null,
-      word: 'food',
-      topLevel: true,
-      ownSenseIds: [],
-      synonymSenseIds: []
-    };
+    const headword = headwordRecord(oxId);
 
     jest.spyOn(headwordsService, 'findOneById').mockImplementation(() => {
-      return Promise.resolve(word);
+      return Promise.resolve(headword);
     });
 
     const res = await resolver.headword('id');
 
     expect(res.oxId).toEqual(oxId);
+  });
+
+  it('searches by search_string', async () => {
+    const word = 'food';
+    const headword = headwordRecord(word);
+    jest.spyOn(headwordsService, 'search').mockImplementation(() => {
+      return Promise.resolve([headword]);
+    });
+    const res = await resolver.search('foo');
+    expect(res[0].word).toEqual(word);
   });
 });

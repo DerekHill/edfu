@@ -15,4 +15,5 @@ type Query {
   hello: String!
   headword(id: String!): HeadwordDto!
   headwordsAll: [HeadwordDto!]!
+  search(search_string: String!): [HeadwordDto!]!
 }

@@ -15,7 +15,6 @@ export class HeadwordsResolver {
 
   @Query(returns => HeadwordDto)
   async headword(@Args('id') id: string): Promise<HeadwordDto> {
-    console.log(`id is ${id}`);
     const headword = await this.headwordsService.findOneById(id);
     if (!headword) {
       throw new NotFoundException(id);
@@ -26,5 +25,10 @@ export class HeadwordsResolver {
   @Query(returns => [HeadwordDto])
   headwordsAll(): Promise<HeadwordDto[]> {
     return this.headwordsService.findAll();
+  }
+
+  @Query(returns => [HeadwordDto])
+  search(@Args('search_string') search_string: string): Promise<HeadwordDto[]> {
+    return this.headwordsService.search(search_string);
   }
 }

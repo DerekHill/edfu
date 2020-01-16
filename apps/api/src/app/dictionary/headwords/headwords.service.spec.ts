@@ -358,5 +358,8 @@ describe('HeadwordsService', () => {
     it('does not return match if not at start of word', async () => {
       expect(await headwordsService.search('ver')).toHaveLength(0);
     });
+    it('does not return results given empty search string', async () => {
+      expect(await headwordsService.search('')).toHaveLength(0);
+    });
   });
 });

@@ -100,9 +100,13 @@ export class HeadwordsService {
   }
 
   search(chars: string): Promise<HeadwordRecord[]> {
-    return this.headwordModel
-      .find({ word: { $regex: `^${chars}`, $options: '$i' } })
-      .exec();
+    if (chars) {
+      return this.headwordModel
+        .find({ word: { $regex: `^${chars}`, $options: '$i' } })
+        .exec();
+    } else {
+      return Promise.resolve([]);
+    }
   }
 
   async makeTopLevel(

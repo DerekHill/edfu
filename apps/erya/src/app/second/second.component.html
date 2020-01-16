@@ -3,18 +3,15 @@
   <mat-form-field class="example-full-width">
     <input
       type="text"
-      placeholder="Pick one"
-      aria-label="Number"
+      placeholder="Search"
+      aria-label="Type here to search"
       matInput
-      [formControl]="myControl"
-      [matAutocomplete]="auto"
+      [formControl]="searchFormControl"
+      [matAutocomplete]="auto2"
     />
-    <mat-autocomplete #auto="matAutocomplete">
-      <mat-option
-        *ngFor="let option of filteredOptions | async"
-        [value]="option"
-      >
-        {{ option }}
+    <mat-autocomplete #auto2="matAutocomplete">
+      <mat-option *ngFor="let res of searchResults$ | async">
+        {{ res.word }}
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>

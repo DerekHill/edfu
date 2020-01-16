@@ -1,5 +1,5 @@
-// import { ObjectType, Field, Int, ID } from "type-graphql";
-// import { ObjectId } from "bson";
+// import { ObjectType, Field, Int, ID } from 'type-graphql';
+// import { ObjectId } from 'bson';
 
 // @ObjectType()
 // export class HeadwordDto {

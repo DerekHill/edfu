@@ -1,29 +1,66 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import gql from 'graphql-tag';
+import { Apollo, QueryRef } from 'apollo-angular';
+import { untilDestroyed } from 'ngx-take-until-destroy';
+import { HttpClient } from '@angular/common/http';
+import { HeadwordDto } from '@edfu/api-interfaces';
+
+interface SearchQuery {
+  search: HeadwordDto[];
+}
+
+interface SearchVariables {
+  search_string?: string;
+}
 
 @Component({
   selector: 'edfu-second',
   templateUrl: './second.component.html'
 })
-export class SecondComponent implements OnInit {
-  myControl = new FormControl();
-  options: string[] = ['One', 'Two', 'Three'];
-  filteredOptions: Observable<string[]>;
+export class SecondComponent implements OnInit, OnDestroy {
+  searchFormControl = new FormControl();
+  searchInput: Observable<string>;
+  searchResults$: Observable<HeadwordDto[]>;
+  searchRef: QueryRef<SearchQuery, SearchVariables>;
+
+  constructor(private http: HttpClient, private apollo: Apollo) {}
 
   ngOnInit() {
-    this.filteredOptions = this.myControl.valueChanges.pipe(
+    this.searchInput = this.searchFormControl.valueChanges.pipe(
       startWith(''),
-      map(value => this._filter(value))
+      map(value => {
+        return value;
+      })
     );
+
+    this.searchRef = this.apollo.watchQuery<SearchQuery, SearchVariables>({
+      query: gql`
+        query Foo($search_string: String!) {
+          search(search_string: $search_string) {
+            _id
+            oxId
+            homographC
+            word
+            topLevel
+          }
+        }
+      `,
+      errorPolicy: 'all'
+    });
+
+    this.searchResults$ = this.searchRef.valueChanges.pipe(
+      map(({ data }: any) => data.search)
+    );
+
+    this.searchInput.subscribe(chars => {
+      this.searchRef.setVariables({
+        search_string: chars
+      });
+    });
   }
 
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.options.filter(option =>
-      option.toLowerCase().includes(filterValue)
-    );
-  }
+  ngOnDestroy() {}
 }

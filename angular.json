@@ -150,6 +150,14 @@
             }
           }
         },
+        "build-console": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/apps/api",
+            "main": "apps/api/src/console.ts",
+            "tsConfig": "apps/api/tsconfig.app.json"
+          }
+        },
         "serve": {
           "builder": "@nrwl/node:execute",
           "options": {

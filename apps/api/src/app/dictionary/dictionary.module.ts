@@ -6,6 +6,7 @@ import { HEADWORD_COLLECTION_NAME, SENSE_COLLECTION_NAME } from '../constants';
 import { HeadwordSchema } from './headwords/schemas/headword.schema';
 import { SensesService } from './senses/senses.service';
 import { HeadwordsResolver } from './headwords/headwords.resolver';
+import { SenseSchema } from './senses/schemas/sense.schema';
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { HeadwordsResolver } from './headwords/headwords.resolver';
       { name: HEADWORD_COLLECTION_NAME, schema: HeadwordSchema }
     ]),
     MongooseModule.forFeature([
-      { name: SENSE_COLLECTION_NAME, schema: HeadwordSchema }
+      { name: SENSE_COLLECTION_NAME, schema: SenseSchema }
     ])
   ],
   providers: [HeadwordsService, SensesService, HeadwordsResolver]

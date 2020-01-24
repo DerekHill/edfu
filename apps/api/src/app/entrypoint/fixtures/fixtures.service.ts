@@ -1,36 +1,51 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { HEADWORD_COLLECTION_NAME } from '../../constants';
+import {
+  HEADWORD_COLLECTION_NAME,
+  SENSE_COLLECTION_NAME
+} from '../../constants';
 import { Model } from 'mongoose';
-import { HeadwordDocument } from '../../dictionary/headwords/interfaces/headword.interface';
+import {
+  HeadwordDocument,
+  HeadwordRecordWithoutId
+} from '../../dictionary/headwords/interfaces/headword.interface';
+import {
+  SenseDocument,
+  SenseRecord
+} from '../../dictionary/senses/interfaces/sense.interface';
 
 const FOOD_SENSE_1_ID = 'm_en_gbus0378040.005';
 const FOOD_SENSE_2_ID = 't_en_gb0005872.001';
 const FOOD_SENSE_3_ID = 't_en_gb0005872.002';
 
-const HEADWORDS = [
+const HEADWORDS: HeadwordRecordWithoutId[] = [
   {
     oxId: 'food',
     homographC: null,
     word: 'food',
     topLevel: true,
-    ownSenseIds: [FOOD_SENSE_1_ID, FOOD_SENSE_2_ID, FOOD_SENSE_3_ID]
+    ownSenseIds: [FOOD_SENSE_1_ID, FOOD_SENSE_2_ID, FOOD_SENSE_3_ID],
+    synonymSenseIds: []
   },
   {
     oxId: 'drink',
     homographC: null,
     word: 'drink',
-    topLevel: true
+    topLevel: true,
+    ownSenseIds: [],
+    synonymSenseIds: []
   },
   {
-    oxId: 'sail',
+    oxId: 'toast',
     homographC: null,
-    word: 'sail',
-    topLevel: true
+    word: 'toast',
+    topLevel: true,
+    ownSenseIds: [],
+    synonymSenseIds: []
   }
 ];
 
-const SENSES = [
+const SENSES: SenseRecord[] = [
   // dictionary
   {
     senseId: FOOD_SENSE_1_ID,
@@ -63,24 +78,45 @@ const SENSES = [
 export class FixturesService {
   constructor(
     @InjectModel(HEADWORD_COLLECTION_NAME)
-    private readonly headwordModel: Model<HeadwordDocument>
+    private readonly headwordModel: Model<HeadwordDocument>,
+    @InjectModel(SENSE_COLLECTION_NAME)
+    private readonly senseModel: Model<SenseDocument>
   ) {}
-  create() {
-    console.log('create ran');
+
+  populateCollection(model: Model<any>, data: object[], conditionsGenerator) {
     return Promise.all(
-      HEADWORDS.map(word => {
-        return this.headwordModel
-          .findOneAndUpdate(
-            { oxId: word.oxId, homographC: word.homographC },
-            word,
-            {
-              upsert: true,
-              new: true
-            }
-          )
+      data.map(obj => {
+        const conditions = conditionsGenerator(obj);
+        return model
+          .findOneAndUpdate(conditions, obj, {
+            upsert: true,
+            new: true
+          })
           .lean()
           .exec();
       })
     );
+  }
+
+  headwordConditionsGenerator(obj: HeadwordRecordWithoutId) {
+    return { oxId: obj.oxId, homographC: obj.homographC };
+  }
+
+  senseConditionsGenerator(obj: SenseRecord) {
+    return { senseId: obj.senseId };
+  }
+
+  async create() {
+    await this.populateCollection(
+      this.headwordModel,
+      HEADWORDS,
+      this.headwordConditionsGenerator
+    );
+    await this.populateCollection(
+      this.senseModel,
+      SENSES,
+      this.senseConditionsGenerator
+    );
+    return console.log('Fixtures created!');
   }
 }

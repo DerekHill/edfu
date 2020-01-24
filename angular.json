@@ -153,9 +153,16 @@
         "build-console": {
           "builder": "@nrwl/node:build",
           "options": {
-            "outputPath": "dist/apps/api",
+            "outputPath": "dist/apps/api-console",
             "main": "apps/api/src/console.ts",
             "tsConfig": "apps/api/tsconfig.app.json"
+          }
+        },
+        "serve-console": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "api:build-console",
+            "port": 7778
           }
         },
         "serve": {

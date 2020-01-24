@@ -23,9 +23,9 @@ const HEADWORDS = [
     topLevel: true
   },
   {
-    oxId: 'boat',
+    oxId: 'tower',
     homographC: null,
-    word: 'boat',
+    word: 'tower',
     topLevel: true
   }
 ];

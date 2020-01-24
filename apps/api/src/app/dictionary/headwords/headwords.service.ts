@@ -12,7 +12,7 @@ import {
 } from '../../oxford-searches/oxford-searches.service';
 import { OxfordSearchRecord } from '../../oxford-searches/interfaces/oxford-search.interface';
 import { SensesService } from '../senses/senses.service';
-import { LexicalCategory } from '../../enums';
+import { LexicalCategory } from '../../../../../../libs/api-interfaces/src/lib/LexicalCategory';
 import { SenseRecord } from '../senses/interfaces/sense.interface';
 
 @Injectable()
@@ -25,7 +25,6 @@ export class HeadwordsService {
     private readonly sensesService: SensesService
   ) {}
 
-  //   Need to deal with stemming & normalisation
   async findOrCreateAndUpdateSenses(
     word: string,
     topLevel = false,

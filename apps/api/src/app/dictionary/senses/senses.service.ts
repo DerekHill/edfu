@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { SENSE_COLLECTION_NAME } from '../../constants';
 import { SenseDocument, SenseRecord } from './interfaces/sense.interface';
-import { LexicalCategory, DictionaryOrThesaurus } from '../../enums';
+import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/api-interfaces';
 import { oc } from 'ts-optchain';
 import {
   OxSense,

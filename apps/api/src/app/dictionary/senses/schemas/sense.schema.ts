@@ -1,5 +1,5 @@
-import * as mongoose from "mongoose";
-import { DictionaryOrThesaurus, LexicalCategory } from "../../../enums";
+import * as mongoose from 'mongoose';
+import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/api-interfaces';
 
 export const SenseSchema = new mongoose.Schema({
   senseId: {

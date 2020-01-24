@@ -1,8 +1,6 @@
 import { Document } from 'mongoose';
 import { ObjectId } from 'bson';
 
-// Maybe better to have optional properties on HeadwordRecord
-// like on SenseRecord
 export interface HeadwordRecordWithoutId {
   readonly oxId: string;
   readonly homographC: number;

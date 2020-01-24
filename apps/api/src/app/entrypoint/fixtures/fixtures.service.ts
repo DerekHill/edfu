@@ -11,8 +11,10 @@ import {
 } from '../../dictionary/headwords/interfaces/headword.interface';
 import {
   SenseDocument,
-  SenseRecord
+  SenseRecordWithoutId
 } from '../../dictionary/senses/interfaces/sense.interface';
+
+const FOOD = 'food';
 
 const FOOD_SENSE_1_ID = 'm_en_gbus0378040.005';
 const FOOD_SENSE_2_ID = 't_en_gb0005872.001';
@@ -20,9 +22,9 @@ const FOOD_SENSE_3_ID = 't_en_gb0005872.002';
 
 const HEADWORDS: HeadwordRecordWithoutId[] = [
   {
-    oxId: 'food',
+    oxId: FOOD,
     homographC: null,
-    word: 'food',
+    word: FOOD,
     topLevel: true,
     ownSenseIds: [FOOD_SENSE_1_ID, FOOD_SENSE_2_ID, FOOD_SENSE_3_ID],
     synonymSenseIds: []
@@ -45,11 +47,11 @@ const HEADWORDS: HeadwordRecordWithoutId[] = [
   }
 ];
 
-const SENSES: SenseRecord[] = [
+const SENSES: SenseRecordWithoutId[] = [
   // dictionary
   {
     senseId: FOOD_SENSE_1_ID,
-    headwordOxId: 'food',
+    headwordOxId: FOOD,
     headwordHomographC: null,
     example: 'we need food and water',
     definition:
@@ -59,7 +61,7 @@ const SENSES: SenseRecord[] = [
   //   thesaurus
   {
     senseId: FOOD_SENSE_2_ID,
-    headwordOxId: 'food',
+    headwordOxId: FOOD,
     headwordHomographC: null,
     example: 'he went three days without food',
     synonyms: ['nourishment', 'sustenance', 'nutriment', 'subsistence']
@@ -67,7 +69,7 @@ const SENSES: SenseRecord[] = [
   //   thesaurus
   {
     senseId: FOOD_SENSE_3_ID,
-    headwordOxId: 'food',
+    headwordOxId: FOOD,
     headwordHomographC: null,
     example: 'food for the cattle and horses',
     synonyms: ['fodder', 'feed', 'forage']
@@ -102,7 +104,7 @@ export class FixturesService {
     return { oxId: obj.oxId, homographC: obj.homographC };
   }
 
-  senseConditionsGenerator(obj: SenseRecord) {
+  senseConditionsGenerator(obj: SenseRecordWithoutId) {
     return { senseId: obj.senseId };
   }
 

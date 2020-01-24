@@ -17,3 +17,11 @@ type Query {
   headwordsAll: [HeadwordDto!]!
   search(search_string: String!): [HeadwordDto!]!
 }
+
+type SenseDto {
+  _id: ID!
+  senseId: String!
+  headwordOxId: String!
+  headwordHomographC: Float!
+  dictionaryOrThesaurus: String
+}

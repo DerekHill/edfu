@@ -7,7 +7,7 @@ import {
   SENSE_COLLECTION_NAME,
   HEADWORD_COLLECTION_NAME
 } from '../../constants';
-import { LexicalCategory } from '../../enums';
+import { LexicalCategory } from '../../../../../../libs/api-interfaces/src/lib/LexicalCategory';
 import { DICTIONARY_SENSE_BANK } from './test/sample-results';
 import { OxSense } from '../../oxford-api/interfaces/oxford-api.interface';
 import { HeadwordsService } from '../headwords/headwords.service';

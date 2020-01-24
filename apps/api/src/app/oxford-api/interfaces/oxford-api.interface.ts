@@ -1,4 +1,4 @@
-import { LexicalCategory } from '../../enums';
+import { LexicalCategory } from '../../../../../../libs/api-interfaces/src/lib/LexicalCategory';
 
 interface OxSynonym {
   readonly id?: string;

@@ -1,10 +1,9 @@
 import { Document } from 'mongoose';
 import { ObjectId } from 'bson';
-import { DictionaryOrThesaurus, LexicalCategory } from '../../../enums';
 import { OxThesaurusLink } from '../../../oxford-api/interfaces/oxford-api.interface';
+import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/api-interfaces';
 
-export interface SenseRecord {
-  readonly _id?: ObjectId;
+export interface SenseRecordWithoutId {
   readonly senseId: string;
   readonly headwordOxId: string;
   readonly headwordHomographC: number;
@@ -14,6 +13,9 @@ export interface SenseRecord {
   readonly example?: string;
   readonly definition?: string;
   readonly synonyms: string[];
+}
+export interface SenseRecord extends SenseRecordWithoutId {
+  readonly _id: ObjectId;
 }
 
 export interface SenseDocument extends Document, SenseRecord {

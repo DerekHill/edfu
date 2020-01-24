@@ -162,7 +162,8 @@
           "builder": "@nrwl/node:execute",
           "options": {
             "buildTarget": "api:build-console",
-            "port": 7778
+            "port": 7778,
+            "args": ["--help"]
           }
         },
         "serve": {

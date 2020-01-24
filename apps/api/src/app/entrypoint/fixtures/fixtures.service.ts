@@ -23,9 +23,9 @@ const HEADWORDS = [
     topLevel: true
   },
   {
-    oxId: 'tower',
+    oxId: 'sail',
     homographC: null,
-    word: 'tower',
+    word: 'sail',
     topLevel: true
   }
 ];
@@ -66,6 +66,7 @@ export class FixturesService {
     private readonly headwordModel: Model<HeadwordDocument>
   ) {}
   create() {
+    console.log('create ran');
     return Promise.all(
       HEADWORDS.map(word => {
         return this.headwordModel

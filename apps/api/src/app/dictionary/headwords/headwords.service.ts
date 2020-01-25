@@ -12,8 +12,8 @@ import {
 } from '../../oxford-searches/oxford-searches.service';
 import { OxfordSearchRecord } from '../../oxford-searches/interfaces/oxford-search.interface';
 import { SensesService } from '../senses/senses.service';
-import { LexicalCategory } from '../../../../../../libs/api-interfaces/src/lib/LexicalCategory';
 import { SenseRecord } from '../senses/interfaces/sense.interface';
+import { LexicalCategory } from '@edfu/api-interfaces';
 
 @Injectable()
 export class HeadwordsService {

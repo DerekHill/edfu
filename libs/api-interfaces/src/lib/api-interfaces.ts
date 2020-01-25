@@ -39,10 +39,10 @@ export class SenseDto {
   @Field({ nullable: true })
   readonly headwordHomographC: number;
 
-  @Field()
+  @Field(type => String)
   readonly dictionaryOrThesaurus?: DictionaryOrThesaurus;
 
-  @Field()
+  @Field(type => String)
   readonly lexicalCategory?: LexicalCategory;
 
   @Field()
@@ -51,6 +51,6 @@ export class SenseDto {
   @Field()
   readonly definition?: string;
 
-  @Field()
+  @Field(type => [String])
   readonly synonyms: string[];
 }

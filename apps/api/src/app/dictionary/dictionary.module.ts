@@ -7,6 +7,7 @@ import { HeadwordSchema } from './headwords/schemas/headword.schema';
 import { SensesService } from './senses/senses.service';
 import { HeadwordsResolver } from './headwords/headwords.resolver';
 import { SenseSchema } from './senses/schemas/sense.schema';
+import { SensesResolver } from './senses/senses.resolver';
 
 @Module({
   imports: [
@@ -18,6 +19,11 @@ import { SenseSchema } from './senses/schemas/sense.schema';
       { name: SENSE_COLLECTION_NAME, schema: SenseSchema }
     ])
   ],
-  providers: [HeadwordsService, SensesService, HeadwordsResolver]
+  providers: [
+    HeadwordsService,
+    SensesService,
+    HeadwordsResolver,
+    SensesResolver
+  ]
 })
 export class DictionaryModule {}

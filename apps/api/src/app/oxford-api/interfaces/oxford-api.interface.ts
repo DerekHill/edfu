@@ -1,4 +1,4 @@
-import { LexicalCategory } from '../../../../../../libs/api-interfaces/src/lib/LexicalCategory';
+import { LexicalCategory } from '@edfu/api-interfaces';
 
 interface OxSynonym {
   readonly id?: string;

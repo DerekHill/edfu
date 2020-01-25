@@ -16,12 +16,17 @@ type Query {
   headword(id: String!): HeadwordDto!
   headwordsAll: [HeadwordDto!]!
   search(search_string: String!): [HeadwordDto!]!
+  sense(senseId: String!): SenseDto!
 }
 
 type SenseDto {
   _id: ID!
   senseId: String!
   headwordOxId: String!
-  headwordHomographC: Float!
-  dictionaryOrThesaurus: String
+  headwordHomographC: Float
+  dictionaryOrThesaurus: String!
+  lexicalCategory: String!
+  example: String!
+  definition: String!
+  synonyms: [String!]!
 }

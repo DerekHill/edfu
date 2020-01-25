@@ -7,6 +7,7 @@ import { Apollo, QueryRef } from 'apollo-angular';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { HttpClient } from '@angular/common/http';
 import { HeadwordDto } from '@edfu/api-interfaces';
+import { MatOption } from '@angular/material';
 
 interface SearchQuery {
   search: HeadwordDto[];
@@ -32,6 +33,7 @@ export class SecondComponent implements OnInit, OnDestroy {
     this.searchInput = this.searchFormControl.valueChanges.pipe(
       startWith(''),
       map(value => {
+        // console.log(value);
         return value;
       })
     );
@@ -55,11 +57,26 @@ export class SecondComponent implements OnInit, OnDestroy {
       map(({ data }: any) => data.search)
     );
 
-    this.searchInput.subscribe(chars => {
-      this.searchRef.setVariables({
-        search_string: chars
-      });
+    this.searchInput.subscribe(input => {
+      console.log('input is:');
+      if (typeof input === 'string') {
+        console.log(input);
+        this.searchRef.setVariables({
+          search_string: input
+        });
+      } else if (typeof input === 'object') {
+        console.log(input);
+      }
     });
+  }
+
+  onOptionSelected(input) {
+    console.log('onOptionSelected:');
+    console.log(input);
+  }
+
+  displayFn(res?: any): string | undefined {
+    return res ? res.word : undefined;
   }
 
   ngOnDestroy() {}

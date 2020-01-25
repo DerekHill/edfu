@@ -6,6 +6,7 @@ import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { Subscription } from 'rxjs';
 import { untilDestroyed } from 'ngx-take-until-destroy';
+import { FormControl } from '@angular/forms';
 
 const Hello = gql`
   query {
@@ -30,6 +31,9 @@ const GetById = gql`
   templateUrl: './basic.component.html'
 })
 export class BasicComponent implements OnInit, OnDestroy {
+  myControl = new FormControl();
+  options: string[] = ['One', 'Two', 'Three'];
+
   hello$ = this.http.get<Message>('/api/hello');
   words: any;
   loading = true;

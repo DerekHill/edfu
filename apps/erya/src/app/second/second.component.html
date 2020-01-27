@@ -6,7 +6,7 @@
       placeholder="Search"
       aria-label="Type here to search"
       matInput
-      [formControl]="searchFormControl"
+      [formControl]="wordSearchFormControl"
       [matAutocomplete]="auto"
     />
     <mat-autocomplete
@@ -15,7 +15,7 @@
       autoActiveFirstOption
       (optionSelected)="onOptionSelected($event.option.value)"
     >
-      <mat-option *ngFor="let res of searchResults$ | async" [value]="res">
+      <mat-option *ngFor="let res of wordSearchResults$ | async" [value]="res">
         {{ res.word }}
       </mat-option>
     </mat-autocomplete>

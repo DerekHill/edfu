@@ -119,8 +119,8 @@ export class SecondComponent implements OnInit, OnDestroy {
     return res ? res.word : undefined;
   }
 
-  selectionChange(foo) {
-    console.log(foo);
+  onSenseClick(event, sense: SenseDto) {
+    console.log(sense);
   }
 
   ngOnDestroy() {}

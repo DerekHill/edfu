@@ -21,8 +21,11 @@
   </mat-form-field>
 </form>
 
-<mat-selection-list (selectionChange)="selectionChange($event.option.value)">
-  <mat-list-option *ngFor="let sense of senses$ | async" [value]="sense">
+<mat-action-list>
+  <mat-list-item
+    *ngFor="let sense of senses$ | async"
+    (click)="onSenseClick($event, sense)"
+  >
     <p>{{ sense.example }}</p>
-  </mat-list-option>
-</mat-selection-list>
+  </mat-list-item>
+</mat-action-list>

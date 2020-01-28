@@ -5,7 +5,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatAutocompleteModule,
   MatFormFieldModule,
-  MatInputModule
+  MatInputModule,
+  MatListModule
 } from '@angular/material';
 
 @NgModule({
@@ -16,7 +17,8 @@ import {
     ReactiveFormsModule,
     MatAutocompleteModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatListModule
   ]
 })
 export class SecondModule {}

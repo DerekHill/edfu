@@ -1,4 +1,3 @@
-<p>second works!</p>
 <form class="example-form">
   <mat-form-field class="example-full-width">
     <input
@@ -21,3 +20,9 @@
     </mat-autocomplete>
   </mat-form-field>
 </form>
+
+<mat-selection-list (selectionChange)="selectionChange($event.option.value)">
+  <mat-list-option *ngFor="let sense of senses$ | async" [value]="sense">
+    <p>{{ sense.example }}</p>
+  </mat-list-option>
+</mat-selection-list>

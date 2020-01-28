@@ -86,7 +86,7 @@ export class SecondComponent implements OnInit, OnDestroy {
     );
 
     this.senses$ = this.sensesSearchRef.valueChanges.pipe(
-      map(({ data }: any) => data)
+      map(({ data }: any) => data.senses)
     );
 
     this.wordSearchInput.subscribe(input => {
@@ -117,6 +117,10 @@ export class SecondComponent implements OnInit, OnDestroy {
 
   displayFn(res?: any): string | undefined {
     return res ? res.word : undefined;
+  }
+
+  selectionChange(foo) {
+    console.log(foo);
   }
 
   ngOnDestroy() {}

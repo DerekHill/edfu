@@ -1,13 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Observable, of } from 'rxjs';
+import { Observable, of, BehaviorSubject } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import gql from 'graphql-tag';
 import { Apollo, QueryRef } from 'apollo-angular';
-import { untilDestroyed } from 'ngx-take-until-destroy';
 import { HttpClient } from '@angular/common/http';
 import { HeadwordDto, SenseDto } from '@edfu/api-interfaces';
-import { MatOption } from '@angular/material';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 interface WordSearchQuery {
   search: HeadwordDto[];
@@ -35,23 +34,19 @@ export class SecondComponent implements OnInit, OnDestroy {
   wordSearchResults$: Observable<HeadwordDto[]>;
   wordSearchRef: QueryRef<WordSearchQuery, WordSearchVariables>;
 
-  senseSearchResults$: Observable<SenseDto[]>;
+  senses$: Observable<SenseDto[]>;
   sensesSearchRef: QueryRef<SensesQuery, SenseSearchVariables>;
 
-  tempObservable$: Observable<any>;
+  senseIds$: BehaviorSubject<string[]>;
 
   constructor(private http: HttpClient, private apollo: Apollo) {}
 
   ngOnInit() {
     this.wordSearchInput = this.wordSearchFormControl.valueChanges.pipe(
-      startWith(''),
-      map(value => {
-        // console.log(value);
-        return value;
-      })
+      startWith('')
     );
 
-    this.tempObservable$ = of('m_en_gbus0378040.005');
+    this.senseIds$ = new BehaviorSubject([]);
 
     this.sensesSearchRef = this.apollo.watchQuery<
       SensesQuery,
@@ -90,51 +85,34 @@ export class SecondComponent implements OnInit, OnDestroy {
       map(({ data }: any) => data.search)
     );
 
-    this.senseSearchResults$ = this.sensesSearchRef.valueChanges.pipe(
-      map(({ data }: any) => {
-        console.log('senseSearchResults:');
-        console.log(data);
-        return data;
-      })
+    this.senses$ = this.sensesSearchRef.valueChanges.pipe(
+      map(({ data }: any) => data)
     );
 
     this.wordSearchInput.subscribe(input => {
-      console.log('input is:');
       if (typeof input === 'string') {
-        console.log(input);
         this.wordSearchRef.setVariables({
           search_string: input
         });
       } else if (typeof input === 'object') {
-        console.log(input);
+        //   Do nothing. Use `onOptionSelected` instead
       }
     });
 
-    this.tempObservable$.subscribe(x => {
+    this.senseIds$.subscribe(senseIds => {
       this.sensesSearchRef.setVariables({
-        // senseId: input
-        senseIds: [x]
+        senseIds: senseIds
       });
-      console.log('x');
-      console.log(x);
     });
 
-    // this.senseSearchResults$.subscribe(foo => console.log(foo))
-
-    this.senseSearchResults$.subscribe(foo => {
-      console.log('sense search results:');
-      console.log(foo);
-      // return foo.search
+    this.senses$.subscribe(senses => {
+      console.log('senses');
+      console.log(senses);
     });
   }
 
-  onOptionSelected(input) {
-    console.log('onOptionSelected:');
-    console.log(input);
-    this.sensesSearchRef.setVariables({
-      senseIds: input.ownSenseIds
-      //   senseIds: ['m_en_gbus0378040.005']
-    });
+  onOptionSelected(input: HeadwordDto) {
+    this.senseIds$.next(input.ownSenseIds);
   }
 
   displayFn(res?: any): string | undefined {

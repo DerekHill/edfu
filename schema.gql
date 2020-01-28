@@ -9,6 +9,8 @@ type HeadwordDto {
   homographC: Float
   word: String!
   topLevel: Boolean!
+  ownSenseIds: [String!]!
+  synonymSenseIds: [String!]!
 }
 
 type Query {
@@ -17,6 +19,7 @@ type Query {
   headwordsAll: [HeadwordDto!]!
   search(search_string: String!): [HeadwordDto!]!
   sense(senseId: String!): SenseDto!
+  senses(senseIds: [String!]!): [SenseDto!]!
 }
 
 type SenseDto {

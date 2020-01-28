@@ -17,12 +17,12 @@ interface WordSearchVariables {
   search_string?: string;
 }
 
-interface SenseByIdQuery {
-  search: SenseDto[];
+interface SensesQuery {
+  senses: SenseDto[];
 }
 
 interface SenseSearchVariables {
-  senseId: string;
+  senseIds: string[];
 }
 
 @Component({
@@ -36,7 +36,7 @@ export class SecondComponent implements OnInit, OnDestroy {
   wordSearchRef: QueryRef<WordSearchQuery, WordSearchVariables>;
 
   senseSearchResults$: Observable<SenseDto[]>;
-  senseSearchRef: QueryRef<SenseByIdQuery, SenseSearchVariables>;
+  sensesSearchRef: QueryRef<SensesQuery, SenseSearchVariables>;
 
   tempObservable$: Observable<any>;
 
@@ -53,13 +53,13 @@ export class SecondComponent implements OnInit, OnDestroy {
 
     this.tempObservable$ = of('m_en_gbus0378040.005');
 
-    this.senseSearchRef = this.apollo.watchQuery<
-      SenseByIdQuery,
+    this.sensesSearchRef = this.apollo.watchQuery<
+      SensesQuery,
       SenseSearchVariables
     >({
       query: gql`
-        query Foo($senseId: String!) {
-          sense(senseId: $senseId) {
+        query SensesQuery($senseIds: [String!]!) {
+          senses(senseIds: $senseIds) {
             _id
             example
           }
@@ -72,13 +72,14 @@ export class SecondComponent implements OnInit, OnDestroy {
       WordSearchVariables
     >({
       query: gql`
-        query Foo($search_string: String!) {
+        query WordSearchQuery($search_string: String!) {
           search(search_string: $search_string) {
             _id
             oxId
             homographC
             word
             topLevel
+            ownSenseIds
           }
         }
       `,
@@ -89,11 +90,11 @@ export class SecondComponent implements OnInit, OnDestroy {
       map(({ data }: any) => data.search)
     );
 
-    this.senseSearchResults$ = this.senseSearchRef.valueChanges.pipe(
+    this.senseSearchResults$ = this.sensesSearchRef.valueChanges.pipe(
       map(({ data }: any) => {
         console.log('senseSearchResults:');
         console.log(data);
-        return data.search;
+        return data;
       })
     );
 
@@ -110,23 +111,29 @@ export class SecondComponent implements OnInit, OnDestroy {
     });
 
     this.tempObservable$.subscribe(x => {
-      this.senseSearchRef.setVariables({
+      this.sensesSearchRef.setVariables({
         // senseId: input
-        senseId: x
+        senseIds: [x]
       });
       console.log('x');
       console.log(x);
     });
 
-    this.senseSearchResults$.subscribe(foo => console.log(foo));
+    // this.senseSearchResults$.subscribe(foo => console.log(foo))
+
+    this.senseSearchResults$.subscribe(foo => {
+      console.log('sense search results:');
+      console.log(foo);
+      // return foo.search
+    });
   }
 
   onOptionSelected(input) {
     console.log('onOptionSelected:');
     console.log(input);
-    this.senseSearchRef.setVariables({
-      // senseId: input
-      senseId: 'm_en_gbus0378040.005'
+    this.sensesSearchRef.setVariables({
+      senseIds: input.ownSenseIds
+      //   senseIds: ['m_en_gbus0378040.005']
     });
   }
 

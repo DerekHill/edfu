@@ -63,6 +63,15 @@ export class SensesService {
       .exec();
   }
 
+  findMany(senseIds: string[]): Promise<SenseRecord[]> {
+    return this.senseModel
+      .find()
+      .where('senseId')
+      .in(senseIds)
+      .lean()
+      .exec();
+  }
+
   extractSynonyms(oxSense: OxSense): string[] {
     const res: string[] = [];
 

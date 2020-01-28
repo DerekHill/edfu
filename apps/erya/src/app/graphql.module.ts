@@ -23,9 +23,13 @@ const defaultOptions: DefaultOptions = {
 export function createApollo(httpLink: HttpLink) {
   const http = httpLink.create({ uri });
 
-  const error = onError(e => {
-    console.error('apollo-link-error found error:');
-    console.error(e);
+  const error = onError((e: any) => {
+    console.log('apollo-link-error found error:');
+    // Switch to chaining once have typescript 3.7
+    if (e.networkError) {
+      console.log(e.networkError.error.errors);
+    }
+    console.log(e);
   });
 
   const link = error.concat(http);

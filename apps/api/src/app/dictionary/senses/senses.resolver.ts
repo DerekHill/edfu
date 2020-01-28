@@ -1,5 +1,5 @@
 import { Resolver, Query, Args } from '@nestjs/graphql';
-import { SensesService } from './Senses.service';
+import { SensesService } from './senses.service';
 import { SenseDto } from '@edfu/api-interfaces';
 import { NotFoundException } from '@nestjs/common';
 
@@ -14,5 +14,16 @@ export class SensesResolver {
       throw new NotFoundException(senseId);
     }
     return sense;
+  }
+  @Query(returns => [SenseDto])
+  //   async senses(@Args('senseIds') senseIds: string[]): Promise<SenseDto[]> {
+  async senses(
+    @Args({ name: 'senseIds', type: () => [String] }) senseIds: string[]
+  ): Promise<SenseDto[]> {
+    const senses = await this.sensesService.findMany(senseIds);
+    if (!senses) {
+      throw new NotFoundException(senseIds);
+    }
+    return senses;
   }
 }

@@ -3,7 +3,9 @@ import { AppModule } from './app/app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    logger: ['log', 'error', 'warn', 'debug', 'verbose']
+    // https://docs.nestjs.com/techniques/logger
+    // logger: ['log', 'error', 'warn', 'debug', 'verbose']
+    logger: console
   });
   const globalPrefix = 'api';
   //   app.enableCors();

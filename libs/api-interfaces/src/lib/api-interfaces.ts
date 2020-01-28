@@ -1,10 +1,6 @@
 import { ObjectType, Field, Int, ID } from 'type-graphql';
 import { ObjectId } from 'bson';
-import { DictionaryOrThesaurus, LexicalCategory } from '..';
-
-export interface Message {
-  message: string;
-}
+import { DictionaryOrThesaurus, LexicalCategory } from './enums';
 
 @ObjectType()
 export class HeadwordDto {
@@ -22,6 +18,12 @@ export class HeadwordDto {
 
   @Field()
   readonly topLevel: boolean;
+
+  @Field(type => [String])
+  readonly ownSenseIds: string[];
+
+  @Field(type => [String])
+  readonly synonymSenseIds: string[];
 }
 
 @ObjectType()

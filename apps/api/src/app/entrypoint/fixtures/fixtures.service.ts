@@ -19,6 +19,7 @@ import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/api-interfaces';
 const FOOD = 'food';
 const FAST = 'fast';
 const BANK = 'bank';
+const SPEEDY = 'speedy';
 
 const FOOD_SENSE_1_ID = 'm_en_gbus0378040.005';
 const FOOD_SENSE_2_ID = 't_en_gb0005872.001';
@@ -73,6 +74,12 @@ const BANK_2_THES_NOU_SENSE_2_ID = 't_en_gb0001139.002';
 const BANK_2_THES_VER_SENSE_1_ID = 't_en_gb0001139.003'; // Linked to BANK_2_DICT_VER_SENSE_1_ID
 const BANK_2_THES_VER_SENSE_2_ID = 't_en_gb0001139.004'; // Linked to BANK_2_DICT_VER_SENSE_1_ID as well
 
+const SPEEDY_DICT_ADJ_SENSE_1_ID = 'm_en_gbus0976550.008';
+const SPEEDY_DICT_ADJ_SENSE_2_ID = 'm_en_gbus0976550.013';
+
+const SPEEDY_THES_ADJ_SENSE_1_ID = 't_en_gb0013890.001'; // Linked to SPEEDY_DICT_ADJ_SENSE_1_ID
+const SPEEDY_THES_ADJ_SENSE_2_ID = 't_en_gb0013890.002'; // Linked to SPEEDY_DICT_ADJ_SENSE_2_ID
+
 const HEADWORDS: HeadwordRecordWithoutId[] = [
   {
     oxId: FOOD,
@@ -109,7 +116,40 @@ const HEADWORDS: HeadwordRecordWithoutId[] = [
     ownSenseIds: [FAST_2_DICT_VER_SENSE_1_ID, FAST_2_DICT_NOU_SENSE_1_ID],
     synonymSenseIds: []
   },
-
+  {
+    oxId: BANK,
+    homographC: 1,
+    word: BANK,
+    topLevel: true,
+    ownSenseIds: [
+      BANK_1_DICT_NOU_SENSE_1_ID,
+      BANK_1_DICT_NOU_SENSE_2_ID,
+      BANK_1_DICT_NOU_SENSE_3_ID,
+      BANK_1_DICT_NOU_SENSE_4_ID,
+      BANK_1_DICT_VER_SENSE_1_ID,
+      BANK_1_DICT_VER_SENSE_2_ID,
+      BANK_1_DICT_VER_SENSE_3_ID,
+      BANK_1_DICT_VER_SENSE_4_ID,
+      BANK_1_DICT_VER_SENSE_5_ID
+    ],
+    synonymSenseIds: []
+  },
+  {
+    oxId: BANK,
+    homographC: 2,
+    word: BANK,
+    topLevel: true,
+    ownSenseIds: [BANK_2_DICT_NOU_SENSE_1_ID, BANK_2_DICT_VER_SENSE_1_ID],
+    synonymSenseIds: []
+  },
+  {
+    oxId: SPEEDY,
+    homographC: null,
+    word: SPEEDY,
+    topLevel: true,
+    ownSenseIds: [SPEEDY_DICT_ADJ_SENSE_1_ID, SPEEDY_DICT_ADJ_SENSE_2_ID],
+    synonymSenseIds: []
+  },
   {
     oxId: 'drink',
     homographC: null,
@@ -780,6 +820,77 @@ const SENSES: SenseRecordWithoutId[] = [
     lexicalCategory: LexicalCategory.noun,
     example: 'the family has banked with Coutts for generations',
     synonyms: ['use']
+  },
+  {
+    senseId: SPEEDY_DICT_ADJ_SENSE_1_ID,
+    headwordOxId: SPEEDY,
+    headwordHomographC: 1,
+    dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
+    lexicalCategory: LexicalCategory.noun,
+    example: 'the family has banked with Coutts for generations',
+    synonyms: ['use']
+  },
+  {
+    senseId: SPEEDY_DICT_ADJ_SENSE_1_ID,
+    headwordOxId: SPEEDY,
+    headwordHomographC: null,
+    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+    lexicalCategory: LexicalCategory.adjective,
+    thesaurusLinks: [
+      {
+        entry_id: 'speedy',
+        sense_id: SPEEDY_THES_ADJ_SENSE_1_ID
+      }
+    ],
+    example: 'a speedy recovery',
+    definition: 'done or occurring quickly',
+    synonyms: []
+  },
+  {
+    senseId: SPEEDY_DICT_ADJ_SENSE_2_ID,
+    headwordOxId: SPEEDY,
+    headwordHomographC: null,
+    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+    lexicalCategory: LexicalCategory.adjective,
+    thesaurusLinks: [
+      {
+        entry_id: 'speedy',
+        sense_id: SPEEDY_THES_ADJ_SENSE_2_ID
+      }
+    ],
+    example: 'a speedy winger',
+    definition: 'moving quickly',
+    synonyms: []
+  },
+  {
+    senseId: SPEEDY_THES_ADJ_SENSE_1_ID,
+    headwordOxId: SPEEDY,
+    headwordHomographC: null,
+    dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
+    lexicalCategory: LexicalCategory.adjective,
+    example: 'a speedy reply',
+    synonyms: [
+      'rapid',
+      'swift',
+      'quick',
+      'fast',
+      'prompt',
+      'immediate',
+      'expeditious',
+      'express',
+      'brisk',
+      'sharp',
+      'unhesitating'
+    ]
+  },
+  {
+    senseId: SPEEDY_THES_ADJ_SENSE_2_ID,
+    headwordOxId: SPEEDY,
+    headwordHomographC: null,
+    dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
+    lexicalCategory: LexicalCategory.adjective,
+    example: 'speedy hatchback',
+    synonyms: ['fast']
   }
 ];
 

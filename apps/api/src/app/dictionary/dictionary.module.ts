@@ -8,6 +8,7 @@ import { SensesService } from './senses/senses.service';
 import { HeadwordsResolver } from './headwords/headwords.resolver';
 import { SenseSchema } from './senses/schemas/sense.schema';
 import { SensesResolver } from './senses/senses.resolver';
+import { SignsService } from './signs/signs.service';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import { SensesResolver } from './senses/senses.resolver';
     HeadwordsService,
     SensesService,
     HeadwordsResolver,
-    SensesResolver
+    SensesResolver,
+    SignsService
   ]
 })
 export class DictionaryModule {}

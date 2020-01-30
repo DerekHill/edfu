@@ -13,6 +13,7 @@ import { SensesService } from '../senses/senses.service';
 import { OxfordSearchRecord } from '../../oxford-searches/interfaces/oxford-search.interface';
 import { createEntrySearchRecord } from './test/oxford-search-record-factory';
 import { DictionarySenseRecord } from '../senses/interfaces/sense.interface';
+import { HeadwordOrPhrase } from '../../enums';
 
 class OxfordSearchesServiceMock {
   findOrFetch(): Promise<OxfordSearchRecord[]> {
@@ -71,13 +72,16 @@ describe('EntriesService', () => {
 
   describe('findOrCreateWithOwnSensesOnly() from Dictionary', () => {
     it('returns new record if word does not already exist', async () => {
+      const WORD = 'food';
+      const TYPE = HeadwordOrPhrase.headword;
+      const record = createEntrySearchRecord(WORD, true, 1, TYPE);
       jest
         .spyOn(entrySearchesService, 'findOrFetch')
-        .mockImplementation(chars =>
-          Promise.resolve([createEntrySearchRecord('food')])
-        );
+        .mockImplementation(chars => Promise.resolve([record]));
 
       const res = await entriesService.findOrCreateWithOwnSensesOnly('foo');
+      expect(res[0].word).toEqual(WORD);
+      expect(res[0].headwordOrPhrase).toEqual(TYPE);
     });
   });
 });

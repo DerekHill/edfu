@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+import { HeadwordOrPhrase } from '../../../enums';
 
 export const EntrySchema = new mongoose.Schema({
   oxId: {
@@ -19,10 +20,15 @@ export const EntrySchema = new mongoose.Schema({
   },
   ownSenseIds: {
     type: [String],
-    required: true
+    required: false
   },
   synonymSenseIds: {
     type: [String],
+    required: false
+  },
+  headwordOrPhrase: {
+    type: String,
+    enum: [HeadwordOrPhrase.headword, HeadwordOrPhrase.phrase],
     required: true
   }
 });

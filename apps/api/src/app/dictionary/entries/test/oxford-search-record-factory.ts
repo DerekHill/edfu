@@ -1,10 +1,12 @@
 import { OxfordSearchRecord } from '../../../oxford-searches/interfaces/oxford-search.interface';
 import { ObjectId } from 'bson';
+import { HeadwordOrPhrase } from '../../../enums';
 
 export const createEntrySearchRecord = (
   word: string,
   found = true,
-  homographC = 1
+  homographC = 1,
+  type = HeadwordOrPhrase.headword
 ): OxfordSearchRecord => {
   return {
     _id: new ObjectId(),
@@ -32,7 +34,7 @@ export const createEntrySearchRecord = (
           text: word
         }
       ],
-      type: 'headword',
+      type: type,
       word: word
     },
     homographC: homographC,

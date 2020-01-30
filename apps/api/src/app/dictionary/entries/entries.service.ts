@@ -2,7 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ENTRY_COLLECTION_NAME } from '../../constants';
 import { Model } from 'mongoose';
-import { EntryRecord, EntryDocument } from './interfaces/entry.interface';
+import {
+  EntryRecord,
+  EntryDocument,
+  EntryRecordWithoutId
+} from './interfaces/entry.interface';
 import {
   EntrySearchesService,
   ThesaurusSearchesService
@@ -14,6 +18,7 @@ import {
   DictionarySenseRecord,
   ThesaurusSenseRecord
 } from '../senses/interfaces/sense.interface';
+import { HeadwordOrPhrase } from '../../enums';
 
 @Injectable()
 export class EntriesService {
@@ -90,11 +95,12 @@ export class EntriesService {
   createEntryFromSearchRecord = (
     record: OxfordSearchRecord
   ): Promise<EntryRecord> => {
-    const entry = {
+    const entry: EntryRecordWithoutId = {
       word: record.result.word,
       oxId: record.result.id,
       homographC: record.homographC,
-      relatedEntriesAdded: false
+      relatedEntriesAdded: false,
+      headwordOrPhrase: HeadwordOrPhrase[record.result.type]
     };
     return this.entryModel.create(entry);
   };

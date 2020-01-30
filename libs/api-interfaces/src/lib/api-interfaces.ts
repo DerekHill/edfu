@@ -17,7 +17,7 @@ export class EntryDto {
   readonly word: string;
 
   @Field()
-  readonly topLevel: boolean;
+  readonly relatedEntriesAdded: boolean;
 
   @Field(type => [String])
   readonly ownSenseIds: string[];
@@ -41,18 +41,18 @@ export class SenseDto {
   @Field({ nullable: true })
   readonly entryHomographC: number;
 
+  //   Remove? (alwas dictionary)
   @Field(type => String)
   readonly dictionaryOrThesaurus?: DictionaryOrThesaurus;
 
   @Field(type => String)
   readonly lexicalCategory?: LexicalCategory;
 
+  //   Make required?
   @Field()
   readonly example?: string;
 
+  //   Make required?
   @Field()
   readonly definition?: string;
-
-  @Field(type => [String])
-  readonly synonyms: string[];
 }

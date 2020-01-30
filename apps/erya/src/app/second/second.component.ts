@@ -73,7 +73,7 @@ export class SecondComponent implements OnInit, OnDestroy {
             oxId
             homographC
             word
-            topLevel
+            relatedEntriesAdded
             ownSenseIds
           }
         }

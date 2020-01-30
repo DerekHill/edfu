@@ -84,7 +84,7 @@ const ENTRIES: EntryRecordWithoutId[] = [
     oxId: FOOD,
     homographC: null,
     word: FOOD,
-    topLevel: true,
+    relatedEntriesAdded: true,
     ownSenseIds: [FOOD_SENSE_1_ID, FOOD_SENSE_2_ID, FOOD_SENSE_3_ID],
     synonymSenseIds: [],
     headwordOrPhrase: HeadwordOrPhrase.headword
@@ -93,7 +93,7 @@ const ENTRIES: EntryRecordWithoutId[] = [
     oxId: FAST,
     homographC: 1,
     word: FAST,
-    topLevel: true,
+    relatedEntriesAdded: true,
     ownSenseIds: [
       FAST_1_DICT_ADJ_SENSE_1_ID,
       FAST_1_DICT_ADJ_SENSE_2_ID,
@@ -113,7 +113,7 @@ const ENTRIES: EntryRecordWithoutId[] = [
     oxId: FAST,
     homographC: 2,
     word: FAST,
-    topLevel: true,
+    relatedEntriesAdded: true,
     ownSenseIds: [FAST_2_DICT_VER_SENSE_1_ID, FAST_2_DICT_NOU_SENSE_1_ID],
     synonymSenseIds: [],
     headwordOrPhrase: HeadwordOrPhrase.headword
@@ -122,7 +122,7 @@ const ENTRIES: EntryRecordWithoutId[] = [
     oxId: BANK,
     homographC: 1,
     word: BANK,
-    topLevel: true,
+    relatedEntriesAdded: true,
     ownSenseIds: [
       BANK_1_DICT_NOU_SENSE_1_ID,
       BANK_1_DICT_NOU_SENSE_2_ID,
@@ -141,7 +141,7 @@ const ENTRIES: EntryRecordWithoutId[] = [
     oxId: BANK,
     homographC: 2,
     word: BANK,
-    topLevel: true,
+    relatedEntriesAdded: true,
     ownSenseIds: [BANK_2_DICT_NOU_SENSE_1_ID, BANK_2_DICT_VER_SENSE_1_ID],
     synonymSenseIds: [],
     headwordOrPhrase: HeadwordOrPhrase.headword
@@ -150,7 +150,7 @@ const ENTRIES: EntryRecordWithoutId[] = [
     oxId: SPEEDY,
     homographC: null,
     word: SPEEDY,
-    topLevel: true,
+    relatedEntriesAdded: true,
     ownSenseIds: [SPEEDY_DICT_ADJ_SENSE_1_ID, SPEEDY_DICT_ADJ_SENSE_2_ID],
     synonymSenseIds: [],
     headwordOrPhrase: HeadwordOrPhrase.headword
@@ -159,7 +159,7 @@ const ENTRIES: EntryRecordWithoutId[] = [
     oxId: 'drink',
     homographC: null,
     word: 'drink',
-    topLevel: true,
+    relatedEntriesAdded: true,
     ownSenseIds: [],
     synonymSenseIds: [],
     headwordOrPhrase: HeadwordOrPhrase.headword
@@ -168,7 +168,7 @@ const ENTRIES: EntryRecordWithoutId[] = [
     oxId: 'toast',
     homographC: null,
     word: 'toast',
-    topLevel: true,
+    relatedEntriesAdded: true,
     ownSenseIds: [],
     synonymSenseIds: [],
     headwordOrPhrase: HeadwordOrPhrase.headword

@@ -3,6 +3,7 @@ import { EntriesResolver } from './entries.resolver';
 import { EntriesService } from './entries.service';
 import { EntryRecord } from './interfaces/entry.interface';
 import { ObjectId } from 'bson';
+import { HeadwordOrPhrase } from '../../enums';
 
 export class EntriesServiceMock {
   findOneById(id: string): Promise<EntryRecord> {
@@ -19,9 +20,10 @@ const entryRecord = (wordAndOxId: string): EntryRecord => {
     oxId: wordAndOxId,
     homographC: null,
     word: wordAndOxId,
-    topLevel: true,
+    relatedEntriesAdded: true,
     ownSenseIds: [],
-    synonymSenseIds: []
+    synonymSenseIds: [],
+    headwordOrPhrase: HeadwordOrPhrase.headword
   };
 };
 

@@ -6,7 +6,7 @@ export interface EntryRecordWithoutId {
   readonly oxId: string;
   readonly homographC: number;
   readonly word: string;
-  readonly topLevel: boolean;
+  readonly relatedEntriesAdded: boolean;
   readonly ownSenseIds: string[]; // deprecated
   readonly synonymSenseIds: string[]; // deprecated
   readonly headwordOrPhrase: HeadwordOrPhrase;

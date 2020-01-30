@@ -8,7 +8,7 @@ type EntryDto {
   oxId: String!
   homographC: Float
   word: String!
-  topLevel: Boolean!
+  relatedEntriesAdded: Boolean!
   ownSenseIds: [String!]!
   synonymSenseIds: [String!]!
 }
@@ -31,5 +31,4 @@ type SenseDto {
   lexicalCategory: String!
   example: String!
   definition: String!
-  synonyms: [String!]!
 }

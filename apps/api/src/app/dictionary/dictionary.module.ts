@@ -5,7 +5,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import {
   ENTRY_COLLECTION_NAME,
   SENSE_COLLECTION_NAME,
-  SIGN_COLLECTION_NAME
+  SIGN_COLLECTION_NAME,
+  ENTRY_SENSE_COLLECTION_NAME
 } from '../constants';
 import { EntrySchema } from './entries/schemas/entry.schema';
 import { SensesService } from './senses/senses.service';
@@ -14,6 +15,8 @@ import { SenseSchema } from './senses/schemas/sense.schema';
 import { SensesResolver } from './senses/senses.resolver';
 import { SignsService } from './signs/signs.service';
 import { SignSchema } from './signs/schemas/sign.schema';
+import { EntrySensesService } from './entry-senses/entry-senses.service';
+import { EntrySenseSchema } from './entry-senses/schemas/entry-sense.schema';
 
 @Module({
   imports: [
@@ -26,6 +29,9 @@ import { SignSchema } from './signs/schemas/sign.schema';
     ]),
     MongooseModule.forFeature([
       { name: SIGN_COLLECTION_NAME, schema: SignSchema }
+    ]),
+    MongooseModule.forFeature([
+      { name: ENTRY_SENSE_COLLECTION_NAME, schema: EntrySenseSchema }
     ])
   ],
   providers: [
@@ -33,7 +39,8 @@ import { SignSchema } from './signs/schemas/sign.schema';
     SensesService,
     EntriesResolver,
     SensesResolver,
-    SignsService
+    SignsService,
+    EntrySensesService
   ]
 })
 export class DictionaryModule {}

@@ -13,6 +13,7 @@ import {
   EntrySearchesService,
   ThesaurusSearchesService
 } from '../../oxford-searches/oxford-searches.service';
+// Make this mock locally
 import { OxfordSearchesServiceMock } from '../../oxford-searches/test/oxford-searches.service.mock';
 
 describe('SensesService', () => {
@@ -44,14 +45,14 @@ describe('SensesService', () => {
     service = module.get<SensesService>(SensesService);
   });
 
-  describe('findOrCreate', () => {
+  describe('findOrCreateWithoutLinkOld', () => {
     it('works', async () => {
       const entryOxId = 'bank';
       const entryHomographC = 0;
       const lexicalCategory = LexicalCategory.adjective;
       const oxSense: OxSense = DICTIONARY_SENSE_BANK;
       expect(
-        service.findOrCreate(
+        service.findOrCreateWithoutLinkOld(
           entryOxId,
           entryHomographC,
           lexicalCategory,
@@ -73,7 +74,7 @@ describe('SensesService', () => {
         id: 'm_en_gbus0378040.005'
       };
 
-      const res = await service.findOrCreate(
+      const res = await service.findOrCreateWithoutLinkOld(
         entryOxId,
         entryHomographC,
         lexicalCategory,

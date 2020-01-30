@@ -31,7 +31,16 @@ export class SensesService {
     private readonly senseModel: Model<SenseDocument>
   ) {}
 
-  async findOrCreate(
+  async findOrCreateWithAssociation(
+    entryOxId: string,
+    entryHomographC: number,
+    lexicalCategory: LexicalCategory,
+    oxSense: OxSense
+  ) {}
+
+  // OLD METHODS //
+
+  async findOrCreateWithoutLinkOld(
     entryOxId: string,
     entryHomographC: number,
     lexicalCategory: LexicalCategory,

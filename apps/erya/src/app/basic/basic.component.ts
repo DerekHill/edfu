@@ -21,7 +21,7 @@ const GetById = gql`
       oxId
       homographC
       word
-      topLevel
+      relatedEntriesAdded
     }
   }
 `;
@@ -56,7 +56,7 @@ export class BasicComponent implements OnInit, OnDestroy {
               oxId
               homographC
               word
-              topLevel
+              relatedEntriesAdded
             }
           }
         `

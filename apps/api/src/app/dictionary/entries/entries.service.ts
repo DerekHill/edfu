@@ -25,9 +25,20 @@ export class EntriesService {
     private readonly sensesService: SensesService
   ) {}
 
+  async findOrCreateWithOwnSensesOnly(chars: string) {
+    const entrySearchResults = await this.entrySearchesService.findOrFetch(
+      chars
+    );
+    console.log(entrySearchResults);
+  }
+
+  async findOrCreateSensesWithAssociations() {}
+
+  // OLD METHODS //
+
   async findOrCreateAndUpdateSenses(
     word: string,
-    topLevel = false,
+    relatedEntriesAdded = false,
     synonymSenseId = null
   ): Promise<EntryRecord[]> {
     const existing: EntryRecord[] = await this.entryModel
@@ -66,16 +77,18 @@ export class EntriesService {
 
       const entries = await Promise.all(
         entrySearchResults.map(record =>
-          this.createEntry(record, topLevel, synonymSenseId)
+          this.createEntry(record, relatedEntriesAdded, synonymSenseId)
         )
       );
 
       await Promise.all(
         entrySearchResults
-          .map(record => this.createSenses(record, topLevel))
+          .map(record =>
+            this.createSensesWithAssociationsOld(record, relatedEntriesAdded)
+          )
           .concat(
             thesaurusSearchResults.map(record =>
-              this.createSenses(record, topLevel)
+              this.createSensesWithAssociationsOld(record, relatedEntriesAdded)
             )
           )
       );
@@ -112,7 +125,7 @@ export class EntriesService {
     const updated = await this.entryModel
       .findOneAndUpdate(
         { oxId: oxId, homographC: homographC },
-        { $set: { topLevel: true } },
+        { $set: { relatedEntriesAdded: true } },
         { new: true }
       )
       .lean();
@@ -146,22 +159,22 @@ export class EntriesService {
 
   createEntry = (
     record: OxfordSearchRecord,
-    topLevel: boolean,
+    relatedEntriesAdded: boolean,
     synonymSenseId = null
   ): Promise<EntryRecord> => {
     const entry = {
       word: record.result.word,
       oxId: record.result.id,
       homographC: record.homographC,
-      topLevel: topLevel,
+      relatedEntriesAdded: relatedEntriesAdded,
       synonymSenseIds: synonymSenseId ? [synonymSenseId] : []
     };
     return this.entryModel.create(entry);
   };
 
-  createSenses = async (
+  createSensesWithAssociationsOld = async (
     searchRecord: OxfordSearchRecord,
-    topLevel: boolean
+    relatedEntriesAdded: boolean
   ): Promise<DictionarySenseRecord[] | ThesaurusSenseRecord[]> => {
     const promises = [];
     for (const categoryEntries of searchRecord.result.lexicalEntries) {
@@ -170,7 +183,7 @@ export class EntriesService {
       for (const entry of categoryEntries.entries) {
         for (const sense of entry.senses) {
           promises.push(
-            this.sensesService.findOrCreate(
+            this.sensesService.findOrCreateWithoutLinkOld(
               searchRecord.result.id,
               searchRecord.homographC,
               lexicalCategory,
@@ -194,7 +207,7 @@ export class EntriesService {
       })
     );
 
-    if (topLevel) {
+    if (relatedEntriesAdded) {
       const entries = [];
       senses.map(record => {
         record.synonyms.map(word => {

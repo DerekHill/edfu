@@ -13,7 +13,7 @@ export const EntrySchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  topLevel: {
+  relatedEntriesAdded: {
     type: Boolean,
     required: true
   },

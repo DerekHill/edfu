@@ -11,6 +11,8 @@ import { EntrySchema } from './schemas/entry.schema';
 import { SenseSchema } from '../senses/schemas/sense.schema';
 import { SensesService } from '../senses/senses.service';
 import { OxfordSearchRecord } from '../../oxford-searches/interfaces/oxford-search.interface';
+import { createEntrySearchRecord } from './test/oxford-search-record-factory';
+import { DictionarySenseRecord } from '../senses/interfaces/sense.interface';
 
 class OxfordSearchesServiceMock {
   findOrFetch(): Promise<OxfordSearchRecord[]> {
@@ -19,9 +21,9 @@ class OxfordSearchesServiceMock {
 }
 
 class SensesServiceMock {
-  //   findOrFetch(): Promise<OxfordSearchRecord[]> {
-  //     return Promise.resolve(null);
-  //   }
+  findOrCreateDictionarySenseWithAssociation(): Promise<DictionarySenseRecord> {
+    return Promise.resolve(null);
+  }
 }
 
 describe('EntriesService', () => {
@@ -68,13 +70,14 @@ describe('EntriesService', () => {
   });
 
   describe('findOrCreateWithOwnSensesOnly() from Dictionary', () => {
-    it('returns new record if word does not already exist', () => {
+    it('returns new record if word does not already exist', async () => {
       jest
         .spyOn(entrySearchesService, 'findOrFetch')
-        .mockImplementation(chars => null);
+        .mockImplementation(chars =>
+          Promise.resolve([createEntrySearchRecord('food')])
+        );
 
-      entriesService.findOrCreateWithOwnSensesOnly('foo');
+      const res = await entriesService.findOrCreateWithOwnSensesOnly('foo');
     });
-    it.skip('returns existing record if word does already exist', () => {});
   });
 });

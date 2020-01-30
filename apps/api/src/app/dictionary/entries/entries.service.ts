@@ -26,13 +26,87 @@ export class EntriesService {
   ) {}
 
   async findOrCreateWithOwnSensesOnly(chars: string) {
+    const existing: EntryRecord[] = await this.entryModel
+      .find({
+        word: chars
+      })
+      .lean();
+
+    if (existing.length) {
+      return existing;
+    }
+
     const entrySearchResults = await this.entrySearchesService.findOrFetch(
       chars
     );
-    console.log(entrySearchResults);
+
+    if (entrySearchResults.length === 0) {
+      throw new Error(`entrySearchesService error for chars: ${chars}`);
+    }
+
+    if (
+      entrySearchResults.length === 1 &&
+      entrySearchResults[0].found === false
+    ) {
+      throw new Error(`chars: ${chars} not found in dictionary`);
+    }
+
+    const entries = await Promise.all(
+      entrySearchResults.map(record => this.createEntryFromSearchRecord(record))
+    );
+
+    await Promise.all(
+      entrySearchResults.map(record =>
+        this.findOrCreateSensesWithAssociations(record)
+      )
+    );
+
+    return Promise.all(entries.map(this.getLatest));
   }
 
-  async findOrCreateSensesWithAssociations() {}
+  findOrCreateSensesWithAssociations = async (
+    searchRecord: OxfordSearchRecord
+  ): Promise<DictionarySenseRecord[]> => {
+    const promises = [];
+    for (const categoryEntries of searchRecord.result.lexicalEntries) {
+      const lexicalCategory =
+        LexicalCategory[categoryEntries.lexicalCategory.id];
+      for (const entry of categoryEntries.entries) {
+        for (const sense of entry.senses) {
+          promises.push(
+            this.sensesService.findOrCreateDictionarySenseWithAssociation(
+              searchRecord.result.id,
+              searchRecord.homographC,
+              lexicalCategory,
+              sense
+            )
+          );
+        }
+      }
+    }
+    return promises;
+  };
+
+  createEntryFromSearchRecord = (
+    record: OxfordSearchRecord
+  ): Promise<EntryRecord> => {
+    const entry = {
+      word: record.result.word,
+      oxId: record.result.id,
+      homographC: record.homographC,
+      relatedEntriesAdded: false
+    };
+    return this.entryModel.create(entry);
+  };
+
+  getLatest = (record: EntryRecord) => {
+    return this.entryModel
+      .findById(record._id)
+      .lean()
+      .exec();
+  };
+
+  senses(oxId: string, homographC: string) {}
 
   // OLD METHODS //
 
@@ -77,7 +151,7 @@ export class EntriesService {
 
       const entries = await Promise.all(
         entrySearchResults.map(record =>
-          this.createEntry(record, relatedEntriesAdded, synonymSenseId)
+          this.createEntryFromSearchRecord(record)
         )
       );
 
@@ -149,28 +223,6 @@ export class EntriesService {
     }
     return Promise.all(promises);
   }
-
-  getLatest = (record: EntryRecord) => {
-    return this.entryModel
-      .findById(record._id)
-      .lean()
-      .exec();
-  };
-
-  createEntry = (
-    record: OxfordSearchRecord,
-    relatedEntriesAdded: boolean,
-    synonymSenseId = null
-  ): Promise<EntryRecord> => {
-    const entry = {
-      word: record.result.word,
-      oxId: record.result.id,
-      homographC: record.homographC,
-      relatedEntriesAdded: relatedEntriesAdded,
-      synonymSenseIds: synonymSenseId ? [synonymSenseId] : []
-    };
-    return this.entryModel.create(entry);
-  };
 
   createSensesWithAssociationsOld = async (
     searchRecord: OxfordSearchRecord,

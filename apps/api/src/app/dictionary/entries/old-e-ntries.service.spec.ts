@@ -61,10 +61,7 @@ describe.skip('OldEntriesService', () => {
     it('creates basic entry', async () => {
       const record: OxfordSearchRecord = createEntrySearchRecord('river');
       const relatedEntriesAdded = true;
-      const origWord = await entriesService.createEntry(
-        record,
-        relatedEntriesAdded
-      );
+      const origWord = await entriesService.createEntryFromSearchRecord(record);
       expect(origWord.relatedEntriesAdded).toBeTruthy();
     });
   });
@@ -256,10 +253,7 @@ describe.skip('OldEntriesService', () => {
         });
 
       const relatedEntriesAdded = false;
-      const origWord = await entriesService.createEntry(
-        record,
-        relatedEntriesAdded
-      );
+      const origWord = await entriesService.createEntryFromSearchRecord(record);
 
       await entriesService.createSensesWithAssociationsOld(
         createThesaurusSearchRecord(oxId, ['quick']),
@@ -278,7 +272,9 @@ describe.skip('OldEntriesService', () => {
 
   describe('search', () => {
     beforeEach(async () => {
-      await entriesService.createEntry(createEntrySearchRecord('river'), true);
+      await entriesService.createEntryFromSearchRecord(
+        createEntrySearchRecord('river')
+      );
     });
     it('matches if characters match', async () => {
       expect(await entriesService.search('ri')).toHaveLength(1);

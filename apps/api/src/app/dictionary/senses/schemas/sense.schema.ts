@@ -41,3 +41,4 @@ export const SenseSchema = new mongoose.Schema({
 });
 
 SenseSchema.index({ senseId: 1 }, { unique: true });
+SenseSchema.index({ thesaurusSenseIds: 1 });

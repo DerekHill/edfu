@@ -60,9 +60,8 @@ export class SensesService {
       .exec();
   }
 
-  findOne(
-    senseId: string
-  ): Promise<DictionarySenseRecord | ThesaurusSenseRecord> {
+  //   Leave out DictionarySenseRecord because does not have synonyms
+  findOne(senseId: string): Promise<ThesaurusSenseRecord> {
     return this.senseModel
       .findOne({ senseId: senseId })
       .lean()

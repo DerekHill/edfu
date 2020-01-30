@@ -22,7 +22,7 @@ export class BaseSearchesService {
     protected readonly oxfordApiService: OxfordApiService
   ) {}
 
-  protected getOxfordEntries(searchTerm: string) {
+  protected getOxfordApiResults(searchTerm: string) {
     return Promise.resolve(['Overwrite in subclass']);
   }
 
@@ -36,7 +36,7 @@ export class BaseSearchesService {
     if (existing.length) {
       return existing;
     } else {
-      const results: Array<any> = await this.getOxfordEntries(searchTerm);
+      const results: Array<any> = await this.getOxfordApiResults(searchTerm);
       if (results.length === 0) {
         results.push(null);
       }
@@ -102,7 +102,7 @@ export class ThesaurusSearchesService extends BaseSearchesService {
     super(thesaurusSearchModel, oxfordService);
   }
 
-  protected getOxfordEntries(searchTerm: string) {
+  protected getOxfordApiResults(searchTerm: string) {
     return this.oxfordApiService.getThesauruses(searchTerm);
   }
 }
@@ -117,7 +117,7 @@ export class EntrySearchesService extends BaseSearchesService {
     super(entrySearchModel, oxfordService);
   }
 
-  protected getOxfordEntries(searchTerm: string) {
+  protected getOxfordApiResults(searchTerm: string) {
     return this.oxfordApiService.getEntries(searchTerm);
   }
 }

@@ -9,8 +9,11 @@ import {
 } from '../../oxford-searches/oxford-searches.service';
 import { OxfordSearchRecord } from '../../oxford-searches/interfaces/oxford-search.interface';
 import { SensesService } from '../senses/senses.service';
-import { SenseRecord } from '../senses/interfaces/sense.interface';
 import { LexicalCategory } from '@edfu/api-interfaces';
+import {
+  DictionarySenseRecord,
+  ThesaurusSenseRecord
+} from '../senses/interfaces/sense.interface';
 
 @Injectable()
 export class EntriesService {
@@ -159,7 +162,7 @@ export class EntriesService {
   createSenses = async (
     searchRecord: OxfordSearchRecord,
     topLevel: boolean
-  ): Promise<SenseRecord[]> => {
+  ): Promise<DictionarySenseRecord[] | ThesaurusSenseRecord[]> => {
     const promises = [];
     for (const categoryEntries of searchRecord.result.lexicalEntries) {
       const lexicalCategory =
@@ -177,7 +180,9 @@ export class EntriesService {
         }
       }
     }
-    const senses: SenseRecord[] = await Promise.all(promises);
+    // Arbitrarily include just ThesaurusSenseRecord.  Not clear why map does
+    // not work if include union type
+    const senses: ThesaurusSenseRecord[] = await Promise.all(promises);
 
     await Promise.all(
       senses.map(record => {

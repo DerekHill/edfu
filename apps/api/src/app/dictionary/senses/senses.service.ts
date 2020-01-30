@@ -5,7 +5,9 @@ import { SENSE_COLLECTION_NAME } from '../../constants';
 import {
   SenseDocument,
   DictionarySenseRecord,
-  ThesaurusSenseRecord
+  ThesaurusSenseRecord,
+  SharedSenseRecord,
+  DictionarySenseRecordWithoutId
 } from './interfaces/sense.interface';
 import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/api-interfaces';
 import { oc } from 'ts-optchain';
@@ -14,6 +16,7 @@ import {
   OxThesaurusLink, // deprecate
   OxSubsense
 } from '../../oxford-api/interfaces/oxford-api.interface';
+import { EntrySensesService } from '../entry-senses/entry-senses.service';
 
 const PROSCRIBED_REGISTERS = [
   'rare',
@@ -28,15 +31,54 @@ const PROSCRIBED_REGISTERS = [
 export class SensesService {
   constructor(
     @InjectModel(SENSE_COLLECTION_NAME)
-    private readonly senseModel: Model<SenseDocument>
+    private readonly senseModel: Model<SenseDocument>,
+    private readonly entrySensesService: EntrySensesService
   ) {}
 
-  async findOrCreateWithAssociation(
+  async findOrCreateDictionarySenseWithAssociation(
     entryOxId: string,
     entryHomographC: number,
     lexicalCategory: LexicalCategory,
     oxSense: OxSense
-  ) {}
+  ): Promise<DictionarySenseRecord> {
+    const senseId = this.extractSenseId(oxSense);
+
+    const sense: DictionarySenseRecordWithoutId = {
+      entryOxId: entryOxId,
+      entryHomographC: entryHomographC,
+      dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+      lexicalCategory: lexicalCategory,
+      senseId: senseId,
+      thesaurusSenseIds: this.extractThesaurusLinks(oxSense),
+      example: this.extractExample(oxSense),
+      definition: this.extractDefinition(oxSense)
+    };
+
+    const ownAssociationConfidence = 1;
+
+    await this.entrySensesService.findOrCreate(
+      entryOxId,
+      entryHomographC,
+      senseId,
+      ownAssociationConfidence
+    );
+
+    return this.senseModel
+      .findOneAndUpdate({ senseId: senseId }, sense, {
+        upsert: true,
+        new: true
+      })
+      .lean()
+      .exec();
+  }
+
+  extractThesaurusLinks(oxSense: OxSense): string[] {
+    if (oxSense.thesaurusLinks) {
+      return oxSense.thesaurusLinks.map(obj => obj.sense_id);
+    } else {
+      return [];
+    }
+  }
 
   // OLD METHODS //
 
@@ -48,13 +90,13 @@ export class SensesService {
   ): Promise<DictionarySenseRecord | ThesaurusSenseRecord> {
     const senseId = this.extractSenseId(oxSense);
 
-    const sense = {
+    const sense: SharedSenseRecord = {
       entryOxId: entryOxId,
       entryHomographC: entryHomographC,
       dictionaryOrThesaurus: this.determineDictionaryOrThesaurus(oxSense),
       lexicalCategory: lexicalCategory,
       senseId: senseId,
-      thesaurusLinks: this.extractThesaurusLinks(oxSense),
+      thesaurusSenseIds: this.extractThesaurusLinks(oxSense),
       example: this.extractExample(oxSense),
       definition: this.extractDefinition(oxSense),
       synonyms: this.extractSynonyms(oxSense)
@@ -143,7 +185,7 @@ export class SensesService {
   }
 
   //   Refactor
-  private extractThesaurusLinks(oxSense: OxSense): OxThesaurusLink[] {
+  private extractThesaurusLinksOld(oxSense: OxSense): OxThesaurusLink[] {
     return oc(oxSense).thesaurusLinks();
   }
 

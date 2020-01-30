@@ -2,7 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ENTRY_SENSE_COLLECTION_NAME } from '../../constants';
 import { Model } from 'mongoose';
-import { EntrySenseDocument } from './interfaces/entry-sense.interface';
+import {
+  EntrySenseDocument,
+  EntrySenseRecord
+} from './interfaces/entry-sense.interface';
 
 @Injectable()
 export class EntrySensesService {
@@ -16,7 +19,7 @@ export class EntrySensesService {
     homographC: number,
     senseId: string,
     confidence: number
-  ) {
+  ): Promise<EntrySenseRecord> {
     return this.entrySenseModel
       .findOneAndUpdate(
         { oxId: oxId, homographC: homographC, senseId: senseId },

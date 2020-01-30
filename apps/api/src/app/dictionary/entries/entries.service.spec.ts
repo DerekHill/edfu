@@ -12,10 +12,16 @@ import { SenseSchema } from '../senses/schemas/sense.schema';
 import { SensesService } from '../senses/senses.service';
 import { OxfordSearchRecord } from '../../oxford-searches/interfaces/oxford-search.interface';
 
-class OxfordSearchesServiceLocalMock {
+class OxfordSearchesServiceMock {
   findOrFetch(): Promise<OxfordSearchRecord[]> {
     return Promise.resolve(null);
   }
+}
+
+class SensesServiceMock {
+  //   findOrFetch(): Promise<OxfordSearchRecord[]> {
+  //     return Promise.resolve(null);
+  //   }
 }
 
 describe('EntriesService', () => {
@@ -39,11 +45,15 @@ describe('EntriesService', () => {
         SensesService,
         {
           provide: EntrySearchesService,
-          useClass: OxfordSearchesServiceLocalMock
+          useClass: OxfordSearchesServiceMock
         },
         {
           provide: ThesaurusSearchesService,
-          useClass: OxfordSearchesServiceLocalMock
+          useClass: OxfordSearchesServiceMock
+        },
+        {
+          provide: SensesService,
+          useClass: SensesServiceMock
         }
       ]
     }).compile();

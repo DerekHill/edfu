@@ -2,7 +2,7 @@ import { Document } from 'mongoose';
 import { ObjectId } from 'bson';
 import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/api-interfaces';
 
-interface SharedSenseRecord {
+interface SharedRequiredProperties {
   readonly senseId: string;
   readonly entryOxId: string;
   readonly entryHomographC: number;
@@ -18,13 +18,19 @@ interface SharedOptionalProperties {
   readonly synonyms?: string[];
 }
 
-export interface DictionarySenseRecordWithoutId extends SharedSenseRecord {
+export interface SharedSenseRecord
+  extends SharedRequiredProperties,
+    SharedOptionalProperties {}
+
+export interface DictionarySenseRecordWithoutId
+  extends SharedRequiredProperties {
   readonly dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary;
   readonly thesaurusSenseIds: string[];
   readonly definition: string;
 }
 
-export interface ThesaurusSenseRecordWithoutId extends SharedSenseRecord {
+export interface ThesaurusSenseRecordWithoutId
+  extends SharedRequiredProperties {
   readonly dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus;
   readonly synonyms: string[];
 }
@@ -37,9 +43,6 @@ export interface ThesaurusSenseRecord extends ThesaurusSenseRecordWithoutId {
   readonly _id: ObjectId;
 }
 
-export interface SenseDocument
-  extends Document,
-    SharedSenseRecord,
-    SharedOptionalProperties {
+export interface SenseDocument extends Document, SharedSenseRecord {
   _id: ObjectId;
 }

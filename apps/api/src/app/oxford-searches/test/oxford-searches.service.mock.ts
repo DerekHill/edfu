@@ -1,36 +1,37 @@
-import { OxfordSearchRecord } from "../interfaces/oxford-search.interface";
-import { ObjectId } from "bson";
+// CAN BE REMOVED
+import { OxfordSearchRecord } from '../interfaces/oxford-search.interface';
+import { ObjectId } from 'bson';
 
 const BASIC_OXFORD_SEARCH_RECORD: OxfordSearchRecord = {
   _id: new ObjectId(),
-  normalizedSearchTerm: "foo",
+  normalizedSearchTerm: 'foo',
   result: {
-    id: "id",
-    language: "en-gb",
+    id: 'id',
+    language: 'en-gb',
     lexicalEntries: [
       {
         entries: [
           {
             senses: [
               {
-                id: "id"
+                id: 'id'
               }
             ]
           }
         ],
-        language: "en-gb",
-        lexicalCategory: { id: "noun", text: "Noun" },
-        text: "food"
+        language: 'en-gb',
+        lexicalCategory: { id: 'noun', text: 'Noun' },
+        text: 'food'
       }
     ],
-    type: "headword",
-    word: "foo"
+    type: 'headword',
+    word: 'foo'
   },
   homographC: 1,
   found: true
 };
 
-export class OxfordSearchesServiceMock {
+export class OxfordSearchesServiceOutdatedMock {
   findOrFetch(): Promise<OxfordSearchRecord[]> {
     return Promise.resolve([BASIC_OXFORD_SEARCH_RECORD]);
   }

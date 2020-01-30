@@ -12,13 +12,13 @@ import { OxfordSearchRecord } from '../../oxford-searches/interfaces/oxford-sear
 import { ObjectId } from 'bson';
 import { SensesService } from '../senses/senses.service';
 import { SenseSchema } from '../senses/schemas/sense.schema';
-import { OxfordSearchesServiceMock } from '../../oxford-searches/test/oxford-searches.service.mock';
+import { OxfordSearchesServiceOutdatedMock } from '../../oxford-searches/test/oxford-searches.service.mock';
 import {
   createEntrySearchRecord,
   createThesaurusSearchRecord
 } from './test/oxford-search-record-factory';
 
-describe('OldEntriesService', () => {
+describe.skip('OldEntriesService', () => {
   let entriesService: EntriesService;
   let entrySearchesService: EntrySearchesService;
   let thesaurusSearchesService: ThesaurusSearchesService;
@@ -39,11 +39,11 @@ describe('OldEntriesService', () => {
         SensesService,
         {
           provide: EntrySearchesService,
-          useClass: OxfordSearchesServiceMock
+          useClass: OxfordSearchesServiceOutdatedMock
         },
         {
           provide: ThesaurusSearchesService,
-          useClass: OxfordSearchesServiceMock
+          useClass: OxfordSearchesServiceOutdatedMock
         }
       ]
     }).compile();

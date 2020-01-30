@@ -13,8 +13,21 @@ import {
   EntrySearchesService,
   ThesaurusSearchesService
 } from '../../oxford-searches/oxford-searches.service';
-// Make this mock locally
-import { OxfordSearchesServiceMock } from '../../oxford-searches/test/oxford-searches.service.mock';
+import { OxfordSearchRecord } from '../../oxford-searches/interfaces/oxford-search.interface';
+import { EntrySenseRecord } from '../entry-senses/interfaces/entry-sense.interface';
+import { EntrySensesService } from '../entry-senses/entry-senses.service';
+
+class OxfordSearchesServiceLocalMock {
+  findOrFetch(): Promise<OxfordSearchRecord[]> {
+    return Promise.resolve(null);
+  }
+}
+
+class EntrySensesServiceMock {
+  findOrCreate(): Promise<EntrySenseRecord> {
+    return Promise.resolve(null);
+  }
+}
 
 describe('SensesService', () => {
   let service: SensesService;
@@ -33,17 +46,65 @@ describe('SensesService', () => {
         EntriesService,
         {
           provide: EntrySearchesService,
-          useClass: OxfordSearchesServiceMock
+          useClass: OxfordSearchesServiceLocalMock
         },
         {
           provide: ThesaurusSearchesService,
-          useClass: OxfordSearchesServiceMock
+          useClass: OxfordSearchesServiceLocalMock
+        },
+        {
+          provide: EntrySensesService,
+          useClass: EntrySensesServiceMock
         }
       ]
     }).compile();
 
     service = module.get<SensesService>(SensesService);
   });
+
+  describe('findOrCreateDictionarySenseWithAssociation', () => {
+    it('returns created sense', async () => {
+      const SENSE_ID = 'm_en_gbus0378040.005';
+      const oxSense: OxSense = {
+        id: SENSE_ID
+      };
+      const res = await service.findOrCreateDictionarySenseWithAssociation(
+        'oxId',
+        null,
+        LexicalCategory.noun,
+        oxSense
+      );
+      expect(res.senseId).toEqual(SENSE_ID);
+    });
+
+    it.skip('creates association', () => {});
+  });
+
+  describe('extractThesaurusLinks', () => {
+    it('works when thesaurusLinks are provided', () => {
+      const SENSE_ID = 'sense_id';
+      const sense: OxSense = {
+        id: 'm_en_gbus0378040.005',
+        thesaurusLinks: [
+          {
+            entry_id: 'entry_id',
+            sense_id: SENSE_ID
+          }
+        ]
+      };
+      const res = service.extractThesaurusLinks(sense);
+      expect(res).toEqual([SENSE_ID]);
+    });
+
+    it('does not raise exception when thesaurusLinks are not provided', () => {
+      const sense: OxSense = {
+        id: 'm_en_gbus0378040.005'
+      };
+      expect(service.extractThesaurusLinks(sense)).toBeDefined();
+    });
+  });
+
+  //   OLD TESTS //
 
   describe('findOrCreateWithoutLinkOld', () => {
     it('works', async () => {

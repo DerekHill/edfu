@@ -1,5 +1,6 @@
 import { Document } from 'mongoose';
 import { ObjectId } from 'bson';
+import { HeadwordOrPhrase } from '../../../enums';
 
 export interface EntryRecordWithoutId {
   readonly oxId: string;
@@ -8,6 +9,7 @@ export interface EntryRecordWithoutId {
   readonly topLevel: boolean;
   readonly ownSenseIds: string[]; // deprecated
   readonly synonymSenseIds: string[]; // deprecated
+  readonly headwordOrPhrase: HeadwordOrPhrase;
 }
 
 export interface EntryRecord extends EntryRecordWithoutId {

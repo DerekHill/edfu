@@ -3,3 +3,8 @@ export enum SignLanguageCode {
   asl = 'asl',
   mkt = 'mkt'
 }
+
+export enum HeadwordOrPhrase {
+  headword = 'headword',
+  phrase = 'phrase'
+}

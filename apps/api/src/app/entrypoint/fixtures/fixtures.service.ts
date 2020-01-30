@@ -12,6 +12,7 @@ import {
 } from '../../dictionary/senses/interfaces/sense.interface';
 import { SignRecordWithoutId } from '../../dictionary/signs/interfaces/sign.interface';
 import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/api-interfaces';
+import { HeadwordOrPhrase } from '../../enums';
 
 const FOOD = 'food';
 const FAST = 'fast';
@@ -84,7 +85,8 @@ const ENTRIES: EntryRecordWithoutId[] = [
     word: FOOD,
     topLevel: true,
     ownSenseIds: [FOOD_SENSE_1_ID, FOOD_SENSE_2_ID, FOOD_SENSE_3_ID],
-    synonymSenseIds: []
+    synonymSenseIds: [],
+    headwordOrPhrase: HeadwordOrPhrase.headword
   },
   {
     oxId: FAST,
@@ -103,7 +105,8 @@ const ENTRIES: EntryRecordWithoutId[] = [
       FAST_1_DICT_ADV_SENSE_2_ID,
       FAST_1_DICT_ADV_SENSE_3_ID
     ],
-    synonymSenseIds: []
+    synonymSenseIds: [],
+    headwordOrPhrase: HeadwordOrPhrase.headword
   },
   {
     oxId: FAST,
@@ -111,7 +114,8 @@ const ENTRIES: EntryRecordWithoutId[] = [
     word: FAST,
     topLevel: true,
     ownSenseIds: [FAST_2_DICT_VER_SENSE_1_ID, FAST_2_DICT_NOU_SENSE_1_ID],
-    synonymSenseIds: []
+    synonymSenseIds: [],
+    headwordOrPhrase: HeadwordOrPhrase.headword
   },
   {
     oxId: BANK,
@@ -129,7 +133,8 @@ const ENTRIES: EntryRecordWithoutId[] = [
       BANK_1_DICT_VER_SENSE_4_ID,
       BANK_1_DICT_VER_SENSE_5_ID
     ],
-    synonymSenseIds: []
+    synonymSenseIds: [],
+    headwordOrPhrase: HeadwordOrPhrase.headword
   },
   {
     oxId: BANK,
@@ -137,7 +142,8 @@ const ENTRIES: EntryRecordWithoutId[] = [
     word: BANK,
     topLevel: true,
     ownSenseIds: [BANK_2_DICT_NOU_SENSE_1_ID, BANK_2_DICT_VER_SENSE_1_ID],
-    synonymSenseIds: []
+    synonymSenseIds: [],
+    headwordOrPhrase: HeadwordOrPhrase.headword
   },
   {
     oxId: SPEEDY,
@@ -145,7 +151,8 @@ const ENTRIES: EntryRecordWithoutId[] = [
     word: SPEEDY,
     topLevel: true,
     ownSenseIds: [SPEEDY_DICT_ADJ_SENSE_1_ID, SPEEDY_DICT_ADJ_SENSE_2_ID],
-    synonymSenseIds: []
+    synonymSenseIds: [],
+    headwordOrPhrase: HeadwordOrPhrase.headword
   },
   {
     oxId: 'drink',
@@ -153,7 +160,8 @@ const ENTRIES: EntryRecordWithoutId[] = [
     word: 'drink',
     topLevel: true,
     ownSenseIds: [],
-    synonymSenseIds: []
+    synonymSenseIds: [],
+    headwordOrPhrase: HeadwordOrPhrase.headword
   },
   {
     oxId: 'toast',
@@ -161,7 +169,8 @@ const ENTRIES: EntryRecordWithoutId[] = [
     word: 'toast',
     topLevel: true,
     ownSenseIds: [],
-    synonymSenseIds: []
+    synonymSenseIds: [],
+    headwordOrPhrase: HeadwordOrPhrase.headword
   }
 ];
 

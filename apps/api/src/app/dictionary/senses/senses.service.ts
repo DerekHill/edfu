@@ -2,12 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { SENSE_COLLECTION_NAME } from '../../constants';
-import { SenseDocument, SenseRecord } from './interfaces/sense.interface';
+import {
+  SenseDocument,
+  DictionarySenseRecord,
+  ThesaurusSenseRecord
+} from './interfaces/sense.interface';
 import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/api-interfaces';
 import { oc } from 'ts-optchain';
 import {
   OxSense,
-  OxThesaurusLink,
+  OxThesaurusLink, // deprecate
   OxSubsense
 } from '../../oxford-api/interfaces/oxford-api.interface';
 
@@ -32,7 +36,7 @@ export class SensesService {
     entryHomographC: number,
     lexicalCategory: LexicalCategory,
     oxSense: OxSense
-  ): Promise<SenseRecord> {
+  ): Promise<DictionarySenseRecord | ThesaurusSenseRecord> {
     const senseId = this.extractSenseId(oxSense);
 
     const sense = {
@@ -56,14 +60,18 @@ export class SensesService {
       .exec();
   }
 
-  findOne(senseId: string): Promise<SenseRecord> {
+  findOne(
+    senseId: string
+  ): Promise<DictionarySenseRecord | ThesaurusSenseRecord> {
     return this.senseModel
       .findOne({ senseId: senseId })
       .lean()
       .exec();
   }
 
-  findMany(senseIds: string[]): Promise<SenseRecord[]> {
+  findMany(
+    senseIds: string[]
+  ): Promise<DictionarySenseRecord[] | ThesaurusSenseRecord[]> {
     return this.senseModel
       .find()
       .where('senseId')
@@ -126,6 +134,7 @@ export class SensesService {
     return oc(oxSense).definitions[0]();
   }
 
+  //   Refactor
   private extractThesaurusLinks(oxSense: OxSense): OxThesaurusLink[] {
     return oc(oxSense).thesaurusLinks();
   }

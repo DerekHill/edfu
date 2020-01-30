@@ -6,7 +6,7 @@ import { ConsoleModule } from 'nestjs-console';
 import { MongooseModule } from '@nestjs/mongoose';
 import { OxfordApiModule } from './oxford-api/oxford-api.module';
 import { ConfigModule } from './config/config.module';
-import { EntrypointModule } from './task/task.module';
+import { EntrypointModule } from './tasks/task.module';
 import { DictionaryModule } from './dictionary/dictionary.module';
 import { MONGOOSE_OPTIONS } from './config/mongoose-deprecations';
 

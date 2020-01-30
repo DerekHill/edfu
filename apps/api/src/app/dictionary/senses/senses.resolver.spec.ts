@@ -1,25 +1,37 @@
 import { TestingModule, Test } from '@nestjs/testing';
 import { SensesResolver } from './senses.resolver';
 import { SensesService } from './senses.service';
-import { SenseRecord } from './interfaces/sense.interface';
+import {
+  DictionarySenseRecord,
+  ThesaurusSenseRecord
+} from './interfaces/sense.interface';
 import { ObjectId } from 'bson';
+import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/api-interfaces';
 
 export class SensesServiceMock {
-  findOne(senseId: string): Promise<SenseRecord> {
+  findOne(
+    senseId: string
+  ): Promise<DictionarySenseRecord | ThesaurusSenseRecord> {
     return Promise.resolve(null);
   }
-  findMany(senseId: string): Promise<SenseRecord[]> {
+  findMany(
+    senseId: string
+  ): Promise<DictionarySenseRecord[] | ThesaurusSenseRecord[]> {
     return Promise.resolve(null);
   }
 }
 
-const senseRecordFactory = (): SenseRecord => {
+const senseRecordFactory = (): DictionarySenseRecord => {
   return {
     _id: new ObjectId(),
     senseId: 'id',
     entryOxId: 'food',
     entryHomographC: null,
-    synonyms: []
+    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+    thesaurusSenseIds: [],
+    definition: 'foo',
+    example: 'bar',
+    lexicalCategory: LexicalCategory.noun
   };
 };
 

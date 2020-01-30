@@ -7,8 +7,9 @@ import {
   EntryRecordWithoutId
 } from '../../dictionary/entries/interfaces/entry.interface';
 import {
-  SenseDocument,
-  SenseRecordWithoutId
+  DictionarySenseRecordWithoutId,
+  ThesaurusSenseRecordWithoutId,
+  SenseDocument
 } from '../../dictionary/senses/interfaces/sense.interface';
 import { SignRecordWithoutId } from '../../dictionary/signs/interfaces/sign.interface';
 import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/api-interfaces';
@@ -174,22 +175,286 @@ const ENTRIES: EntryRecordWithoutId[] = [
   }
 ];
 
-const SENSES: SenseRecordWithoutId[] = [
+const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   {
     senseId: FOOD_SENSE_1_ID,
     entryOxId: FOOD,
     entryHomographC: null,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+    thesaurusSenseIds: [],
+    lexicalCategory: LexicalCategory.noun,
     example: 'we need food and water',
     definition:
-      'any nutritious substance that people or animals eat or drink or that plants absorb in order to maintain life and growth',
-    synonyms: []
+      'any nutritious substance that people or animals eat or drink or that plants absorb in order to maintain life and growth'
   },
+  {
+    senseId: FAST_1_DICT_ADJ_SENSE_1_ID,
+    entryOxId: FAST,
+    entryHomographC: 1,
+    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+    lexicalCategory: LexicalCategory.adjective,
+    thesaurusSenseIds: [FAST_1_THES_ADJ_SENSE_1_ID],
+    example: 'a fast and powerful car',
+    definition: 'moving or capable of moving at high speed'
+  },
+  {
+    senseId: FAST_1_DICT_ADJ_SENSE_2_ID,
+    entryOxId: FAST,
+    entryHomographC: 1,
+    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+    lexicalCategory: LexicalCategory.adjective,
+    thesaurusSenseIds: [],
+    example: 'I keep my watch fifteen minutes fast',
+    definition: '(of a clock or watch) showing a time ahead of the correct time'
+  },
+  {
+    senseId: FAST_1_DICT_ADJ_SENSE_3_ID,
+    entryOxId: FAST,
+    entryHomographC: 1,
+    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+    lexicalCategory: LexicalCategory.adjective,
+    thesaurusSenseIds: [FAST_1_THES_ADJ_SENSE_2_ID, 't_en_gb0005497.012'],
+    example: 'he made a rope fast to each corner',
+    definition: 'firmly fixed or attached'
+  },
+  {
+    senseId: FAST_1_DICT_ADJ_SENSE_4_ID,
+    entryOxId: FAST,
+    entryHomographC: 1,
+    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+    lexicalCategory: LexicalCategory.adjective,
+    thesaurusSenseIds: [],
+    example: 'a 35-mm colour film which is ten times faster than Kodacolor II',
+    definition: '(of a film) needing only a short exposure'
+  },
+  {
+    senseId: FAST_1_DICT_ADJ_SENSE_5_ID,
+    entryOxId: FAST,
+    entryHomographC: 1,
+    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+    lexicalCategory: LexicalCategory.adjective,
+    thesaurusSenseIds: [FAST_1_THES_ADJ_SENSE_3_ID],
+    example: 'the dyes are boiled with the yarn to produce a fast colour',
+    definition: '(of a dye) not fading in light or when washed'
+  },
+  {
+    senseId: FAST_1_DICT_ADJ_SENSE_6_ID,
+    entryOxId: FAST,
+    entryHomographC: 1,
+    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+    lexicalCategory: LexicalCategory.adjective,
+    thesaurusSenseIds: [FAST_1_THES_ADJ_SENSE_6_ID],
+    example: 'the fast life she led in London',
+    definition:
+      'engaging in or involving activities characterized by excitement, extranvagance, and risk-taking'
+  },
+  {
+    senseId: FAST_1_DICT_ADJ_SENSE_7_ID,
+    entryOxId: FAST,
+    entryHomographC: 1,
+    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+    lexicalCategory: LexicalCategory.adjective,
+    thesaurusSenseIds: [],
+    example: 'Mammy said, ‘Stop asking questions, you too damn farse.’',
+    definition: '(of a person) prone to act in an unacceptably familiar way'
+  },
+  {
+    senseId: FAST_1_DICT_ADV_SENSE_1_ID,
+    entryOxId: FAST,
+    entryHomographC: 1,
+    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+    lexicalCategory: LexicalCategory.adverb,
+    thesaurusSenseIds: [],
+    example: 'he was driving too fast',
+    definition: 'at high speed'
+  },
+  {
+    senseId: FAST_1_DICT_ADV_SENSE_2_ID,
+    entryOxId: FAST,
+    entryHomographC: 1,
+    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+    lexicalCategory: LexicalCategory.adverb,
+    thesaurusSenseIds: [],
+    example: 'the ship was held fast by the anchor chain',
+    definition: 'so as to be hard to move; securely'
+  },
+  {
+    senseId: FAST_1_DICT_ADV_SENSE_3_ID,
+    entryOxId: FAST,
+    entryHomographC: 1,
+    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+    lexicalCategory: LexicalCategory.adverb,
+    thesaurusSenseIds: [],
+    example: 'they were too fast asleep to reply',
+    definition: 'so as to be hard to wake'
+  },
+  {
+    senseId: FAST_2_DICT_VER_SENSE_1_ID,
+    entryOxId: FAST,
+    entryHomographC: 2,
+    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+    lexicalCategory: LexicalCategory.verb,
+    thesaurusSenseIds: [FAST_2_THES_VER_SENSE_1_ID],
+    example: 'the ministry instructed people to fast',
+    definition:
+      'abstain from all or some kinds of food or drink, especially as a religious observance'
+  },
+  {
+    senseId: FAST_2_DICT_NOU_SENSE_1_ID,
+    entryOxId: FAST,
+    entryHomographC: 2,
+    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+    lexicalCategory: LexicalCategory.noun,
+    thesaurusSenseIds: [FAST_2_THES_NOU_SENSE_1_ID],
+    example: 'a five-day fast',
+    definition: 'an act or period of fasting'
+  },
+  {
+    senseId: BANK_1_DICT_NOU_SENSE_1_ID,
+    entryOxId: BANK,
+    entryHomographC: 1,
+    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+    lexicalCategory: LexicalCategory.noun,
+    thesaurusSenseIds: [BANK_1_THES_NOU_SENSE_1_ID],
+    example: 'willows lined the bank of the stream',
+    definition: 'the land alongside or sloping down to a river or lake'
+  },
+  {
+    senseId: BANK_1_DICT_NOU_SENSE_2_ID,
+    entryOxId: BANK,
+    entryHomographC: 1,
+    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+    lexicalCategory: LexicalCategory.noun,
+    thesaurusSenseIds: [BANK_1_THES_NOU_SENSE_2_ID],
+    example: 'a grassy bank',
+    definition: 'a long, high mass or mound of a particular substance'
+  },
+  {
+    senseId: BANK_1_DICT_NOU_SENSE_3_ID,
+    entryOxId: BANK,
+    entryHomographC: 1,
+    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+    lexicalCategory: LexicalCategory.noun,
+    thesaurusSenseIds: [BANK_1_THES_NOU_SENSE_3_ID],
+    example:
+      'the DJ had big banks of lights and speakers on either side of his console',
+    definition:
+      'a set of similar things, especially electrical or electronic devices, grouped together in rows'
+  },
+  {
+    senseId: BANK_1_DICT_NOU_SENSE_4_ID,
+    entryOxId: BANK,
+    entryHomographC: 1,
+    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+    lexicalCategory: LexicalCategory.noun,
+    thesaurusSenseIds: [],
+    example: 'a bank shot',
+    definition: 'the cushion of a pool table'
+  },
+  {
+    senseId: BANK_1_DICT_VER_SENSE_1_ID,
+    entryOxId: BANK,
+    entryHomographC: 1,
+    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+    lexicalCategory: LexicalCategory.verb,
+    thesaurusSenseIds: [BANK_1_THES_VER_SENSE_1_ID],
+    example: 'the rain banked the soil up behind the gate',
+    definition: 'heap (a substance) into a mass or mound'
+  },
+  {
+    senseId: BANK_1_DICT_VER_SENSE_2_ID,
+    entryOxId: BANK,
+    entryHomographC: 1,
+    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+    lexicalCategory: LexicalCategory.verb,
+    thesaurusSenseIds: [BANK_1_THES_VER_SENSE_3_ID],
+    example: 'the plane banked as if to return to the airport',
+    definition:
+      '(with reference to an aircraft or vehicle) tilt or cause to tilt sideways in making a turn'
+  },
+  {
+    senseId: BANK_1_DICT_VER_SENSE_3_ID,
+    entryOxId: BANK,
+    entryHomographC: 1,
+    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+    lexicalCategory: LexicalCategory.verb,
+    thesaurusSenseIds: [],
+    example:
+      'he has built a four-cylinder locomotive for banking trains up the Lickey incline',
+    definition:
+      '(of a locomotive) provide additional power for (a train) in ascending an incline'
+  },
+  {
+    senseId: BANK_1_DICT_VER_SENSE_4_ID,
+    entryOxId: BANK,
+    entryHomographC: 1,
+    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+    thesaurusSenseIds: [],
+    lexicalCategory: LexicalCategory.verb,
+    example: 'it was the biggest rainbow trout that had ever been banked',
+    definition: '(of an angler) succeed in landing (a fish)'
+  },
+  {
+    senseId: BANK_1_DICT_VER_SENSE_5_ID,
+    entryOxId: BANK,
+    entryHomographC: 1,
+    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+    thesaurusSenseIds: [],
+    lexicalCategory: LexicalCategory.verb,
+    example: 'I banked the eight ball off two cushions',
+    definition:
+      'in pool) play (a ball) so that it rebounds off a surface such as a cushion'
+  },
+  {
+    senseId: BANK_2_DICT_NOU_SENSE_1_ID,
+    entryOxId: BANK,
+    entryHomographC: 2,
+    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+    lexicalCategory: LexicalCategory.noun,
+    thesaurusSenseIds: [BANK_2_THES_NOU_SENSE_1_ID],
+    example: 'a bank account',
+    definition:
+      'a financial establishment that uses money deposited by customers for investment, pays it out when required, makes loans at interest, and exchanges currency'
+  },
+  {
+    senseId: BANK_2_DICT_VER_SENSE_1_ID,
+    entryOxId: BANK,
+    entryHomographC: 2,
+    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+    lexicalCategory: LexicalCategory.verb,
+    thesaurusSenseIds: [BANK_2_THES_VER_SENSE_1_ID, BANK_2_THES_VER_SENSE_2_ID],
+    example: 'she may have banked a cheque in the wrong account',
+    definition: 'deposit (money or valuables) in a bank'
+  },
+  {
+    senseId: SPEEDY_DICT_ADJ_SENSE_1_ID,
+    entryOxId: SPEEDY,
+    entryHomographC: null,
+    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+    lexicalCategory: LexicalCategory.adjective,
+    thesaurusSenseIds: [SPEEDY_THES_ADJ_SENSE_1_ID],
+    example: 'a speedy recovery',
+    definition: 'done or occurring quickly'
+  },
+  {
+    senseId: SPEEDY_DICT_ADJ_SENSE_2_ID,
+    entryOxId: SPEEDY,
+    entryHomographC: null,
+    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+    lexicalCategory: LexicalCategory.adjective,
+    thesaurusSenseIds: [SPEEDY_THES_ADJ_SENSE_2_ID],
+    example: 'a speedy winger',
+    definition: 'moving quickly'
+  }
+];
+
+const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   {
     senseId: FOOD_SENSE_2_ID,
     entryOxId: FOOD,
     entryHomographC: null,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
+    lexicalCategory: LexicalCategory.noun,
     example: 'he went three days without food',
     synonyms: ['nourishment', 'sustenance', 'nutriment', 'subsistence']
   },
@@ -198,334 +463,9 @@ const SENSES: SenseRecordWithoutId[] = [
     entryOxId: FOOD,
     entryHomographC: null,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
+    lexicalCategory: LexicalCategory.noun,
     example: 'food for the cattle and horses',
     synonyms: ['fodder', 'feed', 'forage']
-  },
-  {
-    senseId: FAST_1_DICT_ADJ_SENSE_1_ID,
-    entryOxId: FAST,
-    entryHomographC: 1,
-    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
-    lexicalCategory: LexicalCategory.adjective,
-    thesaurusLinks: [
-      {
-        entry_id: 'fast',
-        sense_id: FAST_1_THES_ADJ_SENSE_1_ID
-      }
-    ],
-    example: 'a fast and powerful car',
-    definition: 'moving or capable of moving at high speed',
-    synonyms: []
-  },
-  {
-    senseId: FAST_1_DICT_ADJ_SENSE_2_ID,
-    entryOxId: FAST,
-    entryHomographC: 1,
-    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
-    lexicalCategory: LexicalCategory.adjective,
-    example: 'I keep my watch fifteen minutes fast',
-    definition:
-      '(of a clock or watch) showing a time ahead of the correct time',
-    synonyms: []
-  },
-  {
-    senseId: FAST_1_DICT_ADJ_SENSE_3_ID,
-    entryOxId: FAST,
-    entryHomographC: 1,
-    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
-    lexicalCategory: LexicalCategory.adjective,
-    thesaurusLinks: [
-      {
-        entry_id: 'fast',
-        sense_id: FAST_1_THES_ADJ_SENSE_2_ID
-      },
-      {
-        entry_id: 'make_fast',
-        sense_id: 't_en_gb0005497.012'
-      }
-    ],
-    example: 'he made a rope fast to each corner',
-    definition: 'firmly fixed or attached',
-    synonyms: []
-  },
-  {
-    senseId: FAST_1_DICT_ADJ_SENSE_4_ID,
-    entryOxId: FAST,
-    entryHomographC: 1,
-    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
-    lexicalCategory: LexicalCategory.adjective,
-    example: 'a 35-mm colour film which is ten times faster than Kodacolor II',
-    definition: '(of a film) needing only a short exposure',
-    synonyms: []
-  },
-  {
-    senseId: FAST_1_DICT_ADJ_SENSE_5_ID,
-    entryOxId: FAST,
-    entryHomographC: 1,
-    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
-    lexicalCategory: LexicalCategory.adjective,
-    thesaurusLinks: [
-      {
-        entry_id: 'fast',
-        sense_id: FAST_1_THES_ADJ_SENSE_3_ID
-      }
-    ],
-    example: 'the dyes are boiled with the yarn to produce a fast colour',
-    definition: '(of a dye) not fading in light or when washed',
-    synonyms: []
-  },
-  {
-    senseId: FAST_1_DICT_ADJ_SENSE_6_ID,
-    entryOxId: FAST,
-    entryHomographC: 1,
-    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
-    lexicalCategory: LexicalCategory.adjective,
-    thesaurusLinks: [
-      {
-        entry_id: 'fast',
-        sense_id: FAST_1_THES_ADJ_SENSE_6_ID
-      }
-    ],
-    example: 'the fast life she led in London',
-    definition:
-      'engaging in or involving activities characterized by excitement, extranvagance, and risk-taking',
-    synonyms: []
-  },
-  {
-    senseId: FAST_1_DICT_ADJ_SENSE_7_ID,
-    entryOxId: FAST,
-    entryHomographC: 1,
-    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
-    lexicalCategory: LexicalCategory.adjective,
-    example: 'Mammy said, ‘Stop asking questions, you too damn farse.’',
-    definition: '(of a person) prone to act in an unacceptably familiar way',
-    synonyms: []
-  },
-  {
-    senseId: FAST_1_DICT_ADV_SENSE_1_ID,
-    entryOxId: FAST,
-    entryHomographC: 1,
-    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
-    lexicalCategory: LexicalCategory.adverb,
-    example: 'he was driving too fast',
-    definition: 'at high speed',
-    synonyms: []
-  },
-  {
-    senseId: FAST_1_DICT_ADV_SENSE_2_ID,
-    entryOxId: FAST,
-    entryHomographC: 1,
-    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
-    lexicalCategory: LexicalCategory.adverb,
-    example: 'the ship was held fast by the anchor chain',
-    definition: 'so as to be hard to move; securely',
-    synonyms: []
-  },
-  {
-    senseId: FAST_1_DICT_ADV_SENSE_3_ID,
-    entryOxId: FAST,
-    entryHomographC: 1,
-    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
-    lexicalCategory: LexicalCategory.adverb,
-    example: 'they were too fast asleep to reply',
-    definition: 'so as to be hard to wake',
-    synonyms: []
-  },
-  {
-    senseId: FAST_2_DICT_VER_SENSE_1_ID,
-    entryOxId: FAST,
-    entryHomographC: 2,
-    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
-    lexicalCategory: LexicalCategory.verb,
-    thesaurusLinks: [
-      {
-        entry_id: 'fast',
-        sense_id: FAST_2_THES_VER_SENSE_1_ID
-      }
-    ],
-    example: 'the ministry instructed people to fast',
-    definition:
-      'abstain from all or some kinds of food or drink, especially as a religious observance',
-    synonyms: []
-  },
-  {
-    senseId: FAST_2_DICT_NOU_SENSE_1_ID,
-    entryOxId: FAST,
-    entryHomographC: 2,
-    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
-    lexicalCategory: LexicalCategory.noun,
-    thesaurusLinks: [
-      {
-        entry_id: 'fast',
-        sense_id: FAST_2_THES_NOU_SENSE_1_ID
-      }
-    ],
-    example: 'a five-day fast',
-    definition: 'an act or period of fasting',
-    synonyms: []
-  },
-  {
-    senseId: BANK_1_DICT_NOU_SENSE_1_ID,
-    entryOxId: BANK,
-    entryHomographC: 1,
-    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
-    lexicalCategory: LexicalCategory.noun,
-    thesaurusLinks: [
-      {
-        entry_id: 'bank',
-        sense_id: BANK_1_THES_NOU_SENSE_1_ID
-      }
-    ],
-    example: 'willows lined the bank of the stream',
-    definition: 'the land alongside or sloping down to a river or lake',
-    synonyms: []
-  },
-  {
-    senseId: BANK_1_DICT_NOU_SENSE_2_ID,
-    entryOxId: BANK,
-    entryHomographC: 1,
-    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
-    lexicalCategory: LexicalCategory.noun,
-    thesaurusLinks: [
-      {
-        entry_id: 'bank',
-        sense_id: BANK_1_THES_NOU_SENSE_2_ID
-      }
-    ],
-    example: 'a grassy bank',
-    definition: 'a long, high mass or mound of a particular substance',
-    synonyms: []
-  },
-  {
-    senseId: BANK_1_DICT_NOU_SENSE_3_ID,
-    entryOxId: BANK,
-    entryHomographC: 1,
-    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
-    lexicalCategory: LexicalCategory.noun,
-    thesaurusLinks: [
-      {
-        entry_id: 'bank',
-        sense_id: BANK_1_THES_NOU_SENSE_3_ID
-      }
-    ],
-    example:
-      'the DJ had big banks of lights and speakers on either side of his console',
-    definition:
-      'a set of similar things, especially electrical or electronic devices, grouped together in rows',
-    synonyms: []
-  },
-  {
-    senseId: BANK_1_DICT_NOU_SENSE_4_ID,
-    entryOxId: BANK,
-    entryHomographC: 1,
-    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
-    lexicalCategory: LexicalCategory.noun,
-    example: 'a bank shot',
-    definition: 'the cushion of a pool table',
-    synonyms: []
-  },
-  {
-    senseId: BANK_1_DICT_VER_SENSE_1_ID,
-    entryOxId: BANK,
-    entryHomographC: 1,
-    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
-    lexicalCategory: LexicalCategory.verb,
-    thesaurusLinks: [
-      {
-        entry_id: 'bank',
-        sense_id: BANK_1_THES_VER_SENSE_1_ID
-      }
-    ],
-    example: 'the rain banked the soil up behind the gate',
-    definition: 'heap (a substance) into a mass or mound',
-    synonyms: []
-  },
-  {
-    senseId: BANK_1_DICT_VER_SENSE_2_ID,
-    entryOxId: BANK,
-    entryHomographC: 1,
-    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
-    lexicalCategory: LexicalCategory.verb,
-    thesaurusLinks: [
-      {
-        entry_id: 'bank',
-        sense_id: BANK_1_THES_VER_SENSE_3_ID
-      }
-    ],
-    example: 'the plane banked as if to return to the airport',
-    definition:
-      '(with reference to an aircraft or vehicle) tilt or cause to tilt sideways in making a turn',
-    synonyms: []
-  },
-  {
-    senseId: BANK_1_DICT_VER_SENSE_3_ID,
-    entryOxId: BANK,
-    entryHomographC: 1,
-    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
-    lexicalCategory: LexicalCategory.verb,
-    example:
-      'he has built a four-cylinder locomotive for banking trains up the Lickey incline',
-    definition:
-      '(of a locomotive) provide additional power for (a train) in ascending an incline',
-    synonyms: []
-  },
-  {
-    senseId: BANK_1_DICT_VER_SENSE_4_ID,
-    entryOxId: BANK,
-    entryHomographC: 1,
-    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
-    lexicalCategory: LexicalCategory.verb,
-    example: 'it was the biggest rainbow trout that had ever been banked',
-    definition: '(of an angler) succeed in landing (a fish)',
-    synonyms: []
-  },
-  {
-    senseId: BANK_1_DICT_VER_SENSE_5_ID,
-    entryOxId: BANK,
-    entryHomographC: 1,
-    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
-    lexicalCategory: LexicalCategory.verb,
-    example: 'I banked the eight ball off two cushions',
-    definition:
-      'in pool) play (a ball) so that it rebounds off a surface such as a cushion',
-    synonyms: []
-  },
-  {
-    senseId: BANK_2_DICT_NOU_SENSE_1_ID,
-    entryOxId: BANK,
-    entryHomographC: 2,
-    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
-    lexicalCategory: LexicalCategory.noun,
-    thesaurusLinks: [
-      {
-        entry_id: 'bank',
-        sense_id: BANK_2_THES_NOU_SENSE_1_ID
-      }
-    ],
-    example: 'a bank account',
-    definition:
-      'a financial establishment that uses money deposited by customers for investment, pays it out when required, makes loans at interest, and exchanges currency',
-    synonyms: []
-  },
-  {
-    senseId: BANK_2_DICT_VER_SENSE_1_ID,
-    entryOxId: BANK,
-    entryHomographC: 2,
-    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
-    lexicalCategory: LexicalCategory.verb,
-    thesaurusLinks: [
-      {
-        entry_id: 'bank',
-        sense_id: BANK_2_THES_VER_SENSE_1_ID
-      },
-      {
-        entry_id: 'bank',
-        sense_id: BANK_2_THES_VER_SENSE_2_ID
-      }
-    ],
-    example: 'she may have banked a cheque in the wrong account',
-    definition: 'deposit (money or valuables) in a bank',
-    synonyms: []
   },
   {
     senseId: FAST_1_THES_ADJ_SENSE_1_ID,
@@ -837,38 +777,6 @@ const SENSES: SenseRecordWithoutId[] = [
     synonyms: ['use']
   },
   {
-    senseId: SPEEDY_DICT_ADJ_SENSE_1_ID,
-    entryOxId: SPEEDY,
-    entryHomographC: null,
-    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
-    lexicalCategory: LexicalCategory.adjective,
-    thesaurusLinks: [
-      {
-        entry_id: 'speedy',
-        sense_id: SPEEDY_THES_ADJ_SENSE_1_ID
-      }
-    ],
-    example: 'a speedy recovery',
-    definition: 'done or occurring quickly',
-    synonyms: []
-  },
-  {
-    senseId: SPEEDY_DICT_ADJ_SENSE_2_ID,
-    entryOxId: SPEEDY,
-    entryHomographC: null,
-    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
-    lexicalCategory: LexicalCategory.adjective,
-    thesaurusLinks: [
-      {
-        entry_id: 'speedy',
-        sense_id: SPEEDY_THES_ADJ_SENSE_2_ID
-      }
-    ],
-    example: 'a speedy winger',
-    definition: 'moving quickly',
-    synonyms: []
-  },
-  {
     senseId: SPEEDY_THES_ADJ_SENSE_1_ID,
     entryOxId: SPEEDY,
     entryHomographC: null,
@@ -928,7 +836,9 @@ export class FixturesService {
     return { oxId: obj.oxId, homographC: obj.homographC };
   }
 
-  senseConditionsGenerator(obj: SenseRecordWithoutId) {
+  senseConditionsGenerator(
+    obj: DictionarySenseRecordWithoutId | ThesaurusSenseRecordWithoutId
+  ) {
     return { senseId: obj.senseId };
   }
 
@@ -940,7 +850,12 @@ export class FixturesService {
     );
     await this.populateCollection(
       this.senseModel,
-      SENSES,
+      DICTIONARY_SENSES,
+      this.senseConditionsGenerator
+    );
+    await this.populateCollection(
+      this.senseModel,
+      THESAURUS_SENSES,
       this.senseConditionsGenerator
     );
     return console.log('Fixtures created!');

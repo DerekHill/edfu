@@ -11,11 +11,6 @@ export const SenseSchema = new mongoose.Schema({
     required: true
   },
   entryHomographC: Number,
-  dictionaryOrThesaurus: {
-    type: String,
-    enum: [DictionaryOrThesaurus.dictionary, DictionaryOrThesaurus.thesaurus],
-    required: true
-  },
   lexicalCategory: {
     type: String,
     enum: [
@@ -29,12 +24,19 @@ export const SenseSchema = new mongoose.Schema({
       LexicalCategory.verb
     ]
   },
-  thesaurusLinks: [{}],
-  example: String,
+  example: {
+    type: String,
+    required: true
+  },
+  dictionaryOrThesaurus: {
+    type: String,
+    enum: [DictionaryOrThesaurus.dictionary, DictionaryOrThesaurus.thesaurus],
+    required: true
+  },
+  thesaurusSenseIds: [String],
   definition: String,
   synonyms: {
-    type: [String],
-    required: true
+    type: [String]
   }
 });
 

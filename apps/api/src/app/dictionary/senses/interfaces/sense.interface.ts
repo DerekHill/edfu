@@ -1,23 +1,45 @@
 import { Document } from 'mongoose';
 import { ObjectId } from 'bson';
-import { OxThesaurusLink } from '../../../oxford-api/interfaces/oxford-api.interface';
 import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/api-interfaces';
 
-export interface SenseRecordWithoutId {
+interface SharedSenseRecord {
   readonly senseId: string;
   readonly entryOxId: string;
   readonly entryHomographC: number;
-  readonly dictionaryOrThesaurus?: DictionaryOrThesaurus;
-  readonly lexicalCategory?: LexicalCategory;
-  readonly thesaurusLinks?: OxThesaurusLink[];
-  readonly example?: string;
+  readonly lexicalCategory: LexicalCategory;
+  readonly example: string;
+  readonly dictionaryOrThesaurus: DictionaryOrThesaurus;
+}
+
+// Not DRY with below, but exists to enable single SenseDocument
+interface SharedOptionalProperties {
+  readonly thesaurusSenseIds?: string[];
   readonly definition?: string;
+  readonly synonyms?: string[];
+}
+
+export interface DictionarySenseRecordWithoutId extends SharedSenseRecord {
+  readonly dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary;
+  readonly thesaurusSenseIds: string[];
+  readonly definition: string;
+}
+
+export interface ThesaurusSenseRecordWithoutId extends SharedSenseRecord {
+  readonly dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus;
   readonly synonyms: string[];
 }
-export interface SenseRecord extends SenseRecordWithoutId {
+
+export interface DictionarySenseRecord extends DictionarySenseRecordWithoutId {
   readonly _id: ObjectId;
 }
 
-export interface SenseDocument extends Document, SenseRecord {
+export interface ThesaurusSenseRecord extends ThesaurusSenseRecordWithoutId {
+  readonly _id: ObjectId;
+}
+
+export interface SenseDocument
+  extends Document,
+    SharedSenseRecord,
+    SharedOptionalProperties {
   _id: ObjectId;
 }

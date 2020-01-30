@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { EntrypointService } from './entrypoint.service';
+import { EntrypointService } from './task.service';
 import { OxfordApiModule } from '../oxford-api/oxford-api.module';
 import { FixturesService } from './fixtures/fixtures.service';
 import { MongooseModule } from '@nestjs/mongoose';

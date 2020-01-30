@@ -1,11 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { HEADWORD_COLLECTION_NAME } from '../../constants';
+import { ENTRY_COLLECTION_NAME } from '../../constants';
 import { Model } from 'mongoose';
-import {
-  HeadwordRecord,
-  HeadwordDocument
-} from './interfaces/headword.interface';
+import { EntryRecord, EntryDocument } from './interfaces/entry.interface';
 import {
   EntrySearchesService,
   ThesaurusSearchesService
@@ -16,10 +13,10 @@ import { SenseRecord } from '../senses/interfaces/sense.interface';
 import { LexicalCategory } from '@edfu/api-interfaces';
 
 @Injectable()
-export class HeadwordsService {
+export class EntriesService {
   constructor(
-    @InjectModel(HEADWORD_COLLECTION_NAME)
-    private readonly headwordModel: Model<HeadwordDocument>,
+    @InjectModel(ENTRY_COLLECTION_NAME)
+    private readonly entryModel: Model<EntryDocument>,
     private readonly entrySearchesService: EntrySearchesService,
     private readonly thesaurusSearchesService: ThesaurusSearchesService,
     private readonly sensesService: SensesService
@@ -29,8 +26,8 @@ export class HeadwordsService {
     word: string,
     topLevel = false,
     synonymSenseId = null
-  ): Promise<HeadwordRecord[]> {
-    const existing: HeadwordRecord[] = await this.headwordModel
+  ): Promise<EntryRecord[]> {
+    const existing: EntryRecord[] = await this.entryModel
       .find({
         word: word
       })
@@ -64,9 +61,9 @@ export class HeadwordsService {
         throw new Error(`Word: ${word} not found in dictionary`);
       }
 
-      const headwords = await Promise.all(
+      const entries = await Promise.all(
         entrySearchResults.map(record =>
-          this.createHeadword(record, topLevel, synonymSenseId)
+          this.createEntry(record, topLevel, synonymSenseId)
         )
       );
 
@@ -79,28 +76,28 @@ export class HeadwordsService {
             )
           )
       );
-      return Promise.all(headwords.map(this.getLatest));
+      return Promise.all(entries.map(this.getLatest));
     }
   }
 
-  find(oxId: string): Promise<HeadwordRecord[]> {
-    return this.headwordModel
+  find(oxId: string): Promise<EntryRecord[]> {
+    return this.entryModel
       .find({ oxId: oxId })
       .lean()
       .exec();
   }
 
-  findOneById(id: string): Promise<HeadwordRecord> {
-    return this.headwordModel.findById(id).exec();
+  findOneById(id: string): Promise<EntryRecord> {
+    return this.entryModel.findById(id).exec();
   }
 
-  findAll(): Promise<HeadwordRecord[]> {
-    return this.headwordModel.find({}).exec();
+  findAll(): Promise<EntryRecord[]> {
+    return this.entryModel.find({}).exec();
   }
 
-  search(chars: string): Promise<HeadwordRecord[]> {
+  search(chars: string): Promise<EntryRecord[]> {
     if (chars) {
-      return this.headwordModel
+      return this.entryModel
         .find({ word: { $regex: `^${chars}`, $options: '$i' } })
         .exec();
     } else {
@@ -108,11 +105,8 @@ export class HeadwordsService {
     }
   }
 
-  async makeTopLevel(
-    oxId: string,
-    homographC: number
-  ): Promise<HeadwordRecord> {
-    const updated = await this.headwordModel
+  async makeTopLevel(oxId: string, homographC: number): Promise<EntryRecord> {
+    const updated = await this.entryModel
       .findOneAndUpdate(
         { oxId: oxId, homographC: homographC },
         { $set: { topLevel: true } },
@@ -123,7 +117,7 @@ export class HeadwordsService {
     const promises = [];
 
     for (const senseId of updated.ownSenseIds) {
-      promises.push(this.findOrCreateHeadwordsForSense(senseId));
+      promises.push(this.findOrCreateEntriesForSense(senseId));
     }
 
     await Promise.all(promises);
@@ -131,7 +125,7 @@ export class HeadwordsService {
     return updated;
   }
 
-  async findOrCreateHeadwordsForSense(senseId: string): Promise<any> {
+  async findOrCreateEntriesForSense(senseId: string): Promise<any> {
     const record = await this.sensesService.findOne(senseId);
     const promises = [];
     for (const synonym of record.synonyms) {
@@ -140,26 +134,26 @@ export class HeadwordsService {
     return Promise.all(promises);
   }
 
-  getLatest = (record: HeadwordRecord) => {
-    return this.headwordModel
+  getLatest = (record: EntryRecord) => {
+    return this.entryModel
       .findById(record._id)
       .lean()
       .exec();
   };
 
-  createHeadword = (
+  createEntry = (
     record: OxfordSearchRecord,
     topLevel: boolean,
     synonymSenseId = null
-  ): Promise<HeadwordRecord> => {
-    const headword = {
+  ): Promise<EntryRecord> => {
+    const entry = {
       word: record.result.word,
       oxId: record.result.id,
       homographC: record.homographC,
       topLevel: topLevel,
       synonymSenseIds: synonymSenseId ? [synonymSenseId] : []
     };
-    return this.headwordModel.create(headword);
+    return this.entryModel.create(entry);
   };
 
   createSenses = async (
@@ -188,30 +182,30 @@ export class HeadwordsService {
     await Promise.all(
       senses.map(record => {
         return this.addOwnSense(
-          record.headwordOxId,
-          record.headwordHomographC,
+          record.entryOxId,
+          record.entryHomographC,
           record.senseId
         );
       })
     );
 
     if (topLevel) {
-      const headwords = [];
+      const entries = [];
       senses.map(record => {
         record.synonyms.map(word => {
-          headwords.push(
+          entries.push(
             this.findOrCreateAndUpdateSenses(word, false, record.senseId)
           );
         });
       });
-      await Promise.all(headwords);
+      await Promise.all(entries);
     }
 
     return senses;
   };
 
   addOwnSense(oxId: string, homographC: number, senseId: string) {
-    return this.headwordModel.updateOne(
+    return this.entryModel.updateOne(
       { oxId: oxId, homographC: homographC },
       { $addToSet: { ownSenseIds: senseId } }
     );
@@ -221,8 +215,8 @@ export class HeadwordsService {
     oxId: string,
     homographC: number,
     senseId: string
-  ): Promise<HeadwordRecord> {
-    return this.headwordModel
+  ): Promise<EntryRecord> {
+    return this.entryModel
       .findOneAndUpdate(
         { oxId: oxId, homographC: homographC },
         {

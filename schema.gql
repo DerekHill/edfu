@@ -3,7 +3,7 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
-type HeadwordDto {
+type EntryDto {
   _id: ID!
   oxId: String!
   homographC: Float
@@ -15,9 +15,9 @@ type HeadwordDto {
 
 type Query {
   hello: String!
-  headword(id: String!): HeadwordDto!
-  headwordsAll: [HeadwordDto!]!
-  search(search_string: String!): [HeadwordDto!]!
+  entry(id: String!): EntryDto!
+  entriesAll: [EntryDto!]!
+  search(search_string: String!): [EntryDto!]!
   sense(senseId: String!): SenseDto!
   senses(senseIds: [String!]!): [SenseDto!]!
 }
@@ -25,8 +25,8 @@ type Query {
 type SenseDto {
   _id: ID!
   senseId: String!
-  headwordOxId: String!
-  headwordHomographC: Float
+  entryOxId: String!
+  entryHomographC: Float
   dictionaryOrThesaurus: String!
   lexicalCategory: String!
   example: String!

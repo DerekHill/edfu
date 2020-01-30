@@ -5,8 +5,8 @@ import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/api-interfaces';
 
 export interface SenseRecordWithoutId {
   readonly senseId: string;
-  readonly headwordOxId: string;
-  readonly headwordHomographC: number;
+  readonly entryOxId: string;
+  readonly entryHomographC: number;
   readonly dictionaryOrThesaurus?: DictionaryOrThesaurus;
   readonly lexicalCategory?: LexicalCategory;
   readonly thesaurusLinks?: OxThesaurusLink[];

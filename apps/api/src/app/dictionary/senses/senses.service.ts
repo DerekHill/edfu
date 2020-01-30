@@ -28,16 +28,16 @@ export class SensesService {
   ) {}
 
   async findOrCreate(
-    headwordOxId: string,
-    headwordHomographC: number,
+    entryOxId: string,
+    entryHomographC: number,
     lexicalCategory: LexicalCategory,
     oxSense: OxSense
   ): Promise<SenseRecord> {
     const senseId = this.extractSenseId(oxSense);
 
     const sense = {
-      headwordOxId: headwordOxId,
-      headwordHomographC: headwordHomographC,
+      entryOxId: entryOxId,
+      entryHomographC: entryHomographC,
       dictionaryOrThesaurus: this.determineDictionaryOrThesaurus(oxSense),
       lexicalCategory: lexicalCategory,
       senseId: senseId,

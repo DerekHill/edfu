@@ -16,7 +16,7 @@ const Hello = gql`
 
 const GetById = gql`
   query {
-    headword(id: "5df37add4b2f1813eff96309") {
+    entry(id: "5df37add4b2f1813eff96309") {
       _id
       oxId
       homographC
@@ -51,7 +51,7 @@ export class BasicComponent implements OnInit, OnDestroy {
       .watchQuery({
         query: gql`
           {
-            headwordsAll {
+            entriesAll {
               _id
               oxId
               homographC
@@ -63,7 +63,7 @@ export class BasicComponent implements OnInit, OnDestroy {
       })
       .valueChanges.pipe(untilDestroyed(this))
       .subscribe((result: any) => {
-        this.words = result.data.headwordsAll;
+        this.words = result.data.entriesAll;
         this.loading = result.loading;
         this.error = result.errors;
       });

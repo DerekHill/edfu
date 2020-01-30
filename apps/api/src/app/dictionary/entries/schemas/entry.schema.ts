@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-export const HeadwordSchema = new mongoose.Schema({
+export const EntrySchema = new mongoose.Schema({
   oxId: {
     type: String,
     required: true
@@ -27,5 +27,5 @@ export const HeadwordSchema = new mongoose.Schema({
   }
 });
 
-HeadwordSchema.index({ oxId: 1, homographC: 1 }, { unique: true });
-HeadwordSchema.index({ word: 1 });
+EntrySchema.index({ oxId: 1, homographC: 1 }, { unique: true });
+EntrySchema.index({ word: 1 });

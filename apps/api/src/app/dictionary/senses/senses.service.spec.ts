@@ -3,15 +3,12 @@ import { SensesService } from './senses.service';
 import { TestDatabaseModule } from '../../config/test-database.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { SenseSchema } from './schemas/sense.schema';
-import {
-  SENSE_COLLECTION_NAME,
-  HEADWORD_COLLECTION_NAME
-} from '../../constants';
+import { SENSE_COLLECTION_NAME, ENTRY_COLLECTION_NAME } from '../../constants';
 import { LexicalCategory } from '@edfu/api-interfaces';
 import { DICTIONARY_SENSE_BANK } from './test/sample-results';
 import { OxSense } from '../../oxford-api/interfaces/oxford-api.interface';
-import { HeadwordsService } from '../headwords/headwords.service';
-import { HeadwordSchema } from '../headwords/schemas/headword.schema';
+import { EntriesService } from '../entries/entries.service';
+import { EntrySchema } from '../entries/schemas/entry.schema';
 import {
   EntrySearchesService,
   ThesaurusSearchesService
@@ -27,12 +24,12 @@ describe('SensesService', () => {
         TestDatabaseModule,
         MongooseModule.forFeature([
           { name: SENSE_COLLECTION_NAME, schema: SenseSchema },
-          { name: HEADWORD_COLLECTION_NAME, schema: HeadwordSchema }
+          { name: ENTRY_COLLECTION_NAME, schema: EntrySchema }
         ])
       ],
       providers: [
         SensesService,
-        HeadwordsService,
+        EntriesService,
         {
           provide: EntrySearchesService,
           useClass: OxfordSearchesServiceMock
@@ -49,14 +46,14 @@ describe('SensesService', () => {
 
   describe('findOrCreate', () => {
     it('works', async () => {
-      const headwordOxId = 'bank';
-      const headwordHomographC = 0;
+      const entryOxId = 'bank';
+      const entryHomographC = 0;
       const lexicalCategory = LexicalCategory.adjective;
       const oxSense: OxSense = DICTIONARY_SENSE_BANK;
       expect(
         service.findOrCreate(
-          headwordOxId,
-          headwordHomographC,
+          entryOxId,
+          entryHomographC,
           lexicalCategory,
           oxSense
         )
@@ -67,8 +64,8 @@ describe('SensesService', () => {
   describe('create', () => {
     it('works with dictionary sense', async () => {
       const example = 'we need food and water';
-      const headwordOxId = 'bank';
-      const headwordHomographC = 0;
+      const entryOxId = 'bank';
+      const entryHomographC = 0;
       const lexicalCategory = LexicalCategory.adjective;
       const dictionarySense = {
         definitions: ['any nutritious substance'],
@@ -77,8 +74,8 @@ describe('SensesService', () => {
       };
 
       const res = await service.findOrCreate(
-        headwordOxId,
-        headwordHomographC,
+        entryOxId,
+        entryHomographC,
         lexicalCategory,
         dictionarySense
       );

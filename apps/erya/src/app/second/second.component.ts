@@ -5,11 +5,11 @@ import { map, startWith } from 'rxjs/operators';
 import gql from 'graphql-tag';
 import { Apollo, QueryRef } from 'apollo-angular';
 import { HttpClient } from '@angular/common/http';
-import { HeadwordDto, SenseDto } from '@edfu/api-interfaces';
+import { EntryDto, SenseDto } from '@edfu/api-interfaces';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 
 interface WordSearchQuery {
-  search: HeadwordDto[];
+  search: EntryDto[];
 }
 
 interface WordSearchVariables {
@@ -31,7 +31,7 @@ interface SenseSearchVariables {
 export class SecondComponent implements OnInit, OnDestroy {
   wordSearchFormControl = new FormControl();
   wordSearchInput: Observable<string>;
-  wordSearchResults$: Observable<HeadwordDto[]>;
+  wordSearchResults$: Observable<EntryDto[]>;
   wordSearchRef: QueryRef<WordSearchQuery, WordSearchVariables>;
 
   senses$: Observable<SenseDto[]>;
@@ -111,7 +111,7 @@ export class SecondComponent implements OnInit, OnDestroy {
     });
   }
 
-  onOptionSelected(input: HeadwordDto) {
+  onOptionSelected(input: EntryDto) {
     this.senseIds$.next(input.ownSenseIds);
   }
 

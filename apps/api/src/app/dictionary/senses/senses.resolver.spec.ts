@@ -17,8 +17,8 @@ const senseRecordFactory = (): SenseRecord => {
   return {
     _id: new ObjectId(),
     senseId: 'id',
-    headwordOxId: 'food',
-    headwordHomographC: null,
+    entryOxId: 'food',
+    entryHomographC: null,
     synonyms: []
   };
 };
@@ -43,7 +43,7 @@ describe('SensesResolver', () => {
   });
 
   it('finds object by id', async () => {
-    const headwordOxId = 'food';
+    const entryOxId = 'food';
     const sense = senseRecordFactory();
 
     jest.spyOn(sensesService, 'findOne').mockImplementation(() => {
@@ -52,7 +52,7 @@ describe('SensesResolver', () => {
 
     const res = await resolver.sense('id');
 
-    expect(res.headwordOxId).toEqual(headwordOxId);
+    expect(res.entryOxId).toEqual(entryOxId);
   });
 
   it('finds objects by ids', async () => {

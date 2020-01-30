@@ -3,7 +3,7 @@ import { ObjectId } from 'bson';
 import { DictionaryOrThesaurus, LexicalCategory } from './enums';
 
 @ObjectType()
-export class HeadwordDto {
+export class EntryDto {
   @Field(type => ID)
   _id: ObjectId;
 
@@ -35,11 +35,11 @@ export class SenseDto {
   readonly senseId: string;
 
   @Field()
-  readonly headwordOxId: string;
+  readonly entryOxId: string;
 
   // Currently nullable, but better to make nulls zero I suspect
   @Field({ nullable: true })
-  readonly headwordHomographC: number;
+  readonly entryHomographC: number;
 
   @Field(type => String)
   readonly dictionaryOrThesaurus?: DictionaryOrThesaurus;

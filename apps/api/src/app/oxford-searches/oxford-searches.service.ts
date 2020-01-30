@@ -19,7 +19,7 @@ export class BaseSearchesService {
   constructor(
     @InjectModel(ENTRY_SEARCH_COLLECTION_NAME)
     private readonly searchModel: Model<OxfordSearchDocument>,
-    protected readonly oxfordService: OxfordApiService
+    protected readonly oxfordApiService: OxfordApiService
   ) {}
 
   protected getOxfordEntries(searchTerm: string) {
@@ -103,7 +103,7 @@ export class ThesaurusSearchesService extends BaseSearchesService {
   }
 
   protected getOxfordEntries(searchTerm: string) {
-    return this.oxfordService.getThesauruses(searchTerm);
+    return this.oxfordApiService.getThesauruses(searchTerm);
   }
 }
 
@@ -118,6 +118,6 @@ export class EntrySearchesService extends BaseSearchesService {
   }
 
   protected getOxfordEntries(searchTerm: string) {
-    return this.oxfordService.getEntries(searchTerm);
+    return this.oxfordApiService.getEntries(searchTerm);
   }
 }

@@ -1,14 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import {
-  HEADWORD_COLLECTION_NAME,
-  SENSE_COLLECTION_NAME
-} from '../../constants';
+import { ENTRY_COLLECTION_NAME, SENSE_COLLECTION_NAME } from '../../constants';
 import { Model } from 'mongoose';
 import {
-  HeadwordDocument,
-  HeadwordRecordWithoutId
-} from '../../dictionary/headwords/interfaces/headword.interface';
+  EntryDocument,
+  EntryRecordWithoutId
+} from '../../dictionary/entries/interfaces/entry.interface';
 import {
   SenseDocument,
   SenseRecordWithoutId
@@ -80,7 +77,7 @@ const SPEEDY_DICT_ADJ_SENSE_2_ID = 'm_en_gbus0976550.013';
 const SPEEDY_THES_ADJ_SENSE_1_ID = 't_en_gb0013890.001'; // Linked to SPEEDY_DICT_ADJ_SENSE_1_ID
 const SPEEDY_THES_ADJ_SENSE_2_ID = 't_en_gb0013890.002'; // Linked to SPEEDY_DICT_ADJ_SENSE_2_ID
 
-const HEADWORDS: HeadwordRecordWithoutId[] = [
+const ENTRIES: EntryRecordWithoutId[] = [
   {
     oxId: FOOD,
     homographC: null,
@@ -171,8 +168,8 @@ const HEADWORDS: HeadwordRecordWithoutId[] = [
 const SENSES: SenseRecordWithoutId[] = [
   {
     senseId: FOOD_SENSE_1_ID,
-    headwordOxId: FOOD,
-    headwordHomographC: null,
+    entryOxId: FOOD,
+    entryHomographC: null,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     example: 'we need food and water',
     definition:
@@ -181,24 +178,24 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: FOOD_SENSE_2_ID,
-    headwordOxId: FOOD,
-    headwordHomographC: null,
+    entryOxId: FOOD,
+    entryHomographC: null,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     example: 'he went three days without food',
     synonyms: ['nourishment', 'sustenance', 'nutriment', 'subsistence']
   },
   {
     senseId: FOOD_SENSE_3_ID,
-    headwordOxId: FOOD,
-    headwordHomographC: null,
+    entryOxId: FOOD,
+    entryHomographC: null,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     example: 'food for the cattle and horses',
     synonyms: ['fodder', 'feed', 'forage']
   },
   {
     senseId: FAST_1_DICT_ADJ_SENSE_1_ID,
-    headwordOxId: FAST,
-    headwordHomographC: 1,
+    entryOxId: FAST,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adjective,
     thesaurusLinks: [
@@ -213,8 +210,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_DICT_ADJ_SENSE_2_ID,
-    headwordOxId: FAST,
-    headwordHomographC: 1,
+    entryOxId: FAST,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adjective,
     example: 'I keep my watch fifteen minutes fast',
@@ -224,8 +221,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_DICT_ADJ_SENSE_3_ID,
-    headwordOxId: FAST,
-    headwordHomographC: 1,
+    entryOxId: FAST,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adjective,
     thesaurusLinks: [
@@ -244,8 +241,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_DICT_ADJ_SENSE_4_ID,
-    headwordOxId: FAST,
-    headwordHomographC: 1,
+    entryOxId: FAST,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adjective,
     example: 'a 35-mm colour film which is ten times faster than Kodacolor II',
@@ -254,8 +251,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_DICT_ADJ_SENSE_5_ID,
-    headwordOxId: FAST,
-    headwordHomographC: 1,
+    entryOxId: FAST,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adjective,
     thesaurusLinks: [
@@ -270,8 +267,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_DICT_ADJ_SENSE_6_ID,
-    headwordOxId: FAST,
-    headwordHomographC: 1,
+    entryOxId: FAST,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adjective,
     thesaurusLinks: [
@@ -287,8 +284,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_DICT_ADJ_SENSE_7_ID,
-    headwordOxId: FAST,
-    headwordHomographC: 1,
+    entryOxId: FAST,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adjective,
     example: 'Mammy said, ‘Stop asking questions, you too damn farse.’',
@@ -297,8 +294,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_DICT_ADV_SENSE_1_ID,
-    headwordOxId: FAST,
-    headwordHomographC: 1,
+    entryOxId: FAST,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adverb,
     example: 'he was driving too fast',
@@ -307,8 +304,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_DICT_ADV_SENSE_2_ID,
-    headwordOxId: FAST,
-    headwordHomographC: 1,
+    entryOxId: FAST,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adverb,
     example: 'the ship was held fast by the anchor chain',
@@ -317,8 +314,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_DICT_ADV_SENSE_3_ID,
-    headwordOxId: FAST,
-    headwordHomographC: 1,
+    entryOxId: FAST,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adverb,
     example: 'they were too fast asleep to reply',
@@ -327,8 +324,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_2_DICT_VER_SENSE_1_ID,
-    headwordOxId: FAST,
-    headwordHomographC: 2,
+    entryOxId: FAST,
+    entryHomographC: 2,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.verb,
     thesaurusLinks: [
@@ -344,8 +341,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_2_DICT_NOU_SENSE_1_ID,
-    headwordOxId: FAST,
-    headwordHomographC: 2,
+    entryOxId: FAST,
+    entryHomographC: 2,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.noun,
     thesaurusLinks: [
@@ -360,8 +357,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_1_DICT_NOU_SENSE_1_ID,
-    headwordOxId: BANK,
-    headwordHomographC: 1,
+    entryOxId: BANK,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.noun,
     thesaurusLinks: [
@@ -376,8 +373,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_1_DICT_NOU_SENSE_2_ID,
-    headwordOxId: BANK,
-    headwordHomographC: 1,
+    entryOxId: BANK,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.noun,
     thesaurusLinks: [
@@ -392,8 +389,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_1_DICT_NOU_SENSE_3_ID,
-    headwordOxId: BANK,
-    headwordHomographC: 1,
+    entryOxId: BANK,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.noun,
     thesaurusLinks: [
@@ -410,8 +407,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_1_DICT_NOU_SENSE_4_ID,
-    headwordOxId: BANK,
-    headwordHomographC: 1,
+    entryOxId: BANK,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.noun,
     example: 'a bank shot',
@@ -420,8 +417,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_1_DICT_VER_SENSE_1_ID,
-    headwordOxId: BANK,
-    headwordHomographC: 1,
+    entryOxId: BANK,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.verb,
     thesaurusLinks: [
@@ -436,8 +433,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_1_DICT_VER_SENSE_2_ID,
-    headwordOxId: BANK,
-    headwordHomographC: 1,
+    entryOxId: BANK,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.verb,
     thesaurusLinks: [
@@ -453,8 +450,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_1_DICT_VER_SENSE_3_ID,
-    headwordOxId: BANK,
-    headwordHomographC: 1,
+    entryOxId: BANK,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.verb,
     example:
@@ -465,8 +462,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_1_DICT_VER_SENSE_4_ID,
-    headwordOxId: BANK,
-    headwordHomographC: 1,
+    entryOxId: BANK,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.verb,
     example: 'it was the biggest rainbow trout that had ever been banked',
@@ -475,8 +472,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_1_DICT_VER_SENSE_5_ID,
-    headwordOxId: BANK,
-    headwordHomographC: 1,
+    entryOxId: BANK,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.verb,
     example: 'I banked the eight ball off two cushions',
@@ -486,8 +483,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_2_DICT_NOU_SENSE_1_ID,
-    headwordOxId: BANK,
-    headwordHomographC: 2,
+    entryOxId: BANK,
+    entryHomographC: 2,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.noun,
     thesaurusLinks: [
@@ -503,8 +500,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_2_DICT_VER_SENSE_1_ID,
-    headwordOxId: BANK,
-    headwordHomographC: 2,
+    entryOxId: BANK,
+    entryHomographC: 2,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.verb,
     thesaurusLinks: [
@@ -523,8 +520,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_THES_ADJ_SENSE_1_ID,
-    headwordOxId: FAST,
-    headwordHomographC: 1,
+    entryOxId: FAST,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adjective,
     example: 'a fast sports car',
@@ -532,8 +529,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_THES_ADJ_SENSE_2_ID,
-    headwordOxId: FAST,
-    headwordHomographC: 1,
+    entryOxId: FAST,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adjective,
     example: 'his hand slammed against the door, holding it fast',
@@ -541,8 +538,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_THES_ADJ_SENSE_3_ID,
-    headwordOxId: FAST,
-    headwordHomographC: 1,
+    entryOxId: FAST,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adjective,
     example: 'the dyes are boiled with yarn to produce a fast colour',
@@ -550,8 +547,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_THES_ADJ_SENSE_4_ID,
-    headwordOxId: FAST,
-    headwordHomographC: 1,
+    entryOxId: FAST,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adjective,
     example: 'they remained fast friends',
@@ -570,8 +567,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_THES_ADJ_SENSE_5_ID,
-    headwordOxId: FAST,
-    headwordHomographC: 1,
+    entryOxId: FAST,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adjective,
     example: 'a fast woman',
@@ -587,8 +584,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_THES_ADJ_SENSE_6_ID,
-    headwordOxId: FAST,
-    headwordHomographC: 1,
+    entryOxId: FAST,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adjective,
     example: 'the fast life she led in London',
@@ -614,8 +611,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_THES_ADV_SENSE_1_ID,
-    headwordOxId: FAST,
-    headwordHomographC: 1,
+    entryOxId: FAST,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adverb,
     example: 'she drove fast towards the gates',
@@ -623,8 +620,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_THES_ADV_SENSE_2_ID,
-    headwordOxId: FAST,
-    headwordHomographC: 1,
+    entryOxId: FAST,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adverb,
     example: 'his wheels were stuck fast',
@@ -632,8 +629,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_THES_ADV_SENSE_3_ID,
-    headwordOxId: FAST,
-    headwordHomographC: 1,
+    entryOxId: FAST,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adverb,
     example: "Richard's fast asleep",
@@ -641,8 +638,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_THES_ADV_SENSE_4_ID,
-    headwordOxId: FAST,
-    headwordHomographC: 1,
+    entryOxId: FAST,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adverb,
     example: 'she lived fast and dangerously',
@@ -659,8 +656,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_2_THES_VER_SENSE_1_ID,
-    headwordOxId: FAST,
-    headwordHomographC: 2,
+    entryOxId: FAST,
+    entryHomographC: 2,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.verb,
     example: 'the ministry instructed people to fast, pray, and read scripture',
@@ -668,8 +665,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_2_THES_NOU_SENSE_1_ID,
-    headwordOxId: FAST,
-    headwordHomographC: 2,
+    entryOxId: FAST,
+    entryHomographC: 2,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.noun,
     example: 'a five-day fast',
@@ -677,8 +674,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_1_THES_NOU_SENSE_1_ID,
-    headwordOxId: BANK,
-    headwordHomographC: 1,
+    entryOxId: BANK,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.noun,
     example: 'the banks of Lake Michigan',
@@ -709,8 +706,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_1_THES_NOU_SENSE_2_ID,
-    headwordOxId: BANK,
-    headwordHomographC: 1,
+    entryOxId: BANK,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.noun,
     example: 'a grassy bank',
@@ -726,8 +723,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_1_THES_NOU_SENSE_3_ID,
-    headwordOxId: BANK,
-    headwordHomographC: 1,
+    entryOxId: BANK,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.noun,
     example: 'a bank of switches',
@@ -735,8 +732,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_1_THES_VER_SENSE_1_ID,
-    headwordOxId: BANK,
-    headwordHomographC: 1,
+    entryOxId: BANK,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.verb,
     example: 'they banked up the earth around their hollow',
@@ -744,8 +741,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_1_THES_VER_SENSE_2_ID,
-    headwordOxId: BANK,
-    headwordHomographC: 1,
+    entryOxId: BANK,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.verb,
     example: 'she banked up the fire',
@@ -753,8 +750,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_1_THES_VER_SENSE_3_ID,
-    headwordOxId: BANK,
-    headwordHomographC: 1,
+    entryOxId: BANK,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.verb,
     example: 'she taught him how to bank the plane',
@@ -775,8 +772,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_2_THES_NOU_SENSE_1_ID,
-    headwordOxId: BANK,
-    headwordHomographC: 1,
+    entryOxId: BANK,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.noun,
     example: 'I paid the money into my bank',
@@ -784,8 +781,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_2_THES_NOU_SENSE_2_ID,
-    headwordOxId: BANK,
-    headwordHomographC: 1,
+    entryOxId: BANK,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.noun,
     example: 'a blood bank',
@@ -805,8 +802,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_2_THES_VER_SENSE_1_ID,
-    headwordOxId: BANK,
-    headwordHomographC: 1,
+    entryOxId: BANK,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.noun,
     example: 'I banked the cheque',
@@ -814,8 +811,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_2_THES_VER_SENSE_2_ID,
-    headwordOxId: BANK,
-    headwordHomographC: 1,
+    entryOxId: BANK,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.noun,
     example: 'the family has banked with Coutts for generations',
@@ -823,8 +820,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: SPEEDY_DICT_ADJ_SENSE_1_ID,
-    headwordOxId: SPEEDY,
-    headwordHomographC: 1,
+    entryOxId: SPEEDY,
+    entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.noun,
     example: 'the family has banked with Coutts for generations',
@@ -832,8 +829,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: SPEEDY_DICT_ADJ_SENSE_1_ID,
-    headwordOxId: SPEEDY,
-    headwordHomographC: null,
+    entryOxId: SPEEDY,
+    entryHomographC: null,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adjective,
     thesaurusLinks: [
@@ -848,8 +845,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: SPEEDY_DICT_ADJ_SENSE_2_ID,
-    headwordOxId: SPEEDY,
-    headwordHomographC: null,
+    entryOxId: SPEEDY,
+    entryHomographC: null,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adjective,
     thesaurusLinks: [
@@ -864,8 +861,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: SPEEDY_THES_ADJ_SENSE_1_ID,
-    headwordOxId: SPEEDY,
-    headwordHomographC: null,
+    entryOxId: SPEEDY,
+    entryHomographC: null,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adjective,
     example: 'a speedy reply',
@@ -885,8 +882,8 @@ const SENSES: SenseRecordWithoutId[] = [
   },
   {
     senseId: SPEEDY_THES_ADJ_SENSE_2_ID,
-    headwordOxId: SPEEDY,
-    headwordHomographC: null,
+    entryOxId: SPEEDY,
+    entryHomographC: null,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adjective,
     example: 'speedy hatchback',
@@ -897,8 +894,8 @@ const SENSES: SenseRecordWithoutId[] = [
 @Injectable()
 export class FixturesService {
   constructor(
-    @InjectModel(HEADWORD_COLLECTION_NAME)
-    private readonly headwordModel: Model<HeadwordDocument>,
+    @InjectModel(ENTRY_COLLECTION_NAME)
+    private readonly entryModel: Model<EntryDocument>,
     @InjectModel(SENSE_COLLECTION_NAME)
     private readonly senseModel: Model<SenseDocument>
   ) {}
@@ -918,7 +915,7 @@ export class FixturesService {
     );
   }
 
-  headwordConditionsGenerator(obj: HeadwordRecordWithoutId) {
+  entryConditionsGenerator(obj: EntryRecordWithoutId) {
     return { oxId: obj.oxId, homographC: obj.homographC };
   }
 
@@ -928,9 +925,9 @@ export class FixturesService {
 
   async create() {
     await this.populateCollection(
-      this.headwordModel,
-      HEADWORDS,
-      this.headwordConditionsGenerator
+      this.entryModel,
+      ENTRIES,
+      this.entryConditionsGenerator
     );
     await this.populateCollection(
       this.senseModel,

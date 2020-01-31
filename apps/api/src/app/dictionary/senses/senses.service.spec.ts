@@ -23,7 +23,7 @@ import {
   SharedSenseRecord,
   DictionarySenseRecord,
   DictionarySenseRecordWithoutId,
-  ThesaurusLinkedSenses
+  LinkedSensePairing
 } from './interfaces/sense.interface';
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
@@ -157,7 +157,7 @@ describe('SensesService', () => {
       };
 
       await setupService.create(dictionarySense);
-      const res: ThesaurusLinkedSenses = await service.populateThesaurusLinkedSenses(
+      const res: LinkedSensePairing = await service.populateThesaurusLinkedSenses(
         thesaurusSense
       );
       expect(res.dictionarySenses.length).toEqual(1);

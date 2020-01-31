@@ -20,6 +20,7 @@ import {
 } from '../senses/interfaces/sense.interface';
 import { HeadwordOrPhrase } from '../../enums';
 import { OxSense } from '../../oxford-api/interfaces/oxford-api.interface';
+import { EntrySensesService } from '../entry-senses/entry-senses.service';
 
 @Injectable()
 export class EntriesService {
@@ -28,10 +29,11 @@ export class EntriesService {
     private readonly entryModel: Model<EntryDocument>,
     private readonly entrySearchesService: EntrySearchesService,
     private readonly thesaurusSearchesService: ThesaurusSearchesService,
-    private readonly sensesService: SensesService
+    private readonly sensesService: SensesService,
+    private readonly entrySensesService: EntrySensesService
   ) {}
 
-  async findOrCreateWithOwnSensesOnly(chars: string) {
+  async findOrCreateWithOwnSensesOnly(chars: string): Promise<EntryRecord[]> {
     const existing: EntryRecord[] = await this.entryModel
       .find({
         word: chars
@@ -104,7 +106,10 @@ export class EntriesService {
       .exec();
   };
 
-  async addRelatedEntries(oxId: string, homographC: number) {
+  async addRelatedEntries(
+    oxId: string,
+    homographC: number
+  ): Promise<EntryRecord[]> {
     const res = await this.entryModel
       .findOne({ oxId: oxId, homographC: homographC })
       .lean()
@@ -131,13 +136,13 @@ export class EntriesService {
       throw new Error(`No thesaurus result for ${oxId}`);
     }
 
-    const promises = [];
+    const promises1 = [];
     for (const categoryEntries of matchingResult.result.lexicalEntries) {
       const lexicalCategory =
         LexicalCategory[categoryEntries.lexicalCategory.id];
       for (const entry of categoryEntries.entries) {
         for (const sense of entry.senses) {
-          promises.push(
+          promises1.push(
             this.sensesService.findOrCreateThesaurusSenseWithoutAssociation(
               matchingResult.result.id,
               matchingResult.homographC,
@@ -148,8 +153,36 @@ export class EntriesService {
         }
       }
     }
-    const senses: ThesaurusSenseRecord[] = await Promise.all(promises);
-    console.log(senses);
+    const senses: ThesaurusSenseRecord[] = await Promise.all(promises1);
+
+    const linkedSensePairings = await Promise.all(
+      senses.map(sense =>
+        this.sensesService.populateThesaurusLinkedSenses(sense)
+      )
+    );
+
+    const foundLinkSensePairings = linkedSensePairings.filter(
+      l => l.dictionarySenses.length
+    );
+
+    const promises2 = [];
+
+    for (const sensePairing of foundLinkSensePairings) {
+      for (const dictionarySense of sensePairing.dictionarySenses) {
+        for (const synonym of sensePairing.thesaurusSense.synonyms) {
+          promises2.push(
+            this.findOrCreateSynonymEntryAndAssociations(
+              synonym,
+              dictionarySense
+            )
+          );
+        }
+      }
+    }
+
+    const newSynonymEntries: EntryRecord[][] = await Promise.all(promises2);
+
+    return newSynonymEntries.flat();
   }
 
   throwErrorIfNotFound(results: OxfordSearchRecord[], string: string) {
@@ -170,6 +203,32 @@ export class EntriesService {
       return null;
     }
     return results.filter(result => result.homographC === homographC)[0];
+  }
+
+  async findOrCreateSynonymEntryAndAssociations(
+    synonym: string,
+    sense: DictionarySenseRecord
+  ): Promise<EntryRecord[]> {
+    const entries = await this.findOrCreateWithOwnSensesOnly(synonym);
+    if (!entries) {
+      return null;
+    }
+
+    const confidence = entries.length === 1 ? 0.5 : 0.1;
+    // Might reduce chance of making association with wrong synonym entry homonym if
+    // check that lexical categories match
+    const promises = entries.map(entry => {
+      return this.entrySensesService.findOrCreate(
+        entry.oxId,
+        entry.homographC,
+        sense.senseId,
+        confidence
+      );
+    });
+
+    await Promise.all(promises);
+
+    return entries;
   }
 
   // OLD METHODS //

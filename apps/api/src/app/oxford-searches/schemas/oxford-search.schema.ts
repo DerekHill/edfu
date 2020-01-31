@@ -1,4 +1,4 @@
-import * as mongoose from "mongoose";
+import * as mongoose from 'mongoose';
 
 export const OxfordSearchSchema = new mongoose.Schema({
   normalizedSearchTerm: String,

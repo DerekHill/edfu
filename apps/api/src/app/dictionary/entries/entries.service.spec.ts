@@ -18,10 +18,13 @@ import {
 } from './test/oxford-search-record-factory';
 import {
   DictionarySenseRecord,
-  ThesaurusSenseRecord
+  ThesaurusSenseRecord,
+  LinkedSensePairing
 } from '../senses/interfaces/sense.interface';
 import { HeadwordOrPhrase } from '../../enums';
 import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/api-interfaces';
+import { EntrySenseRecord } from '../entry-senses/interfaces/entry-sense.interface';
+import { EntrySensesService } from '../entry-senses/entry-senses.service';
 
 class OxfordSearchesServiceMock {
   findOrFetch(): Promise<OxfordSearchRecord[]> {
@@ -39,6 +42,16 @@ class SensesServiceMock {
   > {
     return Promise.resolve(null);
   }
+
+  populateThesaurusLinkedSenses(): Promise<LinkedSensePairing> {
+    return Promise.resolve(null);
+  }
+}
+
+class EntrySensesServiceMock {
+  findOrCreate(): Promise<EntrySenseRecord> {
+    return Promise.resolve(null);
+  }
 }
 
 describe('EntriesService', () => {
@@ -46,6 +59,7 @@ describe('EntriesService', () => {
   let entrySearchesService: EntrySearchesService;
   let thesaurusSearchesService: ThesaurusSearchesService;
   let sensesService: SensesService;
+  let entrySensesService: EntrySensesService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -72,6 +86,10 @@ describe('EntriesService', () => {
         {
           provide: SensesService,
           useClass: SensesServiceMock
+        },
+        {
+          provide: EntrySensesService,
+          useClass: EntrySensesServiceMock
         }
       ]
     }).compile();
@@ -84,6 +102,7 @@ describe('EntriesService', () => {
       ThesaurusSearchesService
     );
     sensesService = module.get<SensesService>(SensesService);
+    entrySensesService = module.get<EntrySensesService>(EntrySensesService);
   });
 
   describe('findOrCreateWithOwnSensesOnly() from Dictionary', () => {
@@ -113,39 +132,71 @@ describe('EntriesService', () => {
 
     it.only('works', async () => {
       const WORD = 'food';
-      const dictionaryRecord = createEntrySearchRecord(WORD);
-      const thesaurusRecord = createThesaurusSearchRecord(WORD, ['supper']);
+      const thesaurusSearchRecord = createThesaurusSearchRecord(WORD, [
+        'supper'
+      ]);
+      const THESAURUS_SENSE_ID = 'thesaurus_sense_id';
+      const ENTRY_OXID = 'entryOxId';
+      const ENTRY_HOMOGRAPH_C = 1;
+      const SYNONYMS = ['jump', 'leap'];
 
-      const sense: ThesaurusSenseRecord = {
+      const thesaurusSense: ThesaurusSenseRecord = {
         _id: new ObjectId(),
-        entryOxId: 'entryOxId',
-        entryHomographC: 1,
+        entryOxId: ENTRY_OXID,
+        entryHomographC: ENTRY_HOMOGRAPH_C,
         dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
         lexicalCategory: LexicalCategory.noun,
-        senseId: 'senseId',
+        senseId: THESAURUS_SENSE_ID,
         example: 'example of sense',
-        synonyms: ['jump', 'leap']
+        synonyms: SYNONYMS
+      };
+
+      const dictionarySense: DictionarySenseRecord = {
+        _id: new ObjectId(),
+        entryOxId: ENTRY_OXID,
+        entryHomographC: ENTRY_HOMOGRAPH_C,
+        dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+        lexicalCategory: LexicalCategory.noun,
+        thesaurusSenseIds: [THESAURUS_SENSE_ID],
+        definition: '',
+        example: '',
+        senseId: 'dictionary_sense_id'
+      };
+
+      const linkedSensePairing: LinkedSensePairing = {
+        thesaurusSense: thesaurusSense,
+        dictionarySenses: [dictionarySense]
       };
 
       jest
         .spyOn(entrySearchesService, 'findOrFetch')
-        .mockImplementation(chars => Promise.resolve([dictionaryRecord]));
+        .mockImplementation(searchTerm =>
+          Promise.resolve([createEntrySearchRecord(searchTerm)])
+        );
 
       jest
         .spyOn(thesaurusSearchesService, 'findOrFetch')
-        .mockImplementation(chars => Promise.resolve([thesaurusRecord]));
+        .mockImplementation(chars => Promise.resolve([thesaurusSearchRecord]));
+
+      jest
+        .spyOn(sensesService, 'populateThesaurusLinkedSenses')
+        .mockImplementation(() => {
+          return Promise.resolve(linkedSensePairing);
+        });
 
       jest
         .spyOn(sensesService, 'findOrCreateThesaurusSenseWithoutAssociation')
         .mockImplementation(
           (entryOxId, entryHomographC, lexicalCategory, oxSense) => {
-            return Promise.resolve(sense);
+            return Promise.resolve(thesaurusSense);
           }
         );
 
       await entriesService.findOrCreateWithOwnSensesOnly(WORD);
-      //   console.log(res);
-      await entriesService.addRelatedEntries('food', 1);
+
+      const entries = await entriesService.addRelatedEntries('food', 1);
+
+      expect(entries.map(entry => entry.word).sort()).toEqual(SYNONYMS.sort());
     });
 
     it.skip('finds related entries if synonyms contain spaces', () => {});

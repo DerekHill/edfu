@@ -47,7 +47,7 @@ export interface SenseDocument extends Document, SharedSenseRecord {
   _id: ObjectId;
 }
 
-export interface ThesaurusLinkedSenses {
+export interface LinkedSensePairing {
   readonly thesaurusSense: ThesaurusSenseRecord;
   readonly dictionarySenses: DictionarySenseRecord[];
 }

@@ -9,7 +9,7 @@ import {
   SharedSenseRecord,
   DictionarySenseRecordWithoutId,
   ThesaurusSenseRecordWithoutId,
-  ThesaurusLinkedSenses
+  LinkedSensePairing
 } from './interfaces/sense.interface';
 import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/api-interfaces';
 import { oc } from 'ts-optchain';
@@ -109,7 +109,7 @@ export class SensesService {
 
   async populateThesaurusLinkedSenses(
     thesaurusSense: ThesaurusSenseRecord
-  ): Promise<ThesaurusLinkedSenses> {
+  ): Promise<LinkedSensePairing> {
     const dictionarySenses: DictionarySenseRecord[] = await this.senseModel
       .find({
         thesaurusSenseIds: thesaurusSense.senseId

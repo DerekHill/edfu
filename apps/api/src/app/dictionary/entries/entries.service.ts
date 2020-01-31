@@ -45,16 +45,7 @@ export class EntriesService {
       chars
     );
 
-    if (entrySearchResults.length === 0) {
-      throw new Error(`entrySearchesService error for chars: ${chars}`);
-    }
-
-    if (
-      entrySearchResults.length === 1 &&
-      entrySearchResults[0].found === false
-    ) {
-      throw new Error(`chars: ${chars} not found in dictionary`);
-    }
+    this.throwErrorIfNotFound(entrySearchResults, chars);
 
     const entries = await Promise.all(
       entrySearchResults.map(record => this.createEntryFromSearchRecord(record))
@@ -112,7 +103,47 @@ export class EntriesService {
       .exec();
   };
 
-  senses(oxId: string, homographC: string) {}
+  async addRelatedEntries(oxId: string, homographC: number) {
+    const res = await this.entryModel
+      .findOne({ oxId: oxId, homographC: homographC })
+      .lean()
+      .exec();
+
+    if (!res) {
+      throw new Error(
+        `Entry not found with oxId: ${oxId} and homographC: ${homographC}`
+      );
+    }
+
+    const thesaurusSearchResults = await this.thesaurusSearchesService.findOrFetch(
+      oxId
+    );
+
+    this.throwErrorIfNotFound(thesaurusSearchResults, oxId);
+
+    // filter for result  with matching homograph
+    console.log(thesaurusSearchResults);
+  }
+
+  throwErrorIfNotFound(results: OxfordSearchRecord[], string: string) {
+    if (results.length === 0) {
+      throw new Error(`searchesService error for chars: ${string}`);
+    }
+
+    if (results.length === 1 && results[0].found === false) {
+      throw new Error(`${string} not found`);
+    }
+  }
+
+  filterResultsByHomographC(
+    results: OxfordSearchRecord[],
+    homographC: number
+  ): OxfordSearchRecord {
+    if (!results || !results.length) {
+      return null;
+    }
+    return results.filter(result => result.homographC === homographC)[0];
+  }
 
   // OLD METHODS //
 

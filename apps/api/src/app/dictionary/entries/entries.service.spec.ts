@@ -11,7 +11,10 @@ import { EntrySchema } from './schemas/entry.schema';
 import { SenseSchema } from '../senses/schemas/sense.schema';
 import { SensesService } from '../senses/senses.service';
 import { OxfordSearchRecord } from '../../oxford-searches/interfaces/oxford-search.interface';
-import { createEntrySearchRecord } from './test/oxford-search-record-factory';
+import {
+  createEntrySearchRecord,
+  createThesaurusSearchRecord
+} from './test/oxford-search-record-factory';
 import { DictionarySenseRecord } from '../senses/interfaces/sense.interface';
 import { HeadwordOrPhrase } from '../../enums';
 
@@ -79,9 +82,96 @@ describe('EntriesService', () => {
         .spyOn(entrySearchesService, 'findOrFetch')
         .mockImplementation(chars => Promise.resolve([record]));
 
-      const res = await entriesService.findOrCreateWithOwnSensesOnly('foo');
+      const res = await entriesService.findOrCreateWithOwnSensesOnly(WORD);
       expect(res[0].word).toEqual(WORD);
       expect(res[0].headwordOrPhrase).toEqual(TYPE);
+    });
+  });
+
+  describe('addRelatedEntries', () => {
+    it('throws error if entry does not exist', async () => {
+      expect.assertions(1);
+      try {
+        await entriesService.addRelatedEntries('food', 1);
+      } catch (e) {
+        expect(e.message).toMatch(/not found/);
+      }
+    });
+
+    it.only('works', async () => {
+      //   expect.assertions(1);
+      const WORD = 'food';
+      const dictionaryRecord = createEntrySearchRecord(WORD);
+      const thesaurusRecord = createThesaurusSearchRecord(WORD, ['supper']);
+
+      jest
+        .spyOn(entrySearchesService, 'findOrFetch')
+        .mockImplementation(chars => Promise.resolve([dictionaryRecord]));
+
+      jest
+        .spyOn(thesaurusSearchesService, 'findOrFetch')
+        .mockImplementation(chars => Promise.resolve([thesaurusRecord]));
+
+      const res = await entriesService.findOrCreateWithOwnSensesOnly(WORD);
+      console.log(res);
+      await entriesService.addRelatedEntries('food', 1);
+    });
+  });
+
+  describe('filterResultsByHomographC', () => {
+    it('filters for correct result', () => {
+      const HOMOGRAPH_C = 1;
+      const WORD_1 = 'word_1';
+      const thesaurusRecord1 = createThesaurusSearchRecord(
+        WORD_1,
+        [],
+        true,
+        HOMOGRAPH_C
+      );
+      const thesaurusRecord2 = createThesaurusSearchRecord(
+        'word2',
+        [],
+        true,
+        2
+      );
+      const res: OxfordSearchRecord = entriesService.filterResultsByHomographC(
+        [thesaurusRecord1, thesaurusRecord2],
+        HOMOGRAPH_C
+      );
+      expect(res.homographC).toBe(HOMOGRAPH_C);
+      expect(res.normalizedSearchTerm).toBe(WORD_1);
+    });
+
+    it('works if homographC is null', () => {
+      const HOMOGRAPH_C = null;
+      const WORD_1 = 'word_1';
+      const thesaurusRecord = createThesaurusSearchRecord(
+        WORD_1,
+        [],
+        true,
+        HOMOGRAPH_C
+      );
+      const res: OxfordSearchRecord = entriesService.filterResultsByHomographC(
+        [thesaurusRecord],
+        HOMOGRAPH_C
+      );
+      expect(res.normalizedSearchTerm).toBe(WORD_1);
+    });
+
+    it('returns null if null is supplied', () => {
+      const res: OxfordSearchRecord = entriesService.filterResultsByHomographC(
+        null,
+        null
+      );
+      expect(res).toBeNull();
+    });
+
+    it('returns null if empty array is supplied', () => {
+      const res: OxfordSearchRecord = entriesService.filterResultsByHomographC(
+        [],
+        null
+      );
+      expect(res).toBeNull();
     });
   });
 });

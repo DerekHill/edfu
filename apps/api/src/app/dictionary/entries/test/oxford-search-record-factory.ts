@@ -45,7 +45,8 @@ export const createEntrySearchRecord = (
 export const createThesaurusSearchRecord = (
   word: string,
   synonyms: string[],
-  found = true
+  found = true,
+  homographC = 1
 ): OxfordSearchRecord => {
   return {
     _id: new ObjectId(),
@@ -88,7 +89,7 @@ export const createThesaurusSearchRecord = (
       type: 'headword',
       word: word
     },
-    homographC: 1,
+    homographC: homographC,
     found: found
   };
 };

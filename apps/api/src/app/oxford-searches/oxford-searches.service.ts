@@ -55,7 +55,7 @@ export class BaseSearchesService {
     const obj: CreateOxfordSearchDto = {
       normalizedSearchTerm: searchTerm,
       result: result,
-      homographC: this.extractHomographNumberC(result),
+      homographC: this.extractHomographC(result),
       found: Boolean(result)
     };
 
@@ -80,7 +80,7 @@ export class BaseSearchesService {
     });
   }
 
-  extractHomographNumberC(result: any) {
+  extractHomographC(result: any) {
     const homographNumber = oc(
       result
     ).lexicalEntries[0].entries[0].homographNumber();

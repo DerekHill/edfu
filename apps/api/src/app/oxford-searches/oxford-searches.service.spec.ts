@@ -54,14 +54,12 @@ describe('BaseSearchesService', () => {
 
   describe('homographC extraction', () => {
     it('returns null if no homographNumber is given', () => {
-      expect(
-        bss.extractHomographNumberC(RESULT_WITHOUT_HOMOGRAPH_NUMBER)
-      ).toBeNull();
+      expect(bss.extractHomographC(RESULT_WITHOUT_HOMOGRAPH_NUMBER)).toBeNull();
     });
     it('returns the number if given', () => {
-      expect(
-        bss.extractHomographNumberC(RESULT_WITH_HOMOGRAPH_NUMBER_200)
-      ).toEqual(2);
+      expect(bss.extractHomographC(RESULT_WITH_HOMOGRAPH_NUMBER_200)).toEqual(
+        2
+      );
     });
   });
 });

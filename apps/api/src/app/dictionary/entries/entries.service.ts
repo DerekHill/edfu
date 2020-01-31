@@ -19,6 +19,7 @@ import {
   ThesaurusSenseRecord
 } from '../senses/interfaces/sense.interface';
 import { HeadwordOrPhrase } from '../../enums';
+import { OxSense } from '../../oxford-api/interfaces/oxford-api.interface';
 
 @Injectable()
 export class EntriesService {
@@ -121,8 +122,34 @@ export class EntriesService {
 
     this.throwErrorIfNotFound(thesaurusSearchResults, oxId);
 
-    // filter for result  with matching homograph
-    console.log(thesaurusSearchResults);
+    const matchingResult: OxfordSearchRecord = this.filterResultsByHomographC(
+      thesaurusSearchResults,
+      homographC
+    );
+
+    if (!matchingResult) {
+      throw new Error(`No thesaurus result for ${oxId}`);
+    }
+
+    const promises = [];
+    for (const categoryEntries of matchingResult.result.lexicalEntries) {
+      const lexicalCategory =
+        LexicalCategory[categoryEntries.lexicalCategory.id];
+      for (const entry of categoryEntries.entries) {
+        for (const sense of entry.senses) {
+          promises.push(
+            this.sensesService.findOrCreateThesaurusSenseWithoutAssociation(
+              matchingResult.result.id,
+              matchingResult.homographC,
+              lexicalCategory,
+              sense
+            )
+          );
+        }
+      }
+    }
+    const senses: ThesaurusSenseRecord[] = await Promise.all(promises);
+    console.log(senses);
   }
 
   throwErrorIfNotFound(results: OxfordSearchRecord[], string: string) {

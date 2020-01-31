@@ -1,3 +1,4 @@
+import { ObjectId } from 'bson';
 import { EntriesService } from './entries.service';
 import {
   EntrySearchesService,
@@ -15,8 +16,12 @@ import {
   createEntrySearchRecord,
   createThesaurusSearchRecord
 } from './test/oxford-search-record-factory';
-import { DictionarySenseRecord } from '../senses/interfaces/sense.interface';
+import {
+  DictionarySenseRecord,
+  ThesaurusSenseRecord
+} from '../senses/interfaces/sense.interface';
 import { HeadwordOrPhrase } from '../../enums';
+import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/api-interfaces';
 
 class OxfordSearchesServiceMock {
   findOrFetch(): Promise<OxfordSearchRecord[]> {
@@ -28,12 +33,19 @@ class SensesServiceMock {
   findOrCreateDictionarySenseWithAssociation(): Promise<DictionarySenseRecord> {
     return Promise.resolve(null);
   }
+
+  findOrCreateThesaurusSenseWithoutAssociation(): Promise<
+    ThesaurusSenseRecord
+  > {
+    return Promise.resolve(null);
+  }
 }
 
 describe('EntriesService', () => {
   let entriesService: EntriesService;
   let entrySearchesService: EntrySearchesService;
   let thesaurusSearchesService: ThesaurusSearchesService;
+  let sensesService: SensesService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -71,6 +83,7 @@ describe('EntriesService', () => {
     thesaurusSearchesService = module.get<ThesaurusSearchesService>(
       ThesaurusSearchesService
     );
+    sensesService = module.get<SensesService>(SensesService);
   });
 
   describe('findOrCreateWithOwnSensesOnly() from Dictionary', () => {
@@ -99,10 +112,20 @@ describe('EntriesService', () => {
     });
 
     it.only('works', async () => {
-      //   expect.assertions(1);
       const WORD = 'food';
       const dictionaryRecord = createEntrySearchRecord(WORD);
       const thesaurusRecord = createThesaurusSearchRecord(WORD, ['supper']);
+
+      const sense: ThesaurusSenseRecord = {
+        _id: new ObjectId(),
+        entryOxId: 'entryOxId',
+        entryHomographC: 1,
+        dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
+        lexicalCategory: LexicalCategory.noun,
+        senseId: 'senseId',
+        example: 'example of sense',
+        synonyms: ['jump', 'leap']
+      };
 
       jest
         .spyOn(entrySearchesService, 'findOrFetch')
@@ -112,10 +135,20 @@ describe('EntriesService', () => {
         .spyOn(thesaurusSearchesService, 'findOrFetch')
         .mockImplementation(chars => Promise.resolve([thesaurusRecord]));
 
-      const res = await entriesService.findOrCreateWithOwnSensesOnly(WORD);
-      console.log(res);
+      jest
+        .spyOn(sensesService, 'findOrCreateThesaurusSenseWithoutAssociation')
+        .mockImplementation(
+          (entryOxId, entryHomographC, lexicalCategory, oxSense) => {
+            return Promise.resolve(sense);
+          }
+        );
+
+      await entriesService.findOrCreateWithOwnSensesOnly(WORD);
+      //   console.log(res);
       await entriesService.addRelatedEntries('food', 1);
     });
+
+    it.skip('finds related entries if synonyms contain spaces', () => {});
   });
 
   describe('filterResultsByHomographC', () => {

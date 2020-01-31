@@ -7,7 +7,9 @@ import {
   DictionarySenseRecord,
   ThesaurusSenseRecord,
   SharedSenseRecord,
-  DictionarySenseRecordWithoutId
+  DictionarySenseRecordWithoutId,
+  ThesaurusSenseRecordWithoutId,
+  ThesaurusLinkedSenses
 } from './interfaces/sense.interface';
 import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/api-interfaces';
 import { oc } from 'ts-optchain';
@@ -63,6 +65,31 @@ export class SensesService {
       ownAssociationConfidence
     );
 
+    return this.findOneAndUpdate(senseId, sense);
+  }
+
+  findOrCreateThesaurusSenseWithoutAssociation(
+    entryOxId: string,
+    entryHomographC: number,
+    lexicalCategory: LexicalCategory,
+    oxSense: OxSense
+  ): Promise<ThesaurusSenseRecord> {
+    const senseId = this.extractSenseId(oxSense);
+
+    const sense: ThesaurusSenseRecordWithoutId = {
+      entryOxId: entryOxId,
+      entryHomographC: entryHomographC,
+      dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
+      lexicalCategory: lexicalCategory,
+      senseId: senseId,
+      example: this.extractExample(oxSense),
+      synonyms: this.extractSynonyms(oxSense)
+    };
+
+    return this.findOneAndUpdate(senseId, sense);
+  }
+
+  findOneAndUpdate(senseId: string, sense: SharedSenseRecord) {
     return this.senseModel
       .findOneAndUpdate({ senseId: senseId }, sense, {
         upsert: true,
@@ -78,6 +105,22 @@ export class SensesService {
     } else {
       return [];
     }
+  }
+
+  async populateThesaurusLinkedSenses(
+    thesaurusSense: ThesaurusSenseRecord
+  ): Promise<ThesaurusLinkedSenses> {
+    const dictionarySenses: DictionarySenseRecord[] = await this.senseModel
+      .find({
+        thesaurusSenseIds: thesaurusSense.senseId
+      })
+      .lean()
+      .exec();
+
+    return {
+      thesaurusSense: thesaurusSense,
+      dictionarySenses: dictionarySenses
+    };
   }
 
   // OLD METHODS //

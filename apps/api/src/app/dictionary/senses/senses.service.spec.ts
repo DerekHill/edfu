@@ -1,10 +1,11 @@
+import { ObjectId } from 'bson';
 import { Test, TestingModule } from '@nestjs/testing';
 import { SensesService } from './senses.service';
 import { TestDatabaseModule } from '../../config/test-database.module';
-import { MongooseModule } from '@nestjs/mongoose';
+import { MongooseModule, InjectModel } from '@nestjs/mongoose';
 import { SenseSchema } from './schemas/sense.schema';
 import { SENSE_COLLECTION_NAME, ENTRY_COLLECTION_NAME } from '../../constants';
-import { LexicalCategory } from '@edfu/api-interfaces';
+import { LexicalCategory, DictionaryOrThesaurus } from '@edfu/api-interfaces';
 import { DICTIONARY_SENSE_BANK } from './test/sample-results';
 import { OxSense } from '../../oxford-api/interfaces/oxford-api.interface';
 import { EntriesService } from '../entries/entries.service';
@@ -16,6 +17,29 @@ import {
 import { OxfordSearchRecord } from '../../oxford-searches/interfaces/oxford-search.interface';
 import { EntrySenseRecord } from '../entry-senses/interfaces/entry-sense.interface';
 import { EntrySensesService } from '../entry-senses/entry-senses.service';
+import {
+  ThesaurusSenseRecord,
+  SenseDocument,
+  SharedSenseRecord,
+  DictionarySenseRecord,
+  DictionarySenseRecordWithoutId,
+  ThesaurusLinkedSenses
+} from './interfaces/sense.interface';
+import { Injectable } from '@nestjs/common';
+import { Model } from 'mongoose';
+
+@Injectable()
+class SensesTestSetupService {
+  constructor(
+    @InjectModel(SENSE_COLLECTION_NAME)
+    private readonly senseModel: Model<SenseDocument>
+  ) {}
+
+  //   Maybe problem that SharedSenseRecord does not have id
+  create(sense: SharedSenseRecord): Promise<SharedSenseRecord> {
+    return this.senseModel.create(sense);
+  }
+}
 
 class OxfordSearchesServiceLocalMock {
   findOrFetch(): Promise<OxfordSearchRecord[]> {
@@ -31,6 +55,7 @@ class EntrySensesServiceMock {
 
 describe('SensesService', () => {
   let service: SensesService;
+  let setupService: SensesTestSetupService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -55,11 +80,13 @@ describe('SensesService', () => {
         {
           provide: EntrySensesService,
           useClass: EntrySensesServiceMock
-        }
+        },
+        SensesTestSetupService
       ]
     }).compile();
 
     service = module.get<SensesService>(SensesService);
+    setupService = module.get<SensesTestSetupService>(SensesTestSetupService);
   });
 
   describe('findOrCreateDictionarySenseWithAssociation', () => {
@@ -101,6 +128,39 @@ describe('SensesService', () => {
         id: 'm_en_gbus0378040.005'
       };
       expect(service.extractThesaurusLinks(sense)).toBeDefined();
+    });
+  });
+
+  describe('populateThesaurusLinkedSenses', () => {
+    it.only('finds linked dictionary sense by thesaurusSenseIds', async () => {
+      const DICTIONARY_SENSE_ID = 'dictionarySenseId';
+      const THESAURUS_SENSE_ID = 'thesaurusSenseId';
+      const dictionarySense: DictionarySenseRecordWithoutId = {
+        senseId: DICTIONARY_SENSE_ID,
+        entryOxId: 'jump',
+        entryHomographC: null,
+        lexicalCategory: LexicalCategory.noun,
+        dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+        thesaurusSenseIds: [THESAURUS_SENSE_ID],
+        definition: 'jump in the air',
+        example: 'look how high it jumped!'
+      };
+      const thesaurusSense: ThesaurusSenseRecord = {
+        _id: new ObjectId(),
+        entryOxId: 'entryOxId',
+        entryHomographC: 1,
+        dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
+        lexicalCategory: LexicalCategory.noun,
+        senseId: THESAURUS_SENSE_ID,
+        example: 'example of sense',
+        synonyms: ['jump', 'leap']
+      };
+
+      await setupService.create(dictionarySense);
+      const res: ThesaurusLinkedSenses = await service.populateThesaurusLinkedSenses(
+        thesaurusSense
+      );
+      expect(res.dictionarySenses.length).toEqual(1);
     });
   });
 

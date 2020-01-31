@@ -282,7 +282,7 @@ describe.skip('OldEntriesService', () => {
     it('does not match if characters do not match', async () => {
       expect(await entriesService.search('wrong_string')).toHaveLength(0);
     });
-    it('is case insenstivie', async () => {
+    it('is case insensitive', async () => {
       expect(await entriesService.search('RI')).toHaveLength(1);
     });
     it('does not return match if not at start of word', async () => {

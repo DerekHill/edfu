@@ -85,8 +85,6 @@ const ENTRIES: EntryRecordWithoutId[] = [
     homographC: null,
     word: FOOD,
     relatedEntriesAdded: true,
-    ownSenseIds: [FOOD_SENSE_1_ID, FOOD_SENSE_2_ID, FOOD_SENSE_3_ID],
-    synonymSenseIds: [],
     headwordOrPhrase: HeadwordOrPhrase.headword
   },
   {
@@ -94,19 +92,6 @@ const ENTRIES: EntryRecordWithoutId[] = [
     homographC: 1,
     word: FAST,
     relatedEntriesAdded: true,
-    ownSenseIds: [
-      FAST_1_DICT_ADJ_SENSE_1_ID,
-      FAST_1_DICT_ADJ_SENSE_2_ID,
-      FAST_1_DICT_ADJ_SENSE_3_ID,
-      FAST_1_DICT_ADJ_SENSE_4_ID,
-      FAST_1_DICT_ADJ_SENSE_5_ID,
-      FAST_1_DICT_ADJ_SENSE_6_ID,
-      FAST_1_DICT_ADJ_SENSE_7_ID,
-      FAST_1_DICT_ADV_SENSE_1_ID,
-      FAST_1_DICT_ADV_SENSE_2_ID,
-      FAST_1_DICT_ADV_SENSE_3_ID
-    ],
-    synonymSenseIds: [],
     headwordOrPhrase: HeadwordOrPhrase.headword
   },
   {
@@ -114,8 +99,6 @@ const ENTRIES: EntryRecordWithoutId[] = [
     homographC: 2,
     word: FAST,
     relatedEntriesAdded: true,
-    ownSenseIds: [FAST_2_DICT_VER_SENSE_1_ID, FAST_2_DICT_NOU_SENSE_1_ID],
-    synonymSenseIds: [],
     headwordOrPhrase: HeadwordOrPhrase.headword
   },
   {
@@ -123,18 +106,6 @@ const ENTRIES: EntryRecordWithoutId[] = [
     homographC: 1,
     word: BANK,
     relatedEntriesAdded: true,
-    ownSenseIds: [
-      BANK_1_DICT_NOU_SENSE_1_ID,
-      BANK_1_DICT_NOU_SENSE_2_ID,
-      BANK_1_DICT_NOU_SENSE_3_ID,
-      BANK_1_DICT_NOU_SENSE_4_ID,
-      BANK_1_DICT_VER_SENSE_1_ID,
-      BANK_1_DICT_VER_SENSE_2_ID,
-      BANK_1_DICT_VER_SENSE_3_ID,
-      BANK_1_DICT_VER_SENSE_4_ID,
-      BANK_1_DICT_VER_SENSE_5_ID
-    ],
-    synonymSenseIds: [],
     headwordOrPhrase: HeadwordOrPhrase.headword
   },
   {
@@ -142,8 +113,6 @@ const ENTRIES: EntryRecordWithoutId[] = [
     homographC: 2,
     word: BANK,
     relatedEntriesAdded: true,
-    ownSenseIds: [BANK_2_DICT_NOU_SENSE_1_ID, BANK_2_DICT_VER_SENSE_1_ID],
-    synonymSenseIds: [],
     headwordOrPhrase: HeadwordOrPhrase.headword
   },
   {
@@ -151,8 +120,6 @@ const ENTRIES: EntryRecordWithoutId[] = [
     homographC: null,
     word: SPEEDY,
     relatedEntriesAdded: true,
-    ownSenseIds: [SPEEDY_DICT_ADJ_SENSE_1_ID, SPEEDY_DICT_ADJ_SENSE_2_ID],
-    synonymSenseIds: [],
     headwordOrPhrase: HeadwordOrPhrase.headword
   },
   {
@@ -160,8 +127,6 @@ const ENTRIES: EntryRecordWithoutId[] = [
     homographC: null,
     word: 'drink',
     relatedEntriesAdded: true,
-    ownSenseIds: [],
-    synonymSenseIds: [],
     headwordOrPhrase: HeadwordOrPhrase.headword
   },
   {
@@ -169,8 +134,6 @@ const ENTRIES: EntryRecordWithoutId[] = [
     homographC: null,
     word: 'toast',
     relatedEntriesAdded: true,
-    ownSenseIds: [],
-    synonymSenseIds: [],
     headwordOrPhrase: HeadwordOrPhrase.headword
   }
 ];

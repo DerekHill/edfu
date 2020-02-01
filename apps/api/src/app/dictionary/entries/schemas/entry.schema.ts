@@ -18,14 +18,6 @@ export const EntrySchema = new mongoose.Schema({
     type: Boolean,
     required: true
   },
-  ownSenseIds: {
-    type: [String],
-    required: false
-  },
-  synonymSenseIds: {
-    type: [String],
-    required: false
-  },
   headwordOrPhrase: {
     type: String,
     enum: [HeadwordOrPhrase.headword, HeadwordOrPhrase.phrase],

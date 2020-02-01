@@ -18,14 +18,6 @@ export class EntryDto {
 
   @Field()
   readonly relatedEntriesAdded: boolean;
-
-  //   to remove
-  @Field(type => [String])
-  readonly ownSenseIds?: string[];
-
-  //   to remove
-  @Field(type => [String])
-  readonly synonymSenseIds?: string[];
 }
 
 @ObjectType()

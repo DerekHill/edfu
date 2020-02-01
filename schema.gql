@@ -9,8 +9,6 @@ type EntryDto {
   homographC: Float
   word: String!
   relatedEntriesAdded: Boolean!
-  ownSenseIds: [String!]!
-  synonymSenseIds: [String!]!
 }
 
 type Query {

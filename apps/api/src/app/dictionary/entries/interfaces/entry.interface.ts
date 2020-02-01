@@ -7,8 +7,6 @@ export interface EntryRecordWithoutId {
   readonly homographC: number;
   readonly word: string;
   readonly relatedEntriesAdded: boolean;
-  readonly ownSenseIds?: string[]; // deprecated
-  readonly synonymSenseIds?: string[]; // deprecated
   readonly headwordOrPhrase: HeadwordOrPhrase;
 }
 

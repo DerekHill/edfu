@@ -21,8 +21,6 @@ const entryRecord = (wordAndOxId: string): EntryRecord => {
     homographC: null,
     word: wordAndOxId,
     relatedEntriesAdded: true,
-    ownSenseIds: [],
-    synonymSenseIds: [],
     headwordOrPhrase: HeadwordOrPhrase.headword
   };
 };

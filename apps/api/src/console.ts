@@ -1,10 +1,11 @@
 // https://github.com/Pop-Code/nestjs-console
 
 // ng run api:build-console
+// ng run api:serve-console
 
-// node ./dist/apps/api/main.js --help
-// node ./dist/apps/api/main.js oxfordEntries
-// node ./dist/apps/api/main.js fixtures
+// node ./dist/apps/api-console/main.js --help
+// node ./dist/apps/api-console/main.js oxfordEntries
+// node ./dist/apps/api-console/main.js fixtures
 
 import { BootstrapConsole } from 'nestjs-console';
 import { AppModule } from './app/app.module';

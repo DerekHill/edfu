@@ -74,7 +74,6 @@ export class SecondComponent implements OnInit, OnDestroy {
             homographC
             word
             relatedEntriesAdded
-            ownSenseIds
           }
         }
       `,
@@ -112,7 +111,7 @@ export class SecondComponent implements OnInit, OnDestroy {
   }
 
   onOptionSelected(input: EntryDto) {
-    this.senseIds$.next(input.ownSenseIds);
+    // this.senseIds$.next(..);
   }
 
   displayFn(res?: any): string | undefined {

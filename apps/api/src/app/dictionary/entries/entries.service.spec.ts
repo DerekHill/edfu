@@ -130,7 +130,7 @@ describe('EntriesService', () => {
       }
     });
 
-    it.only('works', async () => {
+    it('adds entries for thesaurus synonyms', async () => {
       const WORD = 'food';
       const thesaurusSearchRecord = createThesaurusSearchRecord(WORD, [
         'supper'
@@ -256,6 +256,38 @@ describe('EntriesService', () => {
         null
       );
       expect(res).toBeNull();
+    });
+  });
+
+  describe('createEntryFromSearchRecord', () => {
+    it('creates basic entry', async () => {
+      const WORD = 'river';
+      const record: OxfordSearchRecord = createEntrySearchRecord(WORD);
+      const origWord = await entriesService.createEntryFromSearchRecord(record);
+      expect(origWord.oxId).toEqual(WORD);
+    });
+  });
+
+  describe('search', () => {
+    beforeEach(async () => {
+      await entriesService.createEntryFromSearchRecord(
+        createEntrySearchRecord('river')
+      );
+    });
+    it('matches if characters match', async () => {
+      expect(await entriesService.search('ri')).toHaveLength(1);
+    });
+    it('does not match if characters do not match', async () => {
+      expect(await entriesService.search('wrong_string')).toHaveLength(0);
+    });
+    it('is case insensitive', async () => {
+      expect(await entriesService.search('RI')).toHaveLength(1);
+    });
+    it('does not return match if not at start of word', async () => {
+      expect(await entriesService.search('ver')).toHaveLength(0);
+    });
+    it('does not return results given empty search string', async () => {
+      expect(await entriesService.search('')).toHaveLength(0);
     });
   });
 });

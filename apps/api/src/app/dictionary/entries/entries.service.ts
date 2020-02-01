@@ -86,19 +86,6 @@ export class EntriesService {
     return promises;
   };
 
-  createEntryFromSearchRecord = (
-    record: OxfordSearchRecord
-  ): Promise<EntryRecord> => {
-    const entry: EntryRecordWithoutId = {
-      word: record.result.word,
-      oxId: record.result.id,
-      homographC: record.homographC,
-      relatedEntriesAdded: false,
-      headwordOrPhrase: HeadwordOrPhrase[record.result.type]
-    };
-    return this.entryModel.create(entry);
-  };
-
   getLatest = (record: EntryRecord) => {
     return this.entryModel
       .findById(record._id)
@@ -231,67 +218,80 @@ export class EntriesService {
     return entries;
   }
 
+  createEntryFromSearchRecord = (
+    record: OxfordSearchRecord
+  ): Promise<EntryRecord> => {
+    const entry: EntryRecordWithoutId = {
+      word: record.result.word,
+      oxId: record.result.id,
+      homographC: record.homographC,
+      relatedEntriesAdded: false,
+      headwordOrPhrase: HeadwordOrPhrase[record.result.type]
+    };
+    return this.entryModel.create(entry);
+  };
+
   // OLD METHODS //
 
-  async findOrCreateAndUpdateSenses(
-    word: string,
-    relatedEntriesAdded = false,
-    synonymSenseId = null
-  ): Promise<EntryRecord[]> {
-    const existing: EntryRecord[] = await this.entryModel
-      .find({
-        word: word
-      })
-      .lean();
+  //   async findOrCreateAndUpdateSenses(
+  //     word: string,
+  //     relatedEntriesAdded = false,
+  //     synonymSenseId = null
+  //   ): Promise<EntryRecord[]> {
+  //     const existing: EntryRecord[] = await this.entryModel
+  //       .find({
+  //         word: word
+  //       })
+  //       .lean();
 
-    if (existing.length) {
-      if (existing.length === 1 && synonymSenseId) {
-        const record = existing[0];
-        return Promise.all([
-          this.addSynonymSense(record.oxId, record.homographC, synonymSenseId)
-        ]);
-      }
-      return existing;
-    } else {
-      let entrySearchResults: OxfordSearchRecord[];
-      let thesaurusSearchResults: OxfordSearchRecord[];
+  //     if (existing.length) {
+  //       if (existing.length === 1 && synonymSenseId) {
+  //         const record = existing[0];
+  //         return Promise.all([
+  //           this.addSynonymSense(record.oxId, record.homographC, synonymSenseId)
+  //         ]);
+  //       }
+  //       return existing;
+  //     } else {
+  //       let entrySearchResults: OxfordSearchRecord[];
+  //       let thesaurusSearchResults: OxfordSearchRecord[];
 
-      [entrySearchResults, thesaurusSearchResults] = await Promise.all([
-        this.entrySearchesService.findOrFetch(word),
-        this.thesaurusSearchesService.findOrFetch(word)
-      ]);
+  //       [entrySearchResults, thesaurusSearchResults] = await Promise.all([
+  //         this.entrySearchesService.findOrFetch(word),
+  //         this.thesaurusSearchesService.findOrFetch(word)
+  //       ]);
 
-      if (entrySearchResults.length === 0) {
-        throw new Error(`entrySearchesService error for word: ${word}`);
-      }
+  //       if (entrySearchResults.length === 0) {
+  //         throw new Error(`entrySearchesService error for word: ${word}`);
+  //       }
 
-      if (
-        entrySearchResults.length === 1 &&
-        entrySearchResults[0].found === false
-      ) {
-        throw new Error(`Word: ${word} not found in dictionary`);
-      }
+  //       if (
+  //         entrySearchResults.length === 1 &&
+  //         entrySearchResults[0].found === false
+  //       ) {
+  //         throw new Error(`Word: ${word} not found in dictionary`);
+  //       }
 
-      const entries = await Promise.all(
-        entrySearchResults.map(record =>
-          this.createEntryFromSearchRecord(record)
-        )
-      );
+  //       const entries = await Promise.all(
+  //         entrySearchResults.map(record =>
+  //           this.createEntryFromSearchRecord(record)
+  //         )
+  //       );
 
-      await Promise.all(
-        entrySearchResults
-          .map(record =>
-            this.createSensesWithAssociationsOld(record, relatedEntriesAdded)
-          )
-          .concat(
-            thesaurusSearchResults.map(record =>
-              this.createSensesWithAssociationsOld(record, relatedEntriesAdded)
-            )
-          )
-      );
-      return Promise.all(entries.map(this.getLatest));
-    }
-  }
+  //       await Promise.all(
+  //         entrySearchResults
+  //           .map(record =>
+  //             this.createSensesWithAssociationsOld(record, relatedEntriesAdded)
+  //           )
+  //           .concat(
+  //             thesaurusSearchResults.map(record =>
+  //               this.createSensesWithAssociationsOld(record, relatedEntriesAdded)
+  //             )
+  //           )
+  //       );
+  //       return Promise.all(entries.map(this.getLatest));
+  //     }
+  //   }
 
   find(oxId: string): Promise<EntryRecord[]> {
     return this.entryModel
@@ -318,84 +318,84 @@ export class EntriesService {
     }
   }
 
-  async makeTopLevel(oxId: string, homographC: number): Promise<EntryRecord> {
-    const updated = await this.entryModel
-      .findOneAndUpdate(
-        { oxId: oxId, homographC: homographC },
-        { $set: { relatedEntriesAdded: true } },
-        { new: true }
-      )
-      .lean();
+  //   async makeTopLevel(oxId: string, homographC: number): Promise<EntryRecord> {
+  //     const updated = await this.entryModel
+  //       .findOneAndUpdate(
+  //         { oxId: oxId, homographC: homographC },
+  //         { $set: { relatedEntriesAdded: true } },
+  //         { new: true }
+  //       )
+  //       .lean();
 
-    const promises = [];
+  //     const promises = [];
 
-    for (const senseId of updated.ownSenseIds) {
-      promises.push(this.findOrCreateEntriesForSense(senseId));
-    }
+  //     for (const senseId of updated.ownSenseIds) {
+  //       promises.push(this.findOrCreateEntriesForSense(senseId));
+  //     }
 
-    await Promise.all(promises);
+  //     await Promise.all(promises);
 
-    return updated;
-  }
+  //     return updated;
+  //   }
 
-  async findOrCreateEntriesForSense(senseId: string): Promise<any> {
-    const record = await this.sensesService.findOne(senseId);
-    const promises = [];
-    for (const synonym of record.synonyms) {
-      promises.push(this.findOrCreateAndUpdateSenses(synonym, false, senseId));
-    }
-    return Promise.all(promises);
-  }
+  //   async findOrCreateEntriesForSense(senseId: string): Promise<any> {
+  //     const record = await this.sensesService.findOne(senseId);
+  //     const promises = [];
+  //     for (const synonym of record.synonyms) {
+  //       promises.push(this.findOrCreateAndUpdateSenses(synonym, false, senseId));
+  //     }
+  //     return Promise.all(promises);
+  //   }
 
-  createSensesWithAssociationsOld = async (
-    searchRecord: OxfordSearchRecord,
-    relatedEntriesAdded: boolean
-  ): Promise<DictionarySenseRecord[] | ThesaurusSenseRecord[]> => {
-    const promises = [];
-    for (const categoryEntries of searchRecord.result.lexicalEntries) {
-      const lexicalCategory =
-        LexicalCategory[categoryEntries.lexicalCategory.id];
-      for (const entry of categoryEntries.entries) {
-        for (const sense of entry.senses) {
-          promises.push(
-            this.sensesService.findOrCreateWithoutLinkOld(
-              searchRecord.result.id,
-              searchRecord.homographC,
-              lexicalCategory,
-              sense
-            )
-          );
-        }
-      }
-    }
-    // Arbitrarily include just ThesaurusSenseRecord.  Not clear why map does
-    // not work if include union type
-    const senses: ThesaurusSenseRecord[] = await Promise.all(promises);
+  //   createSensesWithAssociationsOld = async (
+  //     searchRecord: OxfordSearchRecord,
+  //     relatedEntriesAdded: boolean
+  //   ): Promise<DictionarySenseRecord[] | ThesaurusSenseRecord[]> => {
+  //     const promises = [];
+  //     for (const categoryEntries of searchRecord.result.lexicalEntries) {
+  //       const lexicalCategory =
+  //         LexicalCategory[categoryEntries.lexicalCategory.id];
+  //       for (const entry of categoryEntries.entries) {
+  //         for (const sense of entry.senses) {
+  //           promises.push(
+  //             this.sensesService.findOrCreateWithoutLinkOld(
+  //               searchRecord.result.id,
+  //               searchRecord.homographC,
+  //               lexicalCategory,
+  //               sense
+  //             )
+  //           );
+  //         }
+  //       }
+  //     }
+  //     // Arbitrarily include just ThesaurusSenseRecord.  Not clear why map does
+  //     // not work if include union type
+  //     const senses: ThesaurusSenseRecord[] = await Promise.all(promises);
 
-    await Promise.all(
-      senses.map(record => {
-        return this.addOwnSense(
-          record.entryOxId,
-          record.entryHomographC,
-          record.senseId
-        );
-      })
-    );
+  //     await Promise.all(
+  //       senses.map(record => {
+  //         return this.addOwnSense(
+  //           record.entryOxId,
+  //           record.entryHomographC,
+  //           record.senseId
+  //         );
+  //       })
+  //     );
 
-    if (relatedEntriesAdded) {
-      const entries = [];
-      senses.map(record => {
-        record.synonyms.map(word => {
-          entries.push(
-            this.findOrCreateAndUpdateSenses(word, false, record.senseId)
-          );
-        });
-      });
-      await Promise.all(entries);
-    }
+  //     if (relatedEntriesAdded) {
+  //       const entries = [];
+  //       senses.map(record => {
+  //         record.synonyms.map(word => {
+  //           entries.push(
+  //             this.findOrCreateAndUpdateSenses(word, false, record.senseId)
+  //           );
+  //         });
+  //       });
+  //       await Promise.all(entries);
+  //     }
 
-    return senses;
-  };
+  //     return senses;
+  //   };
 
   addOwnSense(oxId: string, homographC: number, senseId: string) {
     return this.entryModel.updateOne(

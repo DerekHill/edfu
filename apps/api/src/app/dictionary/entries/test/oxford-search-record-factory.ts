@@ -10,7 +10,7 @@ export const createEntrySearchRecord = (
 ): OxfordSearchRecord => {
   return {
     _id: new ObjectId(),
-    normalizedSearchTerm: 'bank',
+    normalizedSearchTerm: word,
     result: {
       id: word,
       language: 'en-gb',

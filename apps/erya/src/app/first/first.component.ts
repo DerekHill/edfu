@@ -146,8 +146,8 @@ export class FirstComponent implements OnInit, OnDestroy {
     return res ? res.word : undefined;
   }
 
-  onSenseClick(event, sense: SenseDto) {
-    console.log(sense);
+  onEntryClick(event, entry: EntryDto) {
+    console.log(entry);
   }
 
   groupByHomographWord(entries: EntryDto[]): HomographGroup[] {

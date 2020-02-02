@@ -201,7 +201,7 @@ export class EntriesService {
     }
 
     const confidence = entries.length === 1 ? 0.5 : 0.1;
-    // Might reduce chance of making association with wrong synonym entry homonym if
+    // Might reduce chance of making association with wrong synonym entry homograph if
     // check that lexical categories match
     const promises = entries.map(entry => {
       return this.entrySensesService.findOrCreate(

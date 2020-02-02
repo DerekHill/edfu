@@ -10,22 +10,22 @@ import { GraphQLModule } from './graphql.module';
 import { RouterModule, Routes } from '@angular/router';
 import { BasicComponent } from './basic/basic.component';
 import { BasicModule } from './basic/basic.module';
-import { SecondModule } from './second/second.module';
-import { SecondComponent } from './second/second.component';
+import { FirstModule } from './first/first.module';
+import { FirstComponent } from './first/first.component';
 
 const appRoutes: Routes = [
-  { path: 'basic', component: BasicComponent },
   {
-    path: 'second',
-    component: SecondComponent
-  }
+    path: 'first',
+    component: FirstComponent
+  },
+  { path: 'basic', component: BasicComponent }
 ];
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BasicModule,
-    SecondModule,
+    FirstModule,
     RouterModule.forRoot(
       appRoutes
       //   { enableTracing: true } // <-- debugging purposes only

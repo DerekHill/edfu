@@ -7,12 +7,13 @@ import { Apollo, QueryRef } from 'apollo-angular';
 import { HttpClient } from '@angular/common/http';
 import { EntryDto, SenseDto } from '@edfu/api-interfaces';
 import { untilDestroyed } from 'ngx-take-until-destroy';
+import { ApolloQueryResult } from 'apollo-client';
 
-interface WordSearchQuery {
+interface EntrySearchQuery {
   search: EntryDto[];
 }
 
-interface WordSearchVariables {
+interface EntrySearchVariables {
   search_string?: string;
 }
 
@@ -24,15 +25,19 @@ interface SenseSearchVariables {
   senseIds: string[];
 }
 
+interface HomographGroup {
+  entries: EntryDto[];
+}
+
 @Component({
-  selector: 'edfu-second',
-  templateUrl: './second.component.html'
+  selector: 'edfu-first',
+  templateUrl: './first.component.html'
 })
-export class SecondComponent implements OnInit, OnDestroy {
-  wordSearchFormControl = new FormControl();
-  wordSearchInput: Observable<string>;
-  wordSearchResults$: Observable<EntryDto[]>;
-  wordSearchRef: QueryRef<WordSearchQuery, WordSearchVariables>;
+export class FirstComponent implements OnInit, OnDestroy {
+  entrySearchFormControl = new FormControl();
+  entrySearchInput: Observable<string>;
+  entrySearchResults$: Observable<EntryDto[]>;
+  entrySearchRef: QueryRef<EntrySearchQuery, EntrySearchVariables>;
 
   senses$: Observable<SenseDto[]>;
   sensesSearchRef: QueryRef<SensesQuery, SenseSearchVariables>;
@@ -42,7 +47,7 @@ export class SecondComponent implements OnInit, OnDestroy {
   constructor(private http: HttpClient, private apollo: Apollo) {}
 
   ngOnInit() {
-    this.wordSearchInput = this.wordSearchFormControl.valueChanges.pipe(
+    this.entrySearchInput = this.entrySearchFormControl.valueChanges.pipe(
       startWith('')
     );
 
@@ -62,9 +67,9 @@ export class SecondComponent implements OnInit, OnDestroy {
       `
     });
 
-    this.wordSearchRef = this.apollo.watchQuery<
-      WordSearchQuery,
-      WordSearchVariables
+    this.entrySearchRef = this.apollo.watchQuery<
+      EntrySearchQuery,
+      EntrySearchVariables
     >({
       query: gql`
         query WordSearchQuery($search_string: String!) {
@@ -80,17 +85,20 @@ export class SecondComponent implements OnInit, OnDestroy {
       errorPolicy: 'all'
     });
 
-    this.wordSearchResults$ = this.wordSearchRef.valueChanges.pipe(
-      map(({ data }: any) => data.search)
+    this.entrySearchResults$ = this.entrySearchRef.valueChanges.pipe(
+      map((res: ApolloQueryResult<EntrySearchQuery>) => {
+        console.log(res);
+        return res.data.search;
+      })
     );
 
     this.senses$ = this.sensesSearchRef.valueChanges.pipe(
       map(({ data }: any) => data.senses)
     );
 
-    this.wordSearchInput.subscribe(input => {
+    this.entrySearchInput.subscribe(input => {
       if (typeof input === 'string') {
-        this.wordSearchRef.setVariables({
+        this.entrySearchRef.setVariables({
           search_string: input
         });
       } else if (typeof input === 'object') {

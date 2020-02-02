@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SecondComponent } from './second.component';
+import { FirstComponent } from './first.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatAutocompleteModule,
@@ -10,7 +10,7 @@ import {
 } from '@angular/material';
 
 @NgModule({
-  declarations: [SecondComponent],
+  declarations: [FirstComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -21,4 +21,4 @@ import {
     MatListModule
   ]
 })
-export class SecondModule {}
+export class FirstModule {}

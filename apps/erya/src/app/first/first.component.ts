@@ -37,12 +37,14 @@ export class FirstComponent implements OnInit, OnDestroy {
   entrySearchFormControl = new FormControl();
   entrySearchInput: Observable<string>;
   entrySearchResults$: Observable<EntryDto[]>;
+  homographGroupSearchResults$: Observable<HomographGroup[]>;
   entrySearchRef: QueryRef<EntrySearchQuery, EntrySearchVariables>;
 
   senses$: Observable<SenseDto[]>;
   sensesSearchRef: QueryRef<SensesQuery, SenseSearchVariables>;
 
   senseIds$: BehaviorSubject<string[]>;
+  homographGroup$: BehaviorSubject<HomographGroup>;
 
   constructor(private apollo: Apollo) {}
 
@@ -52,6 +54,7 @@ export class FirstComponent implements OnInit, OnDestroy {
     );
 
     this.senseIds$ = new BehaviorSubject([]);
+    this.homographGroup$ = new BehaviorSubject(null);
 
     this.sensesSearchRef = this.apollo.watchQuery<
       SensesQuery,
@@ -86,10 +89,12 @@ export class FirstComponent implements OnInit, OnDestroy {
     });
 
     this.entrySearchResults$ = this.entrySearchRef.valueChanges.pipe(
-      map((res: ApolloQueryResult<EntrySearchQuery>) => {
-        const foo = res.data.search;
-        console.log(res.data.search);
-        return res.data.search;
+      map((res: ApolloQueryResult<EntrySearchQuery>) => res.data.search)
+    );
+
+    this.homographGroupSearchResults$ = this.entrySearchResults$.pipe(
+      map(entries => {
+        return this.groupByHomographWord(entries);
       })
     );
 
@@ -99,6 +104,7 @@ export class FirstComponent implements OnInit, OnDestroy {
 
     this.entrySearchInput.subscribe(input => {
       if (typeof input === 'string') {
+        console.log('entrySearchRef.setVariables');
         this.entrySearchRef.setVariables({
           search_string: input
         });
@@ -107,10 +113,21 @@ export class FirstComponent implements OnInit, OnDestroy {
       }
     });
 
+    this.homographGroupSearchResults$.subscribe(a => {
+      console.log('homographGroupSearchResults');
+      console.log(a);
+    });
+
     this.senseIds$.subscribe(senseIds => {
+      console.log('via subscribe to senseIds', senseIds);
       this.sensesSearchRef.setVariables({
         senseIds: senseIds
       });
+    });
+
+    this.homographGroup$.subscribe(group => {
+      console.log('group');
+      console.log(group);
     });
 
     this.senses$.subscribe(senses => {
@@ -119,7 +136,9 @@ export class FirstComponent implements OnInit, OnDestroy {
     });
   }
 
-  onOptionSelected(input: EntryDto) {
+  onOptionSelected(group: HomographGroup) {
+    console.log(group);
+    this.homographGroup$.next(group);
     // this.senseIds$.next(..);
   }
 

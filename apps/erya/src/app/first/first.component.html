@@ -14,7 +14,10 @@
       autoActiveFirstOption
       (optionSelected)="onOptionSelected($event.option.value)"
     >
-      <mat-option *ngFor="let res of entrySearchResults$ | async" [value]="res">
+      <mat-option
+        *ngFor="let res of homographGroupSearchResults$ | async"
+        [value]="res"
+      >
         {{ res.word }}
       </mat-option>
     </mat-autocomplete>
@@ -29,3 +32,6 @@
     <p>{{ sense.example }}</p>
   </mat-list-item>
 </mat-action-list>
+<div *ngIf="homographGroup$ | async as homographGroup">
+  <p>{{ homographGroup.word }}</p>
+</div>

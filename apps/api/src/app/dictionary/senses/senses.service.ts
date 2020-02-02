@@ -123,37 +123,6 @@ export class SensesService {
     };
   }
 
-  // OLD METHODS //
-
-  async findOrCreateWithoutLinkOld(
-    entryOxId: string,
-    entryHomographC: number,
-    lexicalCategory: LexicalCategory,
-    oxSense: OxSense
-  ): Promise<DictionarySenseRecord | ThesaurusSenseRecord> {
-    const senseId = this.extractSenseId(oxSense);
-
-    const sense: SharedSenseRecord = {
-      entryOxId: entryOxId,
-      entryHomographC: entryHomographC,
-      dictionaryOrThesaurus: this.determineDictionaryOrThesaurus(oxSense),
-      lexicalCategory: lexicalCategory,
-      senseId: senseId,
-      thesaurusSenseIds: this.extractThesaurusLinks(oxSense),
-      example: this.extractExample(oxSense),
-      definition: this.extractDefinition(oxSense),
-      synonyms: this.extractSynonyms(oxSense)
-    };
-
-    return this.senseModel
-      .findOneAndUpdate({ senseId: senseId }, sense, {
-        upsert: true,
-        new: true
-      })
-      .lean()
-      .exec();
-  }
-
   //   Leave out DictionarySenseRecord because does not have synonyms
   findOne(senseId: string): Promise<ThesaurusSenseRecord> {
     return this.senseModel
@@ -225,20 +194,5 @@ export class SensesService {
 
   private extractDefinition(oxSense: OxSense): string {
     return oc(oxSense).definitions[0]();
-  }
-
-  //   Refactor
-  private extractThesaurusLinksOld(oxSense: OxSense): OxThesaurusLink[] {
-    return oc(oxSense).thesaurusLinks();
-  }
-
-  private determineDictionaryOrThesaurus(
-    oxSense: OxSense
-  ): DictionaryOrThesaurus {
-    if (oxSense.definitions) {
-      return DictionaryOrThesaurus.dictionary;
-    } else {
-      return DictionaryOrThesaurus.thesaurus;
-    }
   }
 }

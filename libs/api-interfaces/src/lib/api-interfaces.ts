@@ -35,18 +35,30 @@ export class SenseDto {
   @Field({ nullable: true })
   readonly entryHomographC: number;
 
-  //   Remove? (alwas dictionary)
-  @Field(type => String)
-  readonly dictionaryOrThesaurus?: DictionaryOrThesaurus;
-
   @Field(type => String)
   readonly lexicalCategory?: LexicalCategory;
 
-  //   Make required?
   @Field()
-  readonly example?: string;
+  readonly example: string;
 
-  //   Make required?
   @Field()
-  readonly definition?: string;
+  readonly definition: string;
+}
+
+@ObjectType()
+export class EntrySenseDto {
+  @Field(type => ID)
+  _id: ObjectId;
+
+  @Field()
+  readonly oxId: string;
+
+  @Field({ nullable: true })
+  readonly homographC: number;
+
+  @Field()
+  readonly senseId: string;
+
+  @Field()
+  readonly confidence: number;
 }

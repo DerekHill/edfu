@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { ENTRY_COLLECTION_NAME, SENSE_COLLECTION_NAME } from '../../constants';
+import {
+  ENTRY_COLLECTION_NAME,
+  SENSE_COLLECTION_NAME,
+  ENTRY_SENSE_COLLECTION_NAME
+} from '../../constants';
 import { Model } from 'mongoose';
 import {
   EntryDocument,
@@ -14,15 +18,16 @@ import {
 import { SignRecordWithoutId } from '../../dictionary/signs/interfaces/sign.interface';
 import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/api-interfaces';
 import { HeadwordOrPhrase } from '../../enums';
+import { EntrySenseRecordWithoutId } from '../../dictionary/entry-senses/interfaces/entry-sense.interface';
 
 const FOOD = 'food';
 const FAST = 'fast';
 const BANK = 'bank';
 const SPEEDY = 'speedy';
 
-const FOOD_SENSE_1_ID = 'm_en_gbus0378040.005';
-const FOOD_SENSE_2_ID = 't_en_gb0005872.001';
-const FOOD_SENSE_3_ID = 't_en_gb0005872.002';
+const FOOD_0_DICT_NOU_SENSE_1_ID = 'm_en_gbus0378040.005';
+const FOOD_0_THES_NOU_SENSE_2_ID = 't_en_gb0005872.001';
+const FOOD_0_THES_NOU_SENSE_3_ID = 't_en_gb0005872.002';
 
 const FAST_1_DICT_ADJ_SENSE_1_ID = 'm_en_gbus0352370.007';
 const FAST_1_DICT_ADJ_SENSE_2_ID = 'm_en_gbus0352370.018';
@@ -73,11 +78,11 @@ const BANK_2_THES_NOU_SENSE_2_ID = 't_en_gb0001139.002';
 const BANK_2_THES_VER_SENSE_1_ID = 't_en_gb0001139.003'; // Linked to BANK_2_DICT_VER_SENSE_1_ID
 const BANK_2_THES_VER_SENSE_2_ID = 't_en_gb0001139.004'; // Linked to BANK_2_DICT_VER_SENSE_1_ID as well
 
-const SPEEDY_DICT_ADJ_SENSE_1_ID = 'm_en_gbus0976550.008';
-const SPEEDY_DICT_ADJ_SENSE_2_ID = 'm_en_gbus0976550.013';
+const SPEEDY_0_DICT_ADJ_SENSE_1_ID = 'm_en_gbus0976550.008';
+const SPEEDY_0_DICT_ADJ_SENSE_2_ID = 'm_en_gbus0976550.013';
 
-const SPEEDY_THES_ADJ_SENSE_1_ID = 't_en_gb0013890.001'; // Linked to SPEEDY_DICT_ADJ_SENSE_1_ID
-const SPEEDY_THES_ADJ_SENSE_2_ID = 't_en_gb0013890.002'; // Linked to SPEEDY_DICT_ADJ_SENSE_2_ID
+const SPEEDY_0_THES_ADJ_SENSE_1_ID = 't_en_gb0013890.001'; // Linked to SPEEDY_DICT_ADJ_SENSE_1_ID
+const SPEEDY_0_THES_ADJ_SENSE_2_ID = 't_en_gb0013890.002'; // Linked to SPEEDY_DICT_ADJ_SENSE_2_ID
 
 const ENTRIES: EntryRecordWithoutId[] = [
   {
@@ -140,7 +145,7 @@ const ENTRIES: EntryRecordWithoutId[] = [
 
 const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   {
-    senseId: FOOD_SENSE_1_ID,
+    senseId: FOOD_0_DICT_NOU_SENSE_1_ID,
     entryOxId: FOOD,
     entryHomographC: null,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
@@ -390,22 +395,22 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
     definition: 'deposit (money or valuables) in a bank'
   },
   {
-    senseId: SPEEDY_DICT_ADJ_SENSE_1_ID,
+    senseId: SPEEDY_0_DICT_ADJ_SENSE_1_ID,
     entryOxId: SPEEDY,
     entryHomographC: null,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adjective,
-    thesaurusSenseIds: [SPEEDY_THES_ADJ_SENSE_1_ID],
+    thesaurusSenseIds: [SPEEDY_0_THES_ADJ_SENSE_1_ID],
     example: 'a speedy recovery',
     definition: 'done or occurring quickly'
   },
   {
-    senseId: SPEEDY_DICT_ADJ_SENSE_2_ID,
+    senseId: SPEEDY_0_DICT_ADJ_SENSE_2_ID,
     entryOxId: SPEEDY,
     entryHomographC: null,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adjective,
-    thesaurusSenseIds: [SPEEDY_THES_ADJ_SENSE_2_ID],
+    thesaurusSenseIds: [SPEEDY_0_THES_ADJ_SENSE_2_ID],
     example: 'a speedy winger',
     definition: 'moving quickly'
   }
@@ -413,7 +418,7 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
 
 const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   {
-    senseId: FOOD_SENSE_2_ID,
+    senseId: FOOD_0_THES_NOU_SENSE_2_ID,
     entryOxId: FOOD,
     entryHomographC: null,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
@@ -422,7 +427,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
     synonyms: ['nourishment', 'sustenance', 'nutriment', 'subsistence']
   },
   {
-    senseId: FOOD_SENSE_3_ID,
+    senseId: FOOD_0_THES_NOU_SENSE_3_ID,
     entryOxId: FOOD,
     entryHomographC: null,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
@@ -731,7 +736,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
     synonyms: ['use']
   },
   {
-    senseId: SPEEDY_DICT_ADJ_SENSE_1_ID,
+    senseId: SPEEDY_0_DICT_ADJ_SENSE_1_ID,
     entryOxId: SPEEDY,
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
@@ -740,7 +745,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
     synonyms: ['use']
   },
   {
-    senseId: SPEEDY_THES_ADJ_SENSE_1_ID,
+    senseId: SPEEDY_0_THES_ADJ_SENSE_1_ID,
     entryOxId: SPEEDY,
     entryHomographC: null,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
@@ -761,7 +766,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
     ]
   },
   {
-    senseId: SPEEDY_THES_ADJ_SENSE_2_ID,
+    senseId: SPEEDY_0_THES_ADJ_SENSE_2_ID,
     entryOxId: SPEEDY,
     entryHomographC: null,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
@@ -771,13 +776,216 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   }
 ];
 
+const ENTRY_SENSES: EntrySenseRecordWithoutId[] = [
+  {
+    oxId: FOOD,
+    homographC: null,
+    senseId: FOOD_0_DICT_NOU_SENSE_1_ID,
+    confidence: 1
+  },
+  {
+    oxId: FAST,
+    homographC: 1,
+    senseId: FAST_1_DICT_ADJ_SENSE_1_ID,
+    confidence: 1
+  },
+  {
+    oxId: FAST,
+    homographC: 1,
+    senseId: FAST_1_DICT_ADJ_SENSE_2_ID,
+    confidence: 1
+  },
+  {
+    oxId: FAST,
+    homographC: 1,
+    senseId: FAST_1_DICT_ADJ_SENSE_3_ID,
+    confidence: 1
+  },
+  {
+    oxId: FAST,
+    homographC: 1,
+    senseId: FAST_1_DICT_ADJ_SENSE_4_ID,
+    confidence: 1
+  },
+  {
+    oxId: FAST,
+    homographC: 1,
+    senseId: FAST_1_DICT_ADJ_SENSE_5_ID,
+    confidence: 1
+  },
+  {
+    oxId: FAST,
+    homographC: 1,
+    senseId: FAST_1_DICT_ADJ_SENSE_6_ID,
+    confidence: 1
+  },
+  {
+    oxId: FAST,
+    homographC: 1,
+    senseId: FAST_1_DICT_ADJ_SENSE_7_ID,
+    confidence: 1
+  },
+  {
+    oxId: FAST,
+    homographC: 1,
+    senseId: FAST_1_DICT_ADV_SENSE_1_ID,
+    confidence: 1
+  },
+  {
+    oxId: FAST,
+    homographC: 1,
+    senseId: FAST_1_DICT_ADV_SENSE_2_ID,
+    confidence: 1
+  },
+  {
+    oxId: FAST,
+    homographC: 1,
+    senseId: FAST_1_DICT_ADV_SENSE_3_ID,
+    confidence: 1
+  },
+  {
+    oxId: FAST,
+    homographC: 2,
+    senseId: FAST_2_DICT_VER_SENSE_1_ID,
+    confidence: 1
+  },
+  {
+    oxId: FAST,
+    homographC: 2,
+    senseId: FAST_2_DICT_NOU_SENSE_1_ID,
+    confidence: 1
+  },
+  {
+    oxId: BANK,
+    homographC: 1,
+    senseId: BANK_1_DICT_NOU_SENSE_1_ID,
+    confidence: 1
+  },
+  {
+    oxId: BANK,
+    homographC: 1,
+    senseId: BANK_1_DICT_NOU_SENSE_2_ID,
+    confidence: 1
+  },
+  {
+    oxId: BANK,
+    homographC: 1,
+    senseId: BANK_1_DICT_NOU_SENSE_3_ID,
+    confidence: 1
+  },
+  {
+    oxId: BANK,
+    homographC: 1,
+    senseId: BANK_1_DICT_NOU_SENSE_4_ID,
+    confidence: 1
+  },
+  {
+    oxId: BANK,
+    homographC: 1,
+    senseId: BANK_1_DICT_VER_SENSE_1_ID,
+    confidence: 1
+  },
+  {
+    oxId: BANK,
+    homographC: 1,
+    senseId: BANK_1_DICT_VER_SENSE_2_ID,
+    confidence: 1
+  },
+  {
+    oxId: BANK,
+    homographC: 1,
+    senseId: BANK_1_DICT_VER_SENSE_3_ID,
+    confidence: 1
+  },
+  {
+    oxId: BANK,
+    homographC: 1,
+    senseId: BANK_1_DICT_VER_SENSE_4_ID,
+    confidence: 1
+  },
+  {
+    oxId: BANK,
+    homographC: 1,
+    senseId: BANK_1_DICT_VER_SENSE_5_ID,
+    confidence: 1
+  },
+  {
+    oxId: BANK,
+    homographC: 2,
+    senseId: BANK_2_DICT_NOU_SENSE_1_ID,
+    confidence: 1
+  },
+  {
+    oxId: BANK,
+    homographC: 2,
+    senseId: BANK_2_DICT_VER_SENSE_1_ID,
+    confidence: 1
+  },
+  {
+    oxId: SPEEDY,
+    homographC: null,
+    senseId: SPEEDY_0_DICT_ADJ_SENSE_1_ID,
+    confidence: 1
+  },
+  {
+    oxId: SPEEDY,
+    homographC: null,
+    senseId: SPEEDY_0_DICT_ADJ_SENSE_2_ID,
+    confidence: 1
+  },
+  {
+    oxId: SPEEDY,
+    homographC: null,
+    senseId: FAST_1_DICT_ADJ_SENSE_1_ID,
+    confidence: 0.1
+  },
+  {
+    oxId: SPEEDY,
+    homographC: null,
+    senseId: FAST_1_DICT_ADJ_SENSE_2_ID,
+    confidence: 0.1
+  },
+  {
+    oxId: SPEEDY,
+    homographC: null,
+    senseId: FAST_1_DICT_ADJ_SENSE_3_ID,
+    confidence: 0.1
+  },
+  {
+    oxId: SPEEDY,
+    homographC: null,
+    senseId: FAST_1_DICT_ADJ_SENSE_4_ID,
+    confidence: 0.1
+  },
+  {
+    oxId: SPEEDY,
+    homographC: null,
+    senseId: FAST_1_DICT_ADJ_SENSE_5_ID,
+    confidence: 0.1
+  },
+  {
+    oxId: SPEEDY,
+    homographC: null,
+    senseId: FAST_1_DICT_ADJ_SENSE_6_ID,
+    confidence: 0.1
+  },
+  {
+    oxId: SPEEDY,
+    homographC: null,
+    senseId: FAST_1_DICT_ADJ_SENSE_7_ID,
+    confidence: 0.1
+  }
+];
+
 @Injectable()
 export class FixturesService {
   constructor(
     @InjectModel(ENTRY_COLLECTION_NAME)
     private readonly entryModel: Model<EntryDocument>,
     @InjectModel(SENSE_COLLECTION_NAME)
-    private readonly senseModel: Model<SenseDocument>
+    private readonly senseModel: Model<SenseDocument>,
+    @InjectModel(ENTRY_SENSE_COLLECTION_NAME)
+    private readonly entrySenseModel: Model<SenseDocument>
   ) {}
 
   populateCollection(model: Model<any>, data: object[], conditionsGenerator) {
@@ -805,6 +1013,10 @@ export class FixturesService {
     return { senseId: obj.senseId };
   }
 
+  entrySenseConditionsGenerator(obj: EntrySenseRecordWithoutId) {
+    return { oxId: obj.oxId, homographC: obj.homographC, senseId: obj.senseId };
+  }
+
   async create() {
     await this.populateCollection(
       this.entryModel,
@@ -820,6 +1032,11 @@ export class FixturesService {
       this.senseModel,
       THESAURUS_SENSES,
       this.senseConditionsGenerator
+    );
+    await this.populateCollection(
+      this.entrySenseModel,
+      ENTRY_SENSES,
+      this.entrySenseConditionsGenerator
     );
     return console.log('Fixtures created!');
   }

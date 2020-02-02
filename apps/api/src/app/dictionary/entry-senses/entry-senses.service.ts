@@ -6,6 +6,7 @@ import {
   EntrySenseDocument,
   EntrySenseRecord
 } from './interfaces/entry-sense.interface';
+import { EntrySenseDto } from '../../../../../../libs/api-interfaces/src';
 
 @Injectable()
 export class EntrySensesService {
@@ -34,6 +35,16 @@ export class EntrySensesService {
           new: true
         }
       )
+      .lean()
+      .exec();
+  }
+
+  findByEntryProperties(
+    oxId: string,
+    homographC: number
+  ): Promise<EntrySenseRecord[]> {
+    return this.entrySenseModel
+      .find({ oxId: oxId, homographC: homographC })
       .lean()
       .exec();
   }

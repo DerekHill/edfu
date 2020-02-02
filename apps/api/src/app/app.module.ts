@@ -6,7 +6,7 @@ import { ConsoleModule } from 'nestjs-console';
 import { MongooseModule } from '@nestjs/mongoose';
 import { OxfordApiModule } from './oxford-api/oxford-api.module';
 import { ConfigModule } from './config/config.module';
-import { EntrypointModule } from './tasks/task.module';
+import { TaskModule } from './tasks/task.module';
 import { DictionaryModule } from './dictionary/dictionary.module';
 import { MONGOOSE_OPTIONS } from './config/mongoose-deprecations';
 
@@ -14,7 +14,7 @@ import { MONGOOSE_OPTIONS } from './config/mongoose-deprecations';
   imports: [
     ConsoleModule,
     ConfigModule,
-    EntrypointModule,
+    TaskModule,
     MongooseModule.forRoot('mongodb://localhost/edfu', MONGOOSE_OPTIONS),
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql'

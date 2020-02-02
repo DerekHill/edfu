@@ -11,6 +11,14 @@ type EntryDto {
   relatedEntriesAdded: Boolean!
 }
 
+type EntrySenseDto {
+  _id: ID!
+  oxId: String!
+  homographC: Float
+  senseId: String!
+  confidence: Float!
+}
+
 type Query {
   hello: String!
   entry(id: String!): EntryDto!
@@ -25,7 +33,6 @@ type SenseDto {
   senseId: String!
   entryOxId: String!
   entryHomographC: Float
-  dictionaryOrThesaurus: String!
   lexicalCategory: String!
   example: String!
   definition: String!

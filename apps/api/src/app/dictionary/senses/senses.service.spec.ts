@@ -164,48 +164,6 @@ describe('SensesService', () => {
     });
   });
 
-  //   OLD TESTS //
-
-  describe('findOrCreateWithoutLinkOld', () => {
-    it('works', async () => {
-      const entryOxId = 'bank';
-      const entryHomographC = 0;
-      const lexicalCategory = LexicalCategory.adjective;
-      const oxSense: OxSense = DICTIONARY_SENSE_BANK;
-      expect(
-        service.findOrCreateWithoutLinkOld(
-          entryOxId,
-          entryHomographC,
-          lexicalCategory,
-          oxSense
-        )
-      ).resolves.toBeTruthy();
-    });
-  });
-
-  describe('create', () => {
-    it('works with dictionary sense', async () => {
-      const example = 'we need food and water';
-      const entryOxId = 'bank';
-      const entryHomographC = 0;
-      const lexicalCategory = LexicalCategory.adjective;
-      const dictionarySense = {
-        definitions: ['any nutritious substance'],
-        examples: [{ text: example }],
-        id: 'm_en_gbus0378040.005'
-      };
-
-      const res = await service.findOrCreateWithoutLinkOld(
-        entryOxId,
-        entryHomographC,
-        lexicalCategory,
-        dictionarySense
-      );
-
-      expect(res.example).toBe(example);
-    });
-  });
-
   describe('extractSynonyms', () => {
     it('extracts synonyms from the top level, and from subsenses', () => {
       const thesaurusSense = {

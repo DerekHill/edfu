@@ -20,6 +20,7 @@ import {
 } from '../senses/interfaces/sense.interface';
 import { HeadwordOrPhrase } from '../../enums';
 import { EntrySensesService } from '../entry-senses/entry-senses.service';
+import { EntrySenseRecord } from '../entry-senses/interfaces/entry-sense.interface';
 
 @Injectable()
 export class EntriesService {
@@ -159,7 +160,8 @@ export class EntriesService {
           promises2.push(
             this.findOrCreateSynonymEntryAndAssociations(
               synonym,
-              dictionarySense
+              dictionarySense,
+              sensePairing.thesaurusSense.lexicalCategory
             )
           );
         }
@@ -193,7 +195,8 @@ export class EntriesService {
 
   async findOrCreateSynonymEntryAndAssociations(
     synonym: string,
-    sense: DictionarySenseRecord
+    sense: DictionarySenseRecord,
+    thesaurusSenseLexicalCategory: LexicalCategory
   ): Promise<EntryRecord[]> {
     const entries = await this.findOrCreateWithOwnSensesOnly(synonym);
     if (!entries) {
@@ -201,15 +204,15 @@ export class EntriesService {
     }
 
     const confidence = entries.length === 1 ? 0.5 : 0.1;
-    // Might reduce chance of making association with wrong synonym entry homograph if
-    // check that lexical categories match
     const promises = entries.map(entry => {
-      return this.entrySensesService.findOrCreate(
-        entry.oxId,
-        entry.homographC,
-        sense.senseId,
-        confidence
-      );
+      if (sense.lexicalCategory === thesaurusSenseLexicalCategory) {
+        return this.entrySensesService.findOrCreate(
+          entry.oxId,
+          entry.homographC,
+          sense.senseId,
+          confidence
+        );
+      }
     });
 
     await Promise.all(promises);

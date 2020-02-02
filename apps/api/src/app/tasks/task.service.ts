@@ -3,7 +3,7 @@ import { OxfordApiService } from '../oxford-api/oxford-api.service';
 import { FixturesService } from './fixtures/fixtures.service';
 
 @Console()
-export class EntrypointService {
+export class TaskService {
   constructor(
     private readonly oxfordService: OxfordApiService,
     private readonly fixturesService: FixturesService

@@ -736,15 +736,6 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
     synonyms: ['use']
   },
   {
-    senseId: SPEEDY_0_DICT_ADJ_SENSE_1_ID,
-    entryOxId: SPEEDY,
-    entryHomographC: 1,
-    dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
-    lexicalCategory: LexicalCategory.noun,
-    example: 'the family has banked with Coutts for generations',
-    synonyms: ['use']
-  },
-  {
     senseId: SPEEDY_0_THES_ADJ_SENSE_1_ID,
     entryOxId: SPEEDY,
     entryHomographC: 0,

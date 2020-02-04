@@ -108,7 +108,9 @@ export class FirstComponent implements OnInit, OnDestroy {
       query: gql`
         query EntrySensesQuery($oxId: String! = "", $homographC: Float! = 0) {
           entrySenses(oxId: $oxId, homographC: $homographC) {
-            senseId
+            sense {
+              example
+            }
           }
         }
       `
@@ -129,7 +131,11 @@ export class FirstComponent implements OnInit, OnDestroy {
     );
 
     this.entrySenses$ = this.entrySensesSearchRef.valueChanges.pipe(
-      map(x => x.data.entrySenses)
+      // Deal with this being null
+      map(x => {
+        console.log(x);
+        return x.data.entrySenses;
+      })
     );
 
     this.searchChars$.subscribe(input => {

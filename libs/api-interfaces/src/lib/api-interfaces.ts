@@ -58,6 +58,13 @@ export class EntrySenseDto {
   @Field()
   readonly senseId: string;
 
+  // 1) Believe that Typescript can't handle @FieldResolver().  So need to make this optional
+  // So can assign EntrySenseDto[] in EntrySensesResolver, even though this does not have senses
+  // 2) Make this nullable to deal with what happens if have entrySense but not corresponding sense
+  // Might be better way
+  @Field(type => SenseDto, { nullable: true })
+  readonly sense?: SenseDto;
+
   @Field()
   readonly confidence: number;
 }

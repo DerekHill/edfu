@@ -123,21 +123,23 @@ export class SensesService {
     };
   }
 
-  //   Leave out DictionarySenseRecord because does not have synonyms
-  findOne(senseId: string): Promise<ThesaurusSenseRecord> {
+  findOne(senseId: string): Promise<DictionarySenseRecord> {
     return this.senseModel
-      .findOne({ senseId: senseId })
+      .findOne({
+        senseId: senseId,
+        dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary
+      })
       .lean()
       .exec();
   }
 
-  findMany(
-    senseIds: string[]
-  ): Promise<DictionarySenseRecord[] | ThesaurusSenseRecord[]> {
+  findMany(senseIds: string[]): Promise<DictionarySenseRecord[]> {
     return this.senseModel
       .find()
       .where('senseId')
       .in(senseIds)
+      .where('dictionaryOrThesaurus')
+      .equals(DictionaryOrThesaurus.dictionary)
       .lean()
       .exec();
   }

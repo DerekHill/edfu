@@ -17,6 +17,7 @@ import { SignsService } from './signs/signs.service';
 import { SignSchema } from './signs/schemas/sign.schema';
 import { EntrySensesService } from './entry-senses/entry-senses.service';
 import { EntrySenseSchema } from './entry-senses/schemas/entry-sense.schema';
+import { EntrySensesResolver } from './entry-senses/entry-senses.resolver';
 
 @Module({
   imports: [
@@ -40,7 +41,8 @@ import { EntrySenseSchema } from './entry-senses/schemas/entry-sense.schema';
     EntriesResolver,
     SensesResolver,
     SignsService,
-    EntrySensesService
+    EntrySensesService,
+    EntrySensesResolver
   ]
 })
 export class DictionaryModule {}

@@ -3,8 +3,13 @@ import { Resolver, Query, Args } from '@nestjs/graphql';
 import { EntrySenseDto } from '@edfu/api-interfaces';
 import { EntrySensesService } from './entry-senses.service';
 
+interface EntryId {
+  oxId: string;
+  homographC: number;
+}
+
 @Resolver('EntrySenses')
-export class EntriesResolver {
+export class EntrySensesResolver {
   constructor(private readonly entrySensesService: EntrySensesService) {}
 
   @Query(returns => [EntrySenseDto])

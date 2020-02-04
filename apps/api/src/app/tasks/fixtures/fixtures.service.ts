@@ -87,7 +87,7 @@ const SPEEDY_0_THES_ADJ_SENSE_2_ID = 't_en_gb0013890.002'; // Linked to SPEEDY_D
 const ENTRIES: EntryRecordWithoutId[] = [
   {
     oxId: FOOD,
-    homographC: null,
+    homographC: 0,
     word: FOOD,
     relatedEntriesAdded: true,
     headwordOrPhrase: HeadwordOrPhrase.headword
@@ -122,21 +122,21 @@ const ENTRIES: EntryRecordWithoutId[] = [
   },
   {
     oxId: SPEEDY,
-    homographC: null,
+    homographC: 0,
     word: SPEEDY,
     relatedEntriesAdded: true,
     headwordOrPhrase: HeadwordOrPhrase.headword
   },
   {
     oxId: 'drink',
-    homographC: null,
+    homographC: 0,
     word: 'drink',
     relatedEntriesAdded: true,
     headwordOrPhrase: HeadwordOrPhrase.headword
   },
   {
     oxId: 'toast',
-    homographC: null,
+    homographC: 0,
     word: 'toast',
     relatedEntriesAdded: true,
     headwordOrPhrase: HeadwordOrPhrase.headword
@@ -147,7 +147,7 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   {
     senseId: FOOD_0_DICT_NOU_SENSE_1_ID,
     entryOxId: FOOD,
-    entryHomographC: null,
+    entryHomographC: 0,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     thesaurusSenseIds: [],
     lexicalCategory: LexicalCategory.noun,
@@ -397,7 +397,7 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   {
     senseId: SPEEDY_0_DICT_ADJ_SENSE_1_ID,
     entryOxId: SPEEDY,
-    entryHomographC: null,
+    entryHomographC: 0,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adjective,
     thesaurusSenseIds: [SPEEDY_0_THES_ADJ_SENSE_1_ID],
@@ -407,7 +407,7 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   {
     senseId: SPEEDY_0_DICT_ADJ_SENSE_2_ID,
     entryOxId: SPEEDY,
-    entryHomographC: null,
+    entryHomographC: 0,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adjective,
     thesaurusSenseIds: [SPEEDY_0_THES_ADJ_SENSE_2_ID],
@@ -420,7 +420,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   {
     senseId: FOOD_0_THES_NOU_SENSE_2_ID,
     entryOxId: FOOD,
-    entryHomographC: null,
+    entryHomographC: 0,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.noun,
     example: 'he went three days without food',
@@ -429,7 +429,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   {
     senseId: FOOD_0_THES_NOU_SENSE_3_ID,
     entryOxId: FOOD,
-    entryHomographC: null,
+    entryHomographC: 0,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.noun,
     example: 'food for the cattle and horses',
@@ -747,7 +747,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   {
     senseId: SPEEDY_0_THES_ADJ_SENSE_1_ID,
     entryOxId: SPEEDY,
-    entryHomographC: null,
+    entryHomographC: 0,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adjective,
     example: 'a speedy reply',
@@ -768,7 +768,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   {
     senseId: SPEEDY_0_THES_ADJ_SENSE_2_ID,
     entryOxId: SPEEDY,
-    entryHomographC: null,
+    entryHomographC: 0,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adjective,
     example: 'speedy hatchback',
@@ -779,7 +779,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
 const ENTRY_SENSES: EntrySenseRecordWithoutId[] = [
   {
     oxId: FOOD,
-    homographC: null,
+    homographC: 0,
     senseId: FOOD_0_DICT_NOU_SENSE_1_ID,
     confidence: 1
   },
@@ -923,55 +923,55 @@ const ENTRY_SENSES: EntrySenseRecordWithoutId[] = [
   },
   {
     oxId: SPEEDY,
-    homographC: null,
+    homographC: 0,
     senseId: SPEEDY_0_DICT_ADJ_SENSE_1_ID,
     confidence: 1
   },
   {
     oxId: SPEEDY,
-    homographC: null,
+    homographC: 0,
     senseId: SPEEDY_0_DICT_ADJ_SENSE_2_ID,
     confidence: 1
   },
   {
     oxId: SPEEDY,
-    homographC: null,
+    homographC: 0,
     senseId: FAST_1_DICT_ADJ_SENSE_1_ID,
     confidence: 0.1
   },
   {
     oxId: SPEEDY,
-    homographC: null,
+    homographC: 0,
     senseId: FAST_1_DICT_ADJ_SENSE_2_ID,
     confidence: 0.1
   },
   {
     oxId: SPEEDY,
-    homographC: null,
+    homographC: 0,
     senseId: FAST_1_DICT_ADJ_SENSE_3_ID,
     confidence: 0.1
   },
   {
     oxId: SPEEDY,
-    homographC: null,
+    homographC: 0,
     senseId: FAST_1_DICT_ADJ_SENSE_4_ID,
     confidence: 0.1
   },
   {
     oxId: SPEEDY,
-    homographC: null,
+    homographC: 0,
     senseId: FAST_1_DICT_ADJ_SENSE_5_ID,
     confidence: 0.1
   },
   {
     oxId: SPEEDY,
-    homographC: null,
+    homographC: 0,
     senseId: FAST_1_DICT_ADJ_SENSE_6_ID,
     confidence: 0.1
   },
   {
     oxId: SPEEDY,
-    homographC: null,
+    homographC: 0,
     senseId: FAST_1_DICT_ADJ_SENSE_7_ID,
     confidence: 0.1
   }

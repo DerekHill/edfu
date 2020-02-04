@@ -54,7 +54,7 @@ describe('BaseSearchesService', () => {
 
   describe('homographC extraction', () => {
     it('returns null if no homographNumber is given', () => {
-      expect(bss.extractHomographC(RESULT_WITHOUT_HOMOGRAPH_NUMBER)).toBeNull();
+      expect(bss.extractHomographC(RESULT_WITHOUT_HOMOGRAPH_NUMBER)).toBe(0);
     });
     it('returns the number if given', () => {
       expect(bss.extractHomographC(RESULT_WITH_HOMOGRAPH_NUMBER_200)).toEqual(
@@ -92,12 +92,12 @@ describe('EntrySearchesService', () => {
   describe('unduplicated saving', () => {
     it('does not save the same word twice', async () => {
       const word = 'foo';
-      const homographNumber = null;
+      const homographC = 0;
       const one = 1;
       await ess.createFromResult(word, RESULT_WITHOUT_HOMOGRAPH_NUMBER);
-      await expect(ess.count(word, homographNumber)).resolves.toEqual(one);
+      await expect(ess.count(word, homographC)).resolves.toEqual(one);
       await ess.createFromResult(word, RESULT_WITHOUT_HOMOGRAPH_NUMBER);
-      await expect(ess.count(word, homographNumber)).resolves.toEqual(one);
+      await expect(ess.count(word, homographC)).resolves.toEqual(one);
     });
   });
 

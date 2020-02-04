@@ -138,7 +138,7 @@ describe('SensesService', () => {
       const dictionarySense: DictionarySenseRecordWithoutId = {
         senseId: DICTIONARY_SENSE_ID,
         entryOxId: 'jump',
-        entryHomographC: null,
+        entryHomographC: 0,
         lexicalCategory: LexicalCategory.noun,
         dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
         thesaurusSenseIds: [THESAURUS_SENSE_ID],

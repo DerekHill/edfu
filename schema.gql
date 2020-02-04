@@ -26,13 +26,14 @@ type Query {
   search(search_string: String!): [EntryDto!]!
   sense(senseId: String!): SenseDto!
   senses(senseIds: [String!]!): [SenseDto!]!
+  entrySenses(homographC: Float!, oxId: String!): [EntrySenseDto!]!
 }
 
 type SenseDto {
   _id: ID!
   senseId: String!
   entryOxId: String!
-  entryHomographC: Float
+  entryHomographC: Float!
   lexicalCategory: String!
   example: String!
   definition: String!

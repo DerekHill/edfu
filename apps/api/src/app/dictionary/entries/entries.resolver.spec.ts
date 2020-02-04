@@ -18,7 +18,7 @@ const entryRecord = (wordAndOxId: string): EntryRecord => {
   return {
     _id: new ObjectId(),
     oxId: wordAndOxId,
-    homographC: null,
+    homographC: 0,
     word: wordAndOxId,
     relatedEntriesAdded: true,
     headwordOrPhrase: HeadwordOrPhrase.headword

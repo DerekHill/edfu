@@ -87,7 +87,7 @@ export class BaseSearchesService {
     if (homographNumber) {
       return parseInt(homographNumber[0], 10);
     } else {
-      return null;
+      return 0;
     }
   }
 }

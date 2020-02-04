@@ -26,7 +26,7 @@ const senseRecordFactory = (): DictionarySenseRecord => {
     _id: new ObjectId(),
     senseId: 'id',
     entryOxId: 'food',
-    entryHomographC: null,
+    entryHomographC: 0,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     thesaurusSenseIds: [],
     definition: 'foo',

@@ -31,8 +31,7 @@ export class SenseDto {
   @Field()
   readonly entryOxId: string;
 
-  // Currently nullable, but better to make nulls zero I suspect
-  @Field({ nullable: true })
+  @Field()
   readonly entryHomographC: number;
 
   @Field(type => String)

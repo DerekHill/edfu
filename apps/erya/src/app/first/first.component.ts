@@ -174,6 +174,9 @@ export class FirstComponent implements OnInit, OnDestroy {
   onOptionSelected(group: HomographGroup) {
     console.log(group);
     this.homographGroup$.next(group);
+    if (group.entries.length === 1) {
+      this.onEntryClick(null, group.entries[0]);
+    }
     // this.senseIds$.next(..);
   }
 

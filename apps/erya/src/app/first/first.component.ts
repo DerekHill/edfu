@@ -79,6 +79,7 @@ export class FirstComponent implements OnInit, OnDestroy {
       query: gql`
         query EntrySensesQuery($oxId: String! = "", $homographC: Float! = 0) {
           sensesForEntry(oxId: $oxId, homographC: $homographC) {
+            senseId
             example
           }
         }
@@ -96,7 +97,7 @@ export class FirstComponent implements OnInit, OnDestroy {
     );
 
     this.senses$ = this.sensesSearchRef.valueChanges.pipe(
-      map(({ data }: any) => data.senses)
+      map(({ data }: any) => data.sensesForEntry)
     );
 
     // this.entrySenses$ = this.entrySensesSearchRef.valueChanges.pipe(

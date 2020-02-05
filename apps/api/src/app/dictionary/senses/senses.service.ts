@@ -156,12 +156,10 @@ export class SensesService {
       oxId,
       homographC
     );
-
     const entrySensesById = entrySenses.reduce((acc, curr) => {
       acc[curr.senseId] = curr;
       return acc;
     }, {});
-
     const senseIds = entrySenses.map(i => i.senseId);
     const senses = await this.senseModel.find({ senseId: { $in: senseIds } });
 
@@ -178,55 +176,7 @@ export class SensesService {
         similarity: entrySensesById[senseId].similarity
       };
     });
-
-    // map and remove nulls
   }
-
-  //   @Field()
-  //   readonly oxId: string;
-
-  //   @Field()
-  //   readonly homographC: number;
-
-  //   @Field()
-  //   readonly senseId: string;
-
-  //   @Field(type => String)
-  //   readonly lexicalCategory?: LexicalCategory;
-
-  //   @Field()
-  //   readonly example: string;
-
-  //   @Field()
-  //   readonly definition: string;
-
-  //   @Field(type => String)
-  //   readonly associationType: DictionaryOrThesaurus;
-
-  //   @Field()
-  //   readonly similarity: number;
-
-  //   NetworkUser.findOne(
-  //     {
-  //       networkId: req.params.network_id,
-  //       userId: req.user._id
-  //     },
-  //     { networkId: 1 },
-  //     LEAN
-  //   )
-  //     .populate({
-  //       path: 'networkId',
-  //       model: 'Network',
-  //       select: NETWORK_PROJECTION
-  //     })
-  //     .then((networkUser: NetworkUserModel) => {
-  //       if (networkUser) {
-  //         return res.status(200).json(networkUser.networkId);
-  //       } else {
-  //         return res.status(403).json({ errorCode: '403' });
-  //       }
-  //     })
-  //     .catch(next);
 
   extractSynonyms(oxSense: OxSense): string[] {
     const res: string[] = [];

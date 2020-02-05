@@ -4,7 +4,7 @@ import { Observable, of, BehaviorSubject } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import gql from 'graphql-tag';
 import { Apollo, QueryRef } from 'apollo-angular';
-import { EntryDto, SenseDto, EntrySenseDto } from '@edfu/api-interfaces';
+import { EntryDto, SenseForEntryDto } from '@edfu/api-interfaces';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { ApolloQueryResult } from 'apollo-client';
 
@@ -17,18 +17,10 @@ interface EntrySearchVariables {
 }
 
 interface SensesQuery {
-  senses: SenseDto[];
+  senses: SenseForEntryDto[];
 }
 
 interface SenseSearchVariables {
-  senseIds: string[];
-}
-
-interface EntrySensesQuery {
-  entrySenses: EntrySenseDto[];
-}
-
-interface EntrySenseSearchVariables {
   oxId: string;
   homographC: number;
 }
@@ -50,36 +42,17 @@ export class FirstComponent implements OnInit, OnDestroy {
   homographGroups$: Observable<HomographGroup[]>;
   entriesSearchRef: QueryRef<EntrySearchQuery, EntrySearchVariables>;
 
-  senses$: Observable<SenseDto[]>;
-  senseIds$: BehaviorSubject<string[]>;
+  senses$: Observable<SenseForEntryDto[]>;
   sensesSearchRef: QueryRef<SensesQuery, SenseSearchVariables>;
 
   homographGroup$: BehaviorSubject<HomographGroup>;
-
-  entrySenses$: Observable<EntrySenseDto[]>;
-  entrySensesSearchRef: QueryRef<EntrySensesQuery, EntrySenseSearchVariables>;
 
   constructor(private apollo: Apollo) {}
 
   ngOnInit() {
     this.searchChars$ = this.searchFormControl.valueChanges.pipe(startWith(''));
 
-    this.senseIds$ = new BehaviorSubject([]);
     this.homographGroup$ = new BehaviorSubject(null);
-
-    this.sensesSearchRef = this.apollo.watchQuery<
-      SensesQuery,
-      SenseSearchVariables
-    >({
-      query: gql`
-        query SensesQuery($senseIds: [String!]!) {
-          senses(senseIds: $senseIds) {
-            _id
-            example
-          }
-        }
-      `
-    });
 
     this.entriesSearchRef = this.apollo.watchQuery<
       EntrySearchQuery,
@@ -88,7 +61,6 @@ export class FirstComponent implements OnInit, OnDestroy {
       query: gql`
         query WordSearchQuery($search_string: String!) {
           search(search_string: $search_string) {
-            _id
             oxId
             homographC
             word
@@ -100,17 +72,14 @@ export class FirstComponent implements OnInit, OnDestroy {
     });
 
     // Probably better way of avoiding error on initial subscription than setting defaults which get sent to the server
-
-    this.entrySensesSearchRef = this.apollo.watchQuery<
-      EntrySensesQuery,
-      EntrySenseSearchVariables
+    this.sensesSearchRef = this.apollo.watchQuery<
+      SensesQuery,
+      SenseSearchVariables
     >({
       query: gql`
         query EntrySensesQuery($oxId: String! = "", $homographC: Float! = 0) {
-          entrySenses(oxId: $oxId, homographC: $homographC) {
-            sense {
-              example
-            }
+          sensesForEntry(oxId: $oxId, homographC: $homographC) {
+            example
           }
         }
       `
@@ -130,13 +99,13 @@ export class FirstComponent implements OnInit, OnDestroy {
       map(({ data }: any) => data.senses)
     );
 
-    this.entrySenses$ = this.entrySensesSearchRef.valueChanges.pipe(
-      // Deal with this being null
-      map(x => {
-        console.log(x);
-        return x.data.entrySenses;
-      })
-    );
+    // this.entrySenses$ = this.entrySensesSearchRef.valueChanges.pipe(
+    //   // Deal with this being null
+    //   map(x => {
+    //     console.log(x);
+    //     return x.data.entrySenses;
+    //   })
+    // );
 
     this.searchChars$.subscribe(input => {
       if (typeof input === 'string') {
@@ -152,13 +121,6 @@ export class FirstComponent implements OnInit, OnDestroy {
     this.homographGroups$.subscribe(a => {
       console.log('homographGroupSearchResults');
       console.log(a);
-    });
-
-    this.senseIds$.subscribe(senseIds => {
-      console.log('via subscribe to senseIds', senseIds);
-      this.sensesSearchRef.setVariables({
-        senseIds: senseIds
-      });
     });
 
     this.homographGroup$.subscribe(group => {
@@ -191,10 +153,8 @@ export class FirstComponent implements OnInit, OnDestroy {
   }
 
   onEntryClick(event, entry: EntryDto) {
-    // console.log('entry');
-    // console.log(entry);
     console.log('onEntryClick', entry.oxId, entry.homographC);
-    this.entrySensesSearchRef.setVariables({
+    this.sensesSearchRef.setVariables({
       oxId: entry.oxId,
       homographC: entry.homographC
     });

@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { ENTRY_COLLECTION_NAME } from '../../constants';
+import { ENTRY_COLLECTION_NAME, TF_MODEL_NAME } from '../../constants';
 import { Model } from 'mongoose';
 import {
   EntryRecord,
@@ -13,7 +13,7 @@ import {
 } from '../../oxford-searches/oxford-searches.service';
 import { OxfordSearchRecord } from '../../oxford-searches/interfaces/oxford-search.interface';
 import { SensesService } from '../senses/senses.service';
-import { LexicalCategory } from '@edfu/api-interfaces';
+import { LexicalCategory, DictionaryOrThesaurus } from '@edfu/api-interfaces';
 import {
   DictionarySenseRecord,
   ThesaurusSenseRecord
@@ -21,6 +21,7 @@ import {
 import { HeadwordOrPhrase } from '../../enums';
 import { EntrySensesService } from '../entry-senses/entry-senses.service';
 import { EntrySenseRecord } from '../entry-senses/interfaces/entry-sense.interface';
+import { SimilarityService } from '../similarity/similarity.service';
 
 @Injectable()
 export class EntriesService {
@@ -30,7 +31,8 @@ export class EntriesService {
     private readonly entrySearchesService: EntrySearchesService,
     private readonly thesaurusSearchesService: ThesaurusSearchesService,
     private readonly sensesService: SensesService,
-    private readonly entrySensesService: EntrySensesService
+    private readonly entrySensesService: EntrySensesService,
+    private readonly similarityService: SimilarityService
   ) {}
 
   async findOrCreateWithOwnSensesOnly(chars: string): Promise<EntryRecord[]> {
@@ -159,9 +161,10 @@ export class EntriesService {
         for (const synonym of sensePairing.thesaurusSense.synonyms) {
           promises2.push(
             this.findOrCreateSynonymEntryAndAssociations(
-              synonym,
               dictionarySense,
-              sensePairing.thesaurusSense.lexicalCategory
+              synonym,
+              sensePairing.thesaurusSense.lexicalCategory,
+              sensePairing.thesaurusSense.example
             )
           );
         }
@@ -194,23 +197,29 @@ export class EntriesService {
   }
 
   async findOrCreateSynonymEntryAndAssociations(
+    dictionarySense: DictionarySenseRecord,
     synonym: string,
-    sense: DictionarySenseRecord,
-    thesaurusSenseLexicalCategory: LexicalCategory
+    thesaurusSenseLexicalCategory: LexicalCategory,
+    thesaurusSenseExample: string
   ): Promise<EntryRecord[]> {
     const entries = await this.findOrCreateWithOwnSensesOnly(synonym);
     if (!entries) {
       return null;
     }
 
-    const confidence = entries.length === 1 ? 0.5 : 0.1;
+    const similarity = await this.similarityService.getSimilarity(
+      dictionarySense.example,
+      thesaurusSenseExample
+    );
+
     const promises = entries.map(entry => {
-      if (sense.lexicalCategory === thesaurusSenseLexicalCategory) {
+      if (dictionarySense.lexicalCategory === thesaurusSenseLexicalCategory) {
         return this.entrySensesService.findOrCreate(
           entry.oxId,
           entry.homographC,
-          sense.senseId,
-          confidence
+          dictionarySense.senseId,
+          DictionaryOrThesaurus.thesaurus,
+          similarity
         );
       }
     });

@@ -56,13 +56,14 @@ export class SensesService {
       definition: this.extractDefinition(oxSense)
     };
 
-    const ownAssociationConfidence = 1;
+    const ownSimilarity = 1;
 
     await this.entrySensesService.findOrCreate(
       entryOxId,
       entryHomographC,
       senseId,
-      ownAssociationConfidence
+      DictionaryOrThesaurus.dictionary,
+      ownSimilarity
     );
 
     return this.findOneAndUpdate(senseId, sense);

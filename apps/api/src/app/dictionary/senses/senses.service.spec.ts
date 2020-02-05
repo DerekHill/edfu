@@ -6,22 +6,14 @@ import { MongooseModule, InjectModel } from '@nestjs/mongoose';
 import { SenseSchema } from './schemas/sense.schema';
 import { SENSE_COLLECTION_NAME, ENTRY_COLLECTION_NAME } from '../../constants';
 import { LexicalCategory, DictionaryOrThesaurus } from '@edfu/api-interfaces';
-import { DICTIONARY_SENSE_BANK } from './test/sample-results';
 import { OxSense } from '../../oxford-api/interfaces/oxford-api.interface';
-import { EntriesService } from '../entries/entries.service';
 import { EntrySchema } from '../entries/schemas/entry.schema';
-import {
-  EntrySearchesService,
-  ThesaurusSearchesService
-} from '../../oxford-searches/oxford-searches.service';
-import { OxfordSearchRecord } from '../../oxford-searches/interfaces/oxford-search.interface';
 import { EntrySenseRecord } from '../entry-senses/interfaces/entry-sense.interface';
 import { EntrySensesService } from '../entry-senses/entry-senses.service';
 import {
   ThesaurusSenseRecord,
   SenseDocument,
   SharedSenseRecord,
-  DictionarySenseRecord,
   DictionarySenseRecordWithoutId,
   LinkedSensePairing
 } from './interfaces/sense.interface';
@@ -35,15 +27,8 @@ class SensesTestSetupService {
     private readonly senseModel: Model<SenseDocument>
   ) {}
 
-  //   Maybe problem that SharedSenseRecord does not have id
   create(sense: SharedSenseRecord): Promise<SharedSenseRecord> {
     return this.senseModel.create(sense);
-  }
-}
-
-class OxfordSearchesServiceLocalMock {
-  findOrFetch(): Promise<OxfordSearchRecord[]> {
-    return Promise.resolve(null);
   }
 }
 
@@ -68,15 +53,6 @@ describe('SensesService', () => {
       ],
       providers: [
         SensesService,
-        EntriesService,
-        {
-          provide: EntrySearchesService,
-          useClass: OxfordSearchesServiceLocalMock
-        },
-        {
-          provide: ThesaurusSearchesService,
-          useClass: OxfordSearchesServiceLocalMock
-        },
         {
           provide: EntrySensesService,
           useClass: EntrySensesServiceMock
@@ -132,7 +108,7 @@ describe('SensesService', () => {
   });
 
   describe('populateThesaurusLinkedSenses', () => {
-    it.only('finds linked dictionary sense by thesaurusSenseIds', async () => {
+    it('finds linked dictionary sense by thesaurusSenseIds', async () => {
       const DICTIONARY_SENSE_ID = 'dictionarySenseId';
       const THESAURUS_SENSE_ID = 'thesaurusSenseId';
       const dictionarySense: DictionarySenseRecordWithoutId = {

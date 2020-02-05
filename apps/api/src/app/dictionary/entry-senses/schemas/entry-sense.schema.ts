@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+import { DICTIONARY_OR_THESAURUS_ALL_VALUES } from '@edfu/api-interfaces';
 
 export const EntrySenseSchema = new mongoose.Schema({
   oxId: {
@@ -13,7 +14,12 @@ export const EntrySenseSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  confidence: {
+  associationType: {
+    type: String,
+    enum: DICTIONARY_OR_THESAURUS_ALL_VALUES,
+    required: true
+  },
+  similarity: {
     type: Number,
     required: true
   }
@@ -23,4 +29,3 @@ EntrySenseSchema.index(
   { oxId: 1, homographC: 1, senseId: 1 },
   { unique: true }
 );
-// Could also add index on senseId if want to find entries for sense

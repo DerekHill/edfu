@@ -6,7 +6,8 @@ import {
   ENTRY_COLLECTION_NAME,
   SENSE_COLLECTION_NAME,
   SIGN_COLLECTION_NAME,
-  ENTRY_SENSE_COLLECTION_NAME
+  ENTRY_SENSE_COLLECTION_NAME,
+  TF_MODEL_NAME
 } from '../constants';
 import { EntrySchema } from './entries/schemas/entry.schema';
 import { SensesService } from './senses/senses.service';
@@ -18,6 +19,8 @@ import { SignSchema } from './signs/schemas/sign.schema';
 import { EntrySensesService } from './entry-senses/entry-senses.service';
 import { EntrySenseSchema } from './entry-senses/schemas/entry-sense.schema';
 import { EntrySensesResolver } from './entry-senses/entry-senses.resolver';
+import { SimilarityService } from './similarity/similarity.service';
+import * as use from '@tensorflow-models/universal-sentence-encoder';
 
 @Module({
   imports: [
@@ -42,7 +45,14 @@ import { EntrySensesResolver } from './entry-senses/entry-senses.resolver';
     SensesResolver,
     SignsService,
     EntrySensesService,
-    EntrySensesResolver
+    EntrySensesResolver,
+    {
+      provide: TF_MODEL_NAME,
+      useFactory: async () => {
+        return await use.load();
+      }
+    }
+    SimilarityService
   ]
 })
 export class DictionaryModule {}

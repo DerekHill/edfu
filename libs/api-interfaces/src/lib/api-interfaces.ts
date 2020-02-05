@@ -65,6 +65,9 @@ export class EntrySenseDto {
   @Field(type => SenseDto, { nullable: true })
   readonly sense?: SenseDto;
 
+  @Field(type => String)
+  readonly associationType: DictionaryOrThesaurus;
+
   @Field()
-  readonly confidence: number;
+  readonly similarity: number;
 }

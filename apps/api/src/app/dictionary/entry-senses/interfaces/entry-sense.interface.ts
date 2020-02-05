@@ -1,11 +1,13 @@
 import { Document } from 'mongoose';
 import { ObjectId } from 'bson';
+import { DictionaryOrThesaurus } from '@edfu/api-interfaces';
 
 export interface EntrySenseRecordWithoutId {
   readonly oxId: string;
   readonly homographC: number;
   readonly senseId: string;
-  readonly confidence: number;
+  readonly associationType: DictionaryOrThesaurus;
+  readonly similarity: number;
 }
 
 export interface EntrySenseRecord extends EntrySenseRecordWithoutId {

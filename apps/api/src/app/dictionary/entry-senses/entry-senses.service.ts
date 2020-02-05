@@ -6,6 +6,7 @@ import {
   EntrySenseDocument,
   EntrySenseRecord
 } from './interfaces/entry-sense.interface';
+import { DictionaryOrThesaurus } from '@edfu/api-interfaces';
 
 @Injectable()
 export class EntrySensesService {
@@ -18,7 +19,8 @@ export class EntrySensesService {
     oxId: string,
     homographC: number,
     senseId: string,
-    confidence: number
+    associationType: DictionaryOrThesaurus,
+    similarity: number
   ): Promise<EntrySenseRecord> {
     return this.entrySenseModel
       .findOneAndUpdate(
@@ -27,7 +29,8 @@ export class EntrySensesService {
           oxId: oxId,
           homographC: homographC,
           senseId: senseId,
-          confidence: confidence
+          associationType: associationType,
+          similarity: similarity
         },
         {
           upsert: true,

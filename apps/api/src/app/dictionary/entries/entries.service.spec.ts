@@ -25,6 +25,7 @@ import { HeadwordOrPhrase } from '../../enums';
 import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/api-interfaces';
 import { EntrySenseRecord } from '../entry-senses/interfaces/entry-sense.interface';
 import { EntrySensesService } from '../entry-senses/entry-senses.service';
+import { SimilarityService } from '../similarity/similarity.service';
 
 class OxfordSearchesServiceMock {
   findOrFetch(): Promise<OxfordSearchRecord[]> {
@@ -54,12 +55,19 @@ class EntrySensesServiceMock {
   }
 }
 
+class SimilarityServiceMock {
+  getSimilarity(sentence1: string, sentence2: string): Promise<number> {
+    return Promise.resolve(null);
+  }
+}
+
 describe('EntriesService', () => {
   let entriesService: EntriesService;
   let entrySearchesService: EntrySearchesService;
   let thesaurusSearchesService: ThesaurusSearchesService;
   let sensesService: SensesService;
   let entrySensesService: EntrySensesService;
+  let similarityService: SimilarityService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -90,6 +98,10 @@ describe('EntriesService', () => {
         {
           provide: EntrySensesService,
           useClass: EntrySensesServiceMock
+        },
+        {
+          provide: SimilarityService,
+          useClass: SimilarityServiceMock
         }
       ]
     }).compile();
@@ -103,6 +115,7 @@ describe('EntriesService', () => {
     );
     sensesService = module.get<SensesService>(SensesService);
     entrySensesService = module.get<EntrySensesService>(EntrySensesService);
+    similarityService = module.get<SimilarityService>(SimilarityService);
   });
 
   describe('findOrCreateWithOwnSensesOnly() from Dictionary', () => {
@@ -120,7 +133,7 @@ describe('EntriesService', () => {
     });
   });
 
-  describe('addRelatedEntries', () => {
+  describe('addRelatedEntries()', () => {
     it('throws error if entry does not exist', async () => {
       expect.assertions(1);
       try {
@@ -202,7 +215,7 @@ describe('EntriesService', () => {
     it.skip('finds related entries if synonyms contain spaces', () => {});
   });
 
-  describe('filterResultsByHomographC', () => {
+  describe('filterResultsByHomographC()', () => {
     it('filters for correct result', () => {
       const HOMOGRAPH_C = 1;
       const WORD_1 = 'word_1';
@@ -259,7 +272,7 @@ describe('EntriesService', () => {
     });
   });
 
-  describe('createEntryFromSearchRecord', () => {
+  describe('createEntryFromSearchRecord()', () => {
     it('creates basic entry', async () => {
       const WORD = 'river';
       const record: OxfordSearchRecord = createEntrySearchRecord(WORD);
@@ -268,7 +281,7 @@ describe('EntriesService', () => {
     });
   });
 
-  describe('search', () => {
+  describe('search()', () => {
     beforeEach(async () => {
       await entriesService.createEntryFromSearchRecord(
         createEntrySearchRecord('river')
@@ -288,6 +301,71 @@ describe('EntriesService', () => {
     });
     it('does not return results given empty search string', async () => {
       expect(await entriesService.search('')).toHaveLength(0);
+    });
+  });
+
+  describe('findOrCreateSynonymEntryAndAssociations()', () => {
+    it('adds similarity to association', async () => {
+      expect.assertions(1);
+      const synonymOxId = 'speedy';
+      const synonymHomographC = 0;
+      const dictionarySenseId = 'dictionarySenseId';
+
+      const dictionarySense: DictionarySenseRecord = {
+        _id: new ObjectId(),
+        entryOxId: 'fast',
+        entryHomographC: 1,
+        dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+        lexicalCategory: LexicalCategory.adjective,
+        senseId: dictionarySenseId,
+        example: 'a fast sports car',
+        definition: '',
+        thesaurusSenseIds: []
+      };
+      const thesaurusSenseLexicalCategory = LexicalCategory.adjective;
+      const thesaurusSenseExample = 'a speedy winger';
+
+      const entrySearchRecord = createEntrySearchRecord(
+        synonymOxId,
+        true,
+        synonymHomographC,
+        HeadwordOrPhrase.headword
+      );
+
+      const SIMILARITY = 0.3;
+
+      const entrySenseRecord: EntrySenseRecord = {
+        _id: new ObjectId(),
+        oxId: synonymOxId,
+        homographC: synonymHomographC,
+        senseId: dictionarySenseId,
+        associationType: DictionaryOrThesaurus.thesaurus,
+        similarity: SIMILARITY
+      };
+
+      jest
+        .spyOn(entrySearchesService, 'findOrFetch')
+        .mockImplementation(chars => Promise.resolve([entrySearchRecord]));
+
+      jest
+        .spyOn(similarityService, 'getSimilarity')
+        .mockImplementation(chars => Promise.resolve(SIMILARITY));
+
+      jest
+        .spyOn(entrySensesService, 'findOrCreate')
+        .mockImplementation(
+          (oxId, homographC, senseId, dictionaryOrThesaurus, similarity) => {
+            expect(similarity).toBe(SIMILARITY);
+            return Promise.resolve(entrySenseRecord);
+          }
+        );
+
+      await entriesService.findOrCreateSynonymEntryAndAssociations(
+        dictionarySense,
+        synonymOxId,
+        thesaurusSenseLexicalCategory,
+        thesaurusSenseExample
+      );
     });
   });
 });

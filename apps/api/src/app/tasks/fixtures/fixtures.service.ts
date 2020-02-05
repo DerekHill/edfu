@@ -770,201 +770,235 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
 const ENTRY_SENSES: EntrySenseRecordWithoutId[] = [
   {
     oxId: FOOD,
-    homographC: 0,
+    homographC: null,
     senseId: FOOD_0_DICT_NOU_SENSE_1_ID,
-    confidence: 1
+    similarity: 0.83124,
+    associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: FAST,
     homographC: 1,
     senseId: FAST_1_DICT_ADJ_SENSE_1_ID,
-    confidence: 1
+    similarity: 0.8537,
+    associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: FAST,
     homographC: 1,
     senseId: FAST_1_DICT_ADJ_SENSE_2_ID,
-    confidence: 1
+    similarity: 0.0088,
+    associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: FAST,
     homographC: 1,
     senseId: FAST_1_DICT_ADJ_SENSE_3_ID,
-    confidence: 1
+    similarity: 0.76714,
+    associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: FAST,
     homographC: 1,
     senseId: FAST_1_DICT_ADJ_SENSE_4_ID,
-    confidence: 1
+    similarity: 0.55251,
+    associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: FAST,
     homographC: 1,
     senseId: FAST_1_DICT_ADJ_SENSE_5_ID,
-    confidence: 1
+    similarity: 0.62822,
+    associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: FAST,
     homographC: 1,
     senseId: FAST_1_DICT_ADJ_SENSE_6_ID,
-    confidence: 1
+    similarity: 0.35977,
+    associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: FAST,
     homographC: 1,
     senseId: FAST_1_DICT_ADJ_SENSE_7_ID,
-    confidence: 1
+    similarity: 0.90314,
+    associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: FAST,
     homographC: 1,
     senseId: FAST_1_DICT_ADV_SENSE_1_ID,
-    confidence: 1
+    similarity: 0.92621,
+    associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: FAST,
     homographC: 1,
     senseId: FAST_1_DICT_ADV_SENSE_2_ID,
-    confidence: 1
+    similarity: 0.31747,
+    associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: FAST,
     homographC: 1,
     senseId: FAST_1_DICT_ADV_SENSE_3_ID,
-    confidence: 1
+    similarity: 0.34111,
+    associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: FAST,
     homographC: 2,
     senseId: FAST_2_DICT_VER_SENSE_1_ID,
-    confidence: 1
+    similarity: 0.16677,
+    associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: FAST,
     homographC: 2,
     senseId: FAST_2_DICT_NOU_SENSE_1_ID,
-    confidence: 1
+    similarity: 0.57127,
+    associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: BANK,
     homographC: 1,
     senseId: BANK_1_DICT_NOU_SENSE_1_ID,
-    confidence: 1
+    similarity: 0.83778,
+    associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: BANK,
     homographC: 1,
     senseId: BANK_1_DICT_NOU_SENSE_2_ID,
-    confidence: 1
+    similarity: 0.79739,
+    associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: BANK,
     homographC: 1,
     senseId: BANK_1_DICT_NOU_SENSE_3_ID,
-    confidence: 1
+    similarity: 0.09282,
+    associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: BANK,
     homographC: 1,
     senseId: BANK_1_DICT_NOU_SENSE_4_ID,
-    confidence: 1
+    similarity: 0.643,
+    associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: BANK,
     homographC: 1,
     senseId: BANK_1_DICT_VER_SENSE_1_ID,
-    confidence: 1
+    similarity: 0.71923,
+    associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: BANK,
     homographC: 1,
     senseId: BANK_1_DICT_VER_SENSE_2_ID,
-    confidence: 1
+    similarity: 0.39544,
+    associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: BANK,
     homographC: 1,
     senseId: BANK_1_DICT_VER_SENSE_3_ID,
-    confidence: 1
+    similarity: 0.68255,
+    associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: BANK,
     homographC: 1,
     senseId: BANK_1_DICT_VER_SENSE_4_ID,
-    confidence: 1
+    similarity: 0.35869,
+    associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: BANK,
     homographC: 1,
     senseId: BANK_1_DICT_VER_SENSE_5_ID,
-    confidence: 1
+    similarity: 0.30363,
+    associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: BANK,
     homographC: 2,
     senseId: BANK_2_DICT_NOU_SENSE_1_ID,
-    confidence: 1
+    similarity: 0.22706,
+    associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: BANK,
     homographC: 2,
     senseId: BANK_2_DICT_VER_SENSE_1_ID,
-    confidence: 1
+    similarity: 0.01549,
+    associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: SPEEDY,
-    homographC: 0,
+    homographC: null,
     senseId: SPEEDY_0_DICT_ADJ_SENSE_1_ID,
-    confidence: 1
+    similarity: 0.33095,
+    associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: SPEEDY,
-    homographC: 0,
+    homographC: null,
     senseId: SPEEDY_0_DICT_ADJ_SENSE_2_ID,
-    confidence: 1
+    similarity: 0.45837,
+    associationType: DictionaryOrThesaurus.dictionary
   },
+
   {
     oxId: SPEEDY,
-    homographC: 0,
+    homographC: null,
     senseId: FAST_1_DICT_ADJ_SENSE_1_ID,
-    confidence: 0.1
+    similarity: 0.381761462707106,
+    associationType: DictionaryOrThesaurus.thesaurus
   },
   {
     oxId: SPEEDY,
-    homographC: 0,
+    homographC: null,
     senseId: FAST_1_DICT_ADJ_SENSE_2_ID,
-    confidence: 0.1
+    similarity: 0.187514542615853,
+    associationType: DictionaryOrThesaurus.thesaurus
   },
   {
     oxId: SPEEDY,
-    homographC: 0,
+    homographC: null,
     senseId: FAST_1_DICT_ADJ_SENSE_3_ID,
-    confidence: 0.1
+    similarity: 0.257706585145461,
+    associationType: DictionaryOrThesaurus.thesaurus
   },
   {
     oxId: SPEEDY,
-    homographC: 0,
+    homographC: null,
     senseId: FAST_1_DICT_ADJ_SENSE_4_ID,
-    confidence: 0.1
+    similarity: 0.210540626877511,
+    associationType: DictionaryOrThesaurus.thesaurus
   },
   {
     oxId: SPEEDY,
-    homographC: 0,
+    homographC: null,
     senseId: FAST_1_DICT_ADJ_SENSE_5_ID,
-    confidence: 0.1
+    similarity: 0.0864320437801567,
+    associationType: DictionaryOrThesaurus.thesaurus
   },
   {
     oxId: SPEEDY,
-    homographC: 0,
+    homographC: null,
     senseId: FAST_1_DICT_ADJ_SENSE_6_ID,
-    confidence: 0.1
+    similarity: 0.238039137005623,
+    associationType: DictionaryOrThesaurus.thesaurus
   },
   {
     oxId: SPEEDY,
-    homographC: 0,
+    homographC: null,
     senseId: FAST_1_DICT_ADJ_SENSE_7_ID,
-    confidence: 0.1
+    similarity: 0.0864007882879364,
+    associationType: DictionaryOrThesaurus.thesaurus
   }
 ];
 

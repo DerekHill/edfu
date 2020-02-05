@@ -1,7 +1,7 @@
 // https://github.com/nestjs/nest/blob/master/sample/23-type-graphql/src/recipes/recipes.resolver.ts
 import { Resolver, Query, Args } from '@nestjs/graphql';
 import { EntriesService } from './entries.service';
-import { EntryDto, EntrySenseDto } from '@edfu/api-interfaces';
+import { EntryDto } from '@edfu/api-interfaces';
 import { NotFoundException } from '@nestjs/common';
 
 @Resolver('Entries')

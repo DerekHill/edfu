@@ -144,17 +144,18 @@ const ENTRIES: EntryRecordWithoutId[] = [
 ];
 
 const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
-  {
-    senseId: FOOD_0_DICT_NOU_SENSE_1_ID,
-    entryOxId: FOOD,
-    entryHomographC: 0,
-    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
-    thesaurusSenseIds: [],
-    lexicalCategory: LexicalCategory.noun,
-    example: 'we need food and water',
-    definition:
-      'any nutritious substance that people or animals eat or drink or that plants absorb in order to maintain life and growth'
-  },
+  // Skip to force error
+  //   {
+  //     senseId: FOOD_0_DICT_NOU_SENSE_1_ID,
+  //     entryOxId: FOOD,
+  //     entryHomographC: 0,
+  //     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+  //     thesaurusSenseIds: [],
+  //     lexicalCategory: LexicalCategory.noun,
+  //     example: 'we need food and water',
+  //     definition:
+  //       'any nutritious substance that people or animals eat or drink or that plants absorb in order to maintain life and growth'
+  //   },
   {
     senseId: FAST_1_DICT_ADJ_SENSE_1_ID,
     entryOxId: FAST,
@@ -770,7 +771,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
 const ENTRY_SENSES: EntrySenseRecordWithoutId[] = [
   {
     oxId: FOOD,
-    homographC: null,
+    homographC: 0,
     senseId: FOOD_0_DICT_NOU_SENSE_1_ID,
     similarity: 0.83124,
     associationType: DictionaryOrThesaurus.dictionary
@@ -938,14 +939,14 @@ const ENTRY_SENSES: EntrySenseRecordWithoutId[] = [
   },
   {
     oxId: SPEEDY,
-    homographC: null,
+    homographC: 0,
     senseId: SPEEDY_0_DICT_ADJ_SENSE_1_ID,
     similarity: 0.33095,
     associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: SPEEDY,
-    homographC: null,
+    homographC: 0,
     senseId: SPEEDY_0_DICT_ADJ_SENSE_2_ID,
     similarity: 0.45837,
     associationType: DictionaryOrThesaurus.dictionary
@@ -953,49 +954,49 @@ const ENTRY_SENSES: EntrySenseRecordWithoutId[] = [
 
   {
     oxId: SPEEDY,
-    homographC: null,
+    homographC: 0,
     senseId: FAST_1_DICT_ADJ_SENSE_1_ID,
     similarity: 0.381761462707106,
     associationType: DictionaryOrThesaurus.thesaurus
   },
   {
     oxId: SPEEDY,
-    homographC: null,
+    homographC: 0,
     senseId: FAST_1_DICT_ADJ_SENSE_2_ID,
     similarity: 0.187514542615853,
     associationType: DictionaryOrThesaurus.thesaurus
   },
   {
     oxId: SPEEDY,
-    homographC: null,
+    homographC: 0,
     senseId: FAST_1_DICT_ADJ_SENSE_3_ID,
     similarity: 0.257706585145461,
     associationType: DictionaryOrThesaurus.thesaurus
   },
   {
     oxId: SPEEDY,
-    homographC: null,
+    homographC: 0,
     senseId: FAST_1_DICT_ADJ_SENSE_4_ID,
     similarity: 0.210540626877511,
     associationType: DictionaryOrThesaurus.thesaurus
   },
   {
     oxId: SPEEDY,
-    homographC: null,
+    homographC: 0,
     senseId: FAST_1_DICT_ADJ_SENSE_5_ID,
     similarity: 0.0864320437801567,
     associationType: DictionaryOrThesaurus.thesaurus
   },
   {
     oxId: SPEEDY,
-    homographC: null,
+    homographC: 0,
     senseId: FAST_1_DICT_ADJ_SENSE_6_ID,
     similarity: 0.238039137005623,
     associationType: DictionaryOrThesaurus.thesaurus
   },
   {
     oxId: SPEEDY,
-    homographC: null,
+    homographC: 0,
     senseId: FAST_1_DICT_ADJ_SENSE_7_ID,
     similarity: 0.0864007882879364,
     associationType: DictionaryOrThesaurus.thesaurus

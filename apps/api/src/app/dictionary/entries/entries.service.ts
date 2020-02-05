@@ -20,7 +20,6 @@ import {
 } from '../senses/interfaces/sense.interface';
 import { HeadwordOrPhrase } from '../../enums';
 import { EntrySensesService } from '../entry-senses/entry-senses.service';
-import { EntrySenseRecord } from '../entry-senses/interfaces/entry-sense.interface';
 import { SimilarityService } from '../similarity/similarity.service';
 
 @Injectable()

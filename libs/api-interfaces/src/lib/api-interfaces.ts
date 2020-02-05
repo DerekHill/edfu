@@ -4,9 +4,6 @@ import { DictionaryOrThesaurus, LexicalCategory } from './enums';
 
 @ObjectType()
 export class EntryDto {
-  @Field(type => ID)
-  _id: ObjectId;
-
   @Field()
   readonly oxId: string;
 
@@ -21,18 +18,15 @@ export class EntryDto {
 }
 
 @ObjectType()
-export class SenseDto {
-  @Field(type => ID)
-  _id: ObjectId;
+export class SenseForEntryDto {
+  @Field()
+  readonly oxId: string;
+
+  @Field()
+  readonly homographC: number;
 
   @Field()
   readonly senseId: string;
-
-  @Field()
-  readonly entryOxId: string;
-
-  @Field()
-  readonly entryHomographC: number;
 
   @Field(type => String)
   readonly lexicalCategory?: LexicalCategory;
@@ -42,28 +36,6 @@ export class SenseDto {
 
   @Field()
   readonly definition: string;
-}
-
-@ObjectType()
-export class EntrySenseDto {
-  @Field(type => ID)
-  _id: ObjectId;
-
-  @Field()
-  readonly oxId: string;
-
-  @Field({ nullable: true })
-  readonly homographC: number;
-
-  @Field()
-  readonly senseId: string;
-
-  // 1) Believe that Typescript can't handle @FieldResolver().  So need to make this optional
-  // So can assign EntrySenseDto[] in EntrySensesResolver, even though this does not have senses
-  // 2) Make this nullable to deal with what happens if have entrySense but not corresponding sense
-  // Might be better way
-  @Field(type => SenseDto, { nullable: true })
-  readonly sense?: SenseDto;
 
   @Field(type => String)
   readonly associationType: DictionaryOrThesaurus;

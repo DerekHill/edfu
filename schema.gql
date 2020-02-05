@@ -4,20 +4,10 @@
 # -----------------------------------------------
 
 type EntryDto {
-  _id: ID!
   oxId: String!
   homographC: Float
   word: String!
   relatedEntriesAdded: Boolean!
-}
-
-type EntrySenseDto {
-  _id: ID!
-  oxId: String!
-  homographC: Float
-  senseId: String!
-  sense: SenseDto
-  confidence: Float!
 }
 
 type Query {
@@ -25,17 +15,16 @@ type Query {
   entry(id: String!): EntryDto!
   entriesAll: [EntryDto!]!
   search(search_string: String!): [EntryDto!]!
-  sense(senseId: String!): SenseDto!
-  senses(senseIds: [String!]!): [SenseDto!]!
-  entrySenses(homographC: Float!, oxId: String!): [EntrySenseDto!]!
+  sensesForEntry(homographC: Float!, oxId: String!): [SenseForEntryDto!]!
 }
 
-type SenseDto {
-  _id: ID!
+type SenseForEntryDto {
+  oxId: String!
+  homographC: Float!
   senseId: String!
-  entryOxId: String!
-  entryHomographC: Float!
   lexicalCategory: String!
   example: String!
   definition: String!
+  associationType: String!
+  similarity: Float!
 }

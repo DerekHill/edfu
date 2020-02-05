@@ -191,9 +191,9 @@ export class FirstComponent implements OnInit, OnDestroy {
   }
 
   onEntryClick(event, entry: EntryDto) {
-    console.log('entry');
+    // console.log('entry');
     // console.log(entry);
-    console.log(entry.oxId, entry.homographC);
+    console.log('onEntryClick', entry.oxId, entry.homographC);
     this.entrySensesSearchRef.setVariables({
       oxId: entry.oxId,
       homographC: entry.homographC

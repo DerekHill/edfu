@@ -11,11 +11,14 @@ import {
   ThesaurusSenseRecordWithoutId,
   LinkedSensePairing
 } from './interfaces/sense.interface';
-import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/api-interfaces';
+import {
+  DictionaryOrThesaurus,
+  LexicalCategory,
+  SenseForEntryDto
+} from '@edfu/api-interfaces';
 import { oc } from 'ts-optchain';
 import {
   OxSense,
-  OxThesaurusLink, // deprecate
   OxSubsense
 } from '../../oxford-api/interfaces/oxford-api.interface';
 import { EntrySensesService } from '../entry-senses/entry-senses.service';
@@ -144,6 +147,86 @@ export class SensesService {
       .lean()
       .exec();
   }
+
+  async getSensesForEntry(
+    oxId: string,
+    homographC: number
+  ): Promise<SenseForEntryDto[]> {
+    const entrySenses = await this.entrySensesService.findByEntryProperties(
+      oxId,
+      homographC
+    );
+
+    const entrySensesById = entrySenses.reduce((acc, curr) => {
+      acc[curr.senseId] = curr;
+      return acc;
+    }, {});
+
+    const senseIds = entrySenses.map(i => i.senseId);
+    const senses = await this.senseModel.find({ senseId: { $in: senseIds } });
+
+    return senses.map(sense => {
+      const senseId = sense.senseId;
+      return {
+        oxId: sense.entryOxId,
+        homographC: sense.entryHomographC,
+        senseId: sense.senseId,
+        LexicalCategory: sense.lexicalCategory,
+        example: sense.example,
+        definition: sense.definition,
+        associationType: entrySensesById[senseId].associationType,
+        similarity: entrySensesById[senseId].similarity
+      };
+    });
+
+    // map and remove nulls
+  }
+
+  //   @Field()
+  //   readonly oxId: string;
+
+  //   @Field()
+  //   readonly homographC: number;
+
+  //   @Field()
+  //   readonly senseId: string;
+
+  //   @Field(type => String)
+  //   readonly lexicalCategory?: LexicalCategory;
+
+  //   @Field()
+  //   readonly example: string;
+
+  //   @Field()
+  //   readonly definition: string;
+
+  //   @Field(type => String)
+  //   readonly associationType: DictionaryOrThesaurus;
+
+  //   @Field()
+  //   readonly similarity: number;
+
+  //   NetworkUser.findOne(
+  //     {
+  //       networkId: req.params.network_id,
+  //       userId: req.user._id
+  //     },
+  //     { networkId: 1 },
+  //     LEAN
+  //   )
+  //     .populate({
+  //       path: 'networkId',
+  //       model: 'Network',
+  //       select: NETWORK_PROJECTION
+  //     })
+  //     .then((networkUser: NetworkUserModel) => {
+  //       if (networkUser) {
+  //         return res.status(200).json(networkUser.networkId);
+  //       } else {
+  //         return res.status(403).json({ errorCode: '403' });
+  //       }
+  //     })
+  //     .catch(next);
 
   extractSynonyms(oxSense: OxSense): string[] {
     const res: string[] = [];

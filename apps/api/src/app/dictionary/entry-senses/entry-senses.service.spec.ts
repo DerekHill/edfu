@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { TestDatabaseModule } from '../../config/test-database.module';
 import { ENTRY_SENSE_COLLECTION_NAME } from '../../constants';
 import { EntrySenseSchema } from './schemas/entry-sense.schema';
+import { DictionaryOrThesaurus } from '@edfu/api-interfaces';
 
 describe('EntrySensesService', () => {
   let service: EntrySensesService;
@@ -23,7 +24,13 @@ describe('EntrySensesService', () => {
   });
 
   it('findOrCreate', async () => {
-    const res = await service.findOrCreate('oxID', 1, 'senseId', 0.5);
+    const res = await service.findOrCreate(
+      'oxID',
+      1,
+      'senseId',
+      DictionaryOrThesaurus.dictionary,
+      0.5
+    );
     expect(res).toBeDefined();
   });
 });

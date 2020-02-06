@@ -144,18 +144,17 @@ const ENTRIES: EntryRecordWithoutId[] = [
 ];
 
 const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
-  // Skip to force error
-  //   {
-  //     senseId: FOOD_0_DICT_NOU_SENSE_1_ID,
-  //     entryOxId: FOOD,
-  //     entryHomographC: 0,
-  //     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
-  //     thesaurusSenseIds: [],
-  //     lexicalCategory: LexicalCategory.noun,
-  //     example: 'we need food and water',
-  //     definition:
-  //       'any nutritious substance that people or animals eat or drink or that plants absorb in order to maintain life and growth'
-  //   },
+  {
+    senseId: FOOD_0_DICT_NOU_SENSE_1_ID,
+    entryOxId: FOOD,
+    entryHomographC: 0,
+    dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+    thesaurusSenseIds: [],
+    lexicalCategory: LexicalCategory.noun,
+    example: 'we need food and water',
+    definition:
+      'any nutritious substance that people or animals eat or drink or that plants absorb in order to maintain life and growth'
+  },
   {
     senseId: FAST_1_DICT_ADJ_SENSE_1_ID,
     entryOxId: FAST,

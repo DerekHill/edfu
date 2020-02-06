@@ -4,7 +4,11 @@ import { Observable, of, BehaviorSubject } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import gql from 'graphql-tag';
 import { Apollo, QueryRef } from 'apollo-angular';
-import { EntryDto, SenseForEntryDto } from '@edfu/api-interfaces';
+import {
+  EntryDto,
+  SenseForEntryDto,
+  LexicalCategory
+} from '@edfu/api-interfaces';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { ApolloQueryResult } from 'apollo-client';
 
@@ -79,8 +83,12 @@ export class FirstComponent implements OnInit, OnDestroy {
       query: gql`
         query EntrySensesQuery($oxId: String! = "", $homographC: Float! = 0) {
           sensesForEntry(oxId: $oxId, homographC: $homographC) {
+            oxId
             senseId
+            lexicalCategory
             example
+            associationType
+            similarity
           }
         }
       `
@@ -92,21 +100,17 @@ export class FirstComponent implements OnInit, OnDestroy {
 
     this.homographGroups$ = this.entries$.pipe(
       map(entries => {
-        return this.groupByHomographWord(entries);
+        return this._groupByHomographWord(entries);
       })
     );
 
     this.senses$ = this.sensesSearchRef.valueChanges.pipe(
-      map(({ data }: any) => data.sensesForEntry)
+      map(({ data }: any) => data.sensesForEntry),
+      map(x => {
+        console.log(x);
+        return x;
+      })
     );
-
-    // this.entrySenses$ = this.entrySensesSearchRef.valueChanges.pipe(
-    //   // Deal with this being null
-    //   map(x => {
-    //     console.log(x);
-    //     return x.data.entrySenses;
-    //   })
-    // );
 
     this.searchChars$.subscribe(input => {
       if (typeof input === 'string') {
@@ -120,12 +124,12 @@ export class FirstComponent implements OnInit, OnDestroy {
     });
 
     this.homographGroups$.subscribe(a => {
-      console.log('homographGroupSearchResults');
+      console.log('homographGroups (plural)');
       console.log(a);
     });
 
     this.homographGroup$.subscribe(group => {
-      console.log('group');
+      console.log('homographGroup (singular)');
       console.log(group);
     });
 
@@ -133,20 +137,13 @@ export class FirstComponent implements OnInit, OnDestroy {
       console.log('senses:');
       console.log(senses);
     });
-
-    // this.entrySenses$.subscribe(entrySenses => {
-    //   console.log('entrySenses');
-    //   console.log(entrySenses);
-    // });
   }
 
   onOptionSelected(group: HomographGroup) {
-    console.log(group);
     this.homographGroup$.next(group);
     if (group.entries.length === 1) {
       this.onEntryClick(null, group.entries[0]);
     }
-    // this.senseIds$.next(..);
   }
 
   displayFn(res?: any): string | undefined {
@@ -161,7 +158,8 @@ export class FirstComponent implements OnInit, OnDestroy {
     });
   }
 
-  groupByHomographWord(entries: EntryDto[]): HomographGroup[] {
+  _groupByHomographWord(entries: EntryDto[]): HomographGroup[] {
+    // console.log(LexicalCategory.noun);
     const entryGroupsKeyedByWord = entries.reduce((acc, cur, idx, src) => {
       (acc[cur.word] = acc[cur.word] || []).push(cur);
       return acc;
@@ -172,6 +170,10 @@ export class FirstComponent implements OnInit, OnDestroy {
       entries: entryGroupsKeyedByWord[key]
     }));
   }
+
+  //   _sortAndFilterSenses(senses: SenseForEntryDto[]) {}
+
+  //   private;
 
   ngOnDestroy() {}
 }

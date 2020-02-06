@@ -169,7 +169,7 @@ export class SensesService {
         oxId: sense.entryOxId,
         homographC: sense.entryHomographC,
         senseId: sense.senseId,
-        LexicalCategory: sense.lexicalCategory,
+        lexicalCategory: sense.lexicalCategory,
         example: sense.example,
         definition: sense.definition,
         associationType: entrySensesById[senseId].associationType,

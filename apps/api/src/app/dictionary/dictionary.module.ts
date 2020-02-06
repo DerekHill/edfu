@@ -47,7 +47,13 @@ import * as use from '@tensorflow-models/universal-sentence-encoder';
     {
       provide: TF_MODEL_NAME,
       useFactory: async () => {
-        return await use.load();
+        // SKIP_TENSORFLOW=yes ng run api:serve-console
+        // SKIP_TENSORFLOW=yes ng serve api
+        if (process.env.SKIP_TENSORFLOW === 'yes') {
+          return null;
+        } else {
+          return await use.load();
+        }
       }
     },
     SimilarityService

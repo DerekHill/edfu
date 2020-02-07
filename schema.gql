@@ -3,11 +3,27 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+enum DictionaryOrThesaurus {
+  dictionary
+  thesaurus
+}
+
 type EntryDto {
   oxId: String!
   homographC: Float
   word: String!
   relatedEntriesAdded: Boolean!
+}
+
+enum LexicalCategory {
+  noun
+  pronoun
+  verb
+  adjective
+  adverb
+  preposition
+  conjunction
+  interjection
 }
 
 type Query {
@@ -22,9 +38,9 @@ type SenseForEntryDto {
   oxId: String!
   homographC: Float!
   senseId: String!
-  lexicalCategory: String!
+  lexicalCategory: LexicalCategory!
   example: String!
   definition: String!
-  associationType: String!
+  associationType: DictionaryOrThesaurus!
   similarity: Float!
 }

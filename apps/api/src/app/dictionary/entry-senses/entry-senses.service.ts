@@ -6,7 +6,7 @@ import {
   EntrySenseDocument,
   EntrySenseRecord
 } from './interfaces/entry-sense.interface';
-import { DictionaryOrThesaurus } from '@edfu/api-interfaces';
+import { DictionaryOrThesaurus } from '@edfu/enums';
 
 @Injectable()
 export class EntrySensesService {

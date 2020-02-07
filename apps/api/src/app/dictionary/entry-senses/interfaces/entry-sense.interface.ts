@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
 import { ObjectId } from 'bson';
-import { DictionaryOrThesaurus } from '@edfu/api-interfaces';
+import { DictionaryOrThesaurus } from '@edfu/enums';
 
 export interface EntrySenseRecordWithoutId {
   readonly oxId: string;

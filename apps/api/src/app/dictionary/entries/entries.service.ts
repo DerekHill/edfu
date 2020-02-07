@@ -13,7 +13,7 @@ import {
 } from '../../oxford-searches/oxford-searches.service';
 import { OxfordSearchRecord } from '../../oxford-searches/interfaces/oxford-search.interface';
 import { SensesService } from '../senses/senses.service';
-import { LexicalCategory, DictionaryOrThesaurus } from '@edfu/api-interfaces';
+import { LexicalCategory, DictionaryOrThesaurus } from '@edfu/enums';
 import {
   DictionarySenseRecord,
   ThesaurusSenseRecord

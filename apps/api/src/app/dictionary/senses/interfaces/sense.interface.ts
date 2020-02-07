@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
 import { ObjectId } from 'bson';
-import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/api-interfaces';
+import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
 
 interface SharedRequiredProperties {
   readonly senseId: string;

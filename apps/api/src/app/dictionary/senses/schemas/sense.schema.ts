@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose';
 import {
   DICTIONARY_OR_THESAURUS_ALL_VALUES,
   LEXICAL_CATEGORY_ALL_VALUES
-} from '@edfu/api-interfaces';
+} from '@edfu/enums';
 
 export const SenseSchema = new mongoose.Schema({
   senseId: {

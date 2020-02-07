@@ -11,17 +11,14 @@ import {
   ThesaurusSenseRecordWithoutId,
   LinkedSensePairing
 } from './interfaces/sense.interface';
-import {
-  DictionaryOrThesaurus,
-  LexicalCategory,
-  SenseForEntryDto
-} from '@edfu/api-interfaces';
+import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
 import { oc } from 'ts-optchain';
 import {
   OxSense,
   OxSubsense
 } from '../../oxford-api/interfaces/oxford-api.interface';
 import { EntrySensesService } from '../entry-senses/entry-senses.service';
+import { SenseForEntryDto } from '@edfu/api-interfaces';
 
 const PROSCRIBED_REGISTERS = [
   'rare',

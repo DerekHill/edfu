@@ -1,6 +1,13 @@
-import { ObjectType, Field, Int, ID } from 'type-graphql';
-import { ObjectId } from 'bson';
-import { DictionaryOrThesaurus, LexicalCategory } from './enums';
+import { ObjectType, Field, Int, ID, registerEnumType } from 'type-graphql';
+import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
+
+registerEnumType(DictionaryOrThesaurus, {
+  name: 'DictionaryOrThesaurus'
+});
+
+registerEnumType(LexicalCategory, {
+  name: 'LexicalCategory'
+});
 
 @ObjectType()
 export class EntryDto {
@@ -28,7 +35,7 @@ export class SenseForEntryDto {
   @Field()
   readonly senseId: string;
 
-  @Field(type => String)
+  @Field(type => LexicalCategory)
   readonly lexicalCategory?: LexicalCategory;
 
   @Field()
@@ -37,7 +44,7 @@ export class SenseForEntryDto {
   @Field()
   readonly definition: string;
 
-  @Field(type => String)
+  @Field(type => DictionaryOrThesaurus)
   readonly associationType: DictionaryOrThesaurus;
 
   @Field()

@@ -1,9 +1,8 @@
-import { Component } from '@angular/core';
 import { TestBed, async } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
-import { MatToolbarModule } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {

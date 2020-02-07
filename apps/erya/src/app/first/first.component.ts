@@ -4,11 +4,8 @@ import { Observable, of, BehaviorSubject } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import gql from 'graphql-tag';
 import { Apollo, QueryRef } from 'apollo-angular';
-import {
-  EntryDto,
-  SenseForEntryDto,
-  LexicalCategory
-} from '@edfu/api-interfaces';
+import { EntryDto, SenseForEntryDto } from '@edfu/api-interfaces';
+import { DictionaryOrThesaurus } from '@edfu/enums';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { ApolloQueryResult } from 'apollo-client';
 
@@ -32,6 +29,11 @@ interface SenseSearchVariables {
 interface HomographGroup {
   word: string;
   entries: EntryDto[];
+}
+
+enum Blah {
+  noun = 'noun',
+  pronoun = 'pronoun'
 }
 
 @Component({
@@ -105,11 +107,13 @@ export class FirstComponent implements OnInit, OnDestroy {
     );
 
     this.senses$ = this.sensesSearchRef.valueChanges.pipe(
-      map(({ data }: any) => data.sensesForEntry),
-      map(x => {
-        console.log(x);
-        return x;
-      })
+      map(({ data }: any) => data.sensesForEntry)
+      //   map(senses => {
+      // return this._sortAndFilterSenses(senses);
+      // console.log(x);
+      // return x;
+      //   }
+      //   )
     );
 
     this.searchChars$.subscribe(input => {
@@ -159,7 +163,6 @@ export class FirstComponent implements OnInit, OnDestroy {
   }
 
   _groupByHomographWord(entries: EntryDto[]): HomographGroup[] {
-    // console.log(LexicalCategory.noun);
     const entryGroupsKeyedByWord = entries.reduce((acc, cur, idx, src) => {
       (acc[cur.word] = acc[cur.word] || []).push(cur);
       return acc;
@@ -171,7 +174,29 @@ export class FirstComponent implements OnInit, OnDestroy {
     }));
   }
 
-  //   _sortAndFilterSenses(senses: SenseForEntryDto[]) {}
+  _sortAndFilterSenses(senses: SenseForEntryDto[]) {
+    return senses.sort(this._compareSenses);
+  }
+
+  _compareSenses(a: SenseForEntryDto, b: SenseForEntryDto) {
+    console.log('Blah.noun', Blah.noun);
+    console.log(DictionaryOrThesaurus.dictionary);
+    return 1;
+    // console.log(LexicalCategory.noun);
+    // if (a.associationType !== b.associationType) {
+    //   if (a.associationType === DictionaryOrThesaurus.dictionary) {
+    // return -1;
+    //   } else {
+    // return 1;
+    //   }
+    // } else {
+    //   if (a.similarity > b.similarity) {
+    //     return -1;
+    //   } else {
+    //     return 1;
+    //   }
+    // }
+  }
 
   //   private;
 

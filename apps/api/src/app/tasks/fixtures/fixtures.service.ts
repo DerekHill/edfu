@@ -16,7 +16,7 @@ import {
   SenseDocument
 } from '../../dictionary/senses/interfaces/sense.interface';
 import { SignRecordWithoutId } from '../../dictionary/signs/interfaces/sign.interface';
-import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/api-interfaces';
+import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
 import { HeadwordOrPhrase } from '../../enums';
 import { EntrySenseRecordWithoutId } from '../../dictionary/entry-senses/interfaces/entry-sense.interface';
 

@@ -4,7 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { TestDatabaseModule } from '../../config/test-database.module';
 import { ENTRY_SENSE_COLLECTION_NAME } from '../../constants';
 import { EntrySenseSchema } from './schemas/entry-sense.schema';
-import { DictionaryOrThesaurus } from '@edfu/api-interfaces';
+import { DictionaryOrThesaurus } from '@edfu/enums';
 
 describe('EntrySensesService', () => {
   let service: EntrySensesService;

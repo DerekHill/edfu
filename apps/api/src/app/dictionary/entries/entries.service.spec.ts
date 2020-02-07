@@ -22,7 +22,7 @@ import {
   LinkedSensePairing
 } from '../senses/interfaces/sense.interface';
 import { HeadwordOrPhrase } from '../../enums';
-import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/api-interfaces';
+import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
 import { EntrySenseRecord } from '../entry-senses/interfaces/entry-sense.interface';
 import { EntrySensesService } from '../entry-senses/entry-senses.service';
 import { SimilarityService } from '../similarity/similarity.service';

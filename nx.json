@@ -9,7 +9,8 @@
   },
   "projects": {
     "erya-e2e": {
-      "tags": []
+      "tags": [],
+      "implicitDependencies": ["erya"]
     },
     "erya": {
       "tags": []
@@ -18,6 +19,9 @@
       "tags": []
     },
     "api-interfaces": {
+      "tags": []
+    },
+    "enums": {
       "tags": []
     }
   }

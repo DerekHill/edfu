@@ -109,11 +109,9 @@ export class FirstComponent implements OnInit, OnDestroy {
 
     this.senses$ = this.sensesSearchRef.valueChanges.pipe(
       map(({ data }: any) => data.sensesForEntry),
-      map(senses => {
-        return this._sortAndFilterSenses(senses);
-        // console.log(x);
-        // return x;
-      })
+      map(senses => this._sortSenses(senses)),
+      map(senses => this._groupAndFilterByLexicalCategory(senses))
+      //   _groupAndFilterByLexicalCategory
     );
 
     this.searchChars$.subscribe(input => {
@@ -174,12 +172,11 @@ export class FirstComponent implements OnInit, OnDestroy {
     }));
   }
 
-  _sortAndFilterSenses(senses: SenseForEntryDto[]) {
+  _sortSenses(senses: SenseForEntryDto[]): SenseForEntryDto[] {
     return senses.sort(this._compareSenses);
   }
 
   _compareSenses(a: SenseForEntryDto, b: SenseForEntryDto) {
-    console.log(LexicalCategory.noun);
     if (a.associationType !== b.associationType) {
       if (a.associationType === DictionaryOrThesaurus.dictionary) {
         return -1;
@@ -187,12 +184,43 @@ export class FirstComponent implements OnInit, OnDestroy {
         return 1;
       }
     } else {
-      if (a.similarity > b.similarity) {
-        return -1;
+      if (a.associationType === DictionaryOrThesaurus.dictionary) {
+        if (a.apiSenseIndex < b.apiSenseIndex) {
+          return -1;
+        } else {
+          return 1;
+        }
       } else {
-        return 1;
+        if (a.similarity > b.similarity) {
+          return -1;
+        } else {
+          return 1;
+        }
       }
     }
+  }
+
+  _groupAndFilterByLexicalCategory(
+    senses: SenseForEntryDto[]
+  ): SenseForEntryDto[] {
+    const categoryOrder = senses.reduce((acc, curr) => {
+      const cat = curr.lexicalCategory;
+      if (!acc.includes(cat)) {
+        acc.push(cat);
+      }
+      return acc;
+    }, []);
+
+    const grouped = [];
+    for (const cat of categoryOrder) {
+      for (const sense of senses) {
+        if (sense.lexicalCategory === cat) {
+          grouped.push(sense);
+        }
+      }
+    }
+
+    return grouped;
   }
 
   ngOnDestroy() {}

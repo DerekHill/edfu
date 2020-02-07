@@ -166,7 +166,6 @@ export class SensesService {
 
     return senses.map(sense => {
       const senseId = sense.senseId;
-      console.log('sense.apiSenseIndex', sense.apiSenseIndex);
       return {
         oxId: sense.entryOxId,
         homographC: sense.entryHomographC,

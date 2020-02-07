@@ -12,6 +12,46 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { LexicalCategory, DictionaryOrThesaurus } from '@edfu/enums';
 
+const createSenseWithDefaults = (params: any): SenseForEntryDto => {
+  const defaults = {
+    senseId: 'senseId',
+    lexicalCategory: LexicalCategory.noun,
+    apiSenseIndex: 0,
+    associationType: DictionaryOrThesaurus.dictionary,
+    similarity: 1
+  };
+
+  const merged = { ...defaults, ...params };
+
+  return createSense(
+    merged.senseId,
+    merged.lexicalCategory,
+    merged.apiSenseIndex,
+    merged.associationType,
+    merged.similarity
+  );
+};
+
+const createSense = (
+  senseId: string,
+  lexicalCategory: LexicalCategory,
+  apiSenseIndex: number,
+  associationType: DictionaryOrThesaurus,
+  similarity: number
+): SenseForEntryDto => {
+  return {
+    oxId: 'oxId',
+    homographC: 0,
+    senseId: senseId,
+    lexicalCategory: lexicalCategory,
+    apiSenseIndex: apiSenseIndex,
+    example: 'example',
+    definition: 'definition',
+    associationType: associationType,
+    similarity: similarity
+  };
+};
+
 describe('FirstComponent', () => {
   let component: FirstComponent;
   let fixture: ComponentFixture<FirstComponent>;
@@ -69,48 +109,75 @@ describe('FirstComponent', () => {
     });
   });
 
-  describe('_sortAndFilterSenses()', () => {
-    it('sorts by associationType and similarity', () => {
-      const FIRST = 'should_be_first_because_dictionary_with_good_similarity';
-      const SECOND = 'should_be_second_because_dictionary_with_poor_similarity';
-      const THIRD = 'should_be_last_because_thesaurus';
+  describe('_sortSenses()', () => {
+    it('sorts first by associationType, then index for dictionary and similarity for thesaurus', () => {
+      const FIRST = 'should_be_first_because_dictionary_with_low_index';
+      const SECOND = 'should_be_second_because_dictionary_with_high_index';
+      const THIRD = 'should_be_third_because_thesaurus_with_high_similarity';
+      const FOURTH = 'should_be_fourth_because_thesaurus_with_low_similarity';
+      const lowSimilarity = 0.3;
+      const highSimilarity = 0.8;
+      const lowApiSenseIndex = 0;
+      const highApiSenseIndex = 1;
       const senses: SenseForEntryDto[] = [
-        {
-          oxId: 'oxId',
-          homographC: 0,
-          senseId: THIRD,
-          lexicalCategory: LexicalCategory.noun,
-          apiSenseIndex: 0,
-          example: 'example',
-          definition: 'definition',
-          associationType: DictionaryOrThesaurus.thesaurus,
-          similarity: 0.5
-        },
-        {
-          oxId: 'oxId',
-          homographC: 0,
-          senseId: SECOND,
-          lexicalCategory: LexicalCategory.noun,
-          apiSenseIndex: 0,
-          example: 'example',
-          definition: 'definition',
-          associationType: DictionaryOrThesaurus.dictionary,
-          similarity: 0.5
-        },
-        {
-          oxId: 'oxId',
-          homographC: 0,
-          senseId: FIRST,
-          lexicalCategory: LexicalCategory.noun,
-          apiSenseIndex: 0,
-          example: 'example',
-          definition: 'definition',
-          associationType: DictionaryOrThesaurus.dictionary,
-          similarity: 1
-        }
+        createSense(
+          FOURTH,
+          LexicalCategory.noun,
+          lowApiSenseIndex,
+          DictionaryOrThesaurus.thesaurus,
+          lowSimilarity
+        ),
+        createSense(
+          THIRD,
+          LexicalCategory.noun,
+          lowApiSenseIndex,
+          DictionaryOrThesaurus.thesaurus,
+          highSimilarity
+        ),
+        createSense(
+          SECOND,
+          LexicalCategory.noun,
+          highApiSenseIndex,
+          DictionaryOrThesaurus.dictionary,
+          highSimilarity
+        ),
+        createSense(
+          FIRST,
+          LexicalCategory.noun,
+          lowApiSenseIndex,
+          DictionaryOrThesaurus.dictionary,
+          highSimilarity
+        )
       ];
-      const res = component._sortAndFilterSenses(senses);
-      expect(res.map(r => r.senseId)).toEqual([FIRST, SECOND, THIRD]);
+      const res = component._sortSenses(senses);
+      expect(res.map(r => r.senseId)).toEqual([FIRST, SECOND, THIRD, FOURTH]);
+    });
+  });
+
+  describe('_groupAndFilterByLexicalCategory()', () => {
+    it.only('works', () => {
+      const NOUN1 = 'noun1';
+      const VERB = 'verb';
+      const NOUN2 = 'noun2';
+      const senses: SenseForEntryDto[] = [
+        createSenseWithDefaults({
+          senseId: NOUN1,
+          lexicalCategory: LexicalCategory.noun
+        }),
+        createSenseWithDefaults({
+          senseId: VERB,
+          lexicalCategory: LexicalCategory.verb
+        }),
+        createSenseWithDefaults({
+          senseId: NOUN2,
+          lexicalCategory: LexicalCategory.noun
+        })
+      ];
+      const res = component._groupAndFilterByLexicalCategory(senses);
+      expect(res.map(r => r.senseId)).toEqual([NOUN1, NOUN2, VERB]);
+
+      //   console.log(createSenseWithDefaults({}));
+      //   console.log('ho');
     });
   });
 });

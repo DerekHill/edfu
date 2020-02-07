@@ -39,6 +39,9 @@ export class SenseForEntryDto {
   readonly lexicalCategory?: LexicalCategory;
 
   @Field()
+  readonly apiSenseIndex: number;
+
+  @Field()
   readonly example: string;
 
   @Field()

@@ -18,6 +18,10 @@ export const SenseSchema = new mongoose.Schema({
     type: String,
     enum: LEXICAL_CATEGORY_ALL_VALUES
   },
+  apiSenseIndex: {
+    type: Number,
+    required: true
+  },
   example: {
     type: String,
     required: true

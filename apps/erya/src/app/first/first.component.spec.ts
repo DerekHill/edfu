@@ -69,15 +69,29 @@ describe('FirstComponent', () => {
     });
   });
 
-  describe.only('_sortAndFilterSenses()', () => {
-    it('works', () => {
-      console.log('foo');
+  describe('_sortAndFilterSenses()', () => {
+    it('sorts by associationType and similarity', () => {
+      const FIRST = 'should_be_first_because_dictionary_with_good_similarity';
+      const SECOND = 'should_be_second_because_dictionary_with_poor_similarity';
+      const THIRD = 'should_be_last_because_thesaurus';
       const senses: SenseForEntryDto[] = [
         {
           oxId: 'oxId',
           homographC: 0,
-          senseId: 'senseId',
+          senseId: THIRD,
           lexicalCategory: LexicalCategory.noun,
+          apiSenseIndex: 0,
+          example: 'example',
+          definition: 'definition',
+          associationType: DictionaryOrThesaurus.thesaurus,
+          similarity: 0.5
+        },
+        {
+          oxId: 'oxId',
+          homographC: 0,
+          senseId: SECOND,
+          lexicalCategory: LexicalCategory.noun,
+          apiSenseIndex: 0,
           example: 'example',
           definition: 'definition',
           associationType: DictionaryOrThesaurus.dictionary,
@@ -86,16 +100,17 @@ describe('FirstComponent', () => {
         {
           oxId: 'oxId',
           homographC: 0,
-          senseId: 'senseId',
+          senseId: FIRST,
           lexicalCategory: LexicalCategory.noun,
+          apiSenseIndex: 0,
           example: 'example',
           definition: 'definition',
-          associationType: DictionaryOrThesaurus.thesaurus,
-          similarity: 0.5
+          associationType: DictionaryOrThesaurus.dictionary,
+          similarity: 1
         }
       ];
       const res = component._sortAndFilterSenses(senses);
-      console.log(res);
+      expect(res.map(r => r.senseId)).toEqual([FIRST, SECOND, THIRD]);
     });
   });
 });

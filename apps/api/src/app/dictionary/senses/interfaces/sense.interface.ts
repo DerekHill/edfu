@@ -7,6 +7,7 @@ interface SharedRequiredProperties {
   readonly entryOxId: string;
   readonly entryHomographC: number;
   readonly lexicalCategory: LexicalCategory;
+  readonly apiSenseIndex: number;
   readonly example: string;
   readonly dictionaryOrThesaurus: DictionaryOrThesaurus;
 }

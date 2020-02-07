@@ -39,6 +39,7 @@ type SenseForEntryDto {
   homographC: Float!
   senseId: String!
   lexicalCategory: LexicalCategory!
+  apiSenseIndex: Float!
   example: String!
   definition: String!
   associationType: DictionaryOrThesaurus!

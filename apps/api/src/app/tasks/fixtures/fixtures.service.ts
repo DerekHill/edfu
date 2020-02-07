@@ -151,6 +151,7 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     thesaurusSenseIds: [],
     lexicalCategory: LexicalCategory.noun,
+    apiSenseIndex: 0,
     example: 'we need food and water',
     definition:
       'any nutritious substance that people or animals eat or drink or that plants absorb in order to maintain life and growth'
@@ -161,6 +162,7 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adjective,
+    apiSenseIndex: 0,
     thesaurusSenseIds: [FAST_1_THES_ADJ_SENSE_1_ID],
     example: 'a fast and powerful car',
     definition: 'moving or capable of moving at high speed'
@@ -171,6 +173,7 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adjective,
+    apiSenseIndex: 1,
     thesaurusSenseIds: [],
     example: 'I keep my watch fifteen minutes fast',
     definition: '(of a clock or watch) showing a time ahead of the correct time'
@@ -181,6 +184,7 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adjective,
+    apiSenseIndex: 2,
     thesaurusSenseIds: [FAST_1_THES_ADJ_SENSE_2_ID, 't_en_gb0005497.012'],
     example: 'he made a rope fast to each corner',
     definition: 'firmly fixed or attached'
@@ -191,6 +195,7 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adjective,
+    apiSenseIndex: 3,
     thesaurusSenseIds: [],
     example: 'a 35-mm colour film which is ten times faster than Kodacolor II',
     definition: '(of a film) needing only a short exposure'
@@ -201,6 +206,7 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adjective,
+    apiSenseIndex: 4,
     thesaurusSenseIds: [FAST_1_THES_ADJ_SENSE_3_ID],
     example: 'the dyes are boiled with the yarn to produce a fast colour',
     definition: '(of a dye) not fading in light or when washed'
@@ -211,6 +217,7 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adjective,
+    apiSenseIndex: 5,
     thesaurusSenseIds: [FAST_1_THES_ADJ_SENSE_6_ID],
     example: 'the fast life she led in London',
     definition:
@@ -222,6 +229,7 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adjective,
+    apiSenseIndex: 6,
     thesaurusSenseIds: [],
     example: 'Mammy said, ‘Stop asking questions, you too damn farse.’',
     definition: '(of a person) prone to act in an unacceptably familiar way'
@@ -232,6 +240,7 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adverb,
+    apiSenseIndex: 0,
     thesaurusSenseIds: [],
     example: 'he was driving too fast',
     definition: 'at high speed'
@@ -242,6 +251,7 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adverb,
+    apiSenseIndex: 1,
     thesaurusSenseIds: [],
     example: 'the ship was held fast by the anchor chain',
     definition: 'so as to be hard to move; securely'
@@ -252,6 +262,7 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adverb,
+    apiSenseIndex: 2,
     thesaurusSenseIds: [],
     example: 'they were too fast asleep to reply',
     definition: 'so as to be hard to wake'
@@ -262,6 +273,7 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
     entryHomographC: 2,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.verb,
+    apiSenseIndex: 0,
     thesaurusSenseIds: [FAST_2_THES_VER_SENSE_1_ID],
     example: 'the ministry instructed people to fast',
     definition:
@@ -273,6 +285,7 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
     entryHomographC: 2,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.noun,
+    apiSenseIndex: 0,
     thesaurusSenseIds: [FAST_2_THES_NOU_SENSE_1_ID],
     example: 'a five-day fast',
     definition: 'an act or period of fasting'
@@ -283,6 +296,7 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.noun,
+    apiSenseIndex: 0,
     thesaurusSenseIds: [BANK_1_THES_NOU_SENSE_1_ID],
     example: 'willows lined the bank of the stream',
     definition: 'the land alongside or sloping down to a river or lake'
@@ -293,6 +307,7 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.noun,
+    apiSenseIndex: 1,
     thesaurusSenseIds: [BANK_1_THES_NOU_SENSE_2_ID],
     example: 'a grassy bank',
     definition: 'a long, high mass or mound of a particular substance'
@@ -303,6 +318,7 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.noun,
+    apiSenseIndex: 2,
     thesaurusSenseIds: [BANK_1_THES_NOU_SENSE_3_ID],
     example:
       'the DJ had big banks of lights and speakers on either side of his console',
@@ -315,6 +331,7 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.noun,
+    apiSenseIndex: 3,
     thesaurusSenseIds: [],
     example: 'a bank shot',
     definition: 'the cushion of a pool table'
@@ -325,6 +342,7 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.verb,
+    apiSenseIndex: 0,
     thesaurusSenseIds: [BANK_1_THES_VER_SENSE_1_ID],
     example: 'the rain banked the soil up behind the gate',
     definition: 'heap (a substance) into a mass or mound'
@@ -335,6 +353,7 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.verb,
+    apiSenseIndex: 1,
     thesaurusSenseIds: [BANK_1_THES_VER_SENSE_3_ID],
     example: 'the plane banked as if to return to the airport',
     definition:
@@ -346,6 +365,7 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.verb,
+    apiSenseIndex: 2,
     thesaurusSenseIds: [],
     example:
       'he has built a four-cylinder locomotive for banking trains up the Lickey incline',
@@ -359,6 +379,7 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     thesaurusSenseIds: [],
     lexicalCategory: LexicalCategory.verb,
+    apiSenseIndex: 3,
     example: 'it was the biggest rainbow trout that had ever been banked',
     definition: '(of an angler) succeed in landing (a fish)'
   },
@@ -369,6 +390,7 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     thesaurusSenseIds: [],
     lexicalCategory: LexicalCategory.verb,
+    apiSenseIndex: 4,
     example: 'I banked the eight ball off two cushions',
     definition:
       'in pool) play (a ball) so that it rebounds off a surface such as a cushion'
@@ -379,6 +401,7 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
     entryHomographC: 2,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.noun,
+    apiSenseIndex: 0,
     thesaurusSenseIds: [BANK_2_THES_NOU_SENSE_1_ID],
     example: 'a bank account',
     definition:
@@ -390,6 +413,7 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
     entryHomographC: 2,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.verb,
+    apiSenseIndex: 0,
     thesaurusSenseIds: [BANK_2_THES_VER_SENSE_1_ID, BANK_2_THES_VER_SENSE_2_ID],
     example: 'she may have banked a cheque in the wrong account',
     definition: 'deposit (money or valuables) in a bank'
@@ -400,6 +424,7 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
     entryHomographC: 0,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adjective,
+    apiSenseIndex: 0,
     thesaurusSenseIds: [SPEEDY_0_THES_ADJ_SENSE_1_ID],
     example: 'a speedy recovery',
     definition: 'done or occurring quickly'
@@ -410,6 +435,7 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
     entryHomographC: 0,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adjective,
+    apiSenseIndex: 1,
     thesaurusSenseIds: [SPEEDY_0_THES_ADJ_SENSE_2_ID],
     example: 'a speedy winger',
     definition: 'moving quickly'
@@ -423,6 +449,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
     entryHomographC: 0,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.noun,
+    apiSenseIndex: 1,
     example: 'he went three days without food',
     synonyms: ['nourishment', 'sustenance', 'nutriment', 'subsistence']
   },
@@ -432,6 +459,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
     entryHomographC: 0,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.noun,
+    apiSenseIndex: 2,
     example: 'food for the cattle and horses',
     synonyms: ['fodder', 'feed', 'forage']
   },
@@ -441,6 +469,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adjective,
+    apiSenseIndex: 0,
     example: 'a fast sports car',
     synonyms: ['speedy', 'quick', 'swift', 'rapid']
   },
@@ -450,6 +479,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adjective,
+    apiSenseIndex: 1,
     example: 'his hand slammed against the door, holding it fast',
     synonyms: ['secure', 'secured', 'fastened', 'tight']
   },
@@ -459,6 +489,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adjective,
+    apiSenseIndex: 2,
     example: 'the dyes are boiled with yarn to produce a fast colour',
     synonyms: ['indelible', 'lasting', 'permanent', 'stable']
   },
@@ -468,6 +499,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adjective,
+    apiSenseIndex: 3,
     example: 'they remained fast friends',
     synonyms: [
       'loyal',
@@ -488,6 +520,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adjective,
+    apiSenseIndex: 4,
     example: 'a fast woman',
     synonyms: [
       'promiscuous',
@@ -505,6 +538,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adjective,
+    apiSenseIndex: 5,
     example: 'the fast life she led in London',
     synonyms: [
       'wild',
@@ -532,6 +566,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adverb,
+    apiSenseIndex: 0,
     example: 'she drove fast towards the gates',
     synonyms: ['quickly', 'rapidly', 'swiftly', 'speedily', 'briskly']
   },
@@ -541,6 +576,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adverb,
+    apiSenseIndex: 1,
     example: 'his wheels were stuck fast',
     synonyms: ['securely', 'tightly', 'immovably', 'fixedly', 'firmly']
   },
@@ -550,6 +586,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adverb,
+    apiSenseIndex: 2,
     example: "Richard's fast asleep",
     synonyms: ['deeply', 'sound', 'completely']
   },
@@ -559,6 +596,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adverb,
+    apiSenseIndex: 3,
     example: 'she lived fast and dangerously',
     synonyms: [
       'wildly',
@@ -577,6 +615,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
     entryHomographC: 2,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.verb,
+    apiSenseIndex: 0,
     example: 'the ministry instructed people to fast, pray, and read scripture',
     synonyms: []
   },
@@ -586,6 +625,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
     entryHomographC: 2,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.noun,
+    apiSenseIndex: 0,
     example: 'a five-day fast',
     synonyms: []
   },
@@ -595,6 +635,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.noun,
+    apiSenseIndex: 0,
     example: 'the banks of Lake Michigan',
     synonyms: [
       'edge',
@@ -627,6 +668,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.noun,
+    apiSenseIndex: 1,
     example: 'a grassy bank',
     synonyms: [
       'slope',
@@ -644,6 +686,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.noun,
+    apiSenseIndex: 2,
     example: 'a bank of switches',
     synonyms: ['array', 'row', 'line', 'tier', 'group', 'series']
   },
@@ -653,6 +696,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.verb,
+    apiSenseIndex: 0,
     example: 'they banked up the earth around their hollow',
     synonyms: ['stack', 'heap', 'pile']
   },
@@ -662,6 +706,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.verb,
+    apiSenseIndex: 1,
     example: 'she banked up the fire',
     synonyms: ['damp', 'smother', 'stifle']
   },
@@ -671,6 +716,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.verb,
+    apiSenseIndex: 2,
     example: 'she taught him how to bank the plane',
     synonyms: [
       'tilt',
@@ -693,6 +739,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.noun,
+    apiSenseIndex: 0,
     example: 'I paid the money into my bank',
     synonyms: []
   },
@@ -702,6 +749,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.noun,
+    apiSenseIndex: 1,
     example: 'a blood bank',
     synonyms: [
       'store',
@@ -723,6 +771,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.noun,
+    apiSenseIndex: 0,
     example: 'I banked the cheque',
     synonyms: ['deposit']
   },
@@ -732,6 +781,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
     entryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.noun,
+    apiSenseIndex: 1,
     example: 'the family has banked with Coutts for generations',
     synonyms: ['use']
   },
@@ -741,6 +791,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
     entryHomographC: 0,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adjective,
+    apiSenseIndex: 0,
     example: 'a speedy reply',
     synonyms: [
       'rapid',
@@ -762,6 +813,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
     entryHomographC: 0,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adjective,
+    apiSenseIndex: 1,
     example: 'speedy hatchback',
     synonyms: ['fast']
   }
@@ -772,182 +824,182 @@ const ENTRY_SENSES: EntrySenseRecordWithoutId[] = [
     oxId: FOOD,
     homographC: 0,
     senseId: FOOD_0_DICT_NOU_SENSE_1_ID,
-    similarity: 0.83124,
+    similarity: 1,
     associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: FAST,
     homographC: 1,
     senseId: FAST_1_DICT_ADJ_SENSE_1_ID,
-    similarity: 0.8537,
+    similarity: 1,
     associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: FAST,
     homographC: 1,
     senseId: FAST_1_DICT_ADJ_SENSE_2_ID,
-    similarity: 0.0088,
+    similarity: 1,
     associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: FAST,
     homographC: 1,
     senseId: FAST_1_DICT_ADJ_SENSE_3_ID,
-    similarity: 0.76714,
+    similarity: 1,
     associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: FAST,
     homographC: 1,
     senseId: FAST_1_DICT_ADJ_SENSE_4_ID,
-    similarity: 0.55251,
+    similarity: 1,
     associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: FAST,
     homographC: 1,
     senseId: FAST_1_DICT_ADJ_SENSE_5_ID,
-    similarity: 0.62822,
+    similarity: 1,
     associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: FAST,
     homographC: 1,
     senseId: FAST_1_DICT_ADJ_SENSE_6_ID,
-    similarity: 0.35977,
+    similarity: 1,
     associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: FAST,
     homographC: 1,
     senseId: FAST_1_DICT_ADJ_SENSE_7_ID,
-    similarity: 0.90314,
+    similarity: 1,
     associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: FAST,
     homographC: 1,
     senseId: FAST_1_DICT_ADV_SENSE_1_ID,
-    similarity: 0.92621,
+    similarity: 1,
     associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: FAST,
     homographC: 1,
     senseId: FAST_1_DICT_ADV_SENSE_2_ID,
-    similarity: 0.31747,
+    similarity: 1,
     associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: FAST,
     homographC: 1,
     senseId: FAST_1_DICT_ADV_SENSE_3_ID,
-    similarity: 0.34111,
+    similarity: 1,
     associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: FAST,
     homographC: 2,
     senseId: FAST_2_DICT_VER_SENSE_1_ID,
-    similarity: 0.16677,
+    similarity: 1,
     associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: FAST,
     homographC: 2,
     senseId: FAST_2_DICT_NOU_SENSE_1_ID,
-    similarity: 0.57127,
+    similarity: 1,
     associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: BANK,
     homographC: 1,
     senseId: BANK_1_DICT_NOU_SENSE_1_ID,
-    similarity: 0.83778,
+    similarity: 1,
     associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: BANK,
     homographC: 1,
     senseId: BANK_1_DICT_NOU_SENSE_2_ID,
-    similarity: 0.79739,
+    similarity: 1,
     associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: BANK,
     homographC: 1,
     senseId: BANK_1_DICT_NOU_SENSE_3_ID,
-    similarity: 0.09282,
+    similarity: 1,
     associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: BANK,
     homographC: 1,
     senseId: BANK_1_DICT_NOU_SENSE_4_ID,
-    similarity: 0.643,
+    similarity: 1,
     associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: BANK,
     homographC: 1,
     senseId: BANK_1_DICT_VER_SENSE_1_ID,
-    similarity: 0.71923,
+    similarity: 1,
     associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: BANK,
     homographC: 1,
     senseId: BANK_1_DICT_VER_SENSE_2_ID,
-    similarity: 0.39544,
+    similarity: 1,
     associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: BANK,
     homographC: 1,
     senseId: BANK_1_DICT_VER_SENSE_3_ID,
-    similarity: 0.68255,
+    similarity: 1,
     associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: BANK,
     homographC: 1,
     senseId: BANK_1_DICT_VER_SENSE_4_ID,
-    similarity: 0.35869,
+    similarity: 1,
     associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: BANK,
     homographC: 1,
     senseId: BANK_1_DICT_VER_SENSE_5_ID,
-    similarity: 0.30363,
+    similarity: 1,
     associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: BANK,
     homographC: 2,
     senseId: BANK_2_DICT_NOU_SENSE_1_ID,
-    similarity: 0.22706,
+    similarity: 1,
     associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: BANK,
     homographC: 2,
     senseId: BANK_2_DICT_VER_SENSE_1_ID,
-    similarity: 0.01549,
+    similarity: 1,
     associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: SPEEDY,
     homographC: 0,
     senseId: SPEEDY_0_DICT_ADJ_SENSE_1_ID,
-    similarity: 0.33095,
+    similarity: 1,
     associationType: DictionaryOrThesaurus.dictionary
   },
   {
     oxId: SPEEDY,
     homographC: 0,
     senseId: SPEEDY_0_DICT_ADJ_SENSE_2_ID,
-    similarity: 0.45837,
+    similarity: 1,
     associationType: DictionaryOrThesaurus.dictionary
   },
 

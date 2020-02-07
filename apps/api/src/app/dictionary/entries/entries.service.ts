@@ -72,16 +72,17 @@ export class EntriesService {
       const lexicalCategory =
         LexicalCategory[categoryEntries.lexicalCategory.id];
       for (const entry of categoryEntries.entries) {
-        for (const sense of entry.senses) {
+        entry.senses.forEach((sense, index) => {
           promises.push(
             this.sensesService.findOrCreateDictionarySenseWithAssociation(
               searchRecord.result.id,
               searchRecord.homographC,
               lexicalCategory,
+              index,
               sense
             )
           );
-        }
+        });
       }
     }
     return promises;
@@ -129,16 +130,17 @@ export class EntriesService {
       const lexicalCategory =
         LexicalCategory[categoryEntries.lexicalCategory.id];
       for (const entry of categoryEntries.entries) {
-        for (const sense of entry.senses) {
+        entry.senses.forEach((sense, index) => {
           promises1.push(
             this.sensesService.findOrCreateThesaurusSenseWithoutAssociation(
               matchingResult.result.id,
               matchingResult.homographC,
               lexicalCategory,
+              index,
               sense
             )
           );
-        }
+        });
       }
     }
     const senses: ThesaurusSenseRecord[] = await Promise.all(promises1);

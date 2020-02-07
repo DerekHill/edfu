@@ -32,5 +32,6 @@
   </mat-action-list>
 </div>
 <div *ngFor="let sense of senses$ | async">
-  {{ sense.example }}
+  {{ sense.example }} - {{ sense.associationType }} -
+  {{ sense.similarity | number: '1.2-2' }} - {{ sense.apiSenseIndex }}
 </div>

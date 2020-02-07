@@ -75,6 +75,7 @@ describe('SensesService', () => {
         'oxId',
         null,
         LexicalCategory.noun,
+        0,
         oxSense
       );
       expect(res.senseId).toEqual(SENSE_ID);
@@ -116,6 +117,7 @@ describe('SensesService', () => {
         entryOxId: 'jump',
         entryHomographC: 0,
         lexicalCategory: LexicalCategory.noun,
+        apiSenseIndex: 0,
         dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
         thesaurusSenseIds: [THESAURUS_SENSE_ID],
         definition: 'jump in the air',
@@ -127,6 +129,7 @@ describe('SensesService', () => {
         entryHomographC: 1,
         dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
         lexicalCategory: LexicalCategory.noun,
+        apiSenseIndex: 0,
         senseId: THESAURUS_SENSE_ID,
         example: 'example of sense',
         synonyms: ['jump', 'leap']

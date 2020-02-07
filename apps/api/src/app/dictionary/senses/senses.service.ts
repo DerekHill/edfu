@@ -41,6 +41,7 @@ export class SensesService {
     entryOxId: string,
     entryHomographC: number,
     lexicalCategory: LexicalCategory,
+    apiSenseIndex: number,
     oxSense: OxSense
   ): Promise<DictionarySenseRecord> {
     const senseId = this.extractSenseId(oxSense);
@@ -50,6 +51,7 @@ export class SensesService {
       entryHomographC: entryHomographC,
       dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
       lexicalCategory: lexicalCategory,
+      apiSenseIndex: apiSenseIndex,
       senseId: senseId,
       thesaurusSenseIds: this.extractThesaurusLinks(oxSense),
       example: this.extractExample(oxSense),
@@ -73,6 +75,7 @@ export class SensesService {
     entryOxId: string,
     entryHomographC: number,
     lexicalCategory: LexicalCategory,
+    apiSenseIndex: number,
     oxSense: OxSense
   ): Promise<ThesaurusSenseRecord> {
     const senseId = this.extractSenseId(oxSense);
@@ -82,6 +85,7 @@ export class SensesService {
       entryHomographC: entryHomographC,
       dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
       lexicalCategory: lexicalCategory,
+      apiSenseIndex: apiSenseIndex,
       senseId: senseId,
       example: this.extractExample(oxSense),
       synonyms: this.extractSynonyms(oxSense)
@@ -162,11 +166,13 @@ export class SensesService {
 
     return senses.map(sense => {
       const senseId = sense.senseId;
+      console.log('sense.apiSenseIndex', sense.apiSenseIndex);
       return {
         oxId: sense.entryOxId,
         homographC: sense.entryHomographC,
         senseId: sense.senseId,
         lexicalCategory: sense.lexicalCategory,
+        apiSenseIndex: sense.apiSenseIndex,
         example: sense.example,
         definition: sense.definition,
         associationType: entrySensesById[senseId].associationType,

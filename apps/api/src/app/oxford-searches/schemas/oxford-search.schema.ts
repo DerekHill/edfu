@@ -1,13 +1,17 @@
 import * as mongoose from 'mongoose';
 
 export const OxfordSearchSchema = new mongoose.Schema({
-  normalizedSearchTerm: String,
-  result: Object,
+  oxIdOrSearchTermLowercase: String,
   homographC: Number,
-  found: Boolean
+  result: Object
 });
 
 OxfordSearchSchema.index(
-  { normalizedSearchTerm: 1, homographC: 1 },
+  { oxIdOrSearchTermLowercase: 1, homographC: 1 },
   { unique: true }
+);
+
+OxfordSearchSchema.index(
+  { oxIdOrSearchTermLowercase: 1 },
+  { collation: { locale: 'en', strength: 2 } }
 );

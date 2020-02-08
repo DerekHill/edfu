@@ -5,7 +5,7 @@ import {
   EntrySearchesService
 } from './oxford-searches.service';
 import { ConfigModule } from '../config/config.module';
-import { MongooseModule } from '@nestjs/mongoose';
+import { MongooseModule, InjectModel } from '@nestjs/mongoose';
 import {
   ENTRY_SEARCH_COLLECTION_NAME,
   THESAURUS_SEARCH_COLLECTION_NAME
@@ -13,12 +13,42 @@ import {
 import { TestDatabaseModule } from '../config/test-database.module';
 import {
   RESULT_WITH_HOMOGRAPH_NUMBER_200,
-  RESULT_WITHOUT_HOMOGRAPH_NUMBER
+  RESULT_WITHOUT_HOMOGRAPH_NUMBER,
+  MORE_RESULT_LANGUAGE
 } from './test/sample-responses';
 import { OxfordApiService } from '../oxford-api/oxford-api.service';
 import { OxfordSearchSchema } from './schemas/oxford-search.schema';
+import { Injectable } from '@nestjs/common';
+import { Model } from 'mongoose';
+import { OxfordSearchDocument } from './interfaces/oxford-search.interface';
+import { OxResult } from '../oxford-api/interfaces/oxford-api.interface';
 
 const CHIPS = ['chips'];
+
+const createOxResult = (id: string): OxResult => {
+  return {
+    id: id,
+    language: 'en',
+    lexicalEntries: [],
+    type: 'headword',
+    word: id
+  };
+};
+
+@Injectable()
+class OxfordSearchesTestSetupService {
+  constructor(
+    @InjectModel(ENTRY_SEARCH_COLLECTION_NAME)
+    private readonly searchModel: Model<OxfordSearchDocument>
+  ) {}
+
+  async count(oxIdOrSearchTermLowercase: string, homographC: number) {
+    return await this.searchModel.countDocuments({
+      oxIdOrSearchTermLowercase: oxIdOrSearchTermLowercase,
+      homographC: homographC
+    });
+  }
+}
 
 class OxfordServiceMock {
   getEntries(searchTerm: string) {
@@ -28,6 +58,7 @@ class OxfordServiceMock {
 
 describe('BaseSearchesService', () => {
   let bss: BaseSearchesService;
+  let setupService: OxfordSearchesTestSetupService;
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
@@ -45,11 +76,15 @@ describe('BaseSearchesService', () => {
         {
           provide: OxfordApiService,
           useClass: OxfordServiceMock
-        }
+        },
+        OxfordSearchesTestSetupService
       ]
     }).compile();
 
     bss = app.get<BaseSearchesService>(BaseSearchesService);
+    setupService = app.get<OxfordSearchesTestSetupService>(
+      OxfordSearchesTestSetupService
+    );
   });
 
   describe('homographC extraction', () => {
@@ -62,10 +97,27 @@ describe('BaseSearchesService', () => {
       );
     });
   });
+
+  describe('extractOxIdOrSearchTermLowercase()', () => {
+    it('extracts oxId if exists keeping capitalisation', () => {
+      const SEARCH_TERM = 'more';
+      expect(
+        bss.extractOxIdOrSearchTermLowercase(SEARCH_TERM, MORE_RESULT_LANGUAGE)
+      ).toEqual('More');
+    });
+
+    it('uses search term if result is null, making it lowercase', () => {
+      const SEARCH_TERM = 'Orange juice';
+      expect(bss.extractOxIdOrSearchTermLowercase(SEARCH_TERM, null)).toEqual(
+        'orange juice'
+      );
+    });
+  });
 });
 
 describe('EntrySearchesService', () => {
   let ess: EntrySearchesService;
+  let setupService: OxfordSearchesTestSetupService;
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
@@ -82,31 +134,47 @@ describe('EntrySearchesService', () => {
         {
           provide: OxfordApiService,
           useClass: OxfordServiceMock
-        }
+        },
+        OxfordSearchesTestSetupService
       ]
     }).compile();
 
     ess = app.get<EntrySearchesService>(EntrySearchesService);
+    setupService = app.get<OxfordSearchesTestSetupService>(
+      OxfordSearchesTestSetupService
+    );
   });
 
   describe('unduplicated saving', () => {
     it('does not save the same word twice', async () => {
-      const word = 'foo';
+      const oxId = 'Orange';
       const homographC = 0;
       const one = 1;
-      await ess.createFromResult(word, RESULT_WITHOUT_HOMOGRAPH_NUMBER);
-      await expect(ess.count(word, homographC)).resolves.toEqual(one);
-      await ess.createFromResult(word, RESULT_WITHOUT_HOMOGRAPH_NUMBER);
-      await expect(ess.count(word, homographC)).resolves.toEqual(one);
+      const result = createOxResult(oxId);
+      await ess.findOrCreateFromResult(oxId, result);
+      await expect(setupService.count(oxId, homographC)).resolves.toEqual(one);
+      await ess.findOrCreateFromResult(oxId, result);
+      await expect(setupService.count(oxId, homographC)).resolves.toEqual(one);
     });
   });
 
-  describe('findOrCreate', () => {
+  describe('findOrFetch()', () => {
     it('returns existing record if already exists', async () => {
       const searchTerm = 'cheese';
-      const existing = await ess.createFromResult(
+      const existing = await ess.findOrCreateFromResult(
         searchTerm,
-        RESULT_WITHOUT_HOMOGRAPH_NUMBER
+        createOxResult(searchTerm)
+      );
+      const fromFindOrCreate = await ess.findOrFetch(searchTerm);
+      expect(existing._id).toEqual(fromFindOrCreate[0]._id);
+    });
+
+    it('finds in case insensitive way', async () => {
+      const oxId = 'Orange';
+      const searchTerm = 'orange';
+      const existing = await ess.findOrCreateFromResult(
+        oxId,
+        createOxResult(oxId)
       );
       const fromFindOrCreate = await ess.findOrFetch(searchTerm);
       expect(existing._id).toEqual(fromFindOrCreate[0]._id);

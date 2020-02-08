@@ -1,12 +1,14 @@
 import { Console, Command } from 'nestjs-console';
 import { OxfordApiService } from '../oxford-api/oxford-api.service';
 import { FixturesService } from './fixtures/fixtures.service';
+import { LoaderService } from './loader/loader.service';
 
 @Console()
 export class TaskService {
   constructor(
     private readonly oxfordService: OxfordApiService,
-    private readonly fixturesService: FixturesService
+    private readonly fixturesService: FixturesService,
+    private readonly loaderService: LoaderService
   ) {}
 
   @Command({
@@ -33,6 +35,18 @@ export class TaskService {
   async fixtures() {
     try {
       await this.fixturesService.create();
+    } catch (error) {
+      console.error(error);
+    }
+    process.exit();
+  }
+
+  @Command({
+    command: 'load'
+  })
+  async load() {
+    try {
+      await this.loaderService.load();
     } catch (error) {
       console.error(error);
     }

@@ -14,7 +14,7 @@ export class EntryDto {
   @Field()
   readonly oxId: string;
 
-  @Field({ nullable: true })
+  @Field()
   readonly homographC: number;
 
   @Field()
@@ -41,7 +41,7 @@ export class SenseForEntryDto {
   @Field()
   readonly apiSenseIndex: number;
 
-  @Field()
+  @Field({ nullable: true })
   readonly example: string;
 
   @Field()

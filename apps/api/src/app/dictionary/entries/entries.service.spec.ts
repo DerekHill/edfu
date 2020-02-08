@@ -122,7 +122,7 @@ describe('EntriesService', () => {
     it('returns new record if word does not already exist', async () => {
       const WORD = 'food';
       const TYPE = HeadwordOrPhrase.headword;
-      const record = createEntrySearchRecord(WORD, true, 1, TYPE);
+      const record = createEntrySearchRecord(WORD, 1, TYPE);
       jest
         .spyOn(entrySearchesService, 'findOrFetch')
         .mockImplementation(chars => Promise.resolve([record]));
@@ -159,6 +159,7 @@ describe('EntriesService', () => {
         entryHomographC: ENTRY_HOMOGRAPH_C,
         dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
         lexicalCategory: LexicalCategory.noun,
+        apiSenseIndex: 0,
         senseId: THESAURUS_SENSE_ID,
         example: 'example of sense',
         synonyms: SYNONYMS
@@ -170,6 +171,7 @@ describe('EntriesService', () => {
         entryHomographC: ENTRY_HOMOGRAPH_C,
         dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
         lexicalCategory: LexicalCategory.noun,
+        apiSenseIndex: 0,
         thesaurusSenseIds: [THESAURUS_SENSE_ID],
         definition: '',
         example: '',
@@ -222,21 +224,15 @@ describe('EntriesService', () => {
       const thesaurusRecord1 = createThesaurusSearchRecord(
         WORD_1,
         [],
-        true,
         HOMOGRAPH_C
       );
-      const thesaurusRecord2 = createThesaurusSearchRecord(
-        'word2',
-        [],
-        true,
-        2
-      );
+      const thesaurusRecord2 = createThesaurusSearchRecord('word2', [], 2);
       const res: OxfordSearchRecord = entriesService.filterResultsByHomographC(
         [thesaurusRecord1, thesaurusRecord2],
         HOMOGRAPH_C
       );
       expect(res.homographC).toBe(HOMOGRAPH_C);
-      expect(res.normalizedSearchTerm).toBe(WORD_1);
+      expect(res.oxIdOrSearchTermLowercase).toBe(WORD_1);
     });
 
     it('works if homographC is null', () => {
@@ -245,14 +241,13 @@ describe('EntriesService', () => {
       const thesaurusRecord = createThesaurusSearchRecord(
         WORD_1,
         [],
-        true,
         HOMOGRAPH_C
       );
       const res: OxfordSearchRecord = entriesService.filterResultsByHomographC(
         [thesaurusRecord],
         HOMOGRAPH_C
       );
-      expect(res.normalizedSearchTerm).toBe(WORD_1);
+      expect(res.oxIdOrSearchTermLowercase).toBe(WORD_1);
     });
 
     it('returns null if null is supplied', () => {
@@ -317,6 +312,7 @@ describe('EntriesService', () => {
         entryHomographC: 1,
         dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
         lexicalCategory: LexicalCategory.adjective,
+        apiSenseIndex: 0,
         senseId: dictionarySenseId,
         example: 'a fast sports car',
         definition: '',
@@ -327,7 +323,6 @@ describe('EntriesService', () => {
 
       const entrySearchRecord = createEntrySearchRecord(
         synonymOxId,
-        true,
         synonymHomographC,
         HeadwordOrPhrase.headword
       );

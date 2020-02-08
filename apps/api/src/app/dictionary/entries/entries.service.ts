@@ -56,18 +56,20 @@ export class EntriesService {
     );
 
     await Promise.all(
-      entrySearchResults.map(record =>
-        this.findOrCreateSensesWithAssociations(record)
-      )
+      entrySearchResults
+        .map(record => {
+          return this.findOrCreateSensesWithAssociations(record);
+        })
+        .flat()
     );
 
     return Promise.all(entries.map(this.getLatest));
   }
 
-  findOrCreateSensesWithAssociations = async (
+  findOrCreateSensesWithAssociations = (
     searchRecord: OxfordSearchRecord
-  ): Promise<DictionarySenseRecord[]> => {
-    const promises = [];
+  ): Promise<DictionarySenseRecord>[] => {
+    const promises: Promise<DictionarySenseRecord>[] = [];
     for (const categoryEntries of searchRecord.result.lexicalEntries) {
       const lexicalCategory =
         LexicalCategory[categoryEntries.lexicalCategory.id];
@@ -125,7 +127,7 @@ export class EntriesService {
       throw new Error(`No thesaurus result for ${oxId}`);
     }
 
-    const promises1 = [];
+    const promises1: Promise<ThesaurusSenseRecord>[] = [];
     for (const categoryEntries of matchingResult.result.lexicalEntries) {
       const lexicalCategory =
         LexicalCategory[categoryEntries.lexicalCategory.id];
@@ -182,7 +184,7 @@ export class EntriesService {
       throw new Error(`searchesService error for chars: ${string}`);
     }
 
-    if (results.length === 1 && results[0].found === false) {
+    if (results.length === 1 && !results[0].result) {
       throw new Error(`${string} not found`);
     }
   }

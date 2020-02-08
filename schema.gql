@@ -10,7 +10,7 @@ enum DictionaryOrThesaurus {
 
 type EntryDto {
   oxId: String!
-  homographC: Float
+  homographC: Float!
   word: String!
   relatedEntriesAdded: Boolean!
 }
@@ -40,7 +40,7 @@ type SenseForEntryDto {
   senseId: String!
   lexicalCategory: LexicalCategory!
   apiSenseIndex: Float!
-  example: String!
+  example: String
   definition: String!
   associationType: DictionaryOrThesaurus!
   similarity: Float!

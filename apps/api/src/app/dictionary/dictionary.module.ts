@@ -57,6 +57,7 @@ import * as use from '@tensorflow-models/universal-sentence-encoder';
       }
     },
     SimilarityService
-  ]
+  ],
+  exports: [EntriesService]
 })
 export class DictionaryModule {}

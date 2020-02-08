@@ -4,13 +4,12 @@ import { HeadwordOrPhrase } from '../../../enums';
 
 export const createEntrySearchRecord = (
   word: string,
-  found = true,
   homographC = 1,
   type = HeadwordOrPhrase.headword
 ): OxfordSearchRecord => {
   return {
     _id: new ObjectId(),
-    normalizedSearchTerm: word,
+    oxIdOrSearchTermLowercase: word,
     result: {
       id: word,
       language: 'en-gb',
@@ -37,20 +36,18 @@ export const createEntrySearchRecord = (
       type: type,
       word: word
     },
-    homographC: homographC,
-    found: found
+    homographC: homographC
   };
 };
 
 export const createThesaurusSearchRecord = (
   word: string,
   synonyms: string[],
-  found = true,
   homographC = 1
 ): OxfordSearchRecord => {
   return {
     _id: new ObjectId(),
-    normalizedSearchTerm: word,
+    oxIdOrSearchTermLowercase: word,
     result: {
       id: word,
       language: 'en-gb',
@@ -89,7 +86,6 @@ export const createThesaurusSearchRecord = (
       type: 'headword',
       word: word
     },
-    homographC: homographC,
-    found: found
+    homographC: homographC
   };
 };

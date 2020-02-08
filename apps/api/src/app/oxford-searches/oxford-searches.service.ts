@@ -9,7 +9,6 @@ import {
   OxfordSearchDocument,
   OxfordSearchRecord
 } from './interfaces/oxford-search.interface';
-import { CreateOxfordSearchDto } from './dto/create-oxford-search.dto';
 import { OxfordApiService } from '../oxford-api/oxford-api.service';
 import { oc } from 'ts-optchain';
 import { OxResult } from '../oxford-api/interfaces/oxford-api.interface';
@@ -23,62 +22,58 @@ export class BaseSearchesService {
   ) {}
 
   protected getOxfordApiResults(searchTerm: string) {
-    return Promise.resolve(['Overwrite in subclass']);
+    return Promise.resolve(null); // overwrite in subclass
   }
 
   async findOrFetch(searchTerm: string): Promise<OxfordSearchRecord[]> {
     const existing = await this.searchModel
       .find({
-        normalizedSearchTerm: searchTerm
+        oxIdOrSearchTermLowercase: searchTerm
       })
+      .collation({ locale: 'en', strength: 2 })
       .lean();
 
     if (existing.length) {
       return existing;
-    } else {
-      const results: Array<any> = await this.getOxfordApiResults(searchTerm);
-      if (results.length === 0) {
-        results.push(null);
-      }
-      return await Promise.all(
-        results.map((result: OxResult) => {
-          return this.createFromResult(searchTerm, result);
-        })
-      );
     }
+
+    const results: OxResult[] = await this.getOxfordApiResults(searchTerm);
+    if (results.length === 0) {
+      results.push(null);
+    }
+
+    return await Promise.all(
+      results.map((result: OxResult) => {
+        return this.findOrCreateFromResult(searchTerm, result);
+      })
+    );
   }
 
-  createFromResult = async (
+  findOrCreateFromResult = async (
     searchTerm: string,
     result: OxResult
   ): Promise<OxfordSearchRecord> => {
-    const obj: CreateOxfordSearchDto = {
-      normalizedSearchTerm: searchTerm,
-      result: result,
-      homographC: this.extractHomographC(result),
-      found: Boolean(result)
+    const homographC = this.extractHomographC(result);
+    const oxIdOrSearchTermLowercase = this.extractOxIdOrSearchTermLowercase(
+      searchTerm,
+      result
+    );
+
+    const identifyingParams = {
+      oxIdOrSearchTermLowercase: oxIdOrSearchTermLowercase,
+      homographC: homographC
     };
 
-    let createdEntrySearch: OxfordSearchDocument;
+    const allParams = { ...identifyingParams, ...{ result: result } };
 
-    try {
-      createdEntrySearch = await this.searchModel.create(obj);
-    } catch (error) {
-      if (error.code === 11000) {
-        return null;
-      } else {
-        throw error;
-      }
-    }
-    return createdEntrySearch.toObject();
+    return this.searchModel
+      .findOneAndUpdate(identifyingParams, allParams, {
+        upsert: true,
+        new: true
+      })
+      .lean()
+      .exec();
   };
-
-  async count(normalizedSearchTerm: string, homographC: number) {
-    return await this.searchModel.countDocuments({
-      normalizedSearchTerm: normalizedSearchTerm,
-      homographC: homographC
-    });
-  }
 
   extractHomographC(result: any) {
     const homographNumber = oc(
@@ -88,6 +83,17 @@ export class BaseSearchesService {
       return parseInt(homographNumber[0], 10);
     } else {
       return 0;
+    }
+  }
+
+  extractOxIdOrSearchTermLowercase(
+    searchTerm: string,
+    result: OxResult
+  ): string {
+    if (result) {
+      return result.id;
+    } else {
+      return searchTerm.toLowerCase();
     }
   }
 }

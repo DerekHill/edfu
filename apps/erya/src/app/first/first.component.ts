@@ -90,6 +90,7 @@ export class FirstComponent implements OnInit, OnDestroy {
             lexicalCategory
             apiSenseIndex
             example
+            definition
             associationType
             similarity
           }

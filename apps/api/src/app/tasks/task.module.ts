@@ -11,6 +11,8 @@ import {
 import { EntrySchema } from '../dictionary/entries/schemas/entry.schema';
 import { SenseSchema } from '../dictionary/senses/schemas/sense.schema';
 import { EntrySenseSchema } from '../dictionary/entry-senses/schemas/entry-sense.schema';
+import { LoaderService } from './loader/loader.service';
+import { DictionaryModule } from '../dictionary/dictionary.module';
 
 @Module({
   imports: [
@@ -19,10 +21,11 @@ import { EntrySenseSchema } from '../dictionary/entry-senses/schemas/entry-sense
       { name: ENTRY_COLLECTION_NAME, schema: EntrySchema },
       { name: SENSE_COLLECTION_NAME, schema: SenseSchema },
       { name: ENTRY_SENSE_COLLECTION_NAME, schema: EntrySenseSchema }
-    ])
+    ]),
+    DictionaryModule
   ],
   controllers: [],
-  providers: [TaskService, FixturesService],
+  providers: [TaskService, FixturesService, LoaderService],
   exports: []
 })
 export class TaskModule {}

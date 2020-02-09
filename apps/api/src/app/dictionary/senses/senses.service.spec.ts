@@ -13,13 +13,12 @@ import { EntrySensesService } from '../entry-senses/entry-senses.service';
 import {
   ThesaurusSenseRecord,
   SenseDocument,
-  SharedSenseRecord,
+  SharedSenseRecordWithoutId,
   DictionarySenseRecordWithoutId,
   LinkedSensePairing
 } from './interfaces/sense.interface';
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
-import { async } from 'rxjs/internal/scheduler/async';
 
 @Injectable()
 class SensesTestSetupService {
@@ -28,7 +27,9 @@ class SensesTestSetupService {
     private readonly senseModel: Model<SenseDocument>
   ) {}
 
-  create(sense: SharedSenseRecord): Promise<SharedSenseRecord> {
+  create(
+    sense: SharedSenseRecordWithoutId
+  ): Promise<SharedSenseRecordWithoutId> {
     return this.senseModel.create(sense);
   }
 }

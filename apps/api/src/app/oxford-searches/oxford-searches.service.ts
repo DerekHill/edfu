@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import {
   ENTRY_SEARCH_COLLECTION_NAME,
-  THESAURUS_SEARCH_COLLECTION_NAME
+  THESAURUS_SEARCH_COLLECTION_NAME,
+  MONGO_DUPLICATE_ERROR_CODE
 } from '../constants';
 import { Model } from 'mongoose';
 import {
@@ -36,7 +37,7 @@ export class BaseSearchesService {
     if (existing.length) {
       return existing;
     }
-    console.log('Calling oxford API for ', searchTerm);
+    console.log(this.constructor.name, ': Calling oxford API for ', searchTerm);
     const results: OxResult[] = await this.getOxfordApiResults(searchTerm);
     if (results.length === 0) {
       results.push(null);
@@ -59,20 +60,31 @@ export class BaseSearchesService {
       result
     );
 
-    const identifyingParams = {
+    const conditions = {
       oxIdOrSearchTermLowercase: oxIdOrSearchTermLowercase,
       homographC: homographC
     };
 
-    const allParams = { ...identifyingParams, ...{ result: result } };
+    const allParams = { ...conditions, ...{ result: result } };
 
-    return this.searchModel
-      .findOneAndUpdate(identifyingParams, allParams, {
-        upsert: true,
-        new: true
-      })
-      .lean()
-      .exec();
+    try {
+      return await this.searchModel
+        .findOneAndUpdate(conditions, allParams, {
+          upsert: true,
+          new: true
+        })
+        .lean()
+        .exec();
+    } catch (error) {
+      if (error.code === MONGO_DUPLICATE_ERROR_CODE) {
+        return this.searchModel
+          .findOne(conditions)
+          .lean()
+          .exec();
+      } else {
+        throw error;
+      }
+    }
   };
 
   extractHomographC(result: any) {

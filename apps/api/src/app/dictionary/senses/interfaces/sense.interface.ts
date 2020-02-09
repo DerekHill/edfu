@@ -19,7 +19,7 @@ interface SharedOptionalProperties {
   readonly synonyms?: string[];
 }
 
-export interface SharedSenseRecord
+export interface SharedSenseRecordWithoutId
   extends SharedRequiredProperties,
     SharedOptionalProperties {}
 
@@ -44,7 +44,7 @@ export interface ThesaurusSenseRecord extends ThesaurusSenseRecordWithoutId {
   readonly _id: ObjectId;
 }
 
-export interface SenseDocument extends Document, SharedSenseRecord {
+export interface SenseDocument extends Document, SharedSenseRecordWithoutId {
   _id: ObjectId;
 }
 

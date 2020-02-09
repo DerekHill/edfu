@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { SENSE_COLLECTION_NAME } from '../../constants';
+import {
+  SENSE_COLLECTION_NAME,
+  MONGO_DUPLICATE_ERROR_CODE
+} from '../../constants';
 import {
   SenseDocument,
   DictionarySenseRecord,
   ThesaurusSenseRecord,
-  SharedSenseRecord,
+  SharedSenseRecordWithoutId,
   DictionarySenseRecordWithoutId,
   ThesaurusSenseRecordWithoutId,
   LinkedSensePairing
@@ -91,17 +94,32 @@ export class SensesService {
       synonyms: this.extractSynonyms(oxSense)
     };
 
-    return this.findOneAndUpdate(senseId, sense);
+    return this.findOneAndUpdate<ThesaurusSenseRecord>(senseId, sense);
   }
 
-  findOneAndUpdate(senseId: string, sense: SharedSenseRecord) {
-    return this.senseModel
-      .findOneAndUpdate({ senseId: senseId }, sense, {
-        upsert: true,
-        new: true
-      })
-      .lean()
-      .exec();
+  async findOneAndUpdate<
+    T extends ThesaurusSenseRecord | DictionarySenseRecord
+  >(senseId: string, sense: SharedSenseRecordWithoutId): Promise<T> {
+    const conditions = { senseId: senseId };
+
+    try {
+      return await this.senseModel
+        .findOneAndUpdate(conditions, sense, {
+          upsert: true,
+          new: true
+        })
+        .lean()
+        .exec();
+    } catch (error) {
+      if (error.code === MONGO_DUPLICATE_ERROR_CODE) {
+        return this.senseModel
+          .findOne(conditions)
+          .lean()
+          .exec();
+      } else {
+        throw error;
+      }
+    }
   }
 
   extractThesaurusLinks(oxSense: OxSense): string[] {

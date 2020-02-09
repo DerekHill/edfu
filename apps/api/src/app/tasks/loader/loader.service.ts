@@ -2,13 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { EntriesService } from '../../dictionary/entries/entries.service';
 
 const WORDS = [
-  //   'good morning',
-  //   'good afternoon',
-  //   'help',
-  'more'
-  //   'please',
-  //   'thank you',
-  //   'break'
+  'good morning',
+  'good afternoon',
+  'help',
+  'more',
+  'please',
+  'thank you',
+  'break'
 ];
 
 @Injectable()
@@ -16,13 +16,19 @@ export class LoaderService {
   constructor(private readonly entriesService: EntriesService) {}
 
   async load() {
-    const entryArrays = await Promise.all(
-      WORDS.map(word => this.entriesService.findOrCreateWithOwnSensesOnly(word))
-    );
-    const entries = entryArrays.flat();
+    for (const word of WORDS) {
+      console.log(`-----Loading ${word}-----`);
+      await this.loadWord(word);
+    }
+  }
 
-    console.log('entries"');
-    console.log(entries);
+  async loadWord(word: string) {
+    const entries = await this.entriesService.findOrCreateWithOwnSensesOnly(
+      word
+    );
+
+    console.log('Entries:');
+    console.log(entries.filter(i => i).map(i => i.oxId));
 
     const relatedEntryArrays = await Promise.all(
       entries.map(entry =>
@@ -33,6 +39,6 @@ export class LoaderService {
     const relatedEntries = relatedEntryArrays.flat();
 
     console.log('relatedEntries:');
-    console.log(relatedEntries);
+    console.log(relatedEntries.filter(i => i).map(i => i.oxId));
   }
 }

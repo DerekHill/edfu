@@ -1,6 +1,10 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { ENTRY_COLLECTION_NAME, TF_MODEL_NAME } from '../../constants';
+import {
+  ENTRY_COLLECTION_NAME,
+  TF_MODEL_NAME,
+  MONGO_DUPLICATE_ERROR_CODE
+} from '../../constants';
 import { Model } from 'mongoose';
 import {
   EntryRecord,
@@ -21,13 +25,6 @@ import {
 import { HeadwordOrPhrase } from '../../enums';
 import { EntrySensesService } from '../entry-senses/entry-senses.service';
 import { SimilarityService } from '../similarity/similarity.service';
-
-export class NotFoundInOxfordApiError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = this.constructor.name;
-  }
-}
 
 @Injectable()
 export class EntriesService {
@@ -53,15 +50,19 @@ export class EntriesService {
       return existing;
     }
 
-    const entrySearchResults = await this.entrySearchesService.findOrFetch(
+    const entrySearchResults: OxfordSearchRecord[] = await this.entrySearchesService.findOrFetch(
       chars
     );
 
-    this.throwErrorIfNotFound(
-      'findOrCreateWithOwnSensesOnly',
-      entrySearchResults,
-      chars
-    );
+    if (
+      this.isNotFoundInOxfordApi(
+        DictionaryOrThesaurus.dictionary,
+        entrySearchResults,
+        chars
+      )
+    ) {
+      return [];
+    }
 
     const entries = await Promise.all(
       entrySearchResults.map(record =>
@@ -77,37 +78,6 @@ export class EntriesService {
 
     return Promise.all(entries.map(this.getLatest));
   }
-
-  findOrCreateSensesWithAssociations = (
-    searchRecord: OxfordSearchRecord
-  ): Promise<DictionarySenseRecord>[] => {
-    const promises: Promise<DictionarySenseRecord>[] = [];
-    for (const categoryEntries of searchRecord.result.lexicalEntries) {
-      const lexicalCategory =
-        LexicalCategory[categoryEntries.lexicalCategory.id];
-      for (const entry of categoryEntries.entries) {
-        entry.senses.forEach((sense, index) => {
-          promises.push(
-            this.sensesService.findOrCreateDictionarySenseWithAssociation(
-              searchRecord.result.id,
-              searchRecord.homographC,
-              lexicalCategory,
-              index,
-              sense
-            )
-          );
-        });
-      }
-    }
-    return promises;
-  };
-
-  getLatest = (record: EntryRecord) => {
-    return this.entryModel
-      .findById(record._id)
-      .lean()
-      .exec();
-  };
 
   async addRelatedEntries(
     oxId: string,
@@ -128,11 +98,15 @@ export class EntriesService {
       oxId
     );
 
-    this.throwErrorIfNotFound(
-      'addRelatedEntries',
-      thesaurusSearchResults,
-      oxId
-    );
+    if (
+      this.isNotFoundInOxfordApi(
+        DictionaryOrThesaurus.thesaurus,
+        thesaurusSearchResults,
+        oxId
+      )
+    ) {
+      return [];
+    }
 
     const matchingResult: OxfordSearchRecord = this.filterResultsByHomographC(
       thesaurusSearchResults,
@@ -140,7 +114,10 @@ export class EntriesService {
     );
 
     if (!matchingResult) {
-      throw new Error(`No thesaurus result for ${oxId}`);
+      console.warn(
+        `No thesaurus result for ${oxId} with homographC: ${homographC}`
+      );
+      return [];
     }
 
     const promises1: Promise<ThesaurusSenseRecord>[] = [];
@@ -195,17 +172,55 @@ export class EntriesService {
     return newSynonymEntries.flat();
   }
 
-  throwErrorIfNotFound(
-    method: string,
+  findOrCreateSensesWithAssociations = (
+    searchRecord: OxfordSearchRecord
+  ): Promise<DictionarySenseRecord>[] => {
+    const promises: Promise<DictionarySenseRecord>[] = [];
+    for (const categoryEntries of searchRecord.result.lexicalEntries) {
+      const lexicalCategory =
+        LexicalCategory[categoryEntries.lexicalCategory.id];
+      for (const entry of categoryEntries.entries) {
+        entry.senses.forEach((sense, index) => {
+          promises.push(
+            this.sensesService.findOrCreateDictionarySenseWithAssociation(
+              searchRecord.result.id,
+              searchRecord.homographC,
+              lexicalCategory,
+              index,
+              sense
+            )
+          );
+        });
+      }
+    }
+    return promises;
+  };
+
+  getLatest = (record: EntryRecord) => {
+    return this.entryModel
+      .findById(record._id)
+      .lean()
+      .exec();
+  };
+
+  isNotFoundInOxfordApi(
+    dictionaryOrThesaurus: DictionaryOrThesaurus,
     results: OxfordSearchRecord[],
     string: string
   ) {
-    if (results.length === 0) {
-      throw new Error(`${method}: searchesService error for chars: ${string}`);
+    if (!results || results.length === 0) {
+      throw new Error(
+        `${dictionaryOrThesaurus}: searchesService error for chars: ${string}`
+      );
     }
 
     if (results.length === 1 && !results[0].result) {
-      throw new NotFoundInOxfordApiError(`${method}: ${string} not found`);
+      console.warn(
+        `${string} not found in ${dictionaryOrThesaurus} in Oxford API`
+      );
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -226,18 +241,11 @@ export class EntriesService {
     thesaurusSenseExample: string
   ): Promise<EntryRecord[]> {
     let entries: EntryRecord[];
-    try {
-      entries = await this.findOrCreateWithOwnSensesOnly(synonym);
-    } catch (e) {
-      if (e instanceof NotFoundInOxfordApiError) {
-        console.warn(`${synonym} not found in Oxford API`);
-        return null;
-      } else {
-        throw e;
-      }
-    }
-    if (!entries) {
-      return null;
+
+    entries = await this.findOrCreateWithOwnSensesOnly(synonym);
+
+    if (!entries.length) {
+      return [];
     }
 
     const similarity = await this.similarityService.getSimilarity(
@@ -262,16 +270,16 @@ export class EntriesService {
     return entries;
   }
 
-  findOrCreateEntryFromSearchRecord = (
+  findOrCreateEntryFromSearchRecord = async (
     record: OxfordSearchRecord
   ): Promise<EntryRecord> => {
-    const identifyingParams = {
+    const conditions = {
       oxId: record.result.id,
       homographC: record.homographC
     };
 
     const entry: EntryRecordWithoutId = {
-      ...identifyingParams,
+      ...conditions,
       ...{
         word: record.result.word,
         relatedEntriesAdded: false,
@@ -279,13 +287,24 @@ export class EntriesService {
       }
     };
 
-    return this.entryModel
-      .findOneAndUpdate(identifyingParams, entry, {
-        upsert: true,
-        new: true
-      })
-      .lean()
-      .exec();
+    try {
+      return await this.entryModel
+        .findOneAndUpdate(conditions, entry, {
+          upsert: true,
+          new: true
+        })
+        .lean()
+        .exec();
+    } catch (error) {
+      if (error.code === MONGO_DUPLICATE_ERROR_CODE) {
+        return this.entryModel
+          .findOne(conditions)
+          .lean()
+          .exec();
+      } else {
+        throw error;
+      }
+    }
   };
 
   find(oxId: string): Promise<EntryRecord[]> {

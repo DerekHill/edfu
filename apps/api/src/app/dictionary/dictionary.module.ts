@@ -21,6 +21,14 @@ import { EntrySenseSchema } from './entry-senses/schemas/entry-sense.schema';
 import { SimilarityService } from './similarity/similarity.service';
 import * as use from '@tensorflow-models/universal-sentence-encoder';
 
+class TfUseMock {
+  embed(sentences: string[]) {
+    return {
+      arraySync: () => [[1], [1]]
+    };
+  }
+}
+
 @Module({
   imports: [
     OxfordSearchesModule,
@@ -53,7 +61,7 @@ import * as use from '@tensorflow-models/universal-sentence-encoder';
           console.warn(
             'Skipping Universal Sentence Encoder Tensorflow model...'
           );
-          return null;
+          return new TfUseMock();
         } else {
           console.warn(
             'Loading Universal Sentence Encoder Tensorflow model...'

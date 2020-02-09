@@ -8,7 +8,11 @@ export class SimilarityService {
   async getSimilarity(sentence1: string, sentence2: string): Promise<number> {
     const embeddings = await this.tfModel.embed([sentence1, sentence2]);
     const arrays = embeddings.arraySync();
-    return this.dot_product(arrays[0], arrays[1]);
+    const similarity = this.dot_product(arrays[0], arrays[1]);
+    console.log(
+      `Similarity between "${sentence1}" and "${sentence2}" is ${similarity}`
+    );
+    return similarity;
   }
 
   private dot_product(vector1: number[], vector2: number[]) {

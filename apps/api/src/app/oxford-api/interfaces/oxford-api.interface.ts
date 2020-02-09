@@ -16,6 +16,9 @@ export interface OxSubsense {
   readonly registers?: OxRegister[];
   readonly synonyms?: OxSynonym[];
   readonly definitions?: string[];
+  readonly shortDefinitions?: string[];
+  readonly examples?: any[];
+  readonly notes?: any[];
 }
 
 interface OxExample {
@@ -30,6 +33,7 @@ export interface OxThesaurusLink {
 export interface OxSense {
   readonly id: string;
   readonly definitions?: string[];
+  readonly shortDefinitions?: string[];
   readonly examples?: OxExample[];
   readonly registers?: OxRegister[];
   readonly subsenses?: OxSubsense[];
@@ -52,6 +56,7 @@ interface OxLexicalEntriesForCategory {
   readonly language: string;
   readonly lexicalCategory: OxlexicalCategory;
   readonly text: string;
+  readonly pronunciations?: any[];
 }
 
 export interface OxResult {

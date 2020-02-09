@@ -21,6 +21,7 @@ export class LoaderService {
     );
     const entries = entryArrays.flat();
 
+    console.log('entries"');
     console.log(entries);
 
     const relatedEntryArrays = await Promise.all(
@@ -31,6 +32,7 @@ export class LoaderService {
 
     const relatedEntries = relatedEntryArrays.flat();
 
+    console.log('relatedEntries:');
     console.log(relatedEntries);
   }
 }

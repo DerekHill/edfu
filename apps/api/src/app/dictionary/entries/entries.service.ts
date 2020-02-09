@@ -71,9 +71,7 @@ export class EntriesService {
 
     await Promise.all(
       entrySearchResults
-        .map(record => {
-          return this.findOrCreateSensesWithAssociations(record);
-        })
+        .map(record => this.findOrCreateSensesWithAssociations(record))
         .flat()
     );
 

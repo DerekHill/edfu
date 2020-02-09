@@ -23,14 +23,14 @@ export class LoaderService {
 
     console.log(entries);
 
-    // const relatedEntryArrays = await Promise.all(
-    //   entries.map(entry =>
-    //     this.entriesService.addRelatedEntries(entry.oxId, entry.homographC)
-    //   )
-    // );
+    const relatedEntryArrays = await Promise.all(
+      entries.map(entry =>
+        this.entriesService.addRelatedEntries(entry.oxId, entry.homographC)
+      )
+    );
 
-    // const relatedEntries = relatedEntryArrays.flat();
+    const relatedEntries = relatedEntryArrays.flat();
 
-    // console.log(relatedEntries);
+    console.log(relatedEntries);
   }
 }

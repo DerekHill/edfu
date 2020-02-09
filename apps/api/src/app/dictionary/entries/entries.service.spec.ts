@@ -138,8 +138,8 @@ describe('EntriesService', () => {
       const uppercaseRecord = createEntrySearchRecord('Orange', 1, TYPE);
       const lowerCaseRecord = createEntrySearchRecord(lowercaseWord, 1, TYPE);
 
-      await entriesService.createEntryFromSearchRecord(uppercaseRecord);
-      await entriesService.createEntryFromSearchRecord(lowerCaseRecord);
+      await entriesService.findOrCreateEntryFromSearchRecord(uppercaseRecord);
+      await entriesService.findOrCreateEntryFromSearchRecord(lowerCaseRecord);
 
       const res = await entriesService.findOrCreateWithOwnSensesOnly(
         lowercaseWord
@@ -282,18 +282,20 @@ describe('EntriesService', () => {
     });
   });
 
-  describe('createEntryFromSearchRecord()', () => {
+  describe('findOrCreateEntryFromSearchRecord()', () => {
     it('creates basic entry', async () => {
       const WORD = 'river';
       const record: OxfordSearchRecord = createEntrySearchRecord(WORD);
-      const origWord = await entriesService.createEntryFromSearchRecord(record);
+      const origWord = await entriesService.findOrCreateEntryFromSearchRecord(
+        record
+      );
       expect(origWord.oxId).toEqual(WORD);
     });
   });
 
   describe('search()', () => {
     beforeEach(async () => {
-      await entriesService.createEntryFromSearchRecord(
+      await entriesService.findOrCreateEntryFromSearchRecord(
         createEntrySearchRecord('river')
       );
     });

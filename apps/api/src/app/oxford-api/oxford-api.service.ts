@@ -35,7 +35,7 @@ export class OxfordApiService {
       if (e.response && e.response.status === 404) {
         return [];
       } else {
-        return e;
+        throw e;
       }
     }
   }

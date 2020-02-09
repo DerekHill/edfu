@@ -22,6 +22,13 @@ import { HeadwordOrPhrase } from '../../enums';
 import { EntrySensesService } from '../entry-senses/entry-senses.service';
 import { SimilarityService } from '../similarity/similarity.service';
 
+export class NotFoundInOxfordApiError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = this.constructor.name;
+  }
+}
+
 @Injectable()
 export class EntriesService {
   constructor(
@@ -50,10 +57,16 @@ export class EntriesService {
       chars
     );
 
-    this.throwErrorIfNotFound(entrySearchResults, chars);
+    this.throwErrorIfNotFound(
+      'findOrCreateWithOwnSensesOnly',
+      entrySearchResults,
+      chars
+    );
 
     const entries = await Promise.all(
-      entrySearchResults.map(record => this.createEntryFromSearchRecord(record))
+      entrySearchResults.map(record =>
+        this.findOrCreateEntryFromSearchRecord(record)
+      )
     );
 
     await Promise.all(
@@ -117,7 +130,11 @@ export class EntriesService {
       oxId
     );
 
-    this.throwErrorIfNotFound(thesaurusSearchResults, oxId);
+    this.throwErrorIfNotFound(
+      'addRelatedEntries',
+      thesaurusSearchResults,
+      oxId
+    );
 
     const matchingResult: OxfordSearchRecord = this.filterResultsByHomographC(
       thesaurusSearchResults,
@@ -180,13 +197,17 @@ export class EntriesService {
     return newSynonymEntries.flat();
   }
 
-  throwErrorIfNotFound(results: OxfordSearchRecord[], string: string) {
+  throwErrorIfNotFound(
+    method: string,
+    results: OxfordSearchRecord[],
+    string: string
+  ) {
     if (results.length === 0) {
-      throw new Error(`searchesService error for chars: ${string}`);
+      throw new Error(`${method}: searchesService error for chars: ${string}`);
     }
 
     if (results.length === 1 && !results[0].result) {
-      throw new Error(`${string} not found`);
+      throw new NotFoundInOxfordApiError(`${method}: ${string} not found`);
     }
   }
 
@@ -206,7 +227,17 @@ export class EntriesService {
     thesaurusSenseLexicalCategory: LexicalCategory,
     thesaurusSenseExample: string
   ): Promise<EntryRecord[]> {
-    const entries = await this.findOrCreateWithOwnSensesOnly(synonym);
+    let entries: EntryRecord[];
+    try {
+      entries = await this.findOrCreateWithOwnSensesOnly(synonym);
+    } catch (e) {
+      if (e instanceof NotFoundInOxfordApiError) {
+        console.warn(`${synonym} not found in Oxford API`);
+        return null;
+      } else {
+        throw e;
+      }
+    }
     if (!entries) {
       return null;
     }
@@ -233,17 +264,30 @@ export class EntriesService {
     return entries;
   }
 
-  createEntryFromSearchRecord = (
+  findOrCreateEntryFromSearchRecord = (
     record: OxfordSearchRecord
   ): Promise<EntryRecord> => {
-    const entry: EntryRecordWithoutId = {
-      word: record.result.word,
+    const identifyingParams = {
       oxId: record.result.id,
-      homographC: record.homographC,
-      relatedEntriesAdded: false,
-      headwordOrPhrase: HeadwordOrPhrase[record.result.type]
+      homographC: record.homographC
     };
-    return this.entryModel.create(entry);
+
+    const entry: EntryRecordWithoutId = {
+      ...identifyingParams,
+      ...{
+        word: record.result.word,
+        relatedEntriesAdded: false,
+        headwordOrPhrase: HeadwordOrPhrase[record.result.type]
+      }
+    };
+
+    return this.entryModel
+      .findOneAndUpdate(identifyingParams, entry, {
+        upsert: true,
+        new: true
+      })
+      .lean()
+      .exec();
   };
 
   find(oxId: string): Promise<EntryRecord[]> {

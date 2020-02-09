@@ -8,6 +8,8 @@ export const DICTIONARY_OR_THESAURUS_ALL_VALUES = [
   DictionaryOrThesaurus.thesaurus
 ];
 
+// Will also be other possible values, still to be identified
+// https://developer.oxforddictionaries.com/documentation/glossary
 export enum LexicalCategory {
   noun = 'noun',
   pronoun = 'pronoun',
@@ -16,16 +18,6 @@ export enum LexicalCategory {
   adverb = 'adverb',
   preposition = 'preposition',
   conjunction = 'conjunction',
-  interjection = 'interjection'
+  interjection = 'interjection',
+  determiner = 'determiner'
 }
-
-export const LEXICAL_CATEGORY_ALL_VALUES = [
-  LexicalCategory.adjective,
-  LexicalCategory.adverb,
-  LexicalCategory.conjunction,
-  LexicalCategory.interjection,
-  LexicalCategory.noun,
-  LexicalCategory.preposition,
-  LexicalCategory.pronoun,
-  LexicalCategory.verb
-];

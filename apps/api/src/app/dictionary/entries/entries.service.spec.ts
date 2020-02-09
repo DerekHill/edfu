@@ -6,7 +6,7 @@ import {
 } from '../../oxford-searches/oxford-searches.service';
 import { TestingModule, Test } from '@nestjs/testing';
 import { TestDatabaseModule } from '../../config/test-database.module';
-import { MongooseModule } from '@nestjs/mongoose';
+import { MongooseModule, InjectModel } from '@nestjs/mongoose';
 import { ENTRY_COLLECTION_NAME, SENSE_COLLECTION_NAME } from '../../constants';
 import { EntrySchema } from './schemas/entry.schema';
 import { SenseSchema } from '../senses/schemas/sense.schema';
@@ -130,6 +130,21 @@ describe('EntriesService', () => {
       const res = await entriesService.findOrCreateWithOwnSensesOnly(WORD);
       expect(res[0].word).toEqual(WORD);
       expect(res[0].headwordOrPhrase).toEqual(TYPE);
+    });
+
+    it('searches for existing records in case-insensitive way', async () => {
+      const lowercaseWord = 'orange';
+      const TYPE = HeadwordOrPhrase.headword;
+      const uppercaseRecord = createEntrySearchRecord('Orange', 1, TYPE);
+      const lowerCaseRecord = createEntrySearchRecord(lowercaseWord, 1, TYPE);
+
+      await entriesService.createEntryFromSearchRecord(uppercaseRecord);
+      await entriesService.createEntryFromSearchRecord(lowerCaseRecord);
+
+      const res = await entriesService.findOrCreateWithOwnSensesOnly(
+        lowercaseWord
+      );
+      expect(res.length).toBe(2);
     });
   });
 

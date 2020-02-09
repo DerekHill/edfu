@@ -24,6 +24,7 @@ enum LexicalCategory {
   preposition
   conjunction
   interjection
+  determiner
 }
 
 type Query {

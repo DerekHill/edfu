@@ -36,7 +36,7 @@ export class BaseSearchesService {
     if (existing.length) {
       return existing;
     }
-
+    console.log('Calling oxford API for ', searchTerm);
     const results: OxResult[] = await this.getOxfordApiResults(searchTerm);
     if (results.length === 0) {
       results.push(null);

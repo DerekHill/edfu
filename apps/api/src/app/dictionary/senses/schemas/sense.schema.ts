@@ -1,8 +1,5 @@
 import * as mongoose from 'mongoose';
-import {
-  DICTIONARY_OR_THESAURUS_ALL_VALUES,
-  LEXICAL_CATEGORY_ALL_VALUES
-} from '@edfu/enums';
+import { DICTIONARY_OR_THESAURUS_ALL_VALUES } from '@edfu/enums';
 
 export const SenseSchema = new mongoose.Schema({
   senseId: {
@@ -16,7 +13,7 @@ export const SenseSchema = new mongoose.Schema({
   entryHomographC: Number,
   lexicalCategory: {
     type: String,
-    enum: LEXICAL_CATEGORY_ALL_VALUES
+    required: true
   },
   apiSenseIndex: {
     type: Number,

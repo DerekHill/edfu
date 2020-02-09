@@ -39,6 +39,7 @@ export class EntriesService {
       .find({
         word: chars
       })
+      .collation({ locale: 'en', strength: 2 })
       .lean();
 
     if (existing.length) {

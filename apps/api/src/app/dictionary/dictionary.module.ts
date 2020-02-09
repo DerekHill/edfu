@@ -50,8 +50,14 @@ import * as use from '@tensorflow-models/universal-sentence-encoder';
         // SKIP_TENSORFLOW=yes ng run api:serve-console
         // SKIP_TENSORFLOW=yes ng serve api
         if (process.env.SKIP_TENSORFLOW === 'yes') {
+          console.warn(
+            'Skipping Universal Sentence Encoder Tensorflow model...'
+          );
           return null;
         } else {
+          console.warn(
+            'Loading Universal Sentence Encoder Tensorflow model...'
+          );
           return await use.load();
         }
       }

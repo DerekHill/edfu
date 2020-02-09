@@ -162,7 +162,10 @@ export class SensesService {
       return acc;
     }, {});
     const senseIds = entrySenses.map(i => i.senseId);
-    const senses = await this.senseModel.find({ senseId: { $in: senseIds } });
+    const senses = await this.senseModel.find({
+      senseId: { $in: senseIds },
+      definition: { $ne: null }
+    });
 
     return senses.map(sense => {
       const senseId = sense.senseId;

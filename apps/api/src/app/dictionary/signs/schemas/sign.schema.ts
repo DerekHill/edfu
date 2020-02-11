@@ -1,15 +1,12 @@
 import * as mongoose from 'mongoose';
 
+// Need to add userId
 export const SignSchema = new mongoose.Schema({
-  senseId: {
-    type: String,
-    required: true
-  },
   mnemonic: {
     type: String,
     required: true
   },
-  media_url: {
+  mediaUrl: {
     type: String,
     required: true
   }

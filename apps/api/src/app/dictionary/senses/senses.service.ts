@@ -254,4 +254,43 @@ export class SensesService {
   private extractDefinition(oxSense: OxSense): string {
     return oc(oxSense).definitions[0]();
   }
+
+  async printSenses() {
+    const senses = await this.senseModel
+      .find(
+        {
+          dictionaryOrThesaurus: 'dictionary',
+          entryOxId: {
+            $in: [
+              'good_morning',
+              'good_afternoon',
+              'help',
+              'more',
+              'please',
+              'thank_you',
+              'break'
+            ]
+          }
+        },
+        { _id: 0, entryOxId: 1, senseId: 1, definition: 1, example: 1 }
+      )
+      .lean()
+      .exec();
+    //   .replace(/,/g, '')
+    for (const sense of senses) {
+      console.log(
+        `${sense.entryOxId},${sense.senseId},${this.replace(
+          sense.definition
+        )},${this.replace(sense.example)}`
+      );
+    }
+  }
+
+  replace(string) {
+    if (string) {
+      return string.replace(/,/g, '');
+    } else {
+      return '';
+    }
+  }
 }

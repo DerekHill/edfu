@@ -3,7 +3,9 @@ import { InjectModel } from '@nestjs/mongoose';
 import {
   ENTRY_COLLECTION_NAME,
   SENSE_COLLECTION_NAME,
-  ENTRY_SENSE_COLLECTION_NAME
+  ENTRY_SENSE_COLLECTION_NAME,
+  SENSE_SIGN_COLLECTION_NAME,
+  SIGN_COLLECTION_NAME
 } from '../../constants';
 import { Model } from 'mongoose';
 import {
@@ -15,10 +17,12 @@ import {
   ThesaurusSenseRecordWithoutId,
   SenseDocument
 } from '../../dictionary/senses/interfaces/sense.interface';
-import { SignRecordWithoutId } from '../../dictionary/signs/interfaces/sign.interface';
 import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
 import { HeadwordOrPhrase } from '../../enums';
 import { EntrySenseRecordWithoutId } from '../../dictionary/entry-senses/interfaces/entry-sense.interface';
+import { ObjectId } from 'bson';
+import { SenseSignRecordWithoutId } from '../../dictionary/signs/interfaces/sense-sign.interface';
+import { SignRecord } from '../../dictionary/signs/interfaces/sign.interface';
 
 const FOOD = 'food';
 const FAST = 'fast';
@@ -83,6 +87,14 @@ const SPEEDY_0_DICT_ADJ_SENSE_2_ID = 'm_en_gbus0976550.013';
 
 const SPEEDY_0_THES_ADJ_SENSE_1_ID = 't_en_gb0013890.001'; // Linked to SPEEDY_DICT_ADJ_SENSE_1_ID
 const SPEEDY_0_THES_ADJ_SENSE_2_ID = 't_en_gb0013890.002'; // Linked to SPEEDY_DICT_ADJ_SENSE_2_ID
+
+const SIGN_ID_GOOD_MORNING = new ObjectId('00000000000000000000000a');
+const SIGN_ID_GOOD_AFTERNOON = new ObjectId('00000000000000000000000b');
+const SIGN_ID_HELP = new ObjectId('00000000000000000000000c');
+const SIGN_ID_MORE = new ObjectId('00000000000000000000000d');
+const SIGN_ID_PLEASE = new ObjectId('00000000000000000000000e');
+const SIGN_ID_THANK_YOU = new ObjectId('00000000000000000000000f');
+const SIGN_ID_BREAK = new ObjectId('00000000000000000000001a');
 
 const ENTRIES: EntryRecordWithoutId[] = [
   {
@@ -1054,6 +1066,63 @@ const ENTRY_SENSES: EntrySenseRecordWithoutId[] = [
   }
 ];
 
+const SENSE_SIGNS: SenseSignRecordWithoutId[] = [
+  { senseId: 'm_en_gbus0423120.004', signId: SIGN_ID_GOOD_MORNING },
+  { senseId: 'm_en_gbus0422860.004', signId: SIGN_ID_GOOD_AFTERNOON },
+  { senseId: 'm_en_gbus0460970.006', signId: SIGN_ID_HELP },
+  { senseId: 'm_en_gbus0460970.023', signId: SIGN_ID_HELP },
+  { senseId: 'm_en_gbus0660470.077', signId: SIGN_ID_MORE },
+  { senseId: 'm_en_gbus0660470.005', signId: SIGN_ID_MORE },
+  { senseId: 'm_en_gbus0789530.019', signId: SIGN_ID_PLEASE },
+  { senseId: 'm_en_gbus1044390.004', signId: SIGN_ID_THANK_YOU },
+  { senseId: 'm_en_gbus0123260.091', signId: SIGN_ID_BREAK }
+];
+
+const SIGNS: SignRecord[] = [
+  {
+    _id: SIGN_ID_MORE,
+    mediaUrl:
+      'https://0gis3zwqlg-flywheel.netdna-ssl.com/wp-content/uploads/2018/10/More.gif',
+    mnemonic: 'Adding more to a pile'
+  },
+  {
+    _id: SIGN_ID_HELP,
+    mediaUrl:
+      'https://0gis3zwqlg-flywheel.netdna-ssl.com/wp-content/uploads/2018/10/Help-1.gif',
+    mnemonic: 'Help your hand up'
+  },
+  {
+    _id: SIGN_ID_GOOD_MORNING,
+    mediaUrl:
+      'https://0gis3zwqlg-flywheel.netdna-ssl.com/wp-content/uploads/2018/10/Good_Morning.gif',
+    mnemonic: 'Open the curtains'
+  },
+  {
+    _id: SIGN_ID_PLEASE,
+    mediaUrl:
+      'https://0gis3zwqlg-flywheel.netdna-ssl.com/wp-content/uploads/2018/10/Please.gif',
+    mnemonic: 'Please to the knees'
+  },
+  {
+    _id: SIGN_ID_THANK_YOU,
+    mediaUrl:
+      'https://0gis3zwqlg-flywheel.netdna-ssl.com/wp-content/uploads/2018/10/Thank_you.gif',
+    mnemonic: 'Thank you to you'
+  },
+  {
+    _id: SIGN_ID_GOOD_AFTERNOON,
+    mediaUrl:
+      'https://0gis3zwqlg-flywheel.netdna-ssl.com/wp-content/uploads/2018/10/Good_afternoon.gif',
+    mnemonic: "To the person you're speaking to"
+  },
+  {
+    _id: SIGN_ID_BREAK,
+    mediaUrl:
+      'https://0gis3zwqlg-flywheel.netdna-ssl.com/wp-content/uploads/2018/10/Toilet_break.gif',
+    mnemonic: ''
+  }
+];
+
 @Injectable()
 export class FixturesService {
   constructor(
@@ -1062,7 +1131,11 @@ export class FixturesService {
     @InjectModel(SENSE_COLLECTION_NAME)
     private readonly senseModel: Model<SenseDocument>,
     @InjectModel(ENTRY_SENSE_COLLECTION_NAME)
-    private readonly entrySenseModel: Model<SenseDocument>
+    private readonly entrySenseModel: Model<SenseDocument>,
+    @InjectModel(SENSE_SIGN_COLLECTION_NAME)
+    private readonly senseSignModel: Model<SenseDocument>,
+    @InjectModel(SIGN_COLLECTION_NAME)
+    private readonly signModel: Model<SenseDocument>
   ) {}
 
   populateCollection(model: Model<any>, data: object[], conditionsGenerator) {
@@ -1094,6 +1167,19 @@ export class FixturesService {
     return { oxId: obj.oxId, homographC: obj.homographC, senseId: obj.senseId };
   }
 
+  senseSignConditionsGenerator(obj: SenseSignRecordWithoutId) {
+    return {
+      senseId: obj.senseId,
+      signId: obj.signId
+    };
+  }
+
+  signConditionsGenerator(obj: SignRecord) {
+    return {
+      _id: obj._id
+    };
+  }
+
   async create() {
     await this.populateCollection(
       this.entryModel,
@@ -1114,6 +1200,16 @@ export class FixturesService {
       this.entrySenseModel,
       ENTRY_SENSES,
       this.entrySenseConditionsGenerator
+    );
+    await this.populateCollection(
+      this.senseSignModel,
+      SENSE_SIGNS,
+      this.senseSignConditionsGenerator
+    );
+    await this.populateCollection(
+      this.signModel,
+      SIGNS,
+      this.signConditionsGenerator
     );
     return console.log('Fixtures created!');
   }

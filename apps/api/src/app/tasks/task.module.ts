@@ -6,13 +6,17 @@ import { MongooseModule } from '@nestjs/mongoose';
 import {
   ENTRY_COLLECTION_NAME,
   SENSE_COLLECTION_NAME,
-  ENTRY_SENSE_COLLECTION_NAME
+  ENTRY_SENSE_COLLECTION_NAME,
+  SENSE_SIGN_COLLECTION_NAME,
+  SIGN_COLLECTION_NAME
 } from '../constants';
 import { EntrySchema } from '../dictionary/entries/schemas/entry.schema';
 import { SenseSchema } from '../dictionary/senses/schemas/sense.schema';
 import { EntrySenseSchema } from '../dictionary/entry-senses/schemas/entry-sense.schema';
 import { LoaderService } from './loader/loader.service';
 import { DictionaryModule } from '../dictionary/dictionary.module';
+import { SenseSignSchema } from '../dictionary/signs/schemas/sense-sign.schema';
+import { SignSchema } from '../dictionary/signs/schemas/sign.schema';
 
 @Module({
   imports: [
@@ -20,7 +24,9 @@ import { DictionaryModule } from '../dictionary/dictionary.module';
     MongooseModule.forFeature([
       { name: ENTRY_COLLECTION_NAME, schema: EntrySchema },
       { name: SENSE_COLLECTION_NAME, schema: SenseSchema },
-      { name: ENTRY_SENSE_COLLECTION_NAME, schema: EntrySenseSchema }
+      { name: ENTRY_SENSE_COLLECTION_NAME, schema: EntrySenseSchema },
+      { name: SENSE_SIGN_COLLECTION_NAME, schema: SenseSignSchema },
+      { name: SIGN_COLLECTION_NAME, schema: SignSchema }
     ]),
     DictionaryModule
   ],

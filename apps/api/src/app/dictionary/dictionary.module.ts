@@ -72,6 +72,6 @@ class TfUseMock {
     },
     SimilarityService
   ],
-  exports: [EntriesService]
+  exports: [EntriesService, SensesService]
 })
 export class DictionaryModule {}

@@ -52,4 +52,13 @@ export class TaskService {
     }
     process.exit();
   }
+
+  @Command({
+    command: 'print'
+  })
+  async printSenses() {
+    console.log('printing');
+    await this.loaderService.printSenses();
+    process.exit();
+  }
 }

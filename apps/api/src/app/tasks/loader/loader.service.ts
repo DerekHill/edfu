@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { EntriesService } from '../../dictionary/entries/entries.service';
+import { SensesService } from '../../dictionary/senses/senses.service';
 
 const WORDS = [
   'good morning',
@@ -13,13 +14,20 @@ const WORDS = [
 
 @Injectable()
 export class LoaderService {
-  constructor(private readonly entriesService: EntriesService) {}
+  constructor(
+    private readonly entriesService: EntriesService,
+    private readonly sensesService: SensesService
+  ) {}
 
   async load() {
     for (const word of WORDS) {
       console.log(`-----Loading ${word}-----`);
       await this.loadWord(word);
     }
+  }
+
+  printSenses() {
+    return this.sensesService.printSenses();
   }
 
   async loadWord(word: string) {

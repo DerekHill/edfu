@@ -57,7 +57,7 @@ describe('EntriesResolver', () => {
     expect(res.oxId).toEqual(oxId);
   });
 
-  it('searches by search_string', async () => {
+  it('searches by searchString', async () => {
     const word = 'food';
     const entry = entryRecord(word);
     jest.spyOn(entriesService, 'search').mockImplementation(() => {

@@ -1,24 +1,25 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Observable, of, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import gql from 'graphql-tag';
 import { Apollo, QueryRef } from 'apollo-angular';
-import { EntryDto, SenseForEntryDto } from '@edfu/api-interfaces';
-import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
+import { EntryDto, SenseForEntryDto, SignDto } from '@edfu/api-interfaces';
+import { DictionaryOrThesaurus } from '@edfu/enums';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { ApolloQueryResult } from 'apollo-client';
 
-interface EntrySearchQuery {
-  search: EntryDto[];
+interface HomographGroup {
+  word: string;
+  entries: EntryDto[];
 }
 
 interface EntrySearchVariables {
-  search_string?: string;
+  searchString?: string;
 }
 
-interface SensesQuery {
-  senses: SenseForEntryDto[];
+interface EntrySearchResult {
+  search: EntryDto[];
 }
 
 interface SenseSearchVariables {
@@ -26,14 +27,16 @@ interface SenseSearchVariables {
   homographC: number;
 }
 
-interface HomographGroup {
-  word: string;
-  entries: EntryDto[];
+interface SensesResult {
+  senses: SenseForEntryDto[];
 }
 
-enum Blah {
-  noun = 'noun',
-  pronoun = 'pronoun'
+interface SignSearchVariables {
+  senseId: string;
+}
+
+interface SignsResult {
+  signs: SignDto[];
 }
 
 @Component({
@@ -44,14 +47,18 @@ export class FirstComponent implements OnInit, OnDestroy {
   searchFormControl = new FormControl();
 
   searchChars$: Observable<string>;
+
+  entriesSearchRef: QueryRef<EntrySearchResult, EntrySearchVariables>;
   entries$: Observable<EntryDto[]>;
   homographGroups$: Observable<HomographGroup[]>;
-  entriesSearchRef: QueryRef<EntrySearchQuery, EntrySearchVariables>;
-
-  senses$: Observable<SenseForEntryDto[]>;
-  sensesSearchRef: QueryRef<SensesQuery, SenseSearchVariables>;
 
   homographGroup$: BehaviorSubject<HomographGroup>;
+
+  sensesSearchRef: QueryRef<SensesResult, SenseSearchVariables>;
+  senses$: Observable<SenseForEntryDto[]>;
+
+  signsSearchRef: QueryRef<SignsResult, SignSearchVariables>;
+  signs$: Observable<SignDto[]>;
 
   constructor(private apollo: Apollo) {}
 
@@ -61,12 +68,12 @@ export class FirstComponent implements OnInit, OnDestroy {
     this.homographGroup$ = new BehaviorSubject(null);
 
     this.entriesSearchRef = this.apollo.watchQuery<
-      EntrySearchQuery,
+      EntrySearchResult,
       EntrySearchVariables
     >({
       query: gql`
-        query WordSearchQuery($search_string: String!) {
-          search(search_string: $search_string) {
+        query WordSearchQuery($searchString: String!) {
+          search(searchString: $searchString) {
             oxId
             homographC
             word
@@ -79,7 +86,7 @@ export class FirstComponent implements OnInit, OnDestroy {
 
     // Probably better way of avoiding error on initial subscription than setting defaults which get sent to the server
     this.sensesSearchRef = this.apollo.watchQuery<
-      SensesQuery,
+      SensesResult,
       SenseSearchVariables
     >({
       query: gql`
@@ -98,8 +105,27 @@ export class FirstComponent implements OnInit, OnDestroy {
       `
     });
 
+    this.signsSearchRef = this.apollo.watchQuery<
+      SignsResult,
+      SignSearchVariables
+    >({
+      query: gql`
+        query SignsQuery($senseId: String! = "") {
+          signs(senseId: $senseId) {
+            senseId
+            signId
+            sign {
+              _id
+              mnemonic
+              mediaUrl
+            }
+          }
+        }
+      `
+    });
+
     this.entries$ = this.entriesSearchRef.valueChanges.pipe(
-      map((res: ApolloQueryResult<EntrySearchQuery>) => res.data.search)
+      map((res: ApolloQueryResult<EntrySearchResult>) => res.data.search)
     );
 
     this.homographGroups$ = this.entries$.pipe(
@@ -115,14 +141,21 @@ export class FirstComponent implements OnInit, OnDestroy {
       //   _groupAndFilterByLexicalCategory
     );
 
+    this.signs$ = this.signsSearchRef.valueChanges.pipe(
+      map(({ data }: any) => {
+        console.log(data);
+        return data.signs;
+      })
+    );
+
     this.searchChars$.subscribe(input => {
       if (typeof input === 'string') {
         console.log('entrySearchRef.setVariables');
         this.entriesSearchRef.setVariables({
-          search_string: input
+          searchString: input
         });
       } else if (typeof input === 'object') {
-        //   Do nothing. Use `onOptionSelected` instead
+        //   Do nothing. Use `onGroupSelect` instead
       }
     });
 
@@ -140,17 +173,18 @@ export class FirstComponent implements OnInit, OnDestroy {
       console.log('senses:');
       console.log(senses);
     });
+
+    this.signs$.subscribe(signs => {
+      console.log('signs:');
+      console.log(signs);
+    });
   }
 
-  onOptionSelected(group: HomographGroup) {
+  onGroupSelect(group: HomographGroup) {
     this.homographGroup$.next(group);
     if (group.entries.length === 1) {
       this.onEntryClick(null, group.entries[0]);
     }
-  }
-
-  displayFn(res?: any): string | undefined {
-    return res ? res.word : undefined;
   }
 
   onEntryClick(event, entry: EntryDto) {
@@ -159,6 +193,17 @@ export class FirstComponent implements OnInit, OnDestroy {
       oxId: entry.oxId,
       homographC: entry.homographC
     });
+  }
+
+  onSenseClick(event, sense: SenseForEntryDto) {
+    console.log(sense);
+    this.signsSearchRef.setVariables({
+      senseId: sense.senseId
+    });
+  }
+
+  displayFn(res?: any): string | undefined {
+    return res ? res.word : undefined;
   }
 
   _groupByHomographWord(entries: EntryDto[]): HomographGroup[] {

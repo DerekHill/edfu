@@ -31,7 +31,7 @@ type Query {
   hello: String!
   entry(id: String!): EntryDto!
   entriesAll: [EntryDto!]!
-  search(search_string: String!): [EntryDto!]!
+  search(searchString: String!): [EntryDto!]!
   sensesForEntry(homographC: Float!, oxId: String!): [SenseForEntryDto!]!
   signs(senseId: String!): [SenseSignDto!]!
 }

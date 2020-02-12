@@ -28,7 +28,7 @@ export class EntriesResolver {
   }
 
   @Query(returns => [EntryDto])
-  search(@Args('search_string') search_string: string): Promise<EntryDto[]> {
-    return this.entriesService.search(search_string);
+  search(@Args('searchString') searchString: string): Promise<EntryDto[]> {
+    return this.entriesService.search(searchString);
   }
 }

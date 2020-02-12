@@ -4,7 +4,12 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import gql from 'graphql-tag';
 import { Apollo, QueryRef } from 'apollo-angular';
-import { EntryDto, SenseForEntryDto, SignDto } from '@edfu/api-interfaces';
+import {
+  EntryDto,
+  SenseForEntryDto,
+  SignDto,
+  SenseSignDto
+} from '@edfu/api-interfaces';
 import { DictionaryOrThesaurus } from '@edfu/enums';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { ApolloQueryResult } from 'apollo-client';
@@ -36,7 +41,7 @@ interface SignSearchVariables {
 }
 
 interface SignsResult {
-  signs: SignDto[];
+  signs: SenseSignDto[];
 }
 
 @Component({
@@ -58,7 +63,7 @@ export class FirstComponent implements OnInit, OnDestroy {
   senses$: Observable<SenseForEntryDto[]>;
 
   signsSearchRef: QueryRef<SignsResult, SignSearchVariables>;
-  signs$: Observable<SignDto[]>;
+  senseSigns$: Observable<SenseSignDto[]>;
 
   constructor(private apollo: Apollo) {}
 
@@ -141,7 +146,7 @@ export class FirstComponent implements OnInit, OnDestroy {
       //   _groupAndFilterByLexicalCategory
     );
 
-    this.signs$ = this.signsSearchRef.valueChanges.pipe(
+    this.senseSigns$ = this.signsSearchRef.valueChanges.pipe(
       map(({ data }: any) => {
         console.log(data);
         return data.signs;
@@ -174,7 +179,7 @@ export class FirstComponent implements OnInit, OnDestroy {
       console.log(senses);
     });
 
-    this.signs$.subscribe(signs => {
+    this.senseSigns$.subscribe(signs => {
       console.log('signs:');
       console.log(signs);
     });

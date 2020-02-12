@@ -1,28 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SignsService } from './signs.service';
-import { Injectable } from '@nestjs/common';
-import { InjectModel, MongooseModule } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { SIGN_COLLECTION_NAME } from '../../constants';
+import { MongooseModule } from '@nestjs/mongoose';
 import {
-  SignDocument,
-  SignRecord,
-  SignRecordWithoutId
-} from './interfaces/sign.interface';
+  SIGN_COLLECTION_NAME,
+  SENSE_SIGN_COLLECTION_NAME
+} from '../../constants';
+import { SignRecord } from './interfaces/sign.interface';
 import { TestDatabaseModule } from '../../config/test-database.module';
 import { SignSchema } from './schemas/sign.schema';
-
-@Injectable()
-class SignsTestSetupService {
-  constructor(
-    @InjectModel(SIGN_COLLECTION_NAME)
-    private readonly signModel: Model<SignDocument>
-  ) {}
-
-  create(sign: SignRecordWithoutId): Promise<SignRecord> {
-    return this.signModel.create(sign);
-  }
-}
+import { ObjectId } from 'bson';
+import { SenseSignRecordWithoutId } from './interfaces/sense-sign.interface';
+import { SenseSignSchema } from './schemas/sense-sign.schema';
+import { SignsTestSetupService } from './signs-test-setup.service';
 
 describe('SignsService', () => {
   let service: SignsService;
@@ -32,6 +21,9 @@ describe('SignsService', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         TestDatabaseModule,
+        MongooseModule.forFeature([
+          { name: SENSE_SIGN_COLLECTION_NAME, schema: SenseSignSchema }
+        ]),
         MongooseModule.forFeature([
           { name: SIGN_COLLECTION_NAME, schema: SignSchema }
         ])
@@ -44,33 +36,31 @@ describe('SignsService', () => {
   });
 
   it('SignsTestSetupService.create', async () => {
-    const data: SignRecordWithoutId = {
+    const data: SignRecord = {
+      _id: new ObjectId(),
       mnemonic: 'foo',
       mediaUrl: 'link'
     };
-    const record = await setupService.create(data);
-    // expect(record.senseId).toEqual(data.senseId);
+    const record = await setupService.createSign(data);
+    expect(record.mediaUrl).toEqual(data.mediaUrl);
   });
 
-  it('findBySenseId', async () => {
-    const MATCHING_ID = 'matching_id';
-    const data: SignRecordWithoutId[] = [
+  it('getSenseSigns', async () => {
+    const senseId = 'm_en_gbus0423120.004';
+    const signId = new ObjectId();
+    const senseSignData: SenseSignRecordWithoutId[] = [
       {
-        mnemonic: 'foo',
-        mediaUrl: 'link'
-      },
-      {
-        mnemonic: 'foo',
-        mediaUrl: 'link'
+        senseId: senseId,
+        signId: signId
       }
     ];
     await Promise.all(
-      data.map((obj: SignRecordWithoutId) => {
-        return setupService.create(obj);
+      senseSignData.map((obj: SenseSignRecordWithoutId) => {
+        return setupService.createSenseSign(obj);
       })
     );
 
-    const res = await service.findBySenseId(MATCHING_ID);
-    expect(res.length).toBe(1);
+    const res = await service.getSenseSigns(senseId);
+    expect(res[0].signId).toEqual(signId);
   });
 });

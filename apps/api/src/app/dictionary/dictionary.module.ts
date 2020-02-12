@@ -7,7 +7,8 @@ import {
   SENSE_COLLECTION_NAME,
   SIGN_COLLECTION_NAME,
   ENTRY_SENSE_COLLECTION_NAME,
-  TF_MODEL_NAME
+  TF_MODEL_NAME,
+  SENSE_SIGN_COLLECTION_NAME
 } from '../constants';
 import { EntrySchema } from './entries/schemas/entry.schema';
 import { SensesService } from './senses/senses.service';
@@ -20,6 +21,8 @@ import { EntrySensesService } from './entry-senses/entry-senses.service';
 import { EntrySenseSchema } from './entry-senses/schemas/entry-sense.schema';
 import { SimilarityService } from './similarity/similarity.service';
 import * as use from '@tensorflow-models/universal-sentence-encoder';
+import { SenseSignSchema } from './signs/schemas/sense-sign.schema';
+import { SignsResolver } from './signs/signs.resolver';
 
 class TfUseMock {
   embed(sentences: string[]) {
@@ -39,10 +42,13 @@ class TfUseMock {
       { name: SENSE_COLLECTION_NAME, schema: SenseSchema }
     ]),
     MongooseModule.forFeature([
-      { name: SIGN_COLLECTION_NAME, schema: SignSchema }
+      { name: ENTRY_SENSE_COLLECTION_NAME, schema: EntrySenseSchema }
     ]),
     MongooseModule.forFeature([
-      { name: ENTRY_SENSE_COLLECTION_NAME, schema: EntrySenseSchema }
+      { name: SENSE_SIGN_COLLECTION_NAME, schema: SenseSignSchema }
+    ]),
+    MongooseModule.forFeature([
+      { name: SIGN_COLLECTION_NAME, schema: SignSchema }
     ])
   ],
   providers: [
@@ -52,6 +58,7 @@ class TfUseMock {
     SensesResolver,
     SignsService,
     EntrySensesService,
+    SignsResolver,
     {
       provide: TF_MODEL_NAME,
       useFactory: async () => {

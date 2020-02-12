@@ -1,19 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import {
-  SIGN_COLLECTION_NAME,
-  SENSE_SIGN_COLLECTION_NAME
+  SENSE_SIGN_COLLECTION_NAME,
+  SIGN_COLLECTION_NAME
 } from '../../constants';
 import { Model } from 'mongoose';
-import { SignDocument, SignRecord } from './interfaces/sign.interface';
 import {
   SenseSignDocument,
+  SenseSignRecordWithoutId,
   SenseSignRecord
 } from './interfaces/sense-sign.interface';
-import { ObjectId } from 'bson';
+import { SignDocument, SignRecord } from './interfaces/sign.interface';
 
 @Injectable()
-export class SignsService {
+export class SignsTestSetupService {
   constructor(
     @InjectModel(SENSE_SIGN_COLLECTION_NAME)
     private readonly senseSignModel: Model<SenseSignDocument>,
@@ -21,18 +21,13 @@ export class SignsService {
     private readonly signModel: Model<SignDocument>
   ) {}
 
-  getSenseSigns(senseId: string): Promise<SenseSignRecord[]> {
-    return this.senseSignModel
-      .find({ senseId: senseId })
-      .lean()
-      .exec();
+  createSign(sign: SignRecord): Promise<SignRecord> {
+    return this.signModel.create(sign);
   }
 
-  findOneSign(_id: ObjectId): Promise<SignRecord> {
-    //   return null
-    return this.signModel
-      .findById(_id)
-      .lean()
-      .exec();
+  createSenseSign(
+    senseSign: SenseSignRecordWithoutId
+  ): Promise<SenseSignRecord> {
+    return this.senseSignModel.create(senseSign);
   }
 }

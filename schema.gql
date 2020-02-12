@@ -33,16 +33,29 @@ type Query {
   entriesAll: [EntryDto!]!
   search(search_string: String!): [EntryDto!]!
   sensesForEntry(homographC: Float!, oxId: String!): [SenseForEntryDto!]!
+  signs(senseId: String!): [SenseSignDto!]!
 }
 
 type SenseForEntryDto {
   oxId: String!
   homographC: Float!
-  senseId: String!
+  senseId: ID!
   lexicalCategory: LexicalCategory!
   apiSenseIndex: Float!
   example: String
   definition: String!
   associationType: DictionaryOrThesaurus!
   similarity: Float!
+}
+
+type SenseSignDto {
+  senseId: ID!
+  signId: ID!
+  sign: SignDto
+}
+
+type SignDto {
+  _id: ID!
+  mnemonic: String!
+  mediaUrl: String!
 }

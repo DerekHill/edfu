@@ -1,5 +1,6 @@
 import { ObjectType, Field, Int, ID, registerEnumType } from 'type-graphql';
 import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
+import { ObjectId } from 'bson';
 
 registerEnumType(DictionaryOrThesaurus, {
   name: 'DictionaryOrThesaurus'
@@ -32,7 +33,7 @@ export class SenseForEntryDto {
   @Field()
   readonly homographC: number;
 
-  @Field()
+  @Field(type => ID)
   readonly senseId: string;
 
   @Field(type => LexicalCategory)
@@ -52,4 +53,28 @@ export class SenseForEntryDto {
 
   @Field()
   readonly similarity: number;
+}
+
+@ObjectType()
+export class SignDto {
+  @Field(type => ID)
+  _id: ObjectId;
+
+  @Field()
+  readonly mnemonic: string;
+
+  @Field()
+  readonly mediaUrl: string;
+}
+
+@ObjectType()
+export class SenseSignDto {
+  @Field(type => ID)
+  readonly senseId: string;
+
+  @Field(type => ID)
+  readonly signId: ObjectId;
+
+  @Field(type => SignDto, { nullable: true })
+  readonly sign?: SignDto;
 }

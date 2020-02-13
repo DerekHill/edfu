@@ -54,16 +54,18 @@ export class FirstComponent implements OnInit, OnDestroy {
   searchChars$: Observable<string>;
 
   entriesSearchRef: QueryRef<EntrySearchResult, EntrySearchVariables>;
-  entries$: Observable<EntryDto[]>;
+  entryValueChanges$: Observable<EntryDto[]>;
   homographGroups$: Observable<HomographGroup[]>;
 
   homographGroup$: BehaviorSubject<HomographGroup>;
 
   sensesSearchRef: QueryRef<SensesResult, SenseSearchVariables>;
   senses$: Observable<SenseForEntryDto[]>;
+  sensesBs$: BehaviorSubject<SenseForEntryDto[]>;
 
   signsSearchRef: QueryRef<SignsResult, SignSearchVariables>;
   senseSigns$: Observable<SenseSignDto[]>;
+  senseSignsBs$: BehaviorSubject<SenseSignDto[]>;
 
   constructor(private apollo: Apollo) {}
 
@@ -71,6 +73,8 @@ export class FirstComponent implements OnInit, OnDestroy {
     this.searchChars$ = this.searchFormControl.valueChanges.pipe(startWith(''));
 
     this.homographGroup$ = new BehaviorSubject(null);
+    this.sensesBs$ = new BehaviorSubject(null);
+    this.senseSignsBs$ = new BehaviorSubject(null);
 
     this.entriesSearchRef = this.apollo.watchQuery<
       EntrySearchResult,
@@ -129,11 +133,11 @@ export class FirstComponent implements OnInit, OnDestroy {
       `
     });
 
-    this.entries$ = this.entriesSearchRef.valueChanges.pipe(
+    this.entryValueChanges$ = this.entriesSearchRef.valueChanges.pipe(
       map((res: ApolloQueryResult<EntrySearchResult>) => res.data.search)
     );
 
-    this.homographGroups$ = this.entries$.pipe(
+    this.homographGroups$ = this.entryValueChanges$.pipe(
       map(entries => {
         return this._groupByHomographWord(entries);
       })
@@ -143,19 +147,16 @@ export class FirstComponent implements OnInit, OnDestroy {
       map(({ data }: any) => data.sensesForEntry),
       map(senses => this._sortSenses(senses)),
       map(senses => this._groupAndFilterByLexicalCategory(senses))
-      //   _groupAndFilterByLexicalCategory
     );
 
     this.senseSigns$ = this.signsSearchRef.valueChanges.pipe(
       map(({ data }: any) => {
-        console.log(data);
         return data.signs;
       })
     );
 
     this.searchChars$.subscribe(input => {
       if (typeof input === 'string') {
-        console.log('entrySearchRef.setVariables');
         this.entriesSearchRef.setVariables({
           searchString: input
         });
@@ -164,24 +165,15 @@ export class FirstComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.homographGroups$.subscribe(a => {
-      console.log('homographGroups (plural)');
-      console.log(a);
-    });
-
-    this.homographGroup$.subscribe(group => {
-      console.log('homographGroup (singular)');
-      console.log(group);
-    });
-
     this.senses$.subscribe(senses => {
-      console.log('senses:');
-      console.log(senses);
+      if (senses.length === 1) {
+        this.onSenseClick(null, senses[0]);
+      }
+      this.sensesBs$.next(senses);
     });
 
     this.senseSigns$.subscribe(signs => {
-      console.log('signs:');
-      console.log(signs);
+      this.senseSignsBs$.next(signs);
     });
   }
 
@@ -193,7 +185,6 @@ export class FirstComponent implements OnInit, OnDestroy {
   }
 
   onEntryClick(event, entry: EntryDto) {
-    console.log('onEntryClick', entry.oxId, entry.homographC);
     this.sensesSearchRef.setVariables({
       oxId: entry.oxId,
       homographC: entry.homographC
@@ -201,10 +192,16 @@ export class FirstComponent implements OnInit, OnDestroy {
   }
 
   onSenseClick(event, sense: SenseForEntryDto) {
-    console.log(sense);
     this.signsSearchRef.setVariables({
       senseId: sense.senseId
     });
+  }
+
+  clearSearchField() {
+    this.homographGroup$.next(null);
+    this.sensesBs$.next(null);
+    this.senseSignsBs$.next(null);
+    this.searchFormControl.reset();
   }
 
   displayFn(res?: any): string | undefined {

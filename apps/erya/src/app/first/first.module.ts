@@ -6,12 +6,9 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
-// import {
-//   MatAutocompleteModule,
-//   MatFormFieldModule,
-//   MatInputModule,
-//   MatListModule
-// } from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [FirstComponent],
@@ -22,7 +19,9 @@ import { MatListModule } from '@angular/material/list';
     MatAutocompleteModule,
     MatFormFieldModule,
     MatInputModule,
-    MatListModule
+    MatListModule,
+    MatIconModule,
+    MatButtonModule
   ]
 })
 export class FirstModule {}

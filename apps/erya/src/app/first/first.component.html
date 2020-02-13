@@ -8,6 +8,17 @@
       [formControl]="searchFormControl"
       [matAutocomplete]="auto"
     />
+
+    <button
+      mat-button
+      mat-icon-button
+      matSuffix
+      (click)="clearSearchField()"
+      *ngIf="this.searchFormControl.value"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+
     <mat-autocomplete
       #auto="matAutocomplete"
       [displayWith]="displayFn"
@@ -32,7 +43,7 @@
   </mat-action-list>
 </div>
 
-<div *ngIf="senses$ | async as senses">
+<div *ngIf="sensesBs$ | async as senses">
   <mat-action-list>
     <mat-list-item
       *ngFor="let sense of senses"
@@ -45,7 +56,7 @@
   </mat-action-list>
 </div>
 
-<div *ngIf="senseSigns$ | async as senseSigns">
+<div *ngIf="senseSignsBs$ | async as senseSigns">
   <div *ngFor="let senseSign of senseSigns">
     <img src="{{ senseSign.sign.mediaUrl }}" />
     {{ senseSign.sign.mnemonic }}

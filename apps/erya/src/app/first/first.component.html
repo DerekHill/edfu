@@ -1,13 +1,13 @@
 <form class="example-form">
   <mat-form-field class="example-full-width">
     <input
-      #searchInput
       type="text"
       placeholder="Search"
       aria-label="Type here to search"
       matInput
       [formControl]="searchFormControl"
       [matAutocomplete]="auto"
+      autofocus
     />
 
     <button

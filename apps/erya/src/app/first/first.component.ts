@@ -1,22 +1,10 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  ViewChild,
-  ElementRef,
-  AfterViewInit
-} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import gql from 'graphql-tag';
 import { Apollo, QueryRef } from 'apollo-angular';
-import {
-  EntryDto,
-  SenseForEntryDto,
-  SignDto,
-  SenseSignDto
-} from '@edfu/api-interfaces';
+import { EntryDto, SenseForEntryDto, SenseSignDto } from '@edfu/api-interfaces';
 import { DictionaryOrThesaurus } from '@edfu/enums';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { ApolloQueryResult } from 'apollo-client';
@@ -55,7 +43,7 @@ interface SignsResult {
   selector: 'edfu-first',
   templateUrl: './first.component.html'
 })
-export class FirstComponent implements OnInit, OnDestroy, AfterViewInit {
+export class FirstComponent implements OnInit, OnDestroy {
   searchFormControl = new FormControl();
 
   searchChars$: Observable<string>;
@@ -75,8 +63,6 @@ export class FirstComponent implements OnInit, OnDestroy, AfterViewInit {
   senseSignsBs$: BehaviorSubject<SenseSignDto[]>;
 
   constructor(private apollo: Apollo) {}
-
-  @ViewChild('searchInput') vc: ElementRef;
 
   ngOnInit() {
     this.searchChars$ = this.searchFormControl.valueChanges.pipe(startWith(''));
@@ -281,8 +267,4 @@ export class FirstComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy() {}
-
-  ngAfterViewInit() {
-    this.vc.nativeElement.focus();
-  }
 }

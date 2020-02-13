@@ -1,4 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  ElementRef,
+  AfterViewInit
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -48,7 +55,7 @@ interface SignsResult {
   selector: 'edfu-first',
   templateUrl: './first.component.html'
 })
-export class FirstComponent implements OnInit, OnDestroy {
+export class FirstComponent implements OnInit, OnDestroy, AfterViewInit {
   searchFormControl = new FormControl();
 
   searchChars$: Observable<string>;
@@ -68,6 +75,8 @@ export class FirstComponent implements OnInit, OnDestroy {
   senseSignsBs$: BehaviorSubject<SenseSignDto[]>;
 
   constructor(private apollo: Apollo) {}
+
+  @ViewChild('searchInput') vc: ElementRef;
 
   ngOnInit() {
     this.searchChars$ = this.searchFormControl.valueChanges.pipe(startWith(''));
@@ -272,4 +281,8 @@ export class FirstComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {}
+
+  ngAfterViewInit() {
+    this.vc.nativeElement.focus();
+  }
 }

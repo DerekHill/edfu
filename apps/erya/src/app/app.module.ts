@@ -9,14 +9,15 @@ import { GraphQLModule } from './graphql.module';
 import { RouterModule, Routes } from '@angular/router';
 import { BasicComponent } from './basic/basic.component';
 import { BasicModule } from './basic/basic.module';
-import { FirstModule } from './first/first.module';
-import { FirstComponent } from './first/first.component';
+import { SearchModule } from './search/search.module';
+import { SearchComponent } from './search/search.component';
 import { HotkeyModule } from 'angular2-hotkeys';
+import { MatButtonModule } from '@angular/material/button';
 
 const appRoutes: Routes = [
   {
-    path: 'first',
-    component: FirstComponent
+    path: 'search',
+    component: SearchComponent
   },
   { path: 'basic', component: BasicComponent }
 ];
@@ -25,7 +26,7 @@ const appRoutes: Routes = [
   declarations: [AppComponent],
   imports: [
     BasicModule,
-    FirstModule,
+    SearchModule,
     RouterModule.forRoot(
       appRoutes
       //   { enableTracing: true } // <-- debugging purposes only
@@ -34,6 +35,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     NoopAnimationsModule,
     MatToolbarModule,
+    MatButtonModule,
     GraphQLModule,
     HotkeyModule.forRoot()
   ],

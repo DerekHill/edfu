@@ -41,10 +41,10 @@ interface SignsResult {
 }
 
 @Component({
-  selector: 'edfu-first',
-  templateUrl: './first.component.html'
+  selector: 'edfu-search',
+  templateUrl: './search.component.html'
 })
-export class FirstComponent implements OnInit, OnDestroy {
+export class SearchComponent implements OnInit, OnDestroy {
   searchFormControl = new FormControl();
 
   searchChars$: Observable<string>;

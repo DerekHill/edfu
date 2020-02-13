@@ -47,6 +47,7 @@
     "@nrwl/angular": "8.12.2",
     "@tensorflow-models/universal-sentence-encoder": "^1.2.2",
     "@tensorflow/tfjs": "^1.5.2",
+    "angular2-hotkeys": "^2.1.5",
     "apollo-angular": "^1.8.0",
     "apollo-angular-link-http": "^1.9.0",
     "apollo-cache-inmemory": "^1.6.0",

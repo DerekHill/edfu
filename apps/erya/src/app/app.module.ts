@@ -11,6 +11,7 @@ import { BasicComponent } from './basic/basic.component';
 import { BasicModule } from './basic/basic.module';
 import { FirstModule } from './first/first.module';
 import { FirstComponent } from './first/first.component';
+import { HotkeyModule } from 'angular2-hotkeys';
 
 const appRoutes: Routes = [
   {
@@ -33,7 +34,8 @@ const appRoutes: Routes = [
     HttpClientModule,
     NoopAnimationsModule,
     MatToolbarModule,
-    GraphQLModule
+    GraphQLModule,
+    HotkeyModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -31,8 +31,10 @@ type Query {
   hello: String!
   entry(id: String!): EntryDto!
   entriesAll: [EntryDto!]!
-  search(searchString: String!): [EntryDto!]!
+  searchDeprecated(searchString: String!): [EntryDto!]!
+  oxIds(searchString: String!): [String!]!
   sensesForEntry(homographC: Float!, oxId: String!): [SenseForEntryDto!]!
+  senses(oxId: String!): [SenseForEntryDto!]!
   signs(senseId: String!): [SenseSignDto!]!
 }
 

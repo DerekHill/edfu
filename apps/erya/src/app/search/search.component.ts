@@ -153,6 +153,9 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     this.senses$ = this.sensesSearchRef.valueChanges.pipe(
       map(({ data }: any) => data.sensesForEntry),
+      map(data => {
+        return data;
+      }),
       map(senses => this._sortSenses(senses)),
       map(senses => this._groupAndFilterByLexicalCategory(senses))
     );
@@ -210,6 +213,15 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.sensesBs$.next(null);
     this.senseSignsBs$.next(null);
     this.searchFormControl.reset();
+    // Needs to be cleared because otherwise valueChanges will not fire if next search is the same
+    // Might be better way to clear this without sending request to API
+    this.sensesSearchRef.setVariables({
+      oxId: '',
+      homographC: 0
+    });
+    this.signsSearchRef.setVariables({
+      senseId: ''
+    });
   }
 
   displayFn(res?: any): string | undefined {

@@ -300,19 +300,21 @@ describe('EntriesService', () => {
       );
     });
     it('matches if characters match', async () => {
-      expect(await entriesService.search('ri')).toHaveLength(1);
+      expect(await entriesService.searchDeprecated('ri')).toHaveLength(1);
     });
     it('does not match if characters do not match', async () => {
-      expect(await entriesService.search('wrong_string')).toHaveLength(0);
+      expect(
+        await entriesService.searchDeprecated('wrong_string')
+      ).toHaveLength(0);
     });
     it('is case insensitive', async () => {
-      expect(await entriesService.search('RI')).toHaveLength(1);
+      expect(await entriesService.searchDeprecated('RI')).toHaveLength(1);
     });
     it('does not return match if not at start of word', async () => {
-      expect(await entriesService.search('ver')).toHaveLength(0);
+      expect(await entriesService.searchDeprecated('ver')).toHaveLength(0);
     });
     it('does not return results given empty search string', async () => {
-      expect(await entriesService.search('')).toHaveLength(0);
+      expect(await entriesService.searchDeprecated('')).toHaveLength(0);
     });
   });
 

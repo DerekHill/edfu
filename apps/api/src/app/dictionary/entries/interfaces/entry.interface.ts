@@ -2,6 +2,11 @@ import { Document } from 'mongoose';
 import { ObjectId } from 'bson';
 import { HeadwordOrPhrase } from '../../../enums';
 
+// export interface UniqueEntry {
+//   readonly oxId: string;
+//   readonly homographC: number;
+// }
+
 export interface EntryRecordWithoutId {
   readonly oxId: string;
   readonly homographC: number;

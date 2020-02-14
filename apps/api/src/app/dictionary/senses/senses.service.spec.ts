@@ -168,7 +168,7 @@ describe('SensesService', () => {
           }
         ]
       };
-      const res = service.extractSynonyms(thesaurusSense);
+      const res = service._extractSynonyms(thesaurusSense);
       expect(res.sort()).toEqual(['marge', 'edge'].sort());
     });
 
@@ -178,7 +178,7 @@ describe('SensesService', () => {
         examples: [{ text: 'we need food and water' }],
         id: 'm_en_gbus0378040.005'
       };
-      const res = service.extractSynonyms(dictionarySense);
+      const res = service._extractSynonyms(dictionarySense);
       expect(res).toEqual([]);
     });
 
@@ -210,7 +210,7 @@ describe('SensesService', () => {
           }
         ]
       };
-      const res = service.extractSynonyms(sense);
+      const res = service._extractSynonyms(sense);
       expect(res).toEqual([]);
     });
 
@@ -242,7 +242,7 @@ describe('SensesService', () => {
           }
         ]
       };
-      const res = service.extractSynonyms(sense);
+      const res = service._extractSynonyms(sense);
       expect(res).toEqual(['edge']);
     });
 
@@ -257,7 +257,7 @@ describe('SensesService', () => {
           }
         ]
       };
-      const res = service.extractSynonyms(sense);
+      const res = service._extractSynonyms(sense);
       expect(res).toEqual([]);
     });
   });

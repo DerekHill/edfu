@@ -22,18 +22,17 @@
 
     <mat-autocomplete
       #auto="matAutocomplete"
-      [displayWith]="displayFn"
       autoActiveFirstOption
-      (optionSelected)="onGroupSelect($event.option.value)"
+      (optionSelected)="onOxIdSelect($event.option.value)"
     >
-      <mat-option *ngFor="let res of homographGroups$ | async" [value]="res">
-        {{ res.word }}
+      <mat-option *ngFor="let oxId of oxIds$ | async" [value]="oxId">
+        {{ oxId }}
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>
 </form>
 
-<div *ngIf="homographGroup$ | async as homographGroup">
+<div *ngIf="homographGroupDeprecated$ | async as homographGroup">
   <mat-action-list>
     <mat-list-item
       *ngFor="let entry of homographGroup.entries"

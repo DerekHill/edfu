@@ -3,7 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import {
   ENTRY_COLLECTION_NAME,
   TF_MODEL_NAME,
-  MONGO_DUPLICATE_ERROR_CODE
+  MONGO_DUPLICATE_ERROR_CODE,
+  CASE_INSENSITIVE_COLLATION
 } from '../../constants';
 import { Model } from 'mongoose';
 import {
@@ -43,7 +44,7 @@ export class EntriesService {
       .find({
         word: chars
       })
-      .collation({ locale: 'en', strength: 2 })
+      .collation(CASE_INSENSITIVE_COLLATION)
       .lean();
 
     if (existing.length) {
@@ -322,11 +323,26 @@ export class EntriesService {
     return this.entryModel.find({}).exec();
   }
 
-  search(chars: string): Promise<EntryRecord[]> {
+  searchDeprecated(chars: string): Promise<EntryRecord[]> {
     if (chars) {
       return this.entryModel
         .find({ word: { $regex: `^${chars}`, $options: '$i' } })
         .exec();
+    } else {
+      return Promise.resolve([]);
+    }
+  }
+
+  async searchOxIds(chars: string): Promise<string[]> {
+    const OXIDS_LIMIT = 100;
+
+    if (chars) {
+      const objs = await this.entryModel
+        .find({ word: { $regex: `^${chars}`, $options: '$i' } }, { oxId: 1 })
+        .limit(OXIDS_LIMIT)
+        .exec();
+      const ids = objs.map(i => i.oxId);
+      return [...new Set(ids)];
     } else {
       return Promise.resolve([]);
     }

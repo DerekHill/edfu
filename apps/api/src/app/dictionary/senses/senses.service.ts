@@ -22,6 +22,8 @@ import {
 } from '../../oxford-api/interfaces/oxford-api.interface';
 import { EntrySensesService } from '../entry-senses/entry-senses.service';
 import { SenseForEntryDto } from '@edfu/api-interfaces';
+import { EntrySenseRecord } from '../entry-senses/interfaces/entry-sense.interface';
+// import { UniqueEntry } from '../entries/interfaces/entry.interface';
 
 const PROSCRIBED_REGISTERS = [
   'rare',
@@ -91,7 +93,7 @@ export class SensesService {
       apiSenseIndex: apiSenseIndex,
       senseId: senseId,
       example: this.extractExample(oxSense),
-      synonyms: this.extractSynonyms(oxSense)
+      synonyms: this._extractSynonyms(oxSense)
     };
 
     return this.findOneAndUpdate<ThesaurusSenseRecord>(senseId, sense);
@@ -167,6 +169,15 @@ export class SensesService {
       .exec();
   }
 
+  async getSensesForOxIdCaseInsensitive(
+    oxId: string
+  ): Promise<SenseForEntryDto[]> {
+    const entrySenses = await this.entrySensesService.findByOxIdCaseInsensitive(
+      oxId
+    );
+    return this.getValidSenses(entrySenses);
+  }
+
   async getSensesForEntry(
     oxId: string,
     homographC: number
@@ -175,6 +186,12 @@ export class SensesService {
       oxId,
       homographC
     );
+    return this.getValidSenses(entrySenses);
+  }
+
+  private async getValidSenses(
+    entrySenses: EntrySenseRecord[]
+  ): Promise<SenseForEntryDto[]> {
     const entrySensesById = entrySenses.reduce((acc, curr) => {
       acc[curr.senseId] = curr;
       return acc;
@@ -201,7 +218,7 @@ export class SensesService {
     });
   }
 
-  extractSynonyms(oxSense: OxSense): string[] {
+  _extractSynonyms(oxSense: OxSense): string[] {
     const res: string[] = [];
 
     if (this.includesProscribedRegisters(oxSense)) {

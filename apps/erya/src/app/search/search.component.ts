@@ -15,17 +15,20 @@ interface HomographGroup {
   entries: EntryDto[];
 }
 
-interface EntrySearchVariables {
+interface OxIdSearchVariables {
   searchString?: string;
 }
 
-interface EntrySearchResult {
-  search: EntryDto[];
+interface OxIdSearchResult {
+  oxIds: string[];
+}
+
+interface EntrySearchResultDeprecated {
+  searchDeprecated: EntryDto[];
 }
 
 interface SenseSearchVariables {
   oxId: string;
-  homographC: number;
 }
 
 interface SensesResult {
@@ -46,14 +49,21 @@ interface SignsResult {
 })
 export class SearchComponent implements OnInit, OnDestroy {
   searchFormControl = new FormControl();
-
   searchChars$: Observable<string>;
 
-  entriesSearchRef: QueryRef<EntrySearchResult, EntrySearchVariables>;
-  entryValueChanges$: Observable<EntryDto[]>;
-  homographGroups$: Observable<HomographGroup[]>;
+  oxIdsSearchRef: QueryRef<OxIdSearchResult, OxIdSearchVariables>;
+  oxIds$: Observable<string[]>;
 
-  homographGroup$: BehaviorSubject<HomographGroup>;
+  oxId$: BehaviorSubject<string>;
+
+  entriesSearchRefDeprecated: QueryRef<
+    EntrySearchResultDeprecated,
+    OxIdSearchVariables
+  >;
+  entryValueChangesDeprecated$: Observable<EntryDto[]>;
+  homographGroupsDeprecated$: Observable<HomographGroup[]>;
+
+  homographGroupDeprecated$: BehaviorSubject<HomographGroup>;
 
   sensesSearchRef: QueryRef<SensesResult, SenseSearchVariables>;
   senses$: Observable<SenseForEntryDto[]>;
@@ -79,18 +89,35 @@ export class SearchComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.searchChars$ = this.searchFormControl.valueChanges.pipe(startWith(''));
 
-    this.homographGroup$ = new BehaviorSubject(null);
+    this.homographGroupDeprecated$ = new BehaviorSubject(null);
     this.sensesBs$ = new BehaviorSubject(null);
     this.senseSignsBs$ = new BehaviorSubject(null);
-    // this.addHotKeys();
+    this.oxId$ = new BehaviorSubject(null);
 
-    this.entriesSearchRef = this.apollo.watchQuery<
-      EntrySearchResult,
-      EntrySearchVariables
+    this.oxIdsSearchRef = this.apollo.watchQuery<
+      OxIdSearchResult,
+      OxIdSearchVariables
+    >({
+      query: gql`
+        query OxIdSearchQuery($searchString: String! = "") {
+          oxIds(searchString: $searchString)
+        }
+      `
+    });
+
+    this.oxIds$ = this.oxIdsSearchRef.valueChanges.pipe(map(x => x.data.oxIds));
+
+    this.oxIds$.subscribe(x => {
+      console.log(x);
+    });
+
+    this.entriesSearchRefDeprecated = this.apollo.watchQuery<
+      EntrySearchResultDeprecated,
+      OxIdSearchVariables
     >({
       query: gql`
         query WordSearchQuery($searchString: String!) {
-          search(searchString: $searchString) {
+          searchDeprecated(searchString: $searchString) {
             oxId
             homographC
             word
@@ -107,8 +134,8 @@ export class SearchComponent implements OnInit, OnDestroy {
       SenseSearchVariables
     >({
       query: gql`
-        query EntrySensesQuery($oxId: String! = "", $homographC: Float! = 0) {
-          sensesForEntry(oxId: $oxId, homographC: $homographC) {
+        query EntrySensesQuery($oxId: String! = "") {
+          senses(oxId: $oxId) {
             oxId
             senseId
             lexicalCategory
@@ -141,21 +168,21 @@ export class SearchComponent implements OnInit, OnDestroy {
       `
     });
 
-    this.entryValueChanges$ = this.entriesSearchRef.valueChanges.pipe(
-      map((res: ApolloQueryResult<EntrySearchResult>) => res.data.search)
+    this.entryValueChangesDeprecated$ = this.entriesSearchRefDeprecated.valueChanges.pipe(
+      map(
+        (res: ApolloQueryResult<EntrySearchResultDeprecated>) =>
+          res.data.searchDeprecated
+      )
     );
 
-    this.homographGroups$ = this.entryValueChanges$.pipe(
+    this.homographGroupsDeprecated$ = this.entryValueChangesDeprecated$.pipe(
       map(entries => {
         return this._groupByHomographWord(entries);
       })
     );
 
     this.senses$ = this.sensesSearchRef.valueChanges.pipe(
-      map(({ data }: any) => data.sensesForEntry),
-      map(data => {
-        return data;
-      }),
+      map(({ data }: any) => data.senses),
       map(senses => this._sortSenses(senses)),
       map(senses => this._groupAndFilterByLexicalCategory(senses))
     );
@@ -168,7 +195,10 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     this.searchChars$.subscribe(input => {
       if (typeof input === 'string') {
-        this.entriesSearchRef.setVariables({
+        this.entriesSearchRefDeprecated.setVariables({
+          searchString: input
+        });
+        this.oxIdsSearchRef.setVariables({
           searchString: input
         });
       } else if (typeof input === 'object') {
@@ -188,18 +218,23 @@ export class SearchComponent implements OnInit, OnDestroy {
     });
   }
 
-  onGroupSelect(group: HomographGroup) {
-    this.homographGroup$.next(group);
-    if (group.entries.length === 1) {
-      this.onEntryClick(null, group.entries[0]);
-    }
+  onOxIdSelect(oxId: string) {
+    console.log('oxId:', oxId);
+    this.oxId$.next(oxId);
+    // this.homographGroupDeprecated$.next(group);
+    // if (group.entries.length === 1) {
+    //   this.onEntryClick(null, group.entries[0]);
+    // }
+    this.sensesSearchRef.setVariables({
+      oxId: oxId
+    });
   }
 
   onEntryClick(event, entry: EntryDto) {
-    this.sensesSearchRef.setVariables({
-      oxId: entry.oxId,
-      homographC: entry.homographC
-    });
+    // this.sensesSearchRef.setVariables({
+    //   oxId: entry.oxId,
+    //   homographC: entry.homographC
+    // });
   }
 
   onSenseClick(event, sense: SenseForEntryDto) {
@@ -209,23 +244,19 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   clearSearchField() {
-    this.homographGroup$.next(null);
+    this.homographGroupDeprecated$.next(null);
     this.sensesBs$.next(null);
     this.senseSignsBs$.next(null);
     this.searchFormControl.reset();
     // Needs to be cleared because otherwise valueChanges will not fire if next search is the same
     // Might be better way to clear this without sending request to API
     this.sensesSearchRef.setVariables({
-      oxId: '',
-      homographC: 0
+      oxId: ''
+      //   homographC: 0
     });
     this.signsSearchRef.setVariables({
       senseId: ''
     });
-  }
-
-  displayFn(res?: any): string | undefined {
-    return res ? res.word : undefined;
   }
 
   _groupByHomographWord(entries: EntryDto[]): HomographGroup[] {

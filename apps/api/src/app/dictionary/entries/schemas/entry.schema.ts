@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+import { CASE_INSENSITIVE_COLLATION } from '../../../constants';
 
 export const EntrySchema = new mongoose.Schema({
   oxId: {
@@ -25,4 +26,4 @@ export const EntrySchema = new mongoose.Schema({
 
 EntrySchema.index({ oxId: 1, homographC: 1 }, { unique: true });
 
-EntrySchema.index({ word: 1 }, { collation: { locale: 'en', strength: 2 } });
+EntrySchema.index({ word: 1 }, { collation: CASE_INSENSITIVE_COLLATION });

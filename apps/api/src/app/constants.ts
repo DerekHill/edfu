@@ -7,3 +7,4 @@ export const SENSE_SIGN_COLLECTION_NAME = 'SenseSign';
 export const SIGN_COLLECTION_NAME = 'Sign';
 export const TF_MODEL_NAME = 'TfModel';
 export const MONGO_DUPLICATE_ERROR_CODE = 11000;
+export const CASE_INSENSITIVE_COLLATION = { locale: 'en', strength: 2 };

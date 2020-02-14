@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import {
   ENTRY_SENSE_COLLECTION_NAME,
-  MONGO_DUPLICATE_ERROR_CODE
+  MONGO_DUPLICATE_ERROR_CODE,
+  CASE_INSENSITIVE_COLLATION
 } from '../../constants';
 import { Model } from 'mongoose';
 import {
@@ -62,6 +63,14 @@ export class EntrySensesService {
   ): Promise<EntrySenseRecord[]> {
     return this.entrySenseModel
       .find({ oxId: oxId, homographC: homographC })
+      .lean()
+      .exec();
+  }
+
+  findByOxIdCaseInsensitive(oxId: string): Promise<EntrySenseRecord[]> {
+    return this.entrySenseModel
+      .find({ oxId: oxId })
+      .collation(CASE_INSENSITIVE_COLLATION)
       .lean()
       .exec();
   }

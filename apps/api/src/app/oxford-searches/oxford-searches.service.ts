@@ -3,7 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import {
   ENTRY_SEARCH_COLLECTION_NAME,
   THESAURUS_SEARCH_COLLECTION_NAME,
-  MONGO_DUPLICATE_ERROR_CODE
+  MONGO_DUPLICATE_ERROR_CODE,
+  CASE_INSENSITIVE_COLLATION
 } from '../constants';
 import { Model } from 'mongoose';
 import {
@@ -31,7 +32,7 @@ export class BaseSearchesService {
       .find({
         oxIdOrSearchTermLowercase: searchTerm
       })
-      .collation({ locale: 'en', strength: 2 })
+      .collation(CASE_INSENSITIVE_COLLATION)
       .lean();
 
     if (existing.length) {

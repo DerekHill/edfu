@@ -28,7 +28,14 @@ export class EntriesResolver {
   }
 
   @Query(returns => [EntryDto])
-  search(@Args('searchString') searchString: string): Promise<EntryDto[]> {
-    return this.entriesService.search(searchString);
+  searchDeprecated(
+    @Args('searchString') searchString: string
+  ): Promise<EntryDto[]> {
+    return this.entriesService.searchDeprecated(searchString);
+  }
+
+  @Query(returns => [String])
+  oxIds(@Args('searchString') searchString: string): Promise<string[]> {
+    return this.entriesService.searchOxIds(searchString);
   }
 }

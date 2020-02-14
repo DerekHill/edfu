@@ -13,4 +13,9 @@ export class SensesResolver {
   ): Promise<SenseForEntryDto[]> {
     return this.sensesService.getSensesForEntry(oxId, homographC);
   }
+
+  @Query(returns => [SenseForEntryDto])
+  senses(@Args('oxId') oxId: string): Promise<SenseForEntryDto[]> {
+    return this.sensesService.getSensesForOxIdCaseInsensitive(oxId);
+  }
 }

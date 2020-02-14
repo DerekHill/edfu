@@ -63,7 +63,7 @@ describe('EntriesResolver', () => {
     jest.spyOn(entriesService, 'search').mockImplementation(() => {
       return Promise.resolve([entry]);
     });
-    const res = await resolver.search('foo');
+    const res = await resolver.searchDeprecated('foo');
     expect(res[0].word).toEqual(word);
   });
 });

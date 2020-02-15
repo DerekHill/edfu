@@ -1,4 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  Pipe,
+  PipeTransform
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -45,6 +51,13 @@ interface SenseGroup {
 
 interface UniqueEntryWithSenseGroups extends UniqueEntry {
   senseGroups: SenseGroup[];
+}
+
+@Pipe({ name: 'removeUnderscores' })
+export class RemoveUnderscoresPipe implements PipeTransform {
+  transform(string: string): string {
+    return string.replace('_', ' ');
+  }
 }
 
 @Component({

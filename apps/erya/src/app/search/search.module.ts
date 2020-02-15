@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SearchComponent } from './search.component';
+import { SearchComponent, RemoveUnderscoresPipe } from './search.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -11,7 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { HotkeyModule } from 'angular2-hotkeys';
 
 @NgModule({
-  declarations: [SearchComponent],
+  declarations: [SearchComponent, RemoveUnderscoresPipe],
   imports: [
     CommonModule,
     FormsModule,

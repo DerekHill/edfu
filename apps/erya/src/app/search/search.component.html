@@ -36,7 +36,7 @@
   <mat-action-list>
     <div *ngFor="let entry of entries" (click)="onNewEntryClick($event, entry)">
       <mat-list-item>
-        <b>{{ entry.oxId }}</b>
+        <b>{{ entry.oxId | removeUnderscores }}</b>
       </mat-list-item>
       <div
         *ngFor="let group of entry.senseGroups"

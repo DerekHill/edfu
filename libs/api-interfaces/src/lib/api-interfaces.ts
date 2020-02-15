@@ -31,6 +31,9 @@ export class SenseForEntryDto {
   readonly oxId: string;
 
   @Field()
+  readonly ownOxId: string;
+
+  @Field()
   readonly homographC: number;
 
   @Field(type => ID)

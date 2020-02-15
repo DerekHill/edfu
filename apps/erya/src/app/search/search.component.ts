@@ -63,6 +63,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   senses$: Observable<SenseForEntryDto[]>;
   sensesBs$: BehaviorSubject<SenseForEntryDto[]>;
 
+  newSensesBs$: BehaviorSubject<UniqueEntryWithSenseGroups[]>;
+
   signsSearchRef: QueryRef<SignsResult, SignSearchVariables>;
   senseSigns$: Observable<SenseSignDto[]>;
   senseSignsBs$: BehaviorSubject<SenseSignDto[]>;
@@ -84,6 +86,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.searchChars$ = this.searchFormControl.valueChanges.pipe(startWith(''));
 
     this.sensesBs$ = new BehaviorSubject(null);
+    this.newSensesBs$ = new BehaviorSubject(null);
     this.senseSignsBs$ = new BehaviorSubject(null);
     this.oxId$ = new BehaviorSubject(null);
 
@@ -111,6 +114,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         query EntrySensesQuery($oxId: String! = "") {
           senses(oxId: $oxId) {
             oxId
+            homographC
             senseId
             lexicalCategory
             apiSenseIndex
@@ -164,14 +168,24 @@ export class SearchComponent implements OnInit, OnDestroy {
     });
 
     this.senses$.subscribe(senses => {
+      console.log('senses');
+      console.log(senses);
       if (senses.length === 1) {
         this.onSenseClick(null, senses[0]);
       }
       this.sensesBs$.next(senses);
+      this.newSensesBs$.next(
+        this._createUniqueEntryWithSenseGroupsArray(senses)
+      );
     });
 
     this.senseSigns$.subscribe(signs => {
       this.senseSignsBs$.next(signs);
+    });
+
+    this.newSensesBs$.subscribe(x => {
+      console.log('new senses bs');
+      console.log(x);
     });
   }
 
@@ -187,6 +201,34 @@ export class SearchComponent implements OnInit, OnDestroy {
       senseId: sense.senseId
     });
   }
+
+  onNewEntryClick(event, sense: SenseForEntryDto) {
+    console.log('new sense click');
+    console.log(sense);
+    // this.signsSearchRef.setVariables({
+    //   senseId: sense.senseId
+    // });
+  }
+
+  onGroupClick(event, group: SenseForEntryDto) {
+    console.log('new group click');
+    console.log(group);
+    // this.signsSearchRef.setVariables({
+    //   senseId: sense.senseId
+    // });
+  }
+
+  onNewSenseClick(event, group: SenseForEntryDto) {
+    console.log('new group click');
+    console.log(group);
+    // this.signsSearchRef.setVariables({
+    //   senseId: sense.senseId
+    // });
+  }
+
+  //   onNewSenseClick
+
+  //   onGroupClick
 
   clearSearchField() {
     this.sensesBs$.next(null);

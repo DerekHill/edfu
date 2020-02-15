@@ -196,24 +196,27 @@ export class SensesService {
       acc[curr.senseId] = curr;
       return acc;
     }, {});
+
     const senseIds = entrySenses.map(i => i.senseId);
+
     const senses = await this.senseModel.find({
       senseId: { $in: senseIds },
       definition: { $ne: null }
     });
 
     return senses.map(sense => {
-      const senseId = sense.senseId;
+      const entrySense = entrySensesById[sense.senseId];
       return {
-        oxId: sense.entryOxId,
-        homographC: sense.entryHomographC,
+        oxId: entrySense.oxId,
+        ownOxId: sense.entryOxId,
+        homographC: entrySense.homographC,
         senseId: sense.senseId,
         lexicalCategory: sense.lexicalCategory,
         apiSenseIndex: sense.apiSenseIndex,
         example: sense.example,
         definition: sense.definition,
-        associationType: entrySensesById[senseId].associationType,
-        similarity: entrySensesById[senseId].similarity
+        associationType: entrySense.associationType,
+        similarity: entrySense.similarity
       };
     });
   }

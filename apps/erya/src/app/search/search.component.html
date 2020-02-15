@@ -32,16 +32,27 @@
   </mat-form-field>
 </form>
 
-<div *ngIf="sensesBs$ | async as senses">
+<div *ngIf="newSensesBs$ | async as entries">
   <mat-action-list>
-    <mat-list-item
-      *ngFor="let sense of senses"
-      (click)="onSenseClick($event, sense)"
-    >
-      {{ sense.lexicalCategory }}: {{ sense.example }} -
-      {{ sense.associationType }} - {{ sense.similarity | number: '1.2-2' }} -
-      {{ sense.apiSenseIndex }}
-    </mat-list-item>
+    <div *ngFor="let entry of entries" (click)="onNewEntryClick($event, entry)">
+      <mat-list-item>
+        <b>{{ entry.oxId }}</b>
+      </mat-list-item>
+      <div
+        *ngFor="let group of entry.senseGroups"
+        (click)="onGroupClick($event, group)"
+      >
+        <mat-list-item>{{ group.lexicalCategory }}</mat-list-item>
+
+        <mat-list-item
+          *ngFor="let sense of group.senses"
+          (click)="onSenseClick($event, sense)"
+        >
+          {{ sense.example }} {{ sense.definition }}
+          {{ sense.associationType }} - {{ sense.similarity | number: '1.2-2' }}
+        </mat-list-item>
+      </div>
+    </div>
   </mat-action-list>
 </div>
 

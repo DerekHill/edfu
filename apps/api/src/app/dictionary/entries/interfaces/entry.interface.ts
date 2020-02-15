@@ -1,15 +1,9 @@
 import { Document } from 'mongoose';
 import { ObjectId } from 'bson';
 import { HeadwordOrPhrase } from '../../../enums';
+import { UniqueEntry } from '@edfu/api-interfaces';
 
-// export interface UniqueEntry {
-//   readonly oxId: string;
-//   readonly homographC: number;
-// }
-
-export interface EntryRecordWithoutId {
-  readonly oxId: string;
-  readonly homographC: number;
+export interface EntryRecordWithoutId extends UniqueEntry {
   readonly word: string;
   readonly relatedEntriesAdded: boolean;
   readonly headwordOrPhrase: HeadwordOrPhrase;

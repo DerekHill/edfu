@@ -4,8 +4,12 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import gql from 'graphql-tag';
 import { Apollo, QueryRef } from 'apollo-angular';
-import { SenseForEntryDto, SenseSignDto } from '@edfu/api-interfaces';
-import { DictionaryOrThesaurus } from '@edfu/enums';
+import {
+  SenseForEntryDto,
+  SenseSignDto,
+  UniqueEntry
+} from '@edfu/api-interfaces';
+import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { ApolloQueryResult } from 'apollo-client';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
@@ -32,6 +36,15 @@ interface SignSearchVariables {
 
 interface SignsResult {
   signs: SenseSignDto[];
+}
+
+interface SenseGroup {
+  lexicalCategory: LexicalCategory;
+  senses: SenseForEntryDto[];
+}
+
+interface UniqueEntryWithSenseGroups extends UniqueEntry {
+  senseGroups: SenseGroup[];
 }
 
 @Component({
@@ -131,8 +144,9 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     this.senses$ = this.sensesSearchRef.valueChanges.pipe(
       map((res: ApolloQueryResult<SensesResult>) => res.data.senses),
-      map(senses => this._sortSenses(senses)),
-      map(senses => this._groupAndFilterByLexicalCategory(senses))
+      map(senses => this._sortSensesByFit(senses)),
+      map(senses => this._applyMaxSensesLimit(senses)),
+      map(senses => this._groupSensesByLexicalCategoryAsList(senses))
     );
 
     this.senseSigns$ = this.signsSearchRef.valueChanges.pipe(
@@ -188,11 +202,58 @@ export class SearchComponent implements OnInit, OnDestroy {
     });
   }
 
-  _sortSenses(senses: SenseForEntryDto[]): SenseForEntryDto[] {
-    return senses.sort(this._compareSenses);
+  _createUniqueEntryWithSenseGroupsArray(
+    senses: SenseForEntryDto[]
+  ): UniqueEntryWithSenseGroups[] {
+    const uniqueEntries: UniqueEntry[] = [];
+    for (const sense of senses) {
+      if (
+        !uniqueEntries.some(
+          entry =>
+            entry.oxId === sense.oxId && entry.homographC === sense.homographC
+        )
+      ) {
+        uniqueEntries.push({ oxId: sense.oxId, homographC: sense.homographC });
+      }
+    }
+    const uniqueEntryWithSenseGroupsArray: UniqueEntryWithSenseGroups[] = [];
+    for (const entry of uniqueEntries) {
+      const relevantSenses = this._extractRelevantSensesPreservingOrder(
+        senses,
+        entry
+      );
+
+      uniqueEntryWithSenseGroupsArray.push({
+        oxId: entry.oxId,
+        homographC: entry.homographC,
+        senseGroups: this._groupSensesByLexicalCategoryAsObjects(relevantSenses)
+      });
+    }
+
+    return uniqueEntryWithSenseGroupsArray;
   }
 
-  _compareSenses(a: SenseForEntryDto, b: SenseForEntryDto) {
+  _extractRelevantSensesPreservingOrder(
+    senses: SenseForEntryDto[],
+    uniqueEntry: UniqueEntry
+  ): SenseForEntryDto[] {
+    return senses.filter(
+      sense =>
+        sense.oxId === uniqueEntry.oxId &&
+        sense.homographC === uniqueEntry.homographC
+    );
+  }
+
+  _sortSensesByFit(senses: SenseForEntryDto[]): SenseForEntryDto[] {
+    return senses.sort(this._compareSensesForFit);
+  }
+
+  _applyMaxSensesLimit(senses: SenseForEntryDto[]): SenseForEntryDto[] {
+    const MAX_SENSES_LIMIT = 10;
+    return senses.slice(0, MAX_SENSES_LIMIT);
+  }
+
+  _compareSensesForFit(a: SenseForEntryDto, b: SenseForEntryDto) {
     if (a.associationType !== b.associationType) {
       if (a.associationType === DictionaryOrThesaurus.dictionary) {
         return -1;
@@ -216,7 +277,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
   }
 
-  _groupAndFilterByLexicalCategory(
+  _groupSensesByLexicalCategoryAsList(
     senses: SenseForEntryDto[]
   ): SenseForEntryDto[] {
     const categoryOrder = senses.reduce((acc, curr) => {
@@ -237,6 +298,27 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
 
     return grouped;
+  }
+
+  _groupSensesByLexicalCategoryAsObjects(
+    senses: SenseForEntryDto[]
+  ): SenseGroup[] {
+    const categoryOrder = senses.reduce((acc, curr) => {
+      const cat = curr.lexicalCategory;
+      if (!acc.includes(cat)) {
+        acc.push(cat);
+      }
+      return acc;
+    }, []);
+    const groups: SenseGroup[] = [];
+    for (const cat of categoryOrder) {
+      groups.push({
+        lexicalCategory: cat,
+        senses: senses.filter(sense => sense.lexicalCategory === cat)
+      });
+    }
+
+    return groups;
   }
 
   ngOnDestroy() {}

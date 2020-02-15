@@ -202,6 +202,10 @@ export class SearchComponent implements OnInit, OnDestroy {
     });
   }
 
+  displayWithoutUnderscores(oxId: string): string {
+    return oxId ? oxId.replace('_', ' ') : '';
+  }
+
   onOxIdSelect(oxId: string) {
     this.oxId$.next(oxId);
     this.sensesSearchRef.setVariables({

@@ -22,11 +22,12 @@
 
     <mat-autocomplete
       #auto="matAutocomplete"
+      [displayWith]="displayWithoutUnderscores"
       autoActiveFirstOption
       (optionSelected)="onOxIdSelect($event.option.value)"
     >
       <mat-option *ngFor="let oxId of oxIds$ | async" [value]="oxId">
-        {{ oxId }}
+        {{ oxId | removeUnderscores }}
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>

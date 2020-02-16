@@ -40,8 +40,9 @@ type Query {
 
 type SenseForEntryDto {
   oxId: String!
-  ownOxId: String!
   homographC: Float!
+  ownEntryOxId: String!
+  ownEntryHomographC: Float!
   senseId: ID!
   lexicalCategory: LexicalCategory!
   apiSenseIndex: Float!

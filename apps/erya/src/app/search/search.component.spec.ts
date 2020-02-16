@@ -1,11 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { SearchComponent } from './search.component';
+import { SearchComponent, RemoveUnderscoresPipe } from './search.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { GraphQLModule } from '../graphql.module';
 import { HttpClientModule } from '@angular/common/http';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { EntryDto, SenseForEntryDto } from '@edfu/api-interfaces';
+import { SenseForEntryDtoInterface } from '@edfu/api-interfaces';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -14,7 +14,7 @@ import { LexicalCategory, DictionaryOrThesaurus } from '@edfu/enums';
 import { MatIconModule } from '@angular/material/icon';
 import { HotkeyModule } from 'angular2-hotkeys';
 
-const createSense = (params: any): SenseForEntryDto => {
+const createSense = (params: any): SenseForEntryDtoInterface => {
   const defaults = {
     oxId: 'oxId',
     homographC: 0,
@@ -36,7 +36,7 @@ describe('SearchComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [SearchComponent],
+      declarations: [SearchComponent, RemoveUnderscoresPipe],
       imports: [
         CommonModule,
         HttpClientModule,
@@ -70,7 +70,7 @@ describe('SearchComponent', () => {
       const highSimilarity = 0.8;
       const lowApiSenseIndex = 0;
       const highApiSenseIndex = 1;
-      const senses: SenseForEntryDto[] = [
+      const senses: SenseForEntryDtoInterface[] = [
         createSense({
           senseId: FOURTH,
           lexicalCategory: LexicalCategory.noun,
@@ -110,7 +110,7 @@ describe('SearchComponent', () => {
       const NOUN1 = 'noun1';
       const VERB = 'verb';
       const NOUN2 = 'noun2';
-      const senses: SenseForEntryDto[] = [
+      const senses: SenseForEntryDtoInterface[] = [
         createSense({
           senseId: NOUN1,
           lexicalCategory: LexicalCategory.noun
@@ -137,7 +137,7 @@ describe('SearchComponent', () => {
       const FAST_1_NOUN_POOR = 2;
       const FAST_1_ADJ_MEDIUM = 3;
       const FAST_2 = 4;
-      const senses: SenseForEntryDto[] = [
+      const senses: SenseForEntryDtoInterface[] = [
         createSense({
           senseId: FAST_1_NOUN_GOOD,
           homographC: homographC_1,
@@ -176,7 +176,7 @@ describe('SearchComponent', () => {
       const COLOUR_GOOD = 1;
       const COLOUR_POOR = 2;
       const FRUIT_MEDIUM = 3;
-      const senses: SenseForEntryDto[] = [
+      const senses: SenseForEntryDtoInterface[] = [
         createSense({
           oxId: oxId_1,
           senseId: COLOUR_GOOD,

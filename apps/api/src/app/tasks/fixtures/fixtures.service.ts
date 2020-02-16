@@ -21,8 +21,7 @@ import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
 import { HeadwordOrPhrase } from '../../enums';
 import { EntrySenseRecordWithoutId } from '../../dictionary/entry-senses/interfaces/entry-sense.interface';
 import { ObjectId } from 'bson';
-import { SenseSignRecordWithoutId } from '../../dictionary/signs/interfaces/sense-sign.interface';
-import { SignRecord } from '../../dictionary/signs/interfaces/sign.interface';
+import { SignRecord, SenseSignRecordWithoutId } from '@edfu/api-interfaces';
 
 const FOOD = 'food';
 const FAST = 'fast';
@@ -158,8 +157,8 @@ const ENTRIES: EntryRecordWithoutId[] = [
 const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   {
     senseId: FOOD_0_DICT_NOU_SENSE_1_ID,
-    entryOxId: FOOD,
-    entryHomographC: 0,
+    ownEntryOxId: FOOD,
+    ownEntryHomographC: 0,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     thesaurusSenseIds: [],
     lexicalCategory: LexicalCategory.noun,
@@ -170,8 +169,8 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_DICT_ADJ_SENSE_1_ID,
-    entryOxId: FAST,
-    entryHomographC: 1,
+    ownEntryOxId: FAST,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adjective,
     apiSenseIndex: 0,
@@ -181,8 +180,8 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_DICT_ADJ_SENSE_2_ID,
-    entryOxId: FAST,
-    entryHomographC: 1,
+    ownEntryOxId: FAST,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adjective,
     apiSenseIndex: 1,
@@ -192,8 +191,8 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_DICT_ADJ_SENSE_3_ID,
-    entryOxId: FAST,
-    entryHomographC: 1,
+    ownEntryOxId: FAST,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adjective,
     apiSenseIndex: 2,
@@ -203,8 +202,8 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_DICT_ADJ_SENSE_4_ID,
-    entryOxId: FAST,
-    entryHomographC: 1,
+    ownEntryOxId: FAST,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adjective,
     apiSenseIndex: 3,
@@ -214,8 +213,8 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_DICT_ADJ_SENSE_5_ID,
-    entryOxId: FAST,
-    entryHomographC: 1,
+    ownEntryOxId: FAST,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adjective,
     apiSenseIndex: 4,
@@ -225,8 +224,8 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_DICT_ADJ_SENSE_6_ID,
-    entryOxId: FAST,
-    entryHomographC: 1,
+    ownEntryOxId: FAST,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adjective,
     apiSenseIndex: 5,
@@ -237,8 +236,8 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_DICT_ADJ_SENSE_7_ID,
-    entryOxId: FAST,
-    entryHomographC: 1,
+    ownEntryOxId: FAST,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adjective,
     apiSenseIndex: 6,
@@ -248,8 +247,8 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_DICT_ADV_SENSE_1_ID,
-    entryOxId: FAST,
-    entryHomographC: 1,
+    ownEntryOxId: FAST,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adverb,
     apiSenseIndex: 0,
@@ -259,8 +258,8 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_DICT_ADV_SENSE_2_ID,
-    entryOxId: FAST,
-    entryHomographC: 1,
+    ownEntryOxId: FAST,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adverb,
     apiSenseIndex: 1,
@@ -270,8 +269,8 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_DICT_ADV_SENSE_3_ID,
-    entryOxId: FAST,
-    entryHomographC: 1,
+    ownEntryOxId: FAST,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adverb,
     apiSenseIndex: 2,
@@ -281,8 +280,8 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_2_DICT_VER_SENSE_1_ID,
-    entryOxId: FAST,
-    entryHomographC: 2,
+    ownEntryOxId: FAST,
+    ownEntryHomographC: 2,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.verb,
     apiSenseIndex: 0,
@@ -293,8 +292,8 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_2_DICT_NOU_SENSE_1_ID,
-    entryOxId: FAST,
-    entryHomographC: 2,
+    ownEntryOxId: FAST,
+    ownEntryHomographC: 2,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.noun,
     apiSenseIndex: 0,
@@ -304,8 +303,8 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_1_DICT_NOU_SENSE_1_ID,
-    entryOxId: BANK,
-    entryHomographC: 1,
+    ownEntryOxId: BANK,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.noun,
     apiSenseIndex: 0,
@@ -315,8 +314,8 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_1_DICT_NOU_SENSE_2_ID,
-    entryOxId: BANK,
-    entryHomographC: 1,
+    ownEntryOxId: BANK,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.noun,
     apiSenseIndex: 1,
@@ -326,8 +325,8 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_1_DICT_NOU_SENSE_3_ID,
-    entryOxId: BANK,
-    entryHomographC: 1,
+    ownEntryOxId: BANK,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.noun,
     apiSenseIndex: 2,
@@ -339,8 +338,8 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_1_DICT_NOU_SENSE_4_ID,
-    entryOxId: BANK,
-    entryHomographC: 1,
+    ownEntryOxId: BANK,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.noun,
     apiSenseIndex: 3,
@@ -350,8 +349,8 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_1_DICT_VER_SENSE_1_ID,
-    entryOxId: BANK,
-    entryHomographC: 1,
+    ownEntryOxId: BANK,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.verb,
     apiSenseIndex: 0,
@@ -361,8 +360,8 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_1_DICT_VER_SENSE_2_ID,
-    entryOxId: BANK,
-    entryHomographC: 1,
+    ownEntryOxId: BANK,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.verb,
     apiSenseIndex: 1,
@@ -373,8 +372,8 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_1_DICT_VER_SENSE_3_ID,
-    entryOxId: BANK,
-    entryHomographC: 1,
+    ownEntryOxId: BANK,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.verb,
     apiSenseIndex: 2,
@@ -386,8 +385,8 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_1_DICT_VER_SENSE_4_ID,
-    entryOxId: BANK,
-    entryHomographC: 1,
+    ownEntryOxId: BANK,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     thesaurusSenseIds: [],
     lexicalCategory: LexicalCategory.verb,
@@ -397,8 +396,8 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_1_DICT_VER_SENSE_5_ID,
-    entryOxId: BANK,
-    entryHomographC: 1,
+    ownEntryOxId: BANK,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     thesaurusSenseIds: [],
     lexicalCategory: LexicalCategory.verb,
@@ -409,8 +408,8 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_2_DICT_NOU_SENSE_1_ID,
-    entryOxId: BANK,
-    entryHomographC: 2,
+    ownEntryOxId: BANK,
+    ownEntryHomographC: 2,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.noun,
     apiSenseIndex: 0,
@@ -421,8 +420,8 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_2_DICT_VER_SENSE_1_ID,
-    entryOxId: BANK,
-    entryHomographC: 2,
+    ownEntryOxId: BANK,
+    ownEntryHomographC: 2,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.verb,
     apiSenseIndex: 0,
@@ -432,8 +431,8 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   },
   {
     senseId: SPEEDY_0_DICT_ADJ_SENSE_1_ID,
-    entryOxId: SPEEDY,
-    entryHomographC: 0,
+    ownEntryOxId: SPEEDY,
+    ownEntryHomographC: 0,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adjective,
     apiSenseIndex: 0,
@@ -443,8 +442,8 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   },
   {
     senseId: SPEEDY_0_DICT_ADJ_SENSE_2_ID,
-    entryOxId: SPEEDY,
-    entryHomographC: 0,
+    ownEntryOxId: SPEEDY,
+    ownEntryHomographC: 0,
     dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
     lexicalCategory: LexicalCategory.adjective,
     apiSenseIndex: 1,
@@ -457,8 +456,8 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
 const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   {
     senseId: FOOD_0_THES_NOU_SENSE_2_ID,
-    entryOxId: FOOD,
-    entryHomographC: 0,
+    ownEntryOxId: FOOD,
+    ownEntryHomographC: 0,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.noun,
     apiSenseIndex: 1,
@@ -467,8 +466,8 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   },
   {
     senseId: FOOD_0_THES_NOU_SENSE_3_ID,
-    entryOxId: FOOD,
-    entryHomographC: 0,
+    ownEntryOxId: FOOD,
+    ownEntryHomographC: 0,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.noun,
     apiSenseIndex: 2,
@@ -477,8 +476,8 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_THES_ADJ_SENSE_1_ID,
-    entryOxId: FAST,
-    entryHomographC: 1,
+    ownEntryOxId: FAST,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adjective,
     apiSenseIndex: 0,
@@ -487,8 +486,8 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_THES_ADJ_SENSE_2_ID,
-    entryOxId: FAST,
-    entryHomographC: 1,
+    ownEntryOxId: FAST,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adjective,
     apiSenseIndex: 1,
@@ -497,8 +496,8 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_THES_ADJ_SENSE_3_ID,
-    entryOxId: FAST,
-    entryHomographC: 1,
+    ownEntryOxId: FAST,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adjective,
     apiSenseIndex: 2,
@@ -507,8 +506,8 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_THES_ADJ_SENSE_4_ID,
-    entryOxId: FAST,
-    entryHomographC: 1,
+    ownEntryOxId: FAST,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adjective,
     apiSenseIndex: 3,
@@ -528,8 +527,8 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_THES_ADJ_SENSE_5_ID,
-    entryOxId: FAST,
-    entryHomographC: 1,
+    ownEntryOxId: FAST,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adjective,
     apiSenseIndex: 4,
@@ -546,8 +545,8 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_THES_ADJ_SENSE_6_ID,
-    entryOxId: FAST,
-    entryHomographC: 1,
+    ownEntryOxId: FAST,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adjective,
     apiSenseIndex: 5,
@@ -574,8 +573,8 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_THES_ADV_SENSE_1_ID,
-    entryOxId: FAST,
-    entryHomographC: 1,
+    ownEntryOxId: FAST,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adverb,
     apiSenseIndex: 0,
@@ -584,8 +583,8 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_THES_ADV_SENSE_2_ID,
-    entryOxId: FAST,
-    entryHomographC: 1,
+    ownEntryOxId: FAST,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adverb,
     apiSenseIndex: 1,
@@ -594,8 +593,8 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_THES_ADV_SENSE_3_ID,
-    entryOxId: FAST,
-    entryHomographC: 1,
+    ownEntryOxId: FAST,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adverb,
     apiSenseIndex: 2,
@@ -604,8 +603,8 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_1_THES_ADV_SENSE_4_ID,
-    entryOxId: FAST,
-    entryHomographC: 1,
+    ownEntryOxId: FAST,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adverb,
     apiSenseIndex: 3,
@@ -623,8 +622,8 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_2_THES_VER_SENSE_1_ID,
-    entryOxId: FAST,
-    entryHomographC: 2,
+    ownEntryOxId: FAST,
+    ownEntryHomographC: 2,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.verb,
     apiSenseIndex: 0,
@@ -633,8 +632,8 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   },
   {
     senseId: FAST_2_THES_NOU_SENSE_1_ID,
-    entryOxId: FAST,
-    entryHomographC: 2,
+    ownEntryOxId: FAST,
+    ownEntryHomographC: 2,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.noun,
     apiSenseIndex: 0,
@@ -643,8 +642,8 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_1_THES_NOU_SENSE_1_ID,
-    entryOxId: BANK,
-    entryHomographC: 1,
+    ownEntryOxId: BANK,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.noun,
     apiSenseIndex: 0,
@@ -676,8 +675,8 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_1_THES_NOU_SENSE_2_ID,
-    entryOxId: BANK,
-    entryHomographC: 1,
+    ownEntryOxId: BANK,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.noun,
     apiSenseIndex: 1,
@@ -694,8 +693,8 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_1_THES_NOU_SENSE_3_ID,
-    entryOxId: BANK,
-    entryHomographC: 1,
+    ownEntryOxId: BANK,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.noun,
     apiSenseIndex: 2,
@@ -704,8 +703,8 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_1_THES_VER_SENSE_1_ID,
-    entryOxId: BANK,
-    entryHomographC: 1,
+    ownEntryOxId: BANK,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.verb,
     apiSenseIndex: 0,
@@ -714,8 +713,8 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_1_THES_VER_SENSE_2_ID,
-    entryOxId: BANK,
-    entryHomographC: 1,
+    ownEntryOxId: BANK,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.verb,
     apiSenseIndex: 1,
@@ -724,8 +723,8 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_1_THES_VER_SENSE_3_ID,
-    entryOxId: BANK,
-    entryHomographC: 1,
+    ownEntryOxId: BANK,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.verb,
     apiSenseIndex: 2,
@@ -747,8 +746,8 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_2_THES_NOU_SENSE_1_ID,
-    entryOxId: BANK,
-    entryHomographC: 1,
+    ownEntryOxId: BANK,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.noun,
     apiSenseIndex: 0,
@@ -757,8 +756,8 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_2_THES_NOU_SENSE_2_ID,
-    entryOxId: BANK,
-    entryHomographC: 1,
+    ownEntryOxId: BANK,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.noun,
     apiSenseIndex: 1,
@@ -779,8 +778,8 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_2_THES_VER_SENSE_1_ID,
-    entryOxId: BANK,
-    entryHomographC: 1,
+    ownEntryOxId: BANK,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.noun,
     apiSenseIndex: 0,
@@ -789,8 +788,8 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   },
   {
     senseId: BANK_2_THES_VER_SENSE_2_ID,
-    entryOxId: BANK,
-    entryHomographC: 1,
+    ownEntryOxId: BANK,
+    ownEntryHomographC: 1,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.noun,
     apiSenseIndex: 1,
@@ -799,8 +798,8 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   },
   {
     senseId: SPEEDY_0_THES_ADJ_SENSE_1_ID,
-    entryOxId: SPEEDY,
-    entryHomographC: 0,
+    ownEntryOxId: SPEEDY,
+    ownEntryHomographC: 0,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adjective,
     apiSenseIndex: 0,
@@ -821,8 +820,8 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   },
   {
     senseId: SPEEDY_0_THES_ADJ_SENSE_2_ID,
-    entryOxId: SPEEDY,
-    entryHomographC: 0,
+    ownEntryOxId: SPEEDY,
+    ownEntryHomographC: 0,
     dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
     lexicalCategory: LexicalCategory.adjective,
     apiSenseIndex: 1,

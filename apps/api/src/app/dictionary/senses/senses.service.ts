@@ -21,8 +21,8 @@ import {
   OxSubsense
 } from '../../oxford-api/interfaces/oxford-api.interface';
 import { EntrySensesService } from '../entry-senses/entry-senses.service';
-import { SenseForEntryDto } from '@edfu/api-interfaces';
 import { EntrySenseRecord } from '../entry-senses/interfaces/entry-sense.interface';
+import { SenseForEntryDto } from './dto/sense.dto';
 // import { UniqueEntry } from '../entries/interfaces/entry.interface';
 
 const PROSCRIBED_REGISTERS = [
@@ -43,8 +43,8 @@ export class SensesService {
   ) {}
 
   async findOrCreateDictionarySenseWithAssociation(
-    entryOxId: string,
-    entryHomographC: number,
+    ownEntryOxId: string,
+    ownEntryHomographC: number,
     lexicalCategory: LexicalCategory,
     apiSenseIndex: number,
     oxSense: OxSense
@@ -52,8 +52,8 @@ export class SensesService {
     const senseId = this.extractSenseId(oxSense);
 
     const sense: DictionarySenseRecordWithoutId = {
-      entryOxId: entryOxId,
-      entryHomographC: entryHomographC,
+      ownEntryOxId: ownEntryOxId,
+      ownEntryHomographC: ownEntryHomographC,
       dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
       lexicalCategory: lexicalCategory,
       apiSenseIndex: apiSenseIndex,
@@ -66,8 +66,8 @@ export class SensesService {
     const ownSimilarity = 1;
 
     await this.entrySensesService.findOrCreate(
-      entryOxId,
-      entryHomographC,
+      ownEntryOxId,
+      ownEntryHomographC,
       senseId,
       DictionaryOrThesaurus.dictionary,
       ownSimilarity
@@ -77,8 +77,8 @@ export class SensesService {
   }
 
   findOrCreateThesaurusSenseWithoutAssociation(
-    entryOxId: string,
-    entryHomographC: number,
+    ownEntryOxId: string,
+    ownEntryHomographC: number,
     lexicalCategory: LexicalCategory,
     apiSenseIndex: number,
     oxSense: OxSense
@@ -86,8 +86,8 @@ export class SensesService {
     const senseId = this.extractSenseId(oxSense);
 
     const sense: ThesaurusSenseRecordWithoutId = {
-      entryOxId: entryOxId,
-      entryHomographC: entryHomographC,
+      ownEntryOxId: ownEntryOxId,
+      ownEntryHomographC: ownEntryHomographC,
       dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
       lexicalCategory: lexicalCategory,
       apiSenseIndex: apiSenseIndex,
@@ -208,7 +208,8 @@ export class SensesService {
       const entrySense = entrySensesById[sense.senseId];
       return {
         oxId: entrySense.oxId,
-        ownOxId: sense.entryOxId,
+        ownEntryOxId: sense.ownEntryOxId,
+        ownEntryHomographC: sense.ownEntryHomographC,
         homographC: entrySense.homographC,
         senseId: sense.senseId,
         lexicalCategory: sense.lexicalCategory,
@@ -280,7 +281,7 @@ export class SensesService {
       .find(
         {
           dictionaryOrThesaurus: 'dictionary',
-          entryOxId: {
+          ownEntryOxId: {
             $in: [
               'good_morning',
               'good_afternoon',
@@ -292,14 +293,14 @@ export class SensesService {
             ]
           }
         },
-        { _id: 0, entryOxId: 1, senseId: 1, definition: 1, example: 1 }
+        { _id: 0, ownEntryOxId: 1, senseId: 1, definition: 1, example: 1 }
       )
       .lean()
       .exec();
     //   .replace(/,/g, '')
     for (const sense of senses) {
       console.log(
-        `${sense.entryOxId},${sense.senseId},${this.replace(
+        `${sense.ownEntryOxId},${sense.senseId},${this.replace(
           sense.definition
         )},${this.replace(sense.example)}`
       );

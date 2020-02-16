@@ -9,7 +9,7 @@ export class EntriesServiceMock {
   findOneById(id: string): Promise<EntryRecord> {
     return Promise.resolve(null);
   }
-  search(chars: string): Promise<EntryRecord[]> {
+  searchDeprecated(chars: string): Promise<EntryRecord[]> {
     return Promise.resolve(null);
   }
 }
@@ -60,7 +60,7 @@ describe('EntriesResolver', () => {
   it('searches by searchString', async () => {
     const word = 'food';
     const entry = entryRecord(word);
-    jest.spyOn(entriesService, 'search').mockImplementation(() => {
+    jest.spyOn(entriesService, 'searchDeprecated').mockImplementation(() => {
       return Promise.resolve([entry]);
     });
     const res = await resolver.searchDeprecated('foo');

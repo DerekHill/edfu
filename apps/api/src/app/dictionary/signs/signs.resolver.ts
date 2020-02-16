@@ -1,6 +1,7 @@
 import { Resolver, Query, Args, ResolveProperty, Root } from '@nestjs/graphql';
 import { SignsService } from './signs.service';
-import { SenseSignDto, SignDto } from '@edfu/api-interfaces';
+import { SenseSignDto } from './dto/sense-sign.dto';
+import { SignDto } from './dto/sign.dto';
 
 @Resolver(of => SenseSignDto)
 export class SignsResolver {

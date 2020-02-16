@@ -7,10 +7,10 @@ import {
 import { Model } from 'mongoose';
 import {
   SenseSignDocument,
-  SenseSignRecordWithoutId,
   SenseSignRecord
 } from './interfaces/sense-sign.interface';
-import { SignDocument, SignRecord } from './interfaces/sign.interface';
+import { SignDocument } from './interfaces/sign.interface';
+import { SignRecord, SenseSignRecordWithoutId } from '@edfu/api-interfaces';
 
 @Injectable()
 export class SignsTestSetupService {

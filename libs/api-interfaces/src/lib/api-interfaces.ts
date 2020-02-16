@@ -1,83 +1,46 @@
-import { ObjectType, Field, Int, ID, registerEnumType } from 'type-graphql';
 import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
 import { ObjectId } from 'bson';
 
-registerEnumType(DictionaryOrThesaurus, {
-  name: 'DictionaryOrThesaurus'
-});
-
-registerEnumType(LexicalCategory, {
-  name: 'LexicalCategory'
-});
-
-@ObjectType()
-export class EntryDto {
-  @Field()
-  readonly oxId: string;
-
-  @Field()
-  readonly homographC: number;
-
-  @Field()
-  readonly word: string;
-
-  @Field()
-  readonly relatedEntriesAdded: boolean;
-}
-
-@ObjectType()
-export class SenseForEntryDto {
-  @Field()
-  readonly oxId: string;
-
-  @Field()
-  readonly ownOxId: string;
-
-  @Field()
-  readonly homographC: number;
-
-  @Field(type => ID)
-  readonly senseId: string;
-
-  @Field(type => LexicalCategory)
-  readonly lexicalCategory?: LexicalCategory;
-
-  @Field()
-  readonly apiSenseIndex: number;
-
-  @Field({ nullable: true })
-  readonly example: string;
-
-  @Field()
-  readonly definition: string;
-
-  @Field(type => DictionaryOrThesaurus)
-  readonly associationType: DictionaryOrThesaurus;
-
-  @Field()
-  readonly similarity: number;
-}
-
-@ObjectType()
-export class SignDto {
-  @Field(type => ID)
-  _id: ObjectId;
-
-  @Field()
+export interface SignRecord {
+  readonly _id: ObjectId;
   readonly mnemonic: string;
-
-  @Field()
   readonly mediaUrl: string;
 }
 
-@ObjectType()
-export class SenseSignDto {
-  @Field(type => ID)
+export interface SenseSignRecordWithoutId {
   readonly senseId: string;
-
-  @Field(type => ID)
   readonly signId: ObjectId;
-
-  @Field(type => SignDto, { nullable: true })
-  readonly sign?: SignDto;
 }
+
+export interface SenseSignDtoInterface extends SenseSignRecordWithoutId {
+  readonly sign?: SignRecord;
+}
+
+export interface UniqueEntry {
+  readonly oxId: string;
+  readonly homographC: number;
+}
+
+export interface EntrySenseAssociationProperties {
+  readonly associationType: DictionaryOrThesaurus;
+  readonly similarity: number;
+}
+
+export interface CombinedSenseRequiredExposedProperties {
+  readonly senseId: string;
+  readonly ownEntryOxId: string;
+  readonly ownEntryHomographC: number;
+  readonly lexicalCategory: LexicalCategory;
+  readonly apiSenseIndex: number;
+  readonly example: string;
+}
+
+export interface CombinedSenseOptionalExposedProperties {
+  readonly definition?: string;
+}
+
+export interface SenseForEntryDtoInterface
+  extends UniqueEntry,
+    EntrySenseAssociationProperties,
+    CombinedSenseRequiredExposedProperties,
+    CombinedSenseOptionalExposedProperties {}

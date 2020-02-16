@@ -116,8 +116,8 @@ describe('SensesService', () => {
       const THESAURUS_SENSE_ID = 'thesaurusSenseId';
       const dictionarySense: DictionarySenseRecordWithoutId = {
         senseId: DICTIONARY_SENSE_ID,
-        entryOxId: 'jump',
-        entryHomographC: 0,
+        ownEntryOxId: 'jump',
+        ownEntryHomographC: 0,
         lexicalCategory: LexicalCategory.noun,
         apiSenseIndex: 0,
         dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
@@ -127,8 +127,8 @@ describe('SensesService', () => {
       };
       const thesaurusSense: ThesaurusSenseRecord = {
         _id: new ObjectId(),
-        entryOxId: 'entryOxId',
-        entryHomographC: 1,
+        ownEntryOxId: 'ownEntryOxId',
+        ownEntryHomographC: 1,
         dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
         lexicalCategory: LexicalCategory.noun,
         apiSenseIndex: 0,

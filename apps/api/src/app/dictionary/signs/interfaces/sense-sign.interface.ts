@@ -1,10 +1,6 @@
 import { Document } from 'mongoose';
 import { ObjectId } from 'bson';
-
-export interface SenseSignRecordWithoutId {
-  readonly senseId: string;
-  readonly signId: ObjectId;
-}
+import { SenseSignRecordWithoutId } from '@edfu/api-interfaces';
 
 export interface SenseSignRecord extends SenseSignRecordWithoutId {
   readonly _id: ObjectId;

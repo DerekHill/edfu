@@ -6,11 +6,11 @@ export const SenseSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  entryOxId: {
+  ownEntryOxId: {
     type: String,
     required: true
   },
-  entryHomographC: Number,
+  ownEntryHomographC: Number,
   lexicalCategory: {
     type: String,
     required: true

@@ -9,9 +9,10 @@ import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { HotkeyModule } from 'angular2-hotkeys';
+import { SenseComponent } from './sense/sense.component';
 
 @NgModule({
-  declarations: [SearchComponent, RemoveUnderscoresPipe],
+  declarations: [SearchComponent, SenseComponent, RemoveUnderscoresPipe],
   imports: [
     CommonModule,
     FormsModule,

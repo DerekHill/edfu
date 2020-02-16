@@ -1,37 +1,38 @@
 import { Document } from 'mongoose';
 import { ObjectId } from 'bson';
 import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
+import {
+  CombinedSenseRequiredExposedProperties,
+  CombinedSenseOptionalExposedProperties
+} from '@edfu/api-interfaces';
 
-interface SharedRequiredProperties {
-  readonly senseId: string;
-  readonly entryOxId: string;
-  readonly entryHomographC: number;
-  readonly lexicalCategory: LexicalCategory;
-  readonly apiSenseIndex: number;
-  readonly example: string;
+interface CombinedSenseRequiredInternalProperties {
   readonly dictionaryOrThesaurus: DictionaryOrThesaurus;
 }
 
-// Not DRY with below, but exists to enable single SenseDocument
-interface SharedOptionalProperties {
+interface CombinedSenseRequiredAllProperties
+  extends CombinedSenseRequiredInternalProperties,
+    CombinedSenseRequiredExposedProperties {}
+
+interface CombinedSenseOptionalInternalProperties {
   readonly thesaurusSenseIds?: string[];
-  readonly definition?: string;
   readonly synonyms?: string[];
 }
 
 export interface SharedSenseRecordWithoutId
-  extends SharedRequiredProperties,
-    SharedOptionalProperties {}
+  extends CombinedSenseRequiredAllProperties,
+    CombinedSenseOptionalInternalProperties,
+    CombinedSenseOptionalExposedProperties {}
 
 export interface DictionarySenseRecordWithoutId
-  extends SharedRequiredProperties {
+  extends CombinedSenseRequiredAllProperties {
   readonly dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary;
   readonly thesaurusSenseIds: string[];
   readonly definition: string;
 }
 
 export interface ThesaurusSenseRecordWithoutId
-  extends SharedRequiredProperties {
+  extends CombinedSenseRequiredAllProperties {
   readonly dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus;
   readonly synonyms: string[];
 }

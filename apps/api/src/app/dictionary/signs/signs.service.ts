@@ -5,12 +5,13 @@ import {
   SENSE_SIGN_COLLECTION_NAME
 } from '../../constants';
 import { Model } from 'mongoose';
-import { SignDocument, SignRecord } from './interfaces/sign.interface';
+import { SignDocument } from './interfaces/sign.interface';
 import {
   SenseSignDocument,
   SenseSignRecord
 } from './interfaces/sense-sign.interface';
 import { ObjectId } from 'bson';
+import { SignRecord } from '@edfu/api-interfaces';
 
 @Injectable()
 export class SignsService {

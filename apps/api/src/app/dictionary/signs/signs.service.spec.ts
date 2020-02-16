@@ -5,13 +5,12 @@ import {
   SIGN_COLLECTION_NAME,
   SENSE_SIGN_COLLECTION_NAME
 } from '../../constants';
-import { SignRecord } from './interfaces/sign.interface';
 import { TestDatabaseModule } from '../../config/test-database.module';
 import { SignSchema } from './schemas/sign.schema';
 import { ObjectId } from 'bson';
-import { SenseSignRecordWithoutId } from './interfaces/sense-sign.interface';
 import { SenseSignSchema } from './schemas/sense-sign.schema';
 import { SignsTestSetupService } from './signs-test-setup.service';
+import { SignRecord, SenseSignRecordWithoutId } from '@edfu/api-interfaces';
 
 describe('SignsService', () => {
   let service: SignsService;

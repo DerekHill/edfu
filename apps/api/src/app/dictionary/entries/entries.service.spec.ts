@@ -164,14 +164,14 @@ describe('EntriesService', () => {
         'supper'
       ]);
       const THESAURUS_SENSE_ID = 'thesaurus_sense_id';
-      const ENTRY_OXID = 'entryOxId';
+      const ENTRY_OXID = 'ownEntryOxId';
       const ENTRY_HOMOGRAPH_C = 1;
       const SYNONYMS = ['jump', 'leap'];
 
       const thesaurusSense: ThesaurusSenseRecord = {
         _id: new ObjectId(),
-        entryOxId: ENTRY_OXID,
-        entryHomographC: ENTRY_HOMOGRAPH_C,
+        ownEntryOxId: ENTRY_OXID,
+        ownEntryHomographC: ENTRY_HOMOGRAPH_C,
         dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
         lexicalCategory: LexicalCategory.noun,
         apiSenseIndex: 0,
@@ -182,8 +182,8 @@ describe('EntriesService', () => {
 
       const dictionarySense: DictionarySenseRecord = {
         _id: new ObjectId(),
-        entryOxId: ENTRY_OXID,
-        entryHomographC: ENTRY_HOMOGRAPH_C,
+        ownEntryOxId: ENTRY_OXID,
+        ownEntryHomographC: ENTRY_HOMOGRAPH_C,
         dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
         lexicalCategory: LexicalCategory.noun,
         apiSenseIndex: 0,
@@ -217,7 +217,7 @@ describe('EntriesService', () => {
       jest
         .spyOn(sensesService, 'findOrCreateThesaurusSenseWithoutAssociation')
         .mockImplementation(
-          (entryOxId, entryHomographC, lexicalCategory, oxSense) => {
+          (ownEntryOxId, ownEntryHomographC, lexicalCategory, oxSense) => {
             return Promise.resolve(thesaurusSense);
           }
         );
@@ -327,8 +327,8 @@ describe('EntriesService', () => {
 
       const dictionarySense: DictionarySenseRecord = {
         _id: new ObjectId(),
-        entryOxId: 'fast',
-        entryHomographC: 1,
+        ownEntryOxId: 'fast',
+        ownEntryHomographC: 1,
         dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
         lexicalCategory: LexicalCategory.adjective,
         apiSenseIndex: 0,

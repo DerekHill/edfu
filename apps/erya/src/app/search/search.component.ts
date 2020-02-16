@@ -3,7 +3,8 @@ import {
   OnInit,
   OnDestroy,
   Pipe,
-  PipeTransform
+  PipeTransform,
+  Input
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -11,9 +12,9 @@ import { map, startWith } from 'rxjs/operators';
 import gql from 'graphql-tag';
 import { Apollo, QueryRef } from 'apollo-angular';
 import {
-  SenseForEntryDto,
-  SenseSignDto,
-  UniqueEntry
+  SenseForEntryDtoInterface,
+  UniqueEntry,
+  SenseSignDtoInterface
 } from '@edfu/api-interfaces';
 import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
 import { untilDestroyed } from 'ngx-take-until-destroy';
@@ -33,7 +34,7 @@ interface SenseSearchVariables {
 }
 
 interface SensesResult {
-  senses: SenseForEntryDto[];
+  senses: SenseForEntryDtoInterface[];
 }
 
 interface SignSearchVariables {
@@ -41,12 +42,12 @@ interface SignSearchVariables {
 }
 
 interface SignsResult {
-  signs: SenseSignDto[];
+  signs: SenseSignDtoInterface[];
 }
 
 interface SenseGroup {
   lexicalCategory: LexicalCategory;
-  senses: SenseForEntryDto[];
+  senses: SenseForEntryDtoInterface[];
 }
 
 interface UniqueEntryWithSenseGroups extends UniqueEntry {
@@ -65,6 +66,7 @@ export class RemoveUnderscoresPipe implements PipeTransform {
   templateUrl: './search.component.html'
 })
 export class SearchComponent implements OnInit, OnDestroy {
+  @Input() sense: SenseForEntryDtoInterface; //
   searchFormControl = new FormControl();
   searchChars$: Observable<string>;
 
@@ -73,14 +75,14 @@ export class SearchComponent implements OnInit, OnDestroy {
   oxId$: BehaviorSubject<string>;
 
   sensesSearchRef: QueryRef<SensesResult, SenseSearchVariables>;
-  senses$: Observable<SenseForEntryDto[]>;
-  sensesBs$: BehaviorSubject<SenseForEntryDto[]>;
+  senses$: Observable<SenseForEntryDtoInterface[]>;
+  sensesBs$: BehaviorSubject<SenseForEntryDtoInterface[]>;
 
   newSensesBs$: BehaviorSubject<UniqueEntryWithSenseGroups[]>;
 
   signsSearchRef: QueryRef<SignsResult, SignSearchVariables>;
-  senseSigns$: Observable<SenseSignDto[]>;
-  senseSignsBs$: BehaviorSubject<SenseSignDto[]>;
+  senseSigns$: Observable<SenseSignDtoInterface[]>;
+  senseSignsBs$: BehaviorSubject<SenseSignDtoInterface[]>;
 
   constructor(private apollo: Apollo, private _hotkeysService: HotkeysService) {
     this._hotkeysService.add(
@@ -213,13 +215,13 @@ export class SearchComponent implements OnInit, OnDestroy {
     });
   }
 
-  onSenseClick(event, sense: SenseForEntryDto) {
+  onSenseClick(event, sense: SenseForEntryDtoInterface) {
     this.signsSearchRef.setVariables({
       senseId: sense.senseId
     });
   }
 
-  onNewEntryClick(event, sense: SenseForEntryDto) {
+  onNewEntryClick(event, sense: SenseForEntryDtoInterface) {
     console.log('new sense click');
     console.log(sense);
     // this.signsSearchRef.setVariables({
@@ -227,7 +229,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     // });
   }
 
-  onGroupClick(event, group: SenseForEntryDto) {
+  onGroupClick(event, group: SenseForEntryDtoInterface) {
     console.log('new group click');
     console.log(group);
     // this.signsSearchRef.setVariables({
@@ -235,7 +237,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     // });
   }
 
-  onNewSenseClick(event, group: SenseForEntryDto) {
+  onNewSenseClick(event, group: SenseForEntryDtoInterface) {
     console.log('new group click');
     console.log(group);
     // this.signsSearchRef.setVariables({
@@ -262,7 +264,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   _createUniqueEntryWithSenseGroupsArray(
-    senses: SenseForEntryDto[]
+    senses: SenseForEntryDtoInterface[]
   ): UniqueEntryWithSenseGroups[] {
     const uniqueEntries: UniqueEntry[] = [];
     for (const sense of senses) {
@@ -293,9 +295,9 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   _extractRelevantSensesPreservingOrder(
-    senses: SenseForEntryDto[],
+    senses: SenseForEntryDtoInterface[],
     uniqueEntry: UniqueEntry
-  ): SenseForEntryDto[] {
+  ): SenseForEntryDtoInterface[] {
     return senses.filter(
       sense =>
         sense.oxId === uniqueEntry.oxId &&
@@ -303,16 +305,23 @@ export class SearchComponent implements OnInit, OnDestroy {
     );
   }
 
-  _sortSensesByFit(senses: SenseForEntryDto[]): SenseForEntryDto[] {
+  _sortSensesByFit(
+    senses: SenseForEntryDtoInterface[]
+  ): SenseForEntryDtoInterface[] {
     return senses.sort(this._compareSensesForFit);
   }
 
-  _applyMaxSensesLimit(senses: SenseForEntryDto[]): SenseForEntryDto[] {
+  _applyMaxSensesLimit(
+    senses: SenseForEntryDtoInterface[]
+  ): SenseForEntryDtoInterface[] {
     const MAX_SENSES_LIMIT = 10;
     return senses.slice(0, MAX_SENSES_LIMIT);
   }
 
-  _compareSensesForFit(a: SenseForEntryDto, b: SenseForEntryDto) {
+  _compareSensesForFit(
+    a: SenseForEntryDtoInterface,
+    b: SenseForEntryDtoInterface
+  ) {
     if (a.associationType !== b.associationType) {
       if (a.associationType === DictionaryOrThesaurus.dictionary) {
         return -1;
@@ -337,8 +346,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   _groupSensesByLexicalCategoryAsList(
-    senses: SenseForEntryDto[]
-  ): SenseForEntryDto[] {
+    senses: SenseForEntryDtoInterface[]
+  ): SenseForEntryDtoInterface[] {
     const categoryOrder = senses.reduce((acc, curr) => {
       const cat = curr.lexicalCategory;
       if (!acc.includes(cat)) {
@@ -360,7 +369,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   _groupSensesByLexicalCategoryAsObjects(
-    senses: SenseForEntryDto[]
+    senses: SenseForEntryDtoInterface[]
   ): SenseGroup[] {
     const categoryOrder = senses.reduce((acc, curr) => {
       const cat = curr.lexicalCategory;

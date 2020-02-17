@@ -26,6 +26,7 @@ import {
 import { HeadwordOrPhrase } from '../../enums';
 import { EntrySensesService } from '../entry-senses/entry-senses.service';
 import { SimilarityService } from '../similarity/similarity.service';
+import { stringify } from 'querystring';
 
 @Injectable()
 export class EntriesService {
@@ -334,6 +335,7 @@ export class EntriesService {
   }
 
   async searchOxIds(chars: string): Promise<string[]> {
+    console.log('chars', chars);
     const OXIDS_LIMIT = 100;
 
     if (chars) {
@@ -346,5 +348,10 @@ export class EntriesService {
     } else {
       return Promise.resolve([]);
     }
+  }
+
+  _removeInvalidRegexChars(chars: string): string {
+    return chars;
+    //   return chars.replace()
   }
 }

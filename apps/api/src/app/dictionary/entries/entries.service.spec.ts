@@ -382,4 +382,11 @@ describe('EntriesService', () => {
       );
     });
   });
+
+  describe.only('_removeInvalidRegexChars', () => {
+    it('does something', () => {
+      console.log('foo');
+      expect(entriesService._removeInvalidRegexChars('f')).toEqual('f');
+    });
+  });
 });

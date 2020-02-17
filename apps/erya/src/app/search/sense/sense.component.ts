@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { SenseForEntryDtoInterface } from '@edfu/api-interfaces';
 
 @Component({
@@ -6,8 +6,10 @@ import { SenseForEntryDtoInterface } from '@edfu/api-interfaces';
   templateUrl: './sense.component.html'
 })
 export class SenseComponent {
-  //   @Input() sense: string;
-}
+  @Input() sense: SenseForEntryDtoInterface;
+  @Output() senseClicked = new EventEmitter<SenseForEntryDtoInterface>();
 
-// // <edfu-sense *ngFor="let sense of group.senses" [sense]="sense">
-// // </edfu-sense>
+  onSenseClick(event, sense: SenseForEntryDtoInterface) {
+    this.senseClicked.emit(sense);
+  }
+}

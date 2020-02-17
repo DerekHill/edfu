@@ -1,1 +1,4 @@
-foo
+<mat-list-item (click)="onSenseClick($event, sense)"
+  >{{ sense.example }} {{ sense.definition }} {{ sense.associationType }} -
+  {{ sense.similarity | number: '1.2-2' }}
+</mat-list-item>

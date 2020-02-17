@@ -33,25 +33,20 @@
   </mat-form-field>
 </form>
 
-<div *ngIf="newSensesBs$ | async as entries">
+<div *ngIf="sensesBs$ | async as entries">
   <mat-action-list>
-    <div *ngFor="let entry of entries" (click)="onNewEntryClick($event, entry)">
+    <div *ngFor="let entry of entries">
       <mat-list-item>
         <b>{{ entry.oxId | removeUnderscores }}</b>
       </mat-list-item>
-      <div
-        *ngFor="let group of entry.senseGroups"
-        (click)="onGroupClick($event, group)"
-      >
+      <div *ngFor="let group of entry.senseGroups">
         <mat-list-item>{{ group.lexicalCategory }}</mat-list-item>
-
-        <mat-list-item
+        <edfu-sense
           *ngFor="let sense of group.senses"
-          (click)="onSenseClick($event, sense)"
+          [sense]="sense"
+          (senseClicked)="onChildSenseEvent($event)"
         >
-          {{ sense.example }} {{ sense.definition }}
-          {{ sense.associationType }} - {{ sense.similarity | number: '1.2-2' }}
-        </mat-list-item>
+        </edfu-sense>
       </div>
     </div>
   </mat-action-list>

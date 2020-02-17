@@ -66,7 +66,8 @@ export class RemoveUnderscoresPipe implements PipeTransform {
   templateUrl: './search.component.html'
 })
 export class SearchComponent implements OnInit, OnDestroy {
-  @Input() sense: SenseForEntryDtoInterface; //
+  //   @Input() sense: SenseForEntryDtoInterface;
+
   searchFormControl = new FormControl();
   searchChars$: Observable<string>;
 
@@ -76,9 +77,8 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   sensesSearchRef: QueryRef<SensesResult, SenseSearchVariables>;
   senses$: Observable<SenseForEntryDtoInterface[]>;
-  sensesBs$: BehaviorSubject<SenseForEntryDtoInterface[]>;
 
-  newSensesBs$: BehaviorSubject<UniqueEntryWithSenseGroups[]>;
+  sensesBs$: BehaviorSubject<UniqueEntryWithSenseGroups[]>;
 
   signsSearchRef: QueryRef<SignsResult, SignSearchVariables>;
   senseSigns$: Observable<SenseSignDtoInterface[]>;
@@ -101,7 +101,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.searchChars$ = this.searchFormControl.valueChanges.pipe(startWith(''));
 
     this.sensesBs$ = new BehaviorSubject(null);
-    this.newSensesBs$ = new BehaviorSubject(null);
     this.senseSignsBs$ = new BehaviorSubject(null);
     this.oxId$ = new BehaviorSubject(null);
 
@@ -183,24 +182,14 @@ export class SearchComponent implements OnInit, OnDestroy {
     });
 
     this.senses$.subscribe(senses => {
-      console.log('senses');
-      console.log(senses);
       if (senses.length === 1) {
-        this.onSenseClick(null, senses[0]);
+        this.onChildSenseEvent(senses[0]);
       }
-      this.sensesBs$.next(senses);
-      this.newSensesBs$.next(
-        this._createUniqueEntryWithSenseGroupsArray(senses)
-      );
+      this.sensesBs$.next(this._createUniqueEntryWithSenseGroupsArray(senses));
     });
 
     this.senseSigns$.subscribe(signs => {
       this.senseSignsBs$.next(signs);
-    });
-
-    this.newSensesBs$.subscribe(x => {
-      console.log('new senses bs');
-      console.log(x);
     });
   }
 
@@ -215,42 +204,13 @@ export class SearchComponent implements OnInit, OnDestroy {
     });
   }
 
-  onSenseClick(event, sense: SenseForEntryDtoInterface) {
+  onChildSenseEvent(sense) {
     this.signsSearchRef.setVariables({
       senseId: sense.senseId
     });
   }
 
-  onNewEntryClick(event, sense: SenseForEntryDtoInterface) {
-    console.log('new sense click');
-    console.log(sense);
-    // this.signsSearchRef.setVariables({
-    //   senseId: sense.senseId
-    // });
-  }
-
-  onGroupClick(event, group: SenseForEntryDtoInterface) {
-    console.log('new group click');
-    console.log(group);
-    // this.signsSearchRef.setVariables({
-    //   senseId: sense.senseId
-    // });
-  }
-
-  onNewSenseClick(event, group: SenseForEntryDtoInterface) {
-    console.log('new group click');
-    console.log(group);
-    // this.signsSearchRef.setVariables({
-    //   senseId: sense.senseId
-    // });
-  }
-
-  //   onNewSenseClick
-
-  //   onGroupClick
-
   clearSearchField() {
-    this.sensesBs$.next(null);
     this.senseSignsBs$.next(null);
     this.searchFormControl.reset();
     // Needs to be cleared because otherwise valueChanges will not fire if next search is the same

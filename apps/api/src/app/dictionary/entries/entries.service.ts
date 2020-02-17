@@ -335,12 +335,15 @@ export class EntriesService {
   }
 
   async searchOxIds(chars: string): Promise<string[]> {
-    console.log('chars', chars);
     const OXIDS_LIMIT = 100;
+    const sanitizedChars = this._removeInvalidRegexChars(chars);
 
-    if (chars) {
+    if (sanitizedChars) {
       const objs = await this.entryModel
-        .find({ word: { $regex: `^${chars}`, $options: '$i' } }, { oxId: 1 })
+        .find(
+          { word: { $regex: `^${sanitizedChars}`, $options: '$i' } },
+          { oxId: 1 }
+        )
         .limit(OXIDS_LIMIT)
         .exec();
       const ids = objs.map(i => i.oxId);
@@ -351,7 +354,6 @@ export class EntriesService {
   }
 
   _removeInvalidRegexChars(chars: string): string {
-    return chars;
-    //   return chars.replace()
+    return chars.replace('\\', '');
   }
 }

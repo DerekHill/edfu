@@ -32,10 +32,11 @@ type Query {
   entry(id: String!): EntryDto!
   entriesAll: [EntryDto!]!
   searchDeprecated(searchString: String!): [EntryDto!]!
-  oxIds(searchString: String!): [String!]!
   sensesForEntry(homographC: Float!, oxId: String!): [SenseForEntryDto!]!
   senses(oxId: String!): [SenseForEntryDto!]!
   signs(senseId: String!): [SenseSignDto!]!
+  foo: String!
+  oxIds(searchString: String!): [String!]!
 }
 
 type SenseForEntryDto {

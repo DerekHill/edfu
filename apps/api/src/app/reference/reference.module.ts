@@ -23,6 +23,7 @@ import { SimilarityService } from './similarity/similarity.service';
 import * as use from '@tensorflow-models/universal-sentence-encoder';
 import { SenseSignSchema } from './signs/schemas/sense-sign.schema';
 import { SignsResolver } from './signs/signs.resolver';
+import { DictionaryResolver } from './reference.resolver';
 
 class TfUseMock {
   embed(sentences: string[]) {
@@ -54,6 +55,7 @@ class TfUseMock {
   providers: [
     EntriesService,
     SensesService,
+    DictionaryResolver,
     EntriesResolver,
     SensesResolver,
     SignsService,

@@ -26,7 +26,6 @@ import {
 import { HeadwordOrPhrase } from '../../enums';
 import { EntrySensesService } from '../entry-senses/entry-senses.service';
 import { SimilarityService } from '../similarity/similarity.service';
-import { stringify } from 'querystring';
 
 @Injectable()
 export class EntriesService {

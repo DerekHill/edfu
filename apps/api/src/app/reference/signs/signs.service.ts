@@ -30,7 +30,6 @@ export class SignsService {
   }
 
   findOneSign(_id: ObjectId): Promise<SignRecord> {
-    //   return null
     return this.signModel
       .findById(_id)
       .lean()

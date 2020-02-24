@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { EntriesService } from '../../dictionary/entries/entries.service';
-import { SensesService } from '../../dictionary/senses/senses.service';
+import { EntriesService } from '../../reference/entries/entries.service';
+import { SensesService } from '../../reference/senses/senses.service';
 
 const WORDS = [
   'good morning',

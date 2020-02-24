@@ -34,8 +34,8 @@ export class EntriesResolver {
     return this.entriesService.searchDeprecated(searchString);
   }
 
-  @Query(returns => [String])
-  oxIds(@Args('searchString') searchString: string): Promise<string[]> {
-    return this.entriesService.searchOxIds(searchString);
-  }
+  //   @Query(returns => [String])
+  //   oxIds(@Args('searchString') searchString: string): Promise<string[]> {
+  //     return this.entriesService.searchOxIds(searchString);
+  //   }
 }

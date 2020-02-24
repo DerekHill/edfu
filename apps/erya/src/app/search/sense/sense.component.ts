@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { SenseForEntryDtoInterface } from '@edfu/api-interfaces';
+import { DictionaryOrThesaurus } from '@edfu/enums';
 
 @Component({
   selector: 'edfu-sense',
@@ -8,11 +9,14 @@ import { SenseForEntryDtoInterface } from '@edfu/api-interfaces';
 export class SenseComponent {
   exampleOrDefinition: string;
   _sense: SenseForEntryDtoInterface;
+  fromThesaurus: boolean;
 
   @Input()
   set sense(sense: SenseForEntryDtoInterface) {
     this._sense = sense;
     this.exampleOrDefinition = sense.example || sense.definition;
+    this.fromThesaurus =
+      sense.associationType === DictionaryOrThesaurus.thesaurus;
   }
 
   get sense(): SenseForEntryDtoInterface {

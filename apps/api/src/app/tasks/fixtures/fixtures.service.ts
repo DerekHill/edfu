@@ -11,15 +11,15 @@ import { Model } from 'mongoose';
 import {
   EntryDocument,
   EntryRecordWithoutId
-} from '../../dictionary/entries/interfaces/entry.interface';
+} from '../../reference/entries/interfaces/entry.interface';
 import {
   DictionarySenseRecordWithoutId,
   ThesaurusSenseRecordWithoutId,
   SenseDocument
-} from '../../dictionary/senses/interfaces/sense.interface';
+} from '../../reference/senses/interfaces/sense.interface';
 import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
 import { HeadwordOrPhrase } from '../../enums';
-import { EntrySenseRecordWithoutId } from '../../dictionary/entry-senses/interfaces/entry-sense.interface';
+import { EntrySenseRecordWithoutId } from '../../reference/entry-senses/interfaces/entry-sense.interface';
 import { ObjectId } from 'bson';
 import { SignRecord, SenseSignRecordWithoutId } from '@edfu/api-interfaces';
 

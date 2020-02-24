@@ -205,6 +205,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   onChildSenseEvent(sense) {
+    console.log('onChildSenseEvent');
+    console.log(sense);
     this.signsSearchRef.setVariables({
       senseId: sense.senseId
     });

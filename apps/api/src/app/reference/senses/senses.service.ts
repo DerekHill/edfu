@@ -23,7 +23,6 @@ import {
 import { EntrySensesService } from '../entry-senses/entry-senses.service';
 import { EntrySenseRecord } from '../entry-senses/interfaces/entry-sense.interface';
 import { SenseForEntryDto } from './dto/sense.dto';
-// import { UniqueEntry } from '../entries/interfaces/entry.interface';
 
 const PROSCRIBED_REGISTERS = [
   'rare',

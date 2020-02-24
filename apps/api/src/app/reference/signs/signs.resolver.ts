@@ -4,6 +4,7 @@ import { SenseSignDto } from './dto/sense-sign.dto';
 import { SignDto } from './dto/sign.dto';
 
 @Resolver(of => SenseSignDto)
+// @Resolver('Signs')
 export class SignsResolver {
   constructor(private readonly signsService: SignsService) {}
 

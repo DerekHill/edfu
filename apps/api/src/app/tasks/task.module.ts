@@ -10,13 +10,13 @@ import {
   SENSE_SIGN_COLLECTION_NAME,
   SIGN_COLLECTION_NAME
 } from '../constants';
-import { EntrySchema } from '../dictionary/entries/schemas/entry.schema';
-import { SenseSchema } from '../dictionary/senses/schemas/sense.schema';
-import { EntrySenseSchema } from '../dictionary/entry-senses/schemas/entry-sense.schema';
+import { EntrySchema } from '../reference/entries/schemas/entry.schema';
+import { SenseSchema } from '../reference/senses/schemas/sense.schema';
+import { EntrySenseSchema } from '../reference/entry-senses/schemas/entry-sense.schema';
 import { LoaderService } from './loader/loader.service';
-import { DictionaryModule } from '../dictionary/dictionary.module';
-import { SenseSignSchema } from '../dictionary/signs/schemas/sense-sign.schema';
-import { SignSchema } from '../dictionary/signs/schemas/sign.schema';
+import { DictionaryModule } from '../reference/reference.module';
+import { SenseSignSchema } from '../reference/signs/schemas/sense-sign.schema';
+import { SignSchema } from '../reference/signs/schemas/sign.schema';
 
 @Module({
   imports: [

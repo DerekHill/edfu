@@ -293,31 +293,6 @@ describe('EntriesService', () => {
     });
   });
 
-  describe('search()', () => {
-    beforeEach(async () => {
-      await entriesService.findOrCreateEntryFromSearchRecord(
-        createEntrySearchRecord('river')
-      );
-    });
-    it('matches if characters match', async () => {
-      expect(await entriesService.searchDeprecated('ri')).toHaveLength(1);
-    });
-    it('does not match if characters do not match', async () => {
-      expect(
-        await entriesService.searchDeprecated('wrong_string')
-      ).toHaveLength(0);
-    });
-    it('is case insensitive', async () => {
-      expect(await entriesService.searchDeprecated('RI')).toHaveLength(1);
-    });
-    it('does not return match if not at start of word', async () => {
-      expect(await entriesService.searchDeprecated('ver')).toHaveLength(0);
-    });
-    it('does not return results given empty search string', async () => {
-      expect(await entriesService.searchDeprecated('')).toHaveLength(0);
-    });
-  });
-
   describe('findOrCreateSynonymEntryAndAssociations()', () => {
     it('adds similarity to association', async () => {
       expect.assertions(1);
@@ -380,12 +355,6 @@ describe('EntriesService', () => {
         thesaurusSenseLexicalCategory,
         thesaurusSenseExample
       );
-    });
-  });
-
-  describe('_removeInvalidRegexChars', () => {
-    it('removes backslashes', () => {
-      expect(entriesService._removeInvalidRegexChars('f\\')).toEqual('f');
     });
   });
 });

@@ -13,6 +13,7 @@ import { MatListModule } from '@angular/material/list';
 import { LexicalCategory, DictionaryOrThesaurus } from '@edfu/enums';
 import { MatIconModule } from '@angular/material/icon';
 import { HotkeyModule } from 'angular2-hotkeys';
+import { SenseComponent } from './sense/sense.component';
 
 const createSense = (params: any): SenseForEntryDtoInterface => {
   const defaults = {
@@ -36,7 +37,7 @@ describe('SearchComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [SearchComponent, RemoveUnderscoresPipe],
+      declarations: [SearchComponent, SenseComponent, RemoveUnderscoresPipe],
       imports: [
         CommonModule,
         HttpClientModule,

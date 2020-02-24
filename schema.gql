@@ -8,13 +8,6 @@ enum DictionaryOrThesaurus {
   thesaurus
 }
 
-type EntryDto {
-  oxId: String!
-  homographC: Float!
-  word: String!
-  relatedEntriesAdded: Boolean!
-}
-
 enum LexicalCategory {
   noun
   pronoun
@@ -29,14 +22,9 @@ enum LexicalCategory {
 
 type Query {
   hello: String!
-  entry(id: String!): EntryDto!
-  entriesAll: [EntryDto!]!
-  searchDeprecated(searchString: String!): [EntryDto!]!
-  sensesForEntry(homographC: Float!, oxId: String!): [SenseForEntryDto!]!
+  oxIds(searchString: String!): [String!]!
   senses(oxId: String!): [SenseForEntryDto!]!
   signs(senseId: String!): [SenseSignDto!]!
-  foo: String!
-  oxIds(searchString: String!): [String!]!
 }
 
 type SenseForEntryDto {

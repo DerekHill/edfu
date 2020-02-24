@@ -47,26 +47,26 @@ export class BasicComponent implements OnInit, OnDestroy {
   constructor(private http: HttpClient, private apollo: Apollo) {}
 
   ngOnInit() {
-    this.apollo
-      .watchQuery({
-        query: gql`
-          {
-            entriesAll {
-              _id
-              oxId
-              homographC
-              word
-              relatedEntriesAdded
-            }
-          }
-        `
-      })
-      .valueChanges.pipe(untilDestroyed(this))
-      .subscribe((result: any) => {
-        this.words = result.data.entriesAll;
-        this.loading = result.loading;
-        this.error = result.errors;
-      });
+    // this.apollo
+    //   .watchQuery({
+    //     query: gql`
+    //       {
+    //         entriesAll {
+    //           _id
+    //           oxId
+    //           homographC
+    //           word
+    //           relatedEntriesAdded
+    //         }
+    //       }
+    //     `
+    //   })
+    //   .valueChanges.pipe(untilDestroyed(this))
+    //   .subscribe((result: any) => {
+    //     this.words = result.data.entriesAll;
+    //     this.loading = result.loading;
+    //     this.error = result.errors;
+    //   });
 
     this.querySubscription = this.apollo
       .watchQuery<any>({

@@ -168,58 +168,47 @@ export class SensesService {
       .exec();
   }
 
-  async getSensesForOxIdCaseInsensitive(
-    oxId: string
-  ): Promise<SenseForEntryDto[]> {
-    const entrySenses = await this.entrySensesService.findByOxIdCaseInsensitive(
-      oxId
-    );
-    return this.getValidSenses(entrySenses);
-  }
+  //   async getSensesForOxIdCaseInsensitive(
+  //     oxId: string
+  //   ): Promise<SenseForEntryDto[]> {
+  //     const entrySenses = await this.entrySensesService.findByOxIdCaseInsensitive(
+  //       oxId
+  //     );
+  //     return this.getValidSenses(entrySenses);
+  //   }
 
-  async getSensesForEntry(
-    oxId: string,
-    homographC: number
-  ): Promise<SenseForEntryDto[]> {
-    const entrySenses = await this.entrySensesService.findByEntryProperties(
-      oxId,
-      homographC
-    );
-    return this.getValidSenses(entrySenses);
-  }
+  //   private async getValidSenses(
+  //     entrySenses: EntrySenseRecord[]
+  //   ): Promise<SenseForEntryDto[]> {
+  //     const entrySensesById = entrySenses.reduce((acc, curr) => {
+  //       acc[curr.senseId] = curr;
+  //       return acc;
+  //     }, {});
 
-  private async getValidSenses(
-    entrySenses: EntrySenseRecord[]
-  ): Promise<SenseForEntryDto[]> {
-    const entrySensesById = entrySenses.reduce((acc, curr) => {
-      acc[curr.senseId] = curr;
-      return acc;
-    }, {});
+  //     const senseIds = entrySenses.map(i => i.senseId);
 
-    const senseIds = entrySenses.map(i => i.senseId);
+  //     const senses = await this.senseModel.find({
+  //       senseId: { $in: senseIds },
+  //       definition: { $ne: null }
+  //     });
 
-    const senses = await this.senseModel.find({
-      senseId: { $in: senseIds },
-      definition: { $ne: null }
-    });
-
-    return senses.map(sense => {
-      const entrySense = entrySensesById[sense.senseId];
-      return {
-        oxId: entrySense.oxId,
-        ownEntryOxId: sense.ownEntryOxId,
-        ownEntryHomographC: sense.ownEntryHomographC,
-        homographC: entrySense.homographC,
-        senseId: sense.senseId,
-        lexicalCategory: sense.lexicalCategory,
-        apiSenseIndex: sense.apiSenseIndex,
-        example: sense.example,
-        definition: sense.definition,
-        associationType: entrySense.associationType,
-        similarity: entrySense.similarity
-      };
-    });
-  }
+  //     return senses.map(sense => {
+  //       const entrySense = entrySensesById[sense.senseId];
+  //       return {
+  //         oxId: entrySense.oxId,
+  //         ownEntryOxId: sense.ownEntryOxId,
+  //         ownEntryHomographC: sense.ownEntryHomographC,
+  //         homographC: entrySense.homographC,
+  //         senseId: sense.senseId,
+  //         lexicalCategory: sense.lexicalCategory,
+  //         apiSenseIndex: sense.apiSenseIndex,
+  //         example: sense.example,
+  //         definition: sense.definition,
+  //         associationType: entrySense.associationType,
+  //         similarity: entrySense.similarity
+  //       };
+  //     });
+  //   }
 
   _extractSynonyms(oxSense: OxSense): string[] {
     const res: string[] = [];

@@ -7,7 +7,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { OxfordApiModule } from './oxford-api/oxford-api.module';
 import { ConfigModule } from './config/config.module';
 import { TaskModule } from './tasks/task.module';
-import { DictionaryModule } from './reference/reference.module';
+import { ReferenceModule } from './reference/reference.module';
 import { MONGOOSE_OPTIONS } from './config/mongoose-deprecations';
 
 @Module({
@@ -20,7 +20,7 @@ import { MONGOOSE_OPTIONS } from './config/mongoose-deprecations';
       autoSchemaFile: 'schema.gql'
     }),
     OxfordApiModule,
-    DictionaryModule
+    ReferenceModule
   ],
   controllers: [AppController],
   providers: [AppService]

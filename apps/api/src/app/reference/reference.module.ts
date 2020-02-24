@@ -14,7 +14,6 @@ import { EntrySchema } from './entries/schemas/entry.schema';
 import { SensesService } from './senses/senses.service';
 import { EntriesResolver } from './entries/entries.resolver';
 import { SenseSchema } from './senses/schemas/sense.schema';
-import { SensesResolver } from './senses/senses.resolver';
 import { SignsService } from './signs/signs.service';
 import { SignSchema } from './signs/schemas/sign.schema';
 import { EntrySensesService } from './entry-senses/entry-senses.service';
@@ -22,8 +21,8 @@ import { EntrySenseSchema } from './entry-senses/schemas/entry-sense.schema';
 import { SimilarityService } from './similarity/similarity.service';
 import * as use from '@tensorflow-models/universal-sentence-encoder';
 import { SenseSignSchema } from './signs/schemas/sense-sign.schema';
-import { SignsResolver } from './signs/signs.resolver';
 import { DictionaryResolver } from './reference.resolver';
+import { ReferenceService } from './reference.service';
 
 class TfUseMock {
   embed(sentences: string[]) {
@@ -54,13 +53,12 @@ class TfUseMock {
   ],
   providers: [
     EntriesService,
+    ReferenceService,
     SensesService,
     DictionaryResolver,
     EntriesResolver,
-    SensesResolver,
     SignsService,
     EntrySensesService,
-    SignsResolver,
     {
       provide: TF_MODEL_NAME,
       useFactory: async () => {
@@ -83,4 +81,4 @@ class TfUseMock {
   ],
   exports: [EntriesService, SensesService]
 })
-export class DictionaryModule {}
+export class ReferenceModule {}

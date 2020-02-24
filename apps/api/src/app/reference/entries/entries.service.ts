@@ -1,8 +1,7 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import {
   ENTRY_COLLECTION_NAME,
-  TF_MODEL_NAME,
   MONGO_DUPLICATE_ERROR_CODE,
   CASE_INSENSITIVE_COLLATION
 } from '../../constants';
@@ -308,51 +307,10 @@ export class EntriesService {
     }
   };
 
-  find(oxId: string): Promise<EntryRecord[]> {
-    return this.entryModel
-      .find({ oxId: oxId })
-      .lean()
-      .exec();
-  }
-
-  findOneById(id: string): Promise<EntryRecord> {
-    return this.entryModel.findById(id).exec();
-  }
-
-  findAll(): Promise<EntryRecord[]> {
-    return this.entryModel.find({}).exec();
-  }
-
-  searchDeprecated(chars: string): Promise<EntryRecord[]> {
-    if (chars) {
-      return this.entryModel
-        .find({ word: { $regex: `^${chars}`, $options: '$i' } })
-        .exec();
-    } else {
-      return Promise.resolve([]);
-    }
-  }
-
-  async searchOxIds(chars: string): Promise<string[]> {
-    const OXIDS_LIMIT = 100;
-    const sanitizedChars = this._removeInvalidRegexChars(chars);
-
-    if (sanitizedChars) {
-      const objs = await this.entryModel
-        .find(
-          { word: { $regex: `^${sanitizedChars}`, $options: '$i' } },
-          { oxId: 1 }
-        )
-        .limit(OXIDS_LIMIT)
-        .exec();
-      const ids = objs.map(i => i.oxId);
-      return [...new Set(ids)];
-    } else {
-      return Promise.resolve([]);
-    }
-  }
-
-  _removeInvalidRegexChars(chars: string): string {
-    return chars.replace('\\', '');
-  }
+  //   find(oxId: string): Promise<EntryRecord[]> {
+  //     return this.entryModel
+  //       .find({ oxId: oxId })
+  //       .lean()
+  //       .exec();
+  //   }
 }

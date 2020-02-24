@@ -14,7 +14,7 @@ import { EntrySchema } from '../reference/entries/schemas/entry.schema';
 import { SenseSchema } from '../reference/senses/schemas/sense.schema';
 import { EntrySenseSchema } from '../reference/entry-senses/schemas/entry-sense.schema';
 import { LoaderService } from './loader/loader.service';
-import { DictionaryModule } from '../reference/reference.module';
+import { ReferenceModule } from '../reference/reference.module';
 import { SenseSignSchema } from '../reference/signs/schemas/sense-sign.schema';
 import { SignSchema } from '../reference/signs/schemas/sign.schema';
 
@@ -28,7 +28,7 @@ import { SignSchema } from '../reference/signs/schemas/sign.schema';
       { name: SENSE_SIGN_COLLECTION_NAME, schema: SenseSignSchema },
       { name: SIGN_COLLECTION_NAME, schema: SignSchema }
     ]),
-    DictionaryModule
+    ReferenceModule
   ],
   controllers: [],
   providers: [TaskService, FixturesService, LoaderService],

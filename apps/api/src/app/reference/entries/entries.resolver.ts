@@ -12,30 +12,4 @@ export class EntriesResolver {
   async hello() {
     return 'hello there people!';
   }
-
-  @Query(returns => EntryDto)
-  async entry(@Args('id') id: string): Promise<EntryDto> {
-    const entry = await this.entriesService.findOneById(id);
-    if (!entry) {
-      throw new NotFoundException(id);
-    }
-    return entry;
-  }
-
-  @Query(returns => [EntryDto])
-  entriesAll(): Promise<EntryDto[]> {
-    return this.entriesService.findAll();
-  }
-
-  @Query(returns => [EntryDto])
-  searchDeprecated(
-    @Args('searchString') searchString: string
-  ): Promise<EntryDto[]> {
-    return this.entriesService.searchDeprecated(searchString);
-  }
-
-  //   @Query(returns => [String])
-  //   oxIds(@Args('searchString') searchString: string): Promise<string[]> {
-  //     return this.entriesService.searchOxIds(searchString);
-  //   }
 }

@@ -24,6 +24,8 @@ import { SignRecord } from '@edfu/api-interfaces';
 import { SignDocument } from './signs/interfaces/sign.interface';
 import { ObjectId } from 'bson';
 
+const OXIDS_LIMIT = 100;
+
 @Injectable()
 export class ReferenceService {
   constructor(
@@ -39,30 +41,26 @@ export class ReferenceService {
     private readonly signModel: Model<SignDocument>
   ) {}
 
-  async searchOxIds(chars: string): Promise<string[]> {
-    const OXIDS_LIMIT = 100;
+  async searchOxIds(chars: string, filter: boolean): Promise<string[]> {
     const sanitizedChars = this._removeInvalidRegexChars(chars);
 
-    if (sanitizedChars) {
-      const objs = await this.entryModel
-        .find(
-          { word: { $regex: `^${sanitizedChars}`, $options: '$i' } },
-          { oxId: 1 }
-        )
-        .limit(OXIDS_LIMIT)
-        .exec();
-      const ids = objs.map(i => i.oxId);
-      return [...new Set(ids)];
-    } else {
+    if (!sanitizedChars) {
       return Promise.resolve([]);
+    }
+
+    if (filter) {
+      return this.searchOxIdsAndFilterForSigns(chars);
+    } else {
+      return this.searchOxIdsWithoutFilteringForSigns(chars);
     }
   }
 
   async getSensesForOxIdCaseInsensitive(
-    oxId: string
+    oxId: string,
+    filter: boolean
   ): Promise<SenseForEntryDto[]> {
     const entrySenses = await this.findByOxIdCaseInsensitive(oxId);
-    return this.getValidSenses(entrySenses);
+    return this.getValidSenses(entrySenses, filter);
   }
 
   getSenseSigns(senseId: string): Promise<SenseSignRecord[]> {
@@ -84,14 +82,22 @@ export class ReferenceService {
   }
 
   private async getValidSenses(
-    entrySenses: EntrySenseRecord[]
+    entrySenses: EntrySenseRecord[],
+    filter: boolean
   ): Promise<SenseForEntryDto[]> {
     const entrySensesById = entrySenses.reduce((acc, curr) => {
       acc[curr.senseId] = curr;
       return acc;
     }, {});
 
-    const senseIds = entrySenses.map(i => i.senseId);
+    let senseIds = entrySenses.map(i => i.senseId);
+
+    if (filter) {
+      const senseSigns = await this.senseSignModel.find({
+        senseId: { $in: senseIds }
+      });
+      senseIds = [...new Set(senseSigns.map(i => i.senseId))];
+    }
 
     const senses = await this.senseModel.find({
       senseId: { $in: senseIds },
@@ -116,11 +122,55 @@ export class ReferenceService {
     });
   }
 
-  findByOxIdCaseInsensitive(oxId: string): Promise<EntrySenseRecord[]> {
+  private findByOxIdCaseInsensitive(oxId: string): Promise<EntrySenseRecord[]> {
     return this.entrySenseModel
       .find({ oxId: oxId })
       .collation(CASE_INSENSITIVE_COLLATION)
       .lean()
       .exec();
+  }
+
+  private async searchOxIdsWithoutFilteringForSigns(
+    chars: string
+  ): Promise<string[]> {
+    const objs = await this.entryModel
+      .find({ word: { $regex: `^${chars}`, $options: '$i' } }, { oxId: 1 })
+      .limit(OXIDS_LIMIT)
+      .exec();
+    const ids = objs.map(i => i.oxId);
+    return [...new Set(ids)];
+  }
+
+  private async searchOxIdsAndFilterForSigns(chars: string): Promise<string[]> {
+    const objs = await this.entryModel.aggregate([
+      {
+        $match: { word: { $regex: `^${chars}`, $options: '$i' } }
+      },
+      {
+        $lookup: {
+          from: `${ENTRY_SENSE_COLLECTION_NAME.toLowerCase()}s`,
+          localField: 'oxId',
+          foreignField: 'oxId',
+          as: 'entrySenses'
+        }
+      },
+      {
+        $unwind: '$entrySenses'
+      },
+      {
+        $lookup: {
+          from: `${SENSE_SIGN_COLLECTION_NAME.toLowerCase()}s`,
+          localField: 'entrySenses.senseId',
+          foreignField: 'senseId',
+          as: 'senseSigns'
+        }
+      },
+      {
+        $unwind: '$senseSigns'
+      },
+      { $group: { _id: '$oxId' } },
+      { $limit: OXIDS_LIMIT }
+    ]);
+    return objs.map(i => i._id);
   }
 }

@@ -13,7 +13,7 @@ import { SignDocument } from './interfaces/sign.interface';
 import { SignRecord, SenseSignRecordWithoutId } from '@edfu/api-interfaces';
 
 @Injectable()
-export class SignsTestSetupService {
+export class SignTestSetupService {
   constructor(
     @InjectModel(SENSE_SIGN_COLLECTION_NAME)
     private readonly senseSignModel: Model<SenseSignDocument>,
@@ -21,13 +21,13 @@ export class SignsTestSetupService {
     private readonly signModel: Model<SignDocument>
   ) {}
 
-  createSign(sign: SignRecord): Promise<SignRecord> {
-    return this.signModel.create(sign);
-  }
-
   createSenseSign(
     senseSign: SenseSignRecordWithoutId
   ): Promise<SenseSignRecord> {
     return this.senseSignModel.create(senseSign);
+  }
+
+  createSign(sign: SignRecord): Promise<SignRecord> {
+    return this.signModel.create(sign);
   }
 }

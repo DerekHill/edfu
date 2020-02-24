@@ -9,13 +9,21 @@ export class DictionaryResolver {
   constructor(private readonly service: ReferenceService) {}
 
   @Query(returns => [String], { name: 'oxIds' })
-  getOxIds(@Args('searchString') searchString: string): Promise<string[]> {
-    return this.service.searchOxIds(searchString);
+  getOxIds(
+    @Args('searchString') searchString: string,
+    @Args({ name: 'filter', type: () => Boolean, defaultValue: false })
+    filter: boolean
+  ): Promise<string[]> {
+    return this.service.searchOxIds(searchString, filter);
   }
 
   @Query(returns => [SenseForEntryDto], { name: 'senses' })
-  getSenses(@Args('oxId') oxId: string): Promise<SenseForEntryDto[]> {
-    return this.service.getSensesForOxIdCaseInsensitive(oxId);
+  getSenses(
+    @Args('oxId') oxId: string,
+    @Args({ name: 'filter', type: () => Boolean, defaultValue: false })
+    filter: boolean
+  ): Promise<SenseForEntryDto[]> {
+    return this.service.getSensesForOxIdCaseInsensitive(oxId, filter);
   }
 
   @Query(returns => [SenseSignDto], { name: 'signs' })

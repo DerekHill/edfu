@@ -9,12 +9,12 @@ import { TestDatabaseModule } from '../../config/test-database.module';
 import { SignSchema } from './schemas/sign.schema';
 import { ObjectId } from 'bson';
 import { SenseSignSchema } from './schemas/sense-sign.schema';
-import { SignsTestSetupService } from './signs-test-setup.service';
 import { SignRecord, SenseSignRecordWithoutId } from '@edfu/api-interfaces';
+import { SignTestSetupService } from './sign-test-setup.service';
 
 describe('SignsService', () => {
   let service: SignsService;
-  let setupService: SignsTestSetupService;
+  let setupService: SignTestSetupService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -27,11 +27,11 @@ describe('SignsService', () => {
           { name: SIGN_COLLECTION_NAME, schema: SignSchema }
         ])
       ],
-      providers: [SignsService, SignsTestSetupService]
+      providers: [SignsService, SignTestSetupService]
     }).compile();
 
     service = module.get<SignsService>(SignsService);
-    setupService = module.get<SignsTestSetupService>(SignsTestSetupService);
+    setupService = module.get<SignTestSetupService>(SignTestSetupService);
   });
 
   it('SignsTestSetupService.create', async () => {

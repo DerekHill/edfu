@@ -3,8 +3,7 @@ import {
   OnInit,
   OnDestroy,
   Pipe,
-  PipeTransform,
-  Input
+  PipeTransform
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -110,7 +109,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     >({
       query: gql`
         query OxIdSearchQuery($searchString: String! = "") {
-          oxIds(searchString: $searchString)
+          oxIds(searchString: $searchString, filter: true)
         }
       `
     });
@@ -126,7 +125,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     >({
       query: gql`
         query EntrySensesQuery($oxId: String! = "") {
-          senses(oxId: $oxId) {
+          senses(oxId: $oxId, filter: true) {
             oxId
             homographC
             senseId

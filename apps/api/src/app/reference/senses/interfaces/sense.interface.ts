@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
 import { ObjectId } from 'bson';
-import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
+import { DictionaryOrThesaurus } from '@edfu/enums';
 import {
   CombinedSenseRequiredExposedProperties,
   CombinedSenseOptionalExposedProperties

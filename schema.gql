@@ -39,6 +39,7 @@ type SenseForEntryDto {
   definition: String!
   associationType: DictionaryOrThesaurus!
   similarity: Float!
+  signs: [SignDto!]
 }
 
 type SenseSignDto {

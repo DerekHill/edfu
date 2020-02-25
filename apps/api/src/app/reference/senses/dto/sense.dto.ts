@@ -1,6 +1,7 @@
 import { ObjectType, Field, Int, ID, registerEnumType } from 'type-graphql';
 import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
 import { SenseForEntryDtoInterface } from '@edfu/api-interfaces';
+import { SignDto } from '../../signs/dto/sign.dto';
 
 registerEnumType(DictionaryOrThesaurus, {
   name: 'DictionaryOrThesaurus'
@@ -44,4 +45,7 @@ export class SenseForEntryDto implements SenseForEntryDtoInterface {
 
   @Field()
   readonly similarity: number;
+
+  @Field(type => SignDto, { nullable: true })
+  readonly signs: SignDto[];
 }

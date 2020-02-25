@@ -4,7 +4,7 @@ import { SenseForEntryDto } from './senses/dto/sense.dto';
 import { SenseSignDto } from './signs/dto/sense-sign.dto';
 import { SignDto } from './signs/dto/sign.dto';
 
-@Resolver(of => SenseSignDto) // For getSigns.  Maybe better way to organise
+@Resolver(of => SenseForEntryDto)
 export class DictionaryResolver {
   constructor(private readonly service: ReferenceService) {}
 
@@ -26,6 +26,17 @@ export class DictionaryResolver {
     return this.service.getSensesForOxIdCaseInsensitive(oxId, filter);
   }
 
+  @ResolveProperty(returns => [SignDto])
+  async signs(@Root() ss: SenseForEntryDto) {
+    console.log('this.service.getSenseSigns(ss.senseId)');
+    console.log(await this.service.getSenseSigns(ss.senseId));
+    return this.service.getSigns(ss.senseId);
+  }
+}
+
+@Resolver(of => SenseSignDto)
+export class SignsResolver {
+  constructor(private readonly service: ReferenceService) {}
   @Query(returns => [SenseSignDto], { name: 'signs' })
   getSigns(@Args('senseId') senseId: string): Promise<SenseSignDto[]> {
     return this.service.getSenseSigns(senseId);

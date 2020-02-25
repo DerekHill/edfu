@@ -21,7 +21,7 @@ import { EntrySenseSchema } from './entry-senses/schemas/entry-sense.schema';
 import { SimilarityService } from './similarity/similarity.service';
 import * as use from '@tensorflow-models/universal-sentence-encoder';
 import { SenseSignSchema } from './signs/schemas/sense-sign.schema';
-import { DictionaryResolver } from './reference.resolver';
+import { DictionaryResolver, SignsResolver } from './reference.resolver';
 import { ReferenceService } from './reference.service';
 
 class TfUseMock {
@@ -56,6 +56,7 @@ class TfUseMock {
     ReferenceService,
     SensesService,
     DictionaryResolver,
+    SignsResolver,
     EntriesResolver,
     SignsService,
     EntrySensesService,

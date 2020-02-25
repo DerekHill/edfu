@@ -22,7 +22,10 @@ import {
   EntrySenseDocument,
   EntrySenseRecord
 } from './entry-senses/interfaces/entry-sense.interface';
-import { SenseDocument } from './senses/interfaces/sense.interface';
+import {
+  SenseDocument,
+  SharedSenseRecordWithoutId
+} from './senses/interfaces/sense.interface';
 
 @Injectable()
 export class ReferenceTestSetupService {
@@ -45,6 +48,10 @@ export class ReferenceTestSetupService {
 
   createEntrySense(entrySense: EntrySenseRecord): Promise<EntrySenseRecord> {
     return this.entrySenseModel.create(entrySense);
+  }
+
+  createSense(sense: SharedSenseRecordWithoutId): Promise<SenseDocument> {
+    return this.senseModel.create(sense);
   }
 
   createSenseSign(

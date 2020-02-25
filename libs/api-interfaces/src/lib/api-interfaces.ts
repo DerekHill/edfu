@@ -43,4 +43,6 @@ export interface SenseForEntryDtoInterface
   extends UniqueEntry,
     EntrySenseAssociationProperties,
     CombinedSenseRequiredExposedProperties,
-    CombinedSenseOptionalExposedProperties {}
+    CombinedSenseOptionalExposedProperties {
+  signs?: SignRecord[];
+}

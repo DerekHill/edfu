@@ -59,8 +59,61 @@ export class ReferenceService {
     oxId: string,
     filter: boolean
   ): Promise<SenseForEntryDto[]> {
-    const entrySenses = await this.findByOxIdCaseInsensitive(oxId);
-    return this.getValidSenses(entrySenses, filter);
+    const basePipeline = [
+      { $match: { oxId: oxId } },
+      {
+        $lookup: {
+          from: `${SENSE_COLLECTION_NAME.toLowerCase()}s`,
+          localField: 'senseId',
+          foreignField: 'senseId',
+          as: 'senses'
+        }
+      },
+      {
+        $unwind: '$senses'
+      },
+      {
+        $project: {
+          oxId: 1,
+          ownEntryOxId: '$senses.ownEntryOxId',
+          ownEntryHomographC: '$senses.ownEntryHomographC',
+          homographC: 1,
+          senseId: '$senses.senseId',
+          lexicalCategory: '$senses.lexicalCategory',
+          apiSenseIndex: '$senses.apiSenseIndex',
+          example: '$senses.example',
+          definition: '$senses.definition',
+          associationType: 1,
+          similarity: 1
+        }
+      }
+    ];
+
+    const filterForHasSignsPipeline = [
+      {
+        $lookup: {
+          from: `${SENSE_SIGN_COLLECTION_NAME.toLowerCase()}s`,
+          localField: 'senseId',
+          foreignField: 'senseId',
+          as: 'senseSigns'
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          senseSigns: 0
+        }
+      }
+    ];
+
+    if (filter) {
+      // @ts-ignore
+      basePipeline.push(...filterForHasSignsPipeline);
+    }
+
+    return this.entrySenseModel
+      .aggregate(basePipeline)
+      .collation(CASE_INSENSITIVE_COLLATION);
   }
 
   getSenseSigns(senseId: string): Promise<SenseSignRecord[]> {
@@ -68,6 +121,30 @@ export class ReferenceService {
       .find({ senseId: senseId })
       .lean()
       .exec();
+  }
+
+  async getSigns(senseId: string): Promise<SignRecord[]> {
+    return this.senseSignModel.aggregate([
+      { $match: { senseId: senseId } },
+      {
+        $lookup: {
+          from: `${SIGN_COLLECTION_NAME.toLowerCase()}s`,
+          localField: 'signId',
+          foreignField: '_id',
+          as: 'signs'
+        }
+      },
+      {
+        $unwind: '$signs'
+      },
+      {
+        $project: {
+          _id: '$signs._id',
+          mnemonic: '$signs.mnemonic',
+          mediaUrl: '$signs.mediaUrl'
+        }
+      }
+    ]);
   }
 
   findOneSign(_id: ObjectId): Promise<SignRecord> {
@@ -79,47 +156,6 @@ export class ReferenceService {
 
   _removeInvalidRegexChars(chars: string): string {
     return chars.replace('\\', '');
-  }
-
-  private async getValidSenses(
-    entrySenses: EntrySenseRecord[],
-    filter: boolean
-  ): Promise<SenseForEntryDto[]> {
-    const entrySensesById = entrySenses.reduce((acc, curr) => {
-      acc[curr.senseId] = curr;
-      return acc;
-    }, {});
-
-    let senseIds = entrySenses.map(i => i.senseId);
-
-    if (filter) {
-      const senseSigns = await this.senseSignModel.find({
-        senseId: { $in: senseIds }
-      });
-      senseIds = [...new Set(senseSigns.map(i => i.senseId))];
-    }
-
-    const senses = await this.senseModel.find({
-      senseId: { $in: senseIds },
-      definition: { $ne: null }
-    });
-
-    return senses.map(sense => {
-      const entrySense = entrySensesById[sense.senseId];
-      return {
-        oxId: entrySense.oxId,
-        ownEntryOxId: sense.ownEntryOxId,
-        ownEntryHomographC: sense.ownEntryHomographC,
-        homographC: entrySense.homographC,
-        senseId: sense.senseId,
-        lexicalCategory: sense.lexicalCategory,
-        apiSenseIndex: sense.apiSenseIndex,
-        example: sense.example,
-        definition: sense.definition,
-        associationType: entrySense.associationType,
-        similarity: entrySense.similarity
-      };
-    });
   }
 
   private findByOxIdCaseInsensitive(oxId: string): Promise<EntrySenseRecord[]> {

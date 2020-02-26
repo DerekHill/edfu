@@ -53,8 +53,8 @@
 </div>
 
 <div *ngIf="senseSignsBs$ | async as senseSigns">
-  <div *ngFor="let senseSign of senseSigns">
-    <img src="{{ senseSign.sign.mediaUrl }}" />
-    {{ senseSign.sign.mnemonic }}
-  </div>
+  <edfu-sign
+    *ngFor="let senseSign of senseSigns"
+    [sign]="senseSign.sign"
+  ></edfu-sign>
 </div>

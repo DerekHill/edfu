@@ -1,0 +1,8 @@
+<div *ngIf="isVideo; then thenBlock; else elseBlock"></div>
+<ng-template #thenBlock
+  ><video width="320" controls>
+    <source src="{{ sign.mediaUrl }}" type="video/mp4" /></video
+></ng-template>
+<ng-template #elseBlock
+  ><img src="{{ sign.mediaUrl }}" /> {{ sign.mnemonic }}</ng-template
+>

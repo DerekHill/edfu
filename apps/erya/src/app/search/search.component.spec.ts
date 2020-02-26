@@ -15,6 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { HotkeyModule } from 'angular2-hotkeys';
 import { SenseComponent } from './sense/sense.component';
 import { ObjectId } from 'bson';
+import { SignComponent } from './sign/sign.component';
 
 const createSense = (params: any): SenseForEntryDtoInterface => {
   const defaults = {
@@ -38,7 +39,12 @@ describe('SearchComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [SearchComponent, SenseComponent, RemoveUnderscoresPipe],
+      declarations: [
+        SearchComponent,
+        SenseComponent,
+        SignComponent,
+        RemoveUnderscoresPipe
+      ],
       imports: [
         CommonModule,
         HttpClientModule,

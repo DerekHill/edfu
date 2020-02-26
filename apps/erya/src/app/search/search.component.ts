@@ -66,8 +66,6 @@ export class RemoveUnderscoresPipe implements PipeTransform {
   templateUrl: './search.component.html'
 })
 export class SearchComponent implements OnInit, OnDestroy {
-  //   @Input() sense: SenseForEntryDtoInterface;
-
   searchFormControl = new FormControl();
   searchChars$: Observable<string>;
 

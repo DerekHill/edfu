@@ -17,20 +17,21 @@ export class SignComponent {
   @Input()
   set sign(sign: SignRecord) {
     this._sign = sign;
-    this.isVideo = this._getMediaType(sign.mediaUrl) === MediaTypes.mp4;
+    this.isVideo = this._isVideo(sign.mediaUrl);
   }
 
   get sign(): SignRecord {
     return this._sign;
   }
 
-  _getMediaType(filename: string): MediaTypes {
+  _isVideo(filename: string): boolean {
     if (/.gif$/.test(filename)) {
-      return MediaTypes.gif;
+      return false;
     } else if (/.mp4$/.test(filename)) {
-      return MediaTypes.mp4;
+      return true;
     } else {
-      throw new Error(`File of unknown media type: ${filename}`);
+      console.log(`File of unknown media type: ${filename}`);
+      return true;
     }
   }
 }

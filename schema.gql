@@ -36,7 +36,7 @@ type SenseForEntryDto {
   lexicalCategory: LexicalCategory!
   apiSenseIndex: Float!
   example: String
-  definition: String!
+  definition: String
   associationType: DictionaryOrThesaurus!
   similarity: Float!
   signs: [SignDto!]

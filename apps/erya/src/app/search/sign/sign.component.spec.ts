@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { SignComponent, MediaTypes } from './sign.component';
 import { ObjectId } from 'bson';
 import { SignRecord } from '@edfu/api-interfaces';
+import { MatListModule } from '@angular/material/list';
 
 describe('SignComponent', () => {
   let component: SignComponent;
@@ -9,7 +10,8 @@ describe('SignComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [SignComponent]
+      declarations: [SignComponent],
+      imports: [MatListModule]
     }).compileComponents();
   }));
 
@@ -25,10 +27,9 @@ describe('SignComponent', () => {
     fixture.detectChanges();
   });
 
-  describe('_getMediaType()', () => {
-    it('identifies .gifs', () => {
-      const res = component._getMediaType('my.gif');
-      expect(res).toBe(MediaTypes.gif);
+  describe('_isVideo()', () => {
+    it('identifies videos', () => {
+      expect(component._isVideo('my.mp4')).toBeTruthy();
     });
   });
 });

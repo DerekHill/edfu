@@ -83,6 +83,11 @@ export class ReferenceService {
           associationType: 1,
           similarity: 1
         }
+      },
+      {
+        $match: {
+          $or: [{ example: { $ne: null } }, { definition: { $ne: null } }]
+        }
       }
     ];
 

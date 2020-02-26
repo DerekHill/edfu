@@ -37,7 +37,7 @@ export class SenseForEntryDto implements SenseForEntryDtoInterface {
   @Field({ nullable: true })
   readonly example: string;
 
-  @Field()
+  @Field({ nullable: true })
   readonly definition: string;
 
   @Field(type => DictionaryOrThesaurus)

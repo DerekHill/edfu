@@ -113,7 +113,7 @@ describe('ReferenceService', () => {
     });
   });
 
-  describe.only('getSensesForOxIdCaseInsensitive', () => {
+  describe('getSensesForOxIdCaseInsensitive', () => {
     it('returns correct sense', async () => {
       const OXID = 'food';
       const HOMOGRAPH_C = 0;

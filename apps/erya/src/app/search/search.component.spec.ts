@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { GraphQLModule } from '../graphql.module';
 import { HttpClientModule } from '@angular/common/http';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { SenseForEntryDtoInterface } from '@edfu/api-interfaces';
+import { SenseForEntryDtoInterface, SignRecord } from '@edfu/api-interfaces';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -14,6 +14,7 @@ import { LexicalCategory, DictionaryOrThesaurus } from '@edfu/enums';
 import { MatIconModule } from '@angular/material/icon';
 import { HotkeyModule } from 'angular2-hotkeys';
 import { SenseComponent } from './sense/sense.component';
+import { ObjectId } from 'bson';
 
 const createSense = (params: any): SenseForEntryDtoInterface => {
   const defaults = {
@@ -199,5 +200,46 @@ describe('SearchComponent', () => {
       const res = component._createUniqueEntryWithSenseGroupsArray(senses);
       expect(res[0].oxId).toBe(oxId_1);
     });
+  });
+
+  describe('_filterForSensesWithDifferentSigns()', () => {
+    it('filters out senses with no signs at all', () => {
+      const sign: SignRecord = {
+        _id: new ObjectId(),
+        mnemonic: 'remember me',
+        mediaUrl: 'www.my_picture_link'
+      };
+      const senses: SenseForEntryDtoInterface[] = [
+        createSense({
+          signs: []
+        }),
+        createSense({
+          signs: [sign]
+        })
+      ];
+      const res = component._filterForSensesWithDifferentSigns(senses);
+      expect(res.length).toBe(1);
+    });
+  });
+
+  it('filers out senses which have signs already seen', () => {
+    const sign: SignRecord = {
+      _id: new ObjectId(),
+      mnemonic: 'remember me',
+      mediaUrl: 'www.my_picture_link'
+    };
+    const senses: SenseForEntryDtoInterface[] = [
+      createSense({
+        signs: [sign]
+      }),
+      createSense({
+        signs: [sign]
+      }),
+      createSense({
+        signs: [sign]
+      })
+    ];
+    const res = component._filterForSensesWithDifferentSigns(senses);
+    expect(res.length).toBe(1);
   });
 });

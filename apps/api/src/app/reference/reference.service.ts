@@ -11,10 +11,7 @@ import {
 import { EntryDocument } from './entries/interfaces/entry.interface';
 import { Model } from 'mongoose';
 import { SenseForEntryDto } from './senses/dto/sense.dto';
-import {
-  EntrySenseRecord,
-  EntrySenseDocument
-} from './entry-senses/interfaces/entry-sense.interface';
+import { EntrySenseDocument } from './entry-senses/interfaces/entry-sense.interface';
 import { SenseDocument } from './senses/interfaces/sense.interface';
 import {
   SenseSignRecord,
@@ -156,14 +153,6 @@ export class ReferenceService {
 
   _removeInvalidRegexChars(chars: string): string {
     return chars.replace('\\', '');
-  }
-
-  private findByOxIdCaseInsensitive(oxId: string): Promise<EntrySenseRecord[]> {
-    return this.entrySenseModel
-      .find({ oxId: oxId })
-      .collation(CASE_INSENSITIVE_COLLATION)
-      .lean()
-      .exec();
   }
 
   private async searchOxIdsWithoutFilteringForSigns(

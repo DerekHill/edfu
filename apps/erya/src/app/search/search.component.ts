@@ -13,7 +13,8 @@ import { Apollo, QueryRef } from 'apollo-angular';
 import {
   SenseForEntryDtoInterface,
   UniqueEntry,
-  SenseSignDtoInterface
+  SenseSignDtoInterface,
+  SignRecord
 } from '@edfu/api-interfaces';
 import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
 import { untilDestroyed } from 'ngx-take-until-destroy';
@@ -135,6 +136,11 @@ export class SearchComponent implements OnInit, OnDestroy {
             definition
             associationType
             similarity
+            signs {
+              _id
+              mnemonic
+              mediaUrl
+            }
           }
         }
       `
@@ -162,6 +168,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.senses$ = this.sensesSearchRef.valueChanges.pipe(
       map((res: ApolloQueryResult<SensesResult>) => res.data.senses),
       map(senses => this._sortSensesByFit(senses)),
+      map(senses => this._filterForSensesWithDifferentSigns(senses)),
       map(senses => this._applyMaxSensesLimit(senses)),
       map(senses => this._groupSensesByLexicalCategoryAsList(senses))
     );
@@ -204,8 +211,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   onChildSenseEvent(sense) {
-    console.log('onChildSenseEvent');
-    console.log(sense);
     this.signsSearchRef.setVariables({
       senseId: sense.senseId
     });
@@ -348,6 +353,27 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
 
     return groups;
+  }
+
+  _filterForSensesWithDifferentSigns(
+    senses: SenseForEntryDtoInterface[]
+  ): SenseForEntryDtoInterface[] {
+    const allSignsIds = new Set();
+    return senses.filter(sense => {
+      if (this._noNewSigns(allSignsIds, sense.signs)) {
+        return false;
+      }
+      sense.signs.forEach(sign => allSignsIds.add(sign._id));
+      return sense.signs && sense.signs.length;
+    });
+  }
+
+  _noNewSigns(allSignsIds: Set<any>, signs: SignRecord[]): boolean {
+    const intersection = new Set(
+      [...signs].filter(sign => allSignsIds.has(sign._id))
+    );
+
+    return intersection.size === signs.length;
   }
 
   ngOnDestroy() {}

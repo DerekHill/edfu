@@ -28,8 +28,6 @@ export class DictionaryResolver {
 
   @ResolveProperty(returns => [SignDto])
   async signs(@Root() ss: SenseForEntryDto) {
-    console.log('this.service.getSenseSigns(ss.senseId)');
-    console.log(await this.service.getSenseSigns(ss.senseId));
     return this.service.getSigns(ss.senseId);
   }
 }

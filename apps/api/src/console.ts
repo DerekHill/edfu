@@ -6,6 +6,7 @@
 // node ./dist/apps/api-console/main.js --help
 // node ./dist/apps/api-console/main.js oxfordEntries
 // node ./dist/apps/api-console/main.js fixtures
+// node ./dist/apps/api-console/main.js load
 
 import { BootstrapConsole } from 'nestjs-console';
 import { AppModule } from './app/app.module';

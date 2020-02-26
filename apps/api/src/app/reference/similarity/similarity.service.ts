@@ -6,6 +6,9 @@ export class SimilarityService {
   constructor(@Inject(TF_MODEL_NAME) private readonly tfModel: any) {}
 
   async getSimilarity(sentence1: string, sentence2: string): Promise<number> {
+    if (!sentence1 || !sentence2) {
+      return 0;
+    }
     const embeddings = await this.tfModel.embed([sentence1, sentence2]);
     const arrays = embeddings.arraySync();
     const similarity = this.dot_product(arrays[0], arrays[1]);

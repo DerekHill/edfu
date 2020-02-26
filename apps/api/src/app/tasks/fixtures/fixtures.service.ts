@@ -87,13 +87,33 @@ const SPEEDY_0_DICT_ADJ_SENSE_2_ID = 'm_en_gbus0976550.013';
 const SPEEDY_0_THES_ADJ_SENSE_1_ID = 't_en_gb0013890.001'; // Linked to SPEEDY_DICT_ADJ_SENSE_1_ID
 const SPEEDY_0_THES_ADJ_SENSE_2_ID = 't_en_gb0013890.002'; // Linked to SPEEDY_DICT_ADJ_SENSE_2_ID
 
-const SIGN_ID_GOOD_MORNING = new ObjectId('00000000000000000000000a');
-const SIGN_ID_GOOD_AFTERNOON = new ObjectId('00000000000000000000000b');
-const SIGN_ID_HELP = new ObjectId('00000000000000000000000c');
-const SIGN_ID_MORE = new ObjectId('00000000000000000000000d');
-const SIGN_ID_PLEASE = new ObjectId('00000000000000000000000e');
-const SIGN_ID_THANK_YOU = new ObjectId('00000000000000000000000f');
-const SIGN_ID_BREAK = new ObjectId('00000000000000000000001a');
+const SIGN_ID_MORE = new ObjectId('000000000000000000000001');
+const SIGN_ID_HELP_1 = new ObjectId('000000000000000000000002');
+const SIGN_ID_GOOD_MORNING_1 = new ObjectId('000000000000000000000003');
+const SIGN_ID_PLEASE_1 = new ObjectId('000000000000000000000004');
+const SIGN_ID_THANK_YOU_1 = new ObjectId('000000000000000000000005');
+const SIGN_ID_GOOD_AFTERNOON = new ObjectId('000000000000000000000006');
+const SIGN_ID_BREAK = new ObjectId('000000000000000000000007');
+const SIGN_ID_PLEASE_2 = new ObjectId('000000000000000000000008');
+const SIGN_ID_LOOK = new ObjectId('000000000000000000000009');
+const SIGN_ID_HELP_2 = new ObjectId('00000000000000000000000A');
+const SIGN_ID_TOILET = new ObjectId('00000000000000000000000B');
+const SIGN_ID_BAD = new ObjectId('00000000000000000000000C');
+const SIGN_ID_GOOD = new ObjectId('00000000000000000000000D');
+const SIGN_ID_GOODBYE = new ObjectId('00000000000000000000000E');
+const SIGN_ID_HELLO = new ObjectId('00000000000000000000000F');
+const SIGN_ID_PLEASE_3 = new ObjectId('000000000000000000000010');
+const SIGN_ID_STOP = new ObjectId('000000000000000000000011');
+const SIGN_ID_YES = new ObjectId('000000000000000000000012');
+const SIGN_ID_BEGIN = new ObjectId('000000000000000000000013');
+const SIGN_ID_GOOD_MORNING_2 = new ObjectId('000000000000000000000014');
+const SIGN_ID_HAPPY = new ObjectId('000000000000000000000015');
+const SIGN_ID_NO = new ObjectId('000000000000000000000016');
+const SIGN_ID_SAD = new ObjectId('000000000000000000000017');
+const SIGN_ID_THANK_YOU_2 = new ObjectId('000000000000000000000018');
+const SIGN_ID_FAST_SPEED = new ObjectId('000000000000000000000019');
+const SIGN_ID_SLOW = new ObjectId('00000000000000000000001A');
+const SIGN_ID_FAST_ABSTAIN = new ObjectId('00000000000000000000001B');
 
 const ENTRIES: EntryRecordWithoutId[] = [
   {
@@ -1066,15 +1086,38 @@ const ENTRY_SENSES: EntrySenseRecordWithoutId[] = [
 ];
 
 const SENSE_SIGNS: SenseSignRecordWithoutId[] = [
-  { senseId: 'm_en_gbus0423120.004', signId: SIGN_ID_GOOD_MORNING },
+  { senseId: 'm_en_gbus0423120.004', signId: SIGN_ID_GOOD_MORNING_1 },
   { senseId: 'm_en_gbus0422860.004', signId: SIGN_ID_GOOD_AFTERNOON },
-  { senseId: 'm_en_gbus0460970.006', signId: SIGN_ID_HELP },
-  { senseId: 'm_en_gbus0460970.023', signId: SIGN_ID_HELP },
+  { senseId: 'm_en_gbus0460970.006', signId: SIGN_ID_HELP_1 },
+  { senseId: 'm_en_gbus0460970.023', signId: SIGN_ID_HELP_1 },
   { senseId: 'm_en_gbus0660470.077', signId: SIGN_ID_MORE },
   { senseId: 'm_en_gbus0660470.005', signId: SIGN_ID_MORE },
-  { senseId: 'm_en_gbus0789530.019', signId: SIGN_ID_PLEASE },
-  { senseId: 'm_en_gbus1044390.004', signId: SIGN_ID_THANK_YOU },
-  { senseId: 'm_en_gbus0123260.091', signId: SIGN_ID_BREAK }
+  { senseId: 'm_en_gbus0789530.019', signId: SIGN_ID_PLEASE_1 },
+  { senseId: 'm_en_gbus1044390.004', signId: SIGN_ID_THANK_YOU_1 },
+  { senseId: 'm_en_gbus0123260.091', signId: SIGN_ID_BREAK },
+  { senseId: 'm_en_gbus0789530.019', signId: SIGN_ID_PLEASE_2 },
+  { senseId: 'm_en_gbus0594070.036', signId: SIGN_ID_LOOK },
+  { senseId: 'm_en_gbus0460970.006', signId: SIGN_ID_HELP_2 },
+  { senseId: 'm_en_gbus0460970.023', signId: SIGN_ID_HELP_2 },
+  { senseId: 'm_en_gbus1059000.006', signId: SIGN_ID_TOILET },
+  { senseId: 'm_en_gbus0066130.012', signId: SIGN_ID_BAD },
+  { senseId: 'm_en_gbus0422850.018', signId: SIGN_ID_GOOD },
+  { senseId: 'm_en_gbus0422880.015', signId: SIGN_ID_GOODBYE },
+  { senseId: 'm_en_gbus0460730.012', signId: SIGN_ID_HELLO },
+  { senseId: 'm_en_gbus0789530.019', signId: SIGN_ID_PLEASE_3 },
+  { senseId: 'm_en_gbus0998540.023', signId: SIGN_ID_STOP },
+  { senseId: 'm_en_gbus1175410.008', signId: SIGN_ID_YES },
+  { senseId: 'm_en_gbus0084170.016', signId: SIGN_ID_BEGIN },
+  { senseId: 'm_en_gbus0423120.004', signId: SIGN_ID_GOOD_MORNING_2 },
+  { senseId: 'm_en_gbus0450170.009', signId: SIGN_ID_HAPPY },
+  { senseId: 'm_en_gbus0693820.021', signId: SIGN_ID_NO },
+  { senseId: 'm_en_gbus0891960.008', signId: SIGN_ID_SAD },
+  { senseId: 'm_en_gbus1044390.004', signId: SIGN_ID_THANK_YOU_2 },
+  { senseId: 'm_en_gbus0956650.006', signId: SIGN_ID_SLOW },
+  { senseId: 'm_en_gbus0352370.007', signId: SIGN_ID_FAST_SPEED },
+  { senseId: 'm_en_gbus0352370.035', signId: SIGN_ID_FAST_SPEED },
+  { senseId: 'm_en_gbus0352380.005', signId: SIGN_ID_FAST_ABSTAIN },
+  { senseId: 'm_en_gbus0352380.019', signId: SIGN_ID_FAST_ABSTAIN }
 ];
 
 const SIGNS: SignRecord[] = [
@@ -1085,25 +1128,25 @@ const SIGNS: SignRecord[] = [
     mnemonic: 'Adding more to a pile'
   },
   {
-    _id: SIGN_ID_HELP,
+    _id: SIGN_ID_HELP_1,
     mediaUrl:
       'https://0gis3zwqlg-flywheel.netdna-ssl.com/wp-content/uploads/2018/10/Help-1.gif',
     mnemonic: 'Help your hand up'
   },
   {
-    _id: SIGN_ID_GOOD_MORNING,
+    _id: SIGN_ID_GOOD_MORNING_1,
     mediaUrl:
       'https://0gis3zwqlg-flywheel.netdna-ssl.com/wp-content/uploads/2018/10/Good_Morning.gif',
     mnemonic: 'Open the curtains'
   },
   {
-    _id: SIGN_ID_PLEASE,
+    _id: SIGN_ID_PLEASE_1,
     mediaUrl:
       'https://0gis3zwqlg-flywheel.netdna-ssl.com/wp-content/uploads/2018/10/Please.gif',
     mnemonic: 'Please to the knees'
   },
   {
-    _id: SIGN_ID_THANK_YOU,
+    _id: SIGN_ID_THANK_YOU_1,
     mediaUrl:
       'https://0gis3zwqlg-flywheel.netdna-ssl.com/wp-content/uploads/2018/10/Thank_you.gif',
     mnemonic: 'Thank you to you'
@@ -1112,12 +1155,114 @@ const SIGNS: SignRecord[] = [
     _id: SIGN_ID_GOOD_AFTERNOON,
     mediaUrl:
       'https://0gis3zwqlg-flywheel.netdna-ssl.com/wp-content/uploads/2018/10/Good_afternoon.gif',
-    mnemonic: "To the person you're speaking to"
+    mnemonic: 'To the person you are speaking to'
   },
   {
     _id: SIGN_ID_BREAK,
     mediaUrl:
       'https://0gis3zwqlg-flywheel.netdna-ssl.com/wp-content/uploads/2018/10/Toilet_break.gif',
+    mnemonic: ''
+  },
+  {
+    _id: SIGN_ID_PLEASE_2,
+    mediaUrl:
+      'https://thumbs.gfycat.com/FocusedSlipperyIcelandichorse-size_restricted.gif',
+    mnemonic: ''
+  },
+  {
+    _id: SIGN_ID_LOOK,
+    mediaUrl: 'https://thumbs.gfycat.com/HonorableDesertedBurro-mobile.mp4',
+    mnemonic: ''
+  },
+  {
+    _id: SIGN_ID_HELP_2,
+    mediaUrl: 'https://thumbs.gfycat.com/NeatUnequaledKudu-size_restricted.gif',
+    mnemonic: ''
+  },
+  {
+    _id: SIGN_ID_TOILET,
+    mediaUrl:
+      'https://thumbs.gfycat.com/DemandingEnchantedAiredaleterrier-size_restricted.gif',
+    mnemonic: ''
+  },
+  {
+    _id: SIGN_ID_BAD,
+    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/bad.mp4',
+    mnemonic: ''
+  },
+  {
+    _id: SIGN_ID_GOOD,
+    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/good.mp4',
+    mnemonic: ''
+  },
+  {
+    _id: SIGN_ID_GOODBYE,
+    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/goodbye.mp4',
+    mnemonic: ''
+  },
+  {
+    _id: SIGN_ID_HELLO,
+    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/hello.mp4',
+    mnemonic: ''
+  },
+  {
+    _id: SIGN_ID_PLEASE_3,
+    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/please.mp4',
+    mnemonic: ''
+  },
+  {
+    _id: SIGN_ID_STOP,
+    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/stop.mp4',
+    mnemonic: ''
+  },
+  {
+    _id: SIGN_ID_YES,
+    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/yes.mp4',
+    mnemonic: ''
+  },
+  {
+    _id: SIGN_ID_BEGIN,
+    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/begin.mp4',
+    mnemonic: ''
+  },
+  {
+    _id: SIGN_ID_GOOD_MORNING_2,
+    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/good_morning.mp4',
+    mnemonic: ''
+  },
+  {
+    _id: SIGN_ID_HAPPY,
+    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/happy.mp4',
+    mnemonic: ''
+  },
+  {
+    _id: SIGN_ID_NO,
+    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/no.mp4',
+    mnemonic: ''
+  },
+  {
+    _id: SIGN_ID_SAD,
+    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/sad.mp4',
+    mnemonic: ''
+  },
+  {
+    _id: SIGN_ID_THANK_YOU_2,
+    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/thank_you.mp4',
+    mnemonic: ''
+  },
+  {
+    _id: SIGN_ID_FAST_SPEED,
+    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/fast.mp4',
+    mnemonic: ''
+  },
+  {
+    _id: SIGN_ID_SLOW,
+    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/slow.mp4',
+    mnemonic: ''
+  },
+  {
+    _id: SIGN_ID_FAST_ABSTAIN,
+    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/fast_abstain.mp4',
     mnemonic: ''
   }
 ];

@@ -9,7 +9,20 @@ const WORDS = [
   'more',
   'please',
   'thank you',
-  'break'
+  'break',
+  'bad',
+  'begin',
+  'good',
+  'goodbye',
+  'happy',
+  'hello',
+  'look',
+  'no',
+  'sad',
+  'slow',
+  'stop',
+  'toilet',
+  'yes'
 ];
 
 @Injectable()

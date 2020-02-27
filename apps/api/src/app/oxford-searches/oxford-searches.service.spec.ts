@@ -4,7 +4,6 @@ import {
   ThesaurusSearchesService,
   EntrySearchesService
 } from './oxford-searches.service';
-import { ConfigModule } from '../config/config.module';
 import { MongooseModule, InjectModel } from '@nestjs/mongoose';
 import {
   ENTRY_SEARCH_COLLECTION_NAME,
@@ -63,7 +62,6 @@ describe('BaseSearchesService', () => {
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       imports: [
-        ConfigModule,
         TestDatabaseModule,
         MongooseModule.forFeature([
           { name: ENTRY_SEARCH_COLLECTION_NAME, schema: OxfordSearchSchema }
@@ -122,7 +120,6 @@ describe('EntrySearchesService', () => {
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       imports: [
-        ConfigModule,
         TestDatabaseModule,
         MongooseModule.forFeature([
           { name: ENTRY_SEARCH_COLLECTION_NAME, schema: OxfordSearchSchema }
@@ -188,7 +185,6 @@ describe('ThesaurusSearchesService', () => {
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       imports: [
-        ConfigModule,
         TestDatabaseModule,
         MongooseModule.forFeature([
           {

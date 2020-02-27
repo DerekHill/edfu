@@ -1,14 +1,16 @@
 language: node_js
 node_js:
-  - '13.8.0'
-
+  - 13.8.0
 branches:
   only:
     - master
-
 before_script:
   - npm install -g @angular/cli
-
 script:
   - ng test api
   - ng test erya
+deploy:
+  provider: heroku
+  app: edfu
+  api_key:
+    secure: flA4F4e8WeAnsgeA3plP3Xm+gcQ+ByTyiuc/A7DHrWZb923GLmgVft6+iTa2IeD3ySk5Ol6URbgrdpI933THDjBZMfLxRq9xp+0CpZg+21pOY7+tmWvdX2pC/L4kSgF23Hw2TBW/Qw6U8nz5KujBFf7183bshle34v1d3+nvbuZZWXenfH442tHROdWQLqppMxEhRoWdB/sqZeMNCl5/WlH2j0wAqU+RWKdJpqeum5K46Jbzn3dX5zVz7KwWEbbr3dbGRypWYhYYXQc6YhzP6tJ+IybuwvKyw9vnEOaSxgt4UoVjx7HjY7iBNXO8geACpLOxKfFknCkHYUG+9MOQxNaPNv2bm+egUpps38/eQrUJRuqF6xQ+ThmucDs+2b1BI3Hfo8Z5J2WeW3RDC1Gqf87VsZvva7K9Ncy7dtKCSSYiEGs1FRdLzCBWz1sYZmlz+wr1JpgRok/wrrIm6GlEAAVgLHYfTKqazogWuTeImWaJin5iBbF7hAOKqIkperDyuQEE+JDXYQQS9TAobsyNisqH77aEwg2lvBtbZboNRMDBFqFL9GT6KQhZYiI6X5M/NaPN++qJQ591gwslAhvAce96O0IyUhyacf7ustOd2lqJRjty6FVJM7PLulG1QRrl04z2Nz76F6aBDfTu0Na9xJnHtvmAJwTofiX9QtJ5IsM=

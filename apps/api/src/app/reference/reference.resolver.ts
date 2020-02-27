@@ -3,14 +3,10 @@ import { ReferenceService } from './reference.service';
 import { SenseForEntryDto } from './senses/dto/sense.dto';
 import { SenseSignDto } from './signs/dto/sense-sign.dto';
 import { SignDto } from './signs/dto/sign.dto';
-import { ConfigService } from '@nestjs/config';
 
 @Resolver(of => SenseForEntryDto)
 export class DictionaryResolver {
-  constructor(
-    private readonly service: ReferenceService,
-    private config: ConfigService
-  ) {}
+  constructor(private readonly service: ReferenceService) {}
 
   @Query(returns => [String], { name: 'oxIds' })
   getOxIds(
@@ -18,7 +14,6 @@ export class DictionaryResolver {
     @Args({ name: 'filter', type: () => Boolean, defaultValue: false })
     filter: boolean
   ): Promise<string[]> {
-    console.log(this.config.get('OXFORD_APP_ID'));
     return this.service.searchOxIds(searchString, filter);
   }
 

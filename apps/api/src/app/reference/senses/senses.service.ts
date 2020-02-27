@@ -27,8 +27,10 @@ const PROSCRIBED_REGISTERS = [
   'literary',
   'derogatory',
   'dated',
-  'archaic'
-  //   "informal",
+  'archaic',
+  'informal',
+  'vulgar_slang',
+  'humorous'
 ];
 
 @Injectable()

@@ -1,5 +1,5 @@
 import { HttpService, Injectable } from '@nestjs/common';
-import { ConfigService } from '../config/config.service';
+import { ConfigService } from '@nestjs/config';
 
 const BASE_URL = 'https://od-api.oxforddictionaries.com/api/v2/';
 

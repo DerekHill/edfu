@@ -23,6 +23,7 @@ import * as use from '@tensorflow-models/universal-sentence-encoder';
 import { SenseSignSchema } from './signs/schemas/sense-sign.schema';
 import { DictionaryResolver, SignsResolver } from './reference.resolver';
 import { ReferenceService } from './reference.service';
+import { ConfigModule } from '@nestjs/config';
 
 class TfUseMock {
   embed(sentences: string[]) {
@@ -34,6 +35,7 @@ class TfUseMock {
 
 @Module({
   imports: [
+    ConfigModule,
     OxfordSearchesModule,
     MongooseModule.forFeature([
       { name: ENTRY_COLLECTION_NAME, schema: EntrySchema }

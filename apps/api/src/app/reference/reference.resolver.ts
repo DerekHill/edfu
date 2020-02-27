@@ -3,7 +3,7 @@ import { ReferenceService } from './reference.service';
 import { SenseForEntryDto } from './senses/dto/sense.dto';
 import { SenseSignDto } from './signs/dto/sense-sign.dto';
 import { SignDto } from './signs/dto/sign.dto';
-import { ConfigService } from '../config/config.service';
+import { ConfigService } from '@nestjs/config';
 
 @Resolver(of => SenseForEntryDto)
 export class DictionaryResolver {

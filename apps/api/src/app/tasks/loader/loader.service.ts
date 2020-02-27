@@ -36,6 +36,8 @@ export class LoaderService {
     for (const word of WORDS) {
       console.log(`-----Loading ${word}-----`);
       await this.loadWord(word);
+      const WAIT_TIME_MILLISECONDS = 30 * 1000;
+      await new Promise(resolve => setTimeout(resolve, WAIT_TIME_MILLISECONDS));
     }
   }
 

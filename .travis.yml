@@ -11,4 +11,4 @@ before_script:
 
 script:
   - ng test api
-  - ng test edfu
+  - ng test erya

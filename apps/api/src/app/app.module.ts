@@ -9,6 +9,8 @@ import { TaskModule } from './tasks/task.module';
 import { ReferenceModule } from './reference/reference.module';
 import { MONGOOSE_OPTIONS } from './config/mongoose-deprecations';
 import { ConfigModule } from '@nestjs/config';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 const CONFIG_CONFIG =
   process.env.TRAVIS === 'true'
@@ -27,7 +29,10 @@ const CONFIG_CONFIG =
       autoSchemaFile: 'schema.gql'
     }),
     OxfordApiModule,
-    ReferenceModule
+    ReferenceModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', '..', '..', 'dist/apps/erya')
+    })
   ],
   controllers: [AppController],
   providers: [AppService]

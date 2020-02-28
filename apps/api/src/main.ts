@@ -8,7 +8,6 @@ async function bootstrap() {
     logger: console
   });
   const globalPrefix = 'api';
-  //   app.enableCors();
   app.setGlobalPrefix(globalPrefix);
   const port = process.env.PORT || 3333;
   await app.listen(port, () => {

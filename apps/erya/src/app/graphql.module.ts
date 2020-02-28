@@ -4,8 +4,7 @@ import { HttpLinkModule, HttpLink } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { onError } from 'apollo-link-error';
 import { DefaultOptions } from 'apollo-client';
-
-const uri = 'http://localhost:3333/graphql';
+import { environment } from '../environments/environment';
 
 // https://www.apollographql.com/docs/react/api/react-apollo/#optionsfetchpolicy
 // https://www.apollographql.com/docs/react/api/react-apollo/#optionserrorpolicy
@@ -21,7 +20,7 @@ const defaultOptions: DefaultOptions = {
 };
 
 export function createApollo(httpLink: HttpLink) {
-  const http = httpLink.create({ uri });
+  const http = httpLink.create({ uri: environment.graphqlUri });
 
   const error = onError((e: any) => {
     console.log('apollo-link-error found error:');

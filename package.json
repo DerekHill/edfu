@@ -27,7 +27,7 @@
     "workspace-schematic": "nx workspace-schematic",
     "dep-graph": "nx dep-graph",
     "help": "nx help",
-    "postinstall": "ng build api --prod && ng build erya -–prod"
+    "postinstall": "ng build api --prod && ng build erya --prod"
   },
   "private": true,
   "dependencies": {

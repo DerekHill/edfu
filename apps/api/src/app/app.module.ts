@@ -22,7 +22,7 @@ const CONFIG_CONFIG =
     ConsoleModule,
     ConfigModule.forRoot(CONFIG_CONFIG),
     TaskModule,
-    MongooseModule.forRoot('mongodb://localhost/edfu', MONGOOSE_OPTIONS),
+    MongooseModule.forRoot(process.env.MONGODB_URI, MONGOOSE_OPTIONS),
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql'
     }),

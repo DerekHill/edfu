@@ -11,6 +11,7 @@ import { MONGOOSE_OPTIONS } from './config/mongoose-deprecations';
 import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { environment } from '../environments/environment';
 
 const CONFIG_CONFIG =
   process.env.TRAVIS === 'true'
@@ -19,21 +20,28 @@ const CONFIG_CONFIG =
       }
     : {};
 
-@Module({
-  imports: [
-    ConsoleModule,
-    ConfigModule.forRoot(CONFIG_CONFIG),
-    TaskModule,
-    MongooseModule.forRoot(process.env.MONGODB_URI, MONGOOSE_OPTIONS),
-    GraphQLModule.forRoot({
-      autoSchemaFile: 'schema.gql'
-    }),
-    OxfordApiModule,
-    ReferenceModule,
+const imports = [
+  ConsoleModule,
+  ConfigModule.forRoot(CONFIG_CONFIG),
+  TaskModule,
+  MongooseModule.forRoot(process.env.MONGODB_URI, MONGOOSE_OPTIONS),
+  GraphQLModule.forRoot({
+    autoSchemaFile: 'schema.gql'
+  }),
+  OxfordApiModule,
+  ReferenceModule
+];
+
+if (environment.production) {
+  imports.push(
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '..', '..', 'dist/apps/erya')
     })
-  ],
+  );
+}
+
+@Module({
+  imports: imports,
   controllers: [AppController],
   providers: [AppService]
 })

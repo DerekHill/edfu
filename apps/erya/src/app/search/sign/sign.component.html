@@ -1,7 +1,7 @@
 <mat-list-item>
   <div *ngIf="isVideo; then thenBlock; else elseBlock"></div>
   <ng-template #thenBlock
-    ><video width="320" controls autoplay loop [muted]="true">
+    ><video width="320" controls autoplay loop playsinline [muted]="true">
       <source src="{{ sign.mediaUrl }}" type="video/mp4" /></video
   ></ng-template>
   <ng-template #elseBlock

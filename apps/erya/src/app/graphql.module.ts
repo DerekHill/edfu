@@ -20,6 +20,8 @@ const defaultOptions: DefaultOptions = {
 };
 
 export function createApollo(httpLink: HttpLink) {
+  console.log(`environment.production is ${environment.production}`);
+  console.log(`environment.graphqlUri is ${environment.graphqlUri}`);
   const http = httpLink.create({ uri: environment.graphqlUri });
 
   const error = onError((e: any) => {

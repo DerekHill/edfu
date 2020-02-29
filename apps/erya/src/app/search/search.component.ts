@@ -183,7 +183,6 @@ export class SearchComponent implements OnInit, OnDestroy {
       } else if (typeof input === 'object') {
         //   Do nothing. Use `onGroupSelect` instead
       }
-      throw new Error('trigger sentry');
     });
 
     this.senses$.subscribe(senses => {

@@ -1,6 +1,6 @@
 import { ObjectType, Field, Int, ID, registerEnumType } from 'type-graphql';
 import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
-import { SenseForEntryDtoInterface } from '@edfu/api-interfaces';
+import { HydratedSense } from '@edfu/api-interfaces';
 import { SignDto } from '../../signs/dto/sign.dto';
 
 registerEnumType(DictionaryOrThesaurus, {
@@ -12,7 +12,7 @@ registerEnumType(LexicalCategory, {
 });
 
 @ObjectType()
-export class SenseForEntryDto implements SenseForEntryDtoInterface {
+export class SenseForEntryDto implements HydratedSense {
   @Field()
   readonly oxId: string;
 

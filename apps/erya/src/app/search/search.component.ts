@@ -10,16 +10,16 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import gql from 'graphql-tag';
 import { Apollo, QueryRef } from 'apollo-angular';
-import {
-  SenseForEntryDtoInterface,
-  UniqueEntry,
-  SenseSignDtoInterface,
-  SignRecord
-} from '@edfu/api-interfaces';
-import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
+import { HydratedSense, SenseSignDtoInterface } from '@edfu/api-interfaces';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { ApolloQueryResult } from 'apollo-client';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
+import { MatDialog } from '@angular/material/dialog';
+import { SensesModalComponent } from './senses-modal/senses-modal.component';
+import {
+  UniqueEntryWithSenseGroups,
+  SenseArrangerService
+} from './sense-grouping/sense-arranger.service';
 
 interface OxIdSearchVariables {
   searchString?: string;
@@ -34,7 +34,7 @@ interface SenseSearchVariables {
 }
 
 interface SensesResult {
-  senses: SenseForEntryDtoInterface[];
+  senses: HydratedSense[];
 }
 
 interface SignSearchVariables {
@@ -43,15 +43,6 @@ interface SignSearchVariables {
 
 interface SignsResult {
   signs: SenseSignDtoInterface[];
-}
-
-interface SenseGroup {
-  lexicalCategory: LexicalCategory;
-  senses: SenseForEntryDtoInterface[];
-}
-
-interface UniqueEntryWithSenseGroups extends UniqueEntry {
-  senseGroups: SenseGroup[];
 }
 
 @Pipe({ name: 'removeUnderscores' })
@@ -74,15 +65,20 @@ export class SearchComponent implements OnInit, OnDestroy {
   oxId$: BehaviorSubject<string>;
 
   sensesSearchRef: QueryRef<SensesResult, SenseSearchVariables>;
-  senses$: Observable<SenseForEntryDtoInterface[]>;
+  senses$: Observable<HydratedSense[]>;
 
-  sensesBs$: BehaviorSubject<UniqueEntryWithSenseGroups[]>;
+  entriesWithSensesBs$: BehaviorSubject<UniqueEntryWithSenseGroups[]>;
 
   signsSearchRef: QueryRef<SignsResult, SignSearchVariables>;
   senseSigns$: Observable<SenseSignDtoInterface[]>;
   senseSignsBs$: BehaviorSubject<SenseSignDtoInterface[]>;
 
-  constructor(private apollo: Apollo, private _hotkeysService: HotkeysService) {
+  constructor(
+    private apollo: Apollo,
+    private _hotkeysService: HotkeysService,
+    private senseArranger: SenseArrangerService,
+    public dialog: MatDialog
+  ) {
     this._hotkeysService.add(
       new Hotkey(
         'esc',
@@ -98,7 +94,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.searchChars$ = this.searchFormControl.valueChanges.pipe(startWith(''));
 
-    this.sensesBs$ = new BehaviorSubject(null);
+    this.entriesWithSensesBs$ = new BehaviorSubject(null);
     this.senseSignsBs$ = new BehaviorSubject(null);
     this.oxId$ = new BehaviorSubject(null);
 
@@ -165,10 +161,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     this.senses$ = this.sensesSearchRef.valueChanges.pipe(
       map((res: ApolloQueryResult<SensesResult>) => res.data.senses),
-      map(senses => this._sortSensesByFit(senses)),
-      map(senses => this._filterForSensesWithDifferentSigns(senses)),
-      map(senses => this._applyMaxSensesLimit(senses)),
-      map(senses => this._groupSensesByLexicalCategoryAsList(senses))
+      map(senses => this.senseArranger.sortAndFilter(senses))
     );
 
     this.senseSigns$ = this.signsSearchRef.valueChanges.pipe(
@@ -185,15 +178,32 @@ export class SearchComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.senses$.subscribe(senses => {
-      if (senses.length === 1) {
-        this.onChildSenseEvent(senses[0]);
+    this.senses$.subscribe((senses: HydratedSense[]) => {
+      if (senses.length > 1) {
+        //   Show modal
+        this.openDialog(senses);
+        this.entriesWithSensesBs$.next(this.senseArranger.groupSenses(senses));
       }
-      this.sensesBs$.next(this._createUniqueEntryWithSenseGroupsArray(senses));
+      if (senses.length === 1) {
+        this.onSenseSelect(senses[0]);
+      }
+      console.log('No senses found');
     });
 
     this.senseSigns$.subscribe(signs => {
       this.senseSignsBs$.next(signs);
+    });
+  }
+
+  openDialog(senses: HydratedSense[]): void {
+    const dialogRef = this.dialog.open(SensesModalComponent, {
+      //   width: '250px',
+      data: senses
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed with result:');
+      console.log(result);
     });
   }
 
@@ -208,7 +218,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     });
   }
 
-  onChildSenseEvent(sense) {
+  onSenseSelect(sense: HydratedSense) {
     this.signsSearchRef.setVariables({
       senseId: sense.senseId
     });
@@ -225,153 +235,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.signsSearchRef.setVariables({
       senseId: ''
     });
-  }
-
-  _createUniqueEntryWithSenseGroupsArray(
-    senses: SenseForEntryDtoInterface[]
-  ): UniqueEntryWithSenseGroups[] {
-    const uniqueEntries: UniqueEntry[] = [];
-    for (const sense of senses) {
-      if (
-        !uniqueEntries.some(
-          entry =>
-            entry.oxId === sense.oxId && entry.homographC === sense.homographC
-        )
-      ) {
-        uniqueEntries.push({ oxId: sense.oxId, homographC: sense.homographC });
-      }
-    }
-    const uniqueEntryWithSenseGroupsArray: UniqueEntryWithSenseGroups[] = [];
-    for (const entry of uniqueEntries) {
-      const relevantSenses = this._extractRelevantSensesPreservingOrder(
-        senses,
-        entry
-      );
-
-      uniqueEntryWithSenseGroupsArray.push({
-        oxId: entry.oxId,
-        homographC: entry.homographC,
-        senseGroups: this._groupSensesByLexicalCategoryAsObjects(relevantSenses)
-      });
-    }
-
-    return uniqueEntryWithSenseGroupsArray;
-  }
-
-  _extractRelevantSensesPreservingOrder(
-    senses: SenseForEntryDtoInterface[],
-    uniqueEntry: UniqueEntry
-  ): SenseForEntryDtoInterface[] {
-    return senses.filter(
-      sense =>
-        sense.oxId === uniqueEntry.oxId &&
-        sense.homographC === uniqueEntry.homographC
-    );
-  }
-
-  _sortSensesByFit(
-    senses: SenseForEntryDtoInterface[]
-  ): SenseForEntryDtoInterface[] {
-    return senses.sort(this._compareSensesForFit);
-  }
-
-  _applyMaxSensesLimit(
-    senses: SenseForEntryDtoInterface[]
-  ): SenseForEntryDtoInterface[] {
-    const MAX_SENSES_LIMIT = 10;
-    return senses.slice(0, MAX_SENSES_LIMIT);
-  }
-
-  _compareSensesForFit(
-    a: SenseForEntryDtoInterface,
-    b: SenseForEntryDtoInterface
-  ) {
-    if (a.associationType !== b.associationType) {
-      if (a.associationType === DictionaryOrThesaurus.dictionary) {
-        return -1;
-      } else {
-        return 1;
-      }
-    } else {
-      if (a.associationType === DictionaryOrThesaurus.dictionary) {
-        if (a.apiSenseIndex < b.apiSenseIndex) {
-          return -1;
-        } else {
-          return 1;
-        }
-      } else {
-        if (a.similarity > b.similarity) {
-          return -1;
-        } else {
-          return 1;
-        }
-      }
-    }
-  }
-
-  _groupSensesByLexicalCategoryAsList(
-    senses: SenseForEntryDtoInterface[]
-  ): SenseForEntryDtoInterface[] {
-    const categoryOrder = senses.reduce((acc, curr) => {
-      const cat = curr.lexicalCategory;
-      if (!acc.includes(cat)) {
-        acc.push(cat);
-      }
-      return acc;
-    }, []);
-
-    const grouped = [];
-    for (const cat of categoryOrder) {
-      for (const sense of senses) {
-        if (sense.lexicalCategory === cat) {
-          grouped.push(sense);
-        }
-      }
-    }
-
-    return grouped;
-  }
-
-  _groupSensesByLexicalCategoryAsObjects(
-    senses: SenseForEntryDtoInterface[]
-  ): SenseGroup[] {
-    const categoryOrder = senses.reduce((acc, curr) => {
-      const cat = curr.lexicalCategory;
-      if (!acc.includes(cat)) {
-        acc.push(cat);
-      }
-      return acc;
-    }, []);
-    const groups: SenseGroup[] = [];
-    for (const cat of categoryOrder) {
-      groups.push({
-        lexicalCategory: cat,
-        senses: senses.filter(sense => sense.lexicalCategory === cat)
-      });
-    }
-
-    return groups;
-  }
-
-  _filterForSensesWithDifferentSigns(
-    senses: SenseForEntryDtoInterface[]
-  ): SenseForEntryDtoInterface[] {
-    const allSignsIds = new Set();
-    return senses.filter(sense => {
-      if (this._noNewSigns(allSignsIds, sense.signs)) {
-        return false;
-      }
-      sense.signs.forEach(sign => allSignsIds.add(sign._id));
-      return sense.signs && sense.signs.length;
-    });
-  }
-
-  _noNewSigns(allSignsIds: Set<any>, signs: SignRecord[]): boolean {
-    const intersection = new Set(
-      [...signs].filter(sign => allSignsIds.has(sign._id))
-    );
-
-    return intersection.size === signs.length;
   }
 
   ngOnDestroy() {}

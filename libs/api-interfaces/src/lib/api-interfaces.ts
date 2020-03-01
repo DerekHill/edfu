@@ -39,7 +39,7 @@ export interface CombinedSenseOptionalExposedProperties {
   readonly definition?: string;
 }
 
-export interface SenseForEntryDtoInterface
+export interface HydratedSense
   extends UniqueEntry,
     EntrySenseAssociationProperties,
     CombinedSenseRequiredExposedProperties,

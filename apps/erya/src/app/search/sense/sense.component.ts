@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { SenseForEntryDtoInterface } from '@edfu/api-interfaces';
+import { HydratedSense } from '@edfu/api-interfaces';
 import { DictionaryOrThesaurus } from '@edfu/enums';
 
 @Component({
@@ -8,24 +8,24 @@ import { DictionaryOrThesaurus } from '@edfu/enums';
 })
 export class SenseComponent {
   exampleOrDefinition: string;
-  _sense: SenseForEntryDtoInterface;
+  _sense: HydratedSense;
   fromThesaurus: boolean;
 
   @Input()
-  set sense(sense: SenseForEntryDtoInterface) {
+  set sense(sense: HydratedSense) {
     this._sense = sense;
     this.exampleOrDefinition = sense.example || sense.definition;
     this.fromThesaurus =
       sense.associationType === DictionaryOrThesaurus.thesaurus;
   }
 
-  get sense(): SenseForEntryDtoInterface {
+  get sense(): HydratedSense {
     return this._sense;
   }
 
-  @Output() senseClicked = new EventEmitter<SenseForEntryDtoInterface>();
+  @Output() senseEmitter = new EventEmitter<HydratedSense>();
 
-  onSenseClick(event, sense: SenseForEntryDtoInterface) {
-    this.senseClicked.emit(sense);
+  onSenseClick(event, sense: HydratedSense) {
+    this.senseEmitter.emit(sense);
   }
 }

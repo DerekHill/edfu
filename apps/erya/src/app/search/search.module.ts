@@ -11,6 +11,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { HotkeyModule } from 'angular2-hotkeys';
 import { SenseComponent } from './sense/sense.component';
 import { SignComponent } from './sign/sign.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { SenseArrangerService } from './sense-grouping/sense-arranger.service';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,9 @@ import { SignComponent } from './sign/sign.component';
     MatListModule,
     MatIconModule,
     MatButtonModule,
+    MatDialogModule,
     HotkeyModule
-  ]
+  ],
+  providers: [SenseArrangerService]
 })
 export class SearchModule {}

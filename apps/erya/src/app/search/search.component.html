@@ -33,7 +33,7 @@
   </mat-form-field>
 </form>
 
-<div *ngIf="sensesBs$ | async as entries">
+<div *ngIf="entriesWithSensesBs$ | async as entries">
   <mat-action-list>
     <div *ngFor="let entry of entries">
       <mat-list-item>
@@ -44,7 +44,7 @@
         <edfu-sense
           *ngFor="let sense of group.senses"
           [sense]="sense"
-          (senseClicked)="onChildSenseEvent($event)"
+          (senseEmitter)="onSenseSelect($event)"
         >
         </edfu-sense>
       </div>
@@ -58,3 +58,5 @@
     [sign]="senseSign.sign"
   ></edfu-sign>
 </div>
+
+<button mat-raised-button (click)="openDialog()">Pick one</button>

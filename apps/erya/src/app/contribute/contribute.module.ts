@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BasicComponent } from './basic.component';
+import { ContributeComponent } from './contribute.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
-  declarations: [BasicComponent],
+  declarations: [ContributeComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -17,4 +17,4 @@ import { MatInputModule } from '@angular/material/input';
     MatInputModule
   ]
 })
-export class BasicModule {}
+export class ContributeModule {}

@@ -11,6 +11,11 @@ export interface UniqueEntryWithSenseGroups extends UniqueEntry {
 }
 
 export class SenseArrangerService {
+  sortFilterAndGroup(senses: HydratedSense[]): UniqueEntryWithSenseGroups[] {
+    const sortedSenses = this.sortAndFilter(senses);
+    return this.groupSenses(sortedSenses);
+  }
+
   sortAndFilter(senses: HydratedSense[]): HydratedSense[] {
     senses = this._sortSensesByFit(senses);
     senses = this._filterForSensesWithDifferentSigns(senses);

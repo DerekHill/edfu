@@ -6,8 +6,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { GraphQLModule } from './graphql.module';
 import { RouterModule, Routes } from '@angular/router';
-import { BasicComponent } from './basic/basic.component';
-import { BasicModule } from './basic/basic.module';
+import { ContributeComponent } from './contribute/contribute.component';
+import { ContributeModule } from './contribute/contribute.module';
 import { SearchModule } from './search/search.module';
 import { SearchComponent } from './search/search.component';
 import { HotkeyModule } from 'angular2-hotkeys';
@@ -18,13 +18,13 @@ const appRoutes: Routes = [
     path: 'search',
     component: SearchComponent
   },
-  { path: 'basic', component: BasicComponent }
+  { path: 'contribute', component: ContributeComponent }
 ];
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
-    BasicModule,
+    ContributeModule,
     SearchModule,
     RouterModule.forRoot(
       appRoutes

@@ -33,23 +33,8 @@
   </mat-form-field>
 </form>
 
-<div *ngIf="entriesWithSensesBs$ | async as entries">
-  <mat-action-list>
-    <div *ngFor="let entry of entries">
-      <mat-list-item>
-        <b>{{ entry.oxId | removeUnderscores }}</b>
-      </mat-list-item>
-      <div *ngFor="let group of entry.senseGroups">
-        <mat-list-item>{{ group.lexicalCategory }}</mat-list-item>
-        <edfu-sense
-          *ngFor="let sense of group.senses"
-          [sense]="sense"
-          (senseEmitter)="onSenseSelect($event)"
-        >
-        </edfu-sense>
-      </div>
-    </div>
-  </mat-action-list>
+<div *ngIf="selectedSense">
+  <h3>{{ selectedSense.ownEntryOxId | removeUnderscores }}</h3>
 </div>
 
 <div *ngIf="senseSignsBs$ | async as senseSigns">
@@ -59,4 +44,6 @@
   ></edfu-sign>
 </div>
 
-<button mat-raised-button (click)="openDialog(null)">Pick one</button>
+<div *ngIf="selectedSense">
+  <edfu-sense [sense]="selectedSense"> </edfu-sense>
+</div>

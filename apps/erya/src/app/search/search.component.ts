@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  Pipe,
-  PipeTransform
-} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -16,10 +10,7 @@ import { ApolloQueryResult } from 'apollo-client';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 import { MatDialog } from '@angular/material/dialog';
 import { SensesModalComponent } from './senses-modal/senses-modal.component';
-import {
-  UniqueEntryWithSenseGroups,
-  SenseArrangerService
-} from './sense-grouping/sense-arranger.service';
+import { SenseArrangerService } from './sense-grouping/sense-arranger.service';
 
 interface OxIdSearchVariables {
   searchString?: string;
@@ -45,13 +36,6 @@ interface SignsResult {
   signs: SenseSignDtoInterface[];
 }
 
-@Pipe({ name: 'removeUnderscores' })
-export class RemoveUnderscoresPipe implements PipeTransform {
-  transform(string: string): string {
-    return string.replace('_', ' ');
-  }
-}
-
 @Component({
   selector: 'edfu-search',
   templateUrl: './search.component.html'
@@ -67,17 +51,18 @@ export class SearchComponent implements OnInit, OnDestroy {
   sensesSearchRef: QueryRef<SensesResult, SenseSearchVariables>;
   senses$: Observable<HydratedSense[]>;
 
-  entriesWithSensesBs$: BehaviorSubject<UniqueEntryWithSenseGroups[]>;
-
   signsSearchRef: QueryRef<SignsResult, SignSearchVariables>;
   senseSigns$: Observable<SenseSignDtoInterface[]>;
   senseSignsBs$: BehaviorSubject<SenseSignDtoInterface[]>;
 
+  //   displayFirstSense: boolean;
+  selectedSense: HydratedSense;
+
   constructor(
     private apollo: Apollo,
     private _hotkeysService: HotkeysService,
-    private senseArranger: SenseArrangerService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private senseArranger: SenseArrangerService
   ) {
     this._hotkeysService.add(
       new Hotkey(
@@ -94,7 +79,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.searchChars$ = this.searchFormControl.valueChanges.pipe(startWith(''));
 
-    this.entriesWithSensesBs$ = new BehaviorSubject(null);
     this.senseSignsBs$ = new BehaviorSubject(null);
     this.oxId$ = new BehaviorSubject(null);
 
@@ -123,6 +107,7 @@ export class SearchComponent implements OnInit, OnDestroy {
           senses(oxId: $oxId, filter: true) {
             oxId
             homographC
+            ownEntryOxId
             senseId
             lexicalCategory
             apiSenseIndex
@@ -174,19 +159,21 @@ export class SearchComponent implements OnInit, OnDestroy {
           searchString: input
         });
       } else if (typeof input === 'object') {
-        //   Do nothing. Use `onGroupSelect` instead
+        //   Do nothing
       }
     });
 
     this.senses$.subscribe((senses: HydratedSense[]) => {
       if (senses.length > 1) {
-        //   Show modal
         this.openDialog(senses);
-        this.entriesWithSensesBs$.next(this.senseArranger.groupSenses(senses));
       }
       if (senses.length === 1) {
         this.onSenseSelect(senses[0]);
+        // this.displayFirstSense = true;
       }
+      //   else {
+      //     this.displayFirstSense = false;
+      //   }
       console.log('No senses found');
     });
 
@@ -201,9 +188,10 @@ export class SearchComponent implements OnInit, OnDestroy {
       data: senses
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed with result:');
-      console.log(result);
+    dialogRef.afterClosed().subscribe((sense: HydratedSense) => {
+      if (sense) {
+        this.onSenseSelect(sense);
+      }
     });
   }
 
@@ -219,9 +207,11 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   onSenseSelect(sense: HydratedSense) {
+    // this.displayFirstSense = true;
     this.signsSearchRef.setVariables({
       senseId: sense.senseId
     });
+    this.selectedSense = sense;
   }
 
   clearSearchField() {
@@ -235,6 +225,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.signsSearchRef.setVariables({
       senseId: ''
     });
+    this.selectedSense = null;
+    // this.displayFirstSense = false;
   }
 
   ngOnDestroy() {}

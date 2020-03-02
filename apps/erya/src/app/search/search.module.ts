@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SearchComponent, RemoveUnderscoresPipe } from './search.component';
+import { SearchComponent } from './search.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -13,12 +13,15 @@ import { SenseComponent } from './sense/sense.component';
 import { SignComponent } from './sign/sign.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { SenseArrangerService } from './sense-grouping/sense-arranger.service';
+import { SensesModalComponent } from './senses-modal/senses-modal.component';
+import { RemoveUnderscoresPipe } from './pipes';
 
 @NgModule({
   declarations: [
     SearchComponent,
     SenseComponent,
     SignComponent,
+    SensesModalComponent,
     RemoveUnderscoresPipe
   ],
   imports: [
@@ -34,6 +37,7 @@ import { SenseArrangerService } from './sense-grouping/sense-arranger.service';
     MatDialogModule,
     HotkeyModule
   ],
+  entryComponents: [SensesModalComponent],
   providers: [SenseArrangerService]
 })
 export class SearchModule {}

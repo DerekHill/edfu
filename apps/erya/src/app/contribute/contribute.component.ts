@@ -27,10 +27,10 @@ const GetById = gql`
 `;
 
 @Component({
-  selector: 'edfu-basic',
-  templateUrl: './basic.component.html'
+  selector: 'edfu-contibute',
+  templateUrl: './contribute.component.html'
 })
-export class BasicComponent implements OnInit, OnDestroy {
+export class ContributeComponent implements OnInit, OnDestroy {
   myControl = new FormControl();
   options: string[] = ['One', 'Two', 'Three'];
 

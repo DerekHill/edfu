@@ -55,7 +55,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   senseSigns$: Observable<SenseSignDtoInterface[]>;
   senseSignsBs$: BehaviorSubject<SenseSignDtoInterface[]>;
 
-  //   displayFirstSense: boolean;
   selectedSense: HydratedSense;
 
   constructor(
@@ -169,12 +168,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       }
       if (senses.length === 1) {
         this.onSenseSelect(senses[0]);
-        // this.displayFirstSense = true;
       }
-      //   else {
-      //     this.displayFirstSense = false;
-      //   }
-      console.log('No senses found');
     });
 
     this.senseSigns$.subscribe(signs => {
@@ -207,7 +201,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   onSenseSelect(sense: HydratedSense) {
-    // this.displayFirstSense = true;
     this.signsSearchRef.setVariables({
       senseId: sense.senseId
     });
@@ -226,7 +219,6 @@ export class SearchComponent implements OnInit, OnDestroy {
       senseId: ''
     });
     this.selectedSense = null;
-    // this.displayFirstSense = false;
   }
 
   ngOnDestroy() {}

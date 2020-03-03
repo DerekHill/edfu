@@ -14,18 +14,6 @@ const Hello = gql`
   }
 `;
 
-const GetById = gql`
-  query {
-    entry(id: "5df37add4b2f1813eff96309") {
-      _id
-      oxId
-      homographC
-      word
-      relatedEntriesAdded
-    }
-  }
-`;
-
 @Component({
   selector: 'edfu-contibute',
   templateUrl: './contribute.component.html'
@@ -47,27 +35,6 @@ export class ContributeComponent implements OnInit, OnDestroy {
   constructor(private http: HttpClient, private apollo: Apollo) {}
 
   ngOnInit() {
-    // this.apollo
-    //   .watchQuery({
-    //     query: gql`
-    //       {
-    //         entriesAll {
-    //           _id
-    //           oxId
-    //           homographC
-    //           word
-    //           relatedEntriesAdded
-    //         }
-    //       }
-    //     `
-    //   })
-    //   .valueChanges.pipe(untilDestroyed(this))
-    //   .subscribe((result: any) => {
-    //     this.words = result.data.entriesAll;
-    //     this.loading = result.loading;
-    //     this.error = result.errors;
-    //   });
-
     this.querySubscription = this.apollo
       .watchQuery<any>({
         query: Hello
@@ -83,14 +50,6 @@ export class ContributeComponent implements OnInit, OnDestroy {
       })
       .subscribe(({ data, loading }) => {
         this.hello2 = data;
-      });
-
-    this.apollo
-      .query<any>({
-        query: GetById
-      })
-      .subscribe(({ data, loading }) => {
-        this.byId = data;
       });
   }
 

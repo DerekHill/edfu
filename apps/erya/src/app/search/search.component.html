@@ -1,13 +1,14 @@
 <form class="example-form">
   <mat-form-field class="example-full-width">
     <input
+      #search_input
       type="text"
       placeholder="Search"
-      aria-label="Type here to search"
+      aria-label="Type here
+    to search"
       matInput
       [formControl]="searchFormControl"
       [matAutocomplete]="auto"
-      autofocus
     />
 
     <button
@@ -24,7 +25,7 @@
       #auto="matAutocomplete"
       [displayWith]="displayWithoutUnderscores"
       autoActiveFirstOption
-      (optionSelected)="onOxIdSelect($event.option.value)"
+      (optionSelected)="onOxIdSelectViaDropdown($event.option.value)"
     >
       <mat-option *ngFor="let oxId of oxIds$ | async" [value]="oxId">
         {{ oxId | removeUnderscores }}

@@ -1,4 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  AfterViewInit,
+  ViewChild,
+  ChangeDetectorRef
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -13,6 +20,7 @@ import { SensesModalComponent } from './senses-modal/senses-modal.component';
 import { SenseArrangerService } from './sense-grouping/sense-arranger.service';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
+// <!-- [(edfuFocusWhen)]="focusSearch" -->
 interface OxIdSearchVariables {
   searchString?: string;
 }
@@ -41,13 +49,12 @@ interface SignsResult {
   selector: 'edfu-search',
   templateUrl: './search.component.html'
 })
-export class SearchComponent implements OnInit, OnDestroy {
+export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
   searchFormControl = new FormControl();
   searchChars$: Observable<string>;
 
   oxIdsSearchRef: QueryRef<OxIdsResult, OxIdSearchVariables>;
   oxIds$: Observable<string[]>;
-  oxId$: BehaviorSubject<string>;
 
   sensesSearchRef: QueryRef<SensesResult, SenseSearchVariables>;
   senses$: Observable<HydratedSense[]>;
@@ -60,6 +67,9 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   routeOxIdLower$: Observable<string>;
   currentOxIdLower: string;
+  focusSearch = true;
+
+  @ViewChild('search_input') searchInput: any;
 
   constructor(
     private apollo: Apollo,
@@ -67,7 +77,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private senseArranger: SenseArrangerService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private cd: ChangeDetectorRef
   ) {
     this._hotkeysService.add(
       new Hotkey(
@@ -83,77 +94,82 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.senseSignsBs$ = new BehaviorSubject(null);
-    this.oxId$ = new BehaviorSubject(null);
 
     this.searchChars$ = this.searchFormControl.valueChanges.pipe(startWith(''));
+
+    const OxIdSearchQuery = gql`
+      query OxIdSearchQuery($searchString: String! = "") {
+        oxIds(searchString: $searchString, filter: true)
+      }
+    `;
 
     this.oxIdsSearchRef = this.apollo.watchQuery<
       OxIdsResult,
       OxIdSearchVariables
     >({
-      query: gql`
-        query OxIdSearchQuery($searchString: String! = "") {
-          oxIds(searchString: $searchString, filter: true)
-        }
-      `
+      query: OxIdSearchQuery
     });
 
     this.oxIds$ = this.oxIdsSearchRef.valueChanges.pipe(
       map((res: ApolloQueryResult<OxIdsResult>) => res.data.oxIds)
     );
 
+    const EntrySensesQuery = gql`
+      query EntrySensesQuery($oxId: String! = "") {
+        senses(oxId: $oxId, filter: true) {
+          oxId
+          homographC
+          ownEntryOxId
+          senseId
+          lexicalCategory
+          apiSenseIndex
+          example
+          definition
+          associationType
+          similarity
+          signs {
+            _id
+            mnemonic
+            mediaUrl
+          }
+        }
+      }
+    `;
+
     // Probably better way of avoiding error on initial subscription than setting defaults which get sent to the server
     this.sensesSearchRef = this.apollo.watchQuery<
       SensesResult,
       SenseSearchVariables
     >({
-      query: gql`
-        query EntrySensesQuery($oxId: String! = "") {
-          senses(oxId: $oxId, filter: true) {
-            oxId
-            homographC
-            ownEntryOxId
-            senseId
-            lexicalCategory
-            apiSenseIndex
-            example
-            definition
-            associationType
-            similarity
-            signs {
-              _id
-              mnemonic
-              mediaUrl
-            }
+      query: EntrySensesQuery
+    });
+
+    const SignsQuery = gql`
+      query SignsQuery($senseId: String! = "") {
+        signs(senseId: $senseId) {
+          senseId
+          signId
+          sign {
+            _id
+            mnemonic
+            mediaUrl
           }
         }
-      `
-    });
+      }
+    `;
 
     this.signsSearchRef = this.apollo.watchQuery<
       SignsResult,
       SignSearchVariables
     >({
-      query: gql`
-        query SignsQuery($senseId: String! = "") {
-          signs(senseId: $senseId) {
-            senseId
-            signId
-            sign {
-              _id
-              mnemonic
-              mediaUrl
-            }
-          }
-        }
-      `
+      query: SignsQuery
     });
 
     this.route.paramMap.subscribe((params: ParamMap) => {
       const param = params.get('oxIdLower');
       this.currentOxIdLower = param;
       if (param) {
-        return this.onOxIdSelect(param);
+        return this.onOxIdSelectViaRouter(param);
       }
     });
 
@@ -207,15 +223,17 @@ export class SearchComponent implements OnInit, OnDestroy {
     return oxId ? oxId.replace('_', ' ') : '';
   }
 
-  onOxIdSelect(oxId: string) {
-    this.oxId$.next(oxId);
+  onOxIdSelectViaDropdown(oxId: string) {
+    const newOxIdLower = oxId.toLowerCase();
+    this.router.navigate(['/search', newOxIdLower]);
+    this.searchInput.nativeElement.blur();
+  }
+
+  onOxIdSelectViaRouter(oxId: string) {
     this.sensesSearchRef.setVariables({
       oxId: oxId
     });
-    const newOxIdLower = oxId.toLowerCase();
-    if (this.currentOxIdLower !== newOxIdLower) {
-      this.router.navigate(['/search', newOxIdLower]);
-    }
+    this.focusSearch = false;
   }
 
   onSenseSelect(sense: HydratedSense) {
@@ -237,7 +255,19 @@ export class SearchComponent implements OnInit, OnDestroy {
       senseId: ''
     });
     this.selectedSense = null;
+    this.searchInput.nativeElement.focus();
   }
 
   ngOnDestroy() {}
+
+  ngAfterViewInit() {
+    console.log('ngAfterViewInit');
+    if (this.focusSearch) {
+      this.searchInput.nativeElement.focus();
+      this.cd.detectChanges();
+    } else {
+      this.searchInput.nativeElement.blur();
+      this.cd.detectChanges();
+    }
+  }
 }

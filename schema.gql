@@ -18,6 +18,8 @@ enum LexicalCategory {
   conjunction
   interjection
   determiner
+  residual
+  other
 }
 
 type Query {

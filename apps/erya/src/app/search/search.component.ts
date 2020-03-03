@@ -11,6 +11,7 @@ import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 import { MatDialog } from '@angular/material/dialog';
 import { SensesModalComponent } from './senses-modal/senses-modal.component';
 import { SenseArrangerService } from './sense-grouping/sense-arranger.service';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 interface OxIdSearchVariables {
   searchString?: string;
@@ -57,11 +58,16 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   selectedSense: HydratedSense;
 
+  routeOxIdLower$: Observable<string>;
+  currentOxIdLower: string;
+
   constructor(
     private apollo: Apollo,
     private _hotkeysService: HotkeysService,
     public dialog: MatDialog,
-    private senseArranger: SenseArrangerService
+    private senseArranger: SenseArrangerService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     this._hotkeysService.add(
       new Hotkey(
@@ -76,10 +82,10 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.searchChars$ = this.searchFormControl.valueChanges.pipe(startWith(''));
-
     this.senseSignsBs$ = new BehaviorSubject(null);
     this.oxId$ = new BehaviorSubject(null);
+
+    this.searchChars$ = this.searchFormControl.valueChanges.pipe(startWith(''));
 
     this.oxIdsSearchRef = this.apollo.watchQuery<
       OxIdsResult,
@@ -143,6 +149,14 @@ export class SearchComponent implements OnInit, OnDestroy {
       `
     });
 
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      const param = params.get('oxIdLower');
+      this.currentOxIdLower = param;
+      if (param) {
+        return this.onOxIdSelect(param);
+      }
+    });
+
     this.senses$ = this.sensesSearchRef.valueChanges.pipe(
       map((res: ApolloQueryResult<SensesResult>) => res.data.senses),
       map(senses => this.senseArranger.sortAndFilter(senses))
@@ -198,6 +212,10 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.sensesSearchRef.setVariables({
       oxId: oxId
     });
+    const newOxIdLower = oxId.toLowerCase();
+    if (this.currentOxIdLower !== newOxIdLower) {
+      this.router.navigate(['/search', newOxIdLower]);
+    }
   }
 
   onSenseSelect(sense: HydratedSense) {

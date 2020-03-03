@@ -15,10 +15,15 @@ import { MatButtonModule } from '@angular/material/button';
 
 const appRoutes: Routes = [
   {
+    path: 'search/:oxIdLower',
+    component: SearchComponent
+  },
+  {
     path: 'search',
     component: SearchComponent
   },
-  { path: 'contribute', component: ContributeComponent }
+  { path: 'contribute', component: ContributeComponent },
+  { path: '', redirectTo: '/search', pathMatch: 'full' }
 ];
 
 @NgModule({

@@ -19,5 +19,7 @@ export enum LexicalCategory {
   preposition = 'preposition',
   conjunction = 'conjunction',
   interjection = 'interjection',
-  determiner = 'determiner'
+  determiner = 'determiner',
+  residual = 'residual',
+  other = 'other'
 }

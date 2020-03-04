@@ -54,10 +54,16 @@ export class ReferenceService {
 
   async getSensesForOxIdCaseInsensitive(
     oxId: string,
-    filter: boolean
+    filter: boolean,
+    senseId?: string
   ): Promise<SenseForEntryDto[]> {
+    const match = { oxId: oxId };
+    if (senseId) {
+      match['senseId'] = senseId;
+    }
+
     const basePipeline = [
-      { $match: { oxId: oxId } },
+      { $match: match },
       {
         $lookup: {
           from: `${SENSE_COLLECTION_NAME.toLowerCase()}s`,

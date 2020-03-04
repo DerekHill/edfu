@@ -25,7 +25,7 @@ enum LexicalCategory {
 type Query {
   hello: String!
   oxIds(filter: Boolean = false, searchString: String!): [String!]!
-  senses(filter: Boolean = false, oxId: String!): [SenseForEntryDto!]!
+  senses(senseId: String = "", filter: Boolean = false, oxId: String!): [SenseForEntryDto!]!
   signs(senseId: String!): [SenseSignDto!]!
 }
 

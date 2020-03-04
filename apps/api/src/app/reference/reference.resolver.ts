@@ -21,9 +21,11 @@ export class DictionaryResolver {
   getSenses(
     @Args('oxId') oxId: string,
     @Args({ name: 'filter', type: () => Boolean, defaultValue: false })
-    filter: boolean
+    filter: boolean,
+    @Args({ name: 'senseId', type: () => String, defaultValue: '' })
+    senseId: string
   ): Promise<SenseForEntryDto[]> {
-    return this.service.getSensesForOxIdCaseInsensitive(oxId, filter);
+    return this.service.getSensesForOxIdCaseInsensitive(oxId, filter, senseId);
   }
 
   @ResolveProperty(returns => [SignDto])

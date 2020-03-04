@@ -20,7 +20,6 @@ import { SensesModalComponent } from './senses-modal/senses-modal.component';
 import { SenseArrangerService } from './sense-grouping/sense-arranger.service';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
-// <!-- [(edfuFocusWhen)]="focusSearch" -->
 interface OxIdSearchVariables {
   searchString?: string;
 }
@@ -115,8 +114,8 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
     );
 
     const EntrySensesQuery = gql`
-      query EntrySensesQuery($oxId: String! = "") {
-        senses(oxId: $oxId, filter: true) {
+      query EntrySensesQuery($oxId: String! = "", $senseId: String! = "") {
+        senses(oxId: $oxId, filter: true, senseId: $senseId) {
           oxId
           homographC
           ownEntryOxId
@@ -166,10 +165,11 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     this.route.paramMap.subscribe((params: ParamMap) => {
-      const param = params.get('oxIdLower');
-      this.currentOxIdLower = param;
-      if (param) {
-        return this.onOxIdSelectViaRouter(param);
+      const oxIdLower = params.get('oxIdLower');
+      const senseId = params.get('senseId');
+      this.currentOxIdLower = oxIdLower;
+      if (oxIdLower) {
+        return this.onVariablesSelectViaRouter(oxIdLower, senseId);
       }
     });
 
@@ -214,7 +214,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
 
     dialogRef.afterClosed().subscribe((sense: HydratedSense) => {
       if (sense) {
-        this.onSenseSelect(sense);
+        this.onSenseSelect(sense, true);
       }
     });
   }
@@ -229,14 +229,21 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
     this.searchInput.nativeElement.blur();
   }
 
-  onOxIdSelectViaRouter(oxId: string) {
-    this.sensesSearchRef.setVariables({
-      oxId: oxId
-    });
+  onVariablesSelectViaRouter(oxId: string, senseId?: string) {
+    const variables = { oxId: oxId };
+    if (senseId) {
+      variables['senseId'] = senseId;
+    }
+    this.sensesSearchRef.setVariables(variables);
     this.focusSearch = false;
   }
 
-  onSenseSelect(sense: HydratedSense) {
+  onSenseSelect(sense: HydratedSense, updateUrl = false) {
+    if (updateUrl) {
+      this.router.navigate([{ senseId: sense.senseId }], {
+        relativeTo: this.route
+      });
+    }
     this.signsSearchRef.setVariables({
       senseId: sense.senseId
     });
@@ -261,7 +268,6 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnDestroy() {}
 
   ngAfterViewInit() {
-    console.log('ngAfterViewInit');
     if (this.focusSearch) {
       this.searchInput.nativeElement.focus();
       this.cd.detectChanges();

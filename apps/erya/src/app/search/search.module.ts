@@ -5,8 +5,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatListModule } from '@angular/material/list';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { HotkeyModule } from 'angular2-hotkeys';
 import { SenseComponent } from './sense/sense.component';
@@ -31,9 +29,7 @@ import { RemoveUnderscoresPipe } from './pipes';
     MatAutocompleteModule,
     MatFormFieldModule,
     MatInputModule,
-    MatListModule,
     MatIconModule,
-    MatButtonModule,
     MatDialogModule,
     HotkeyModule
   ],

@@ -3,7 +3,13 @@
     <a class="navbar-item" routerLink="/search">
       Erya
     </a>
-    <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+    <a
+      role="button"
+      class="navbar-burger burger"
+      aria-label="menu"
+      aria-expanded="false"
+      data-target="navbarBasicExample"
+    >
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
@@ -15,11 +21,22 @@
         Search
       </a>
 
-      <a class="navbar-item" routerLink="/contribute" routerLinkActive="is-active">
+      <a
+        class="navbar-item"
+        routerLink="/contribute"
+        routerLinkActive="is-active"
+      >
         Contribute
       </a>
     </div>
   </div>
 </nav>
-
-<router-outlet></router-outlet>
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-two-thirds-desktop">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,5 +1,6 @@
-<form class="example-form">
-  <mat-form-field class="example-full-width">
+
+<form>
+  <mat-form-field>
     <input
       #search_input
       type="text"
@@ -10,7 +11,6 @@
       [formControl]="searchFormControl"
       [matAutocomplete]="auto"
     />
-
     <button
       mat-button
       mat-icon-button
@@ -33,18 +33,13 @@
     </mat-autocomplete>
   </mat-form-field>
 </form>
+<div *ngIf="selectedSense" class="content">
+  <h1 class="has-text-centered is-capitalized">{{ selectedSense.ownEntryOxId | removeUnderscores }}</h1>
 
-<div *ngIf="selectedSense">
-  <h3>{{ selectedSense.ownEntryOxId | removeUnderscores }}</h3>
-</div>
-
-<div *ngIf="senseSignsBs$ | async as senseSigns">
-  <edfu-sign
-    *ngFor="let senseSign of senseSigns"
-    [sign]="senseSign.sign"
-  ></edfu-sign>
-</div>
-
-<div *ngIf="selectedSense">
-  <edfu-sense [sense]="selectedSense"> </edfu-sense>
+  <div class="columns is-multiline" *ngIf="senseSignsBs$ | async as senseSigns">
+    <edfu-sign class="column is-full"
+      *ngFor="let senseSign of senseSigns"
+      [sign]="senseSign.sign" [sense]="selectedSense"
+    ></edfu-sign>
+  </div>
 </div>

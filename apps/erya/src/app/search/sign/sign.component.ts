@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { SignRecord } from '@edfu/api-interfaces';
+import { HydratedSense, SignRecord } from '@edfu/api-interfaces';
 
 export enum MediaTypes {
   gif = 'gif',
@@ -14,6 +14,7 @@ export class SignComponent {
   _sign: SignRecord;
   isVideo: boolean;
 
+  @Input() sense: HydratedSense;
   @Input()
   set sign(sign: SignRecord) {
     this._sign = sign;

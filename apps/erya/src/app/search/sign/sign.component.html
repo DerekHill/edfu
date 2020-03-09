@@ -1,10 +1,11 @@
-<mat-list-item>
-  <div *ngIf="isVideo; then thenBlock; else elseBlock"></div>
-  <ng-template #thenBlock
-    ><video width="320" controls autoplay loop playsinline [muted]="true">
-      <source src="{{ sign.mediaUrl }}" type="video/mp4" /></video
-  ></ng-template>
-  <ng-template #elseBlock
-    ><img src="{{ sign.mediaUrl }}" /> {{ sign.mnemonic }}</ng-template
-  >
-</mat-list-item>
+<div *ngIf="isVideo; then thenBlock; else elseBlock"></div>
+<ng-template #thenBlock>
+    <video autoplay loop playsinline [muted]="true">
+      <source src="{{ sign.mediaUrl }}" type="video/mp4" />
+    </video>
+    <edfu-sense [sense]="sense"> </edfu-sense>
+</ng-template>
+<ng-template #elseBlock>
+      <img class="is-fullwidth-er" src="{{ sign.mediaUrl }}" />
+      <p class="has-text-centered">{{ sign.mnemonic }}</p>
+</ng-template>

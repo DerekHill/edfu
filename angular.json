@@ -23,6 +23,11 @@
             "tsConfig": "apps/erya/tsconfig.app.json",
             "aot": true,
             "assets": ["apps/erya/src/favicon.ico", "apps/erya/src/assets"],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "apps/erya/src/assets/stylesheets"
+              ]
+            },
             "styles": [
               "apps/erya/src/styles.scss",
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css"

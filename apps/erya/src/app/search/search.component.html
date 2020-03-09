@@ -1,50 +1,64 @@
-<form class="example-form">
-  <mat-form-field class="example-full-width">
-    <input
-      #search_input
-      type="text"
-      placeholder="Search"
-      aria-label="Type here
-    to search"
-      matInput
-      [formControl]="searchFormControl"
-      [matAutocomplete]="auto"
-    />
+<div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="20px">
+  <div fxFlex="100" fxFlex.gt-sm="50" fxFlexAlign="center" >
+    <form>
+      <mat-form-field fxFlexFill>
+        <mat-label>Search</mat-label>
+        <input
+          #search_input
+          type="text"
+          matInput
+          [formControl]="searchFormControl"
+          placeholder="Type here to search"
+          [matAutocomplete]="auto"
+        />
 
-    <button
-      mat-button
-      mat-icon-button
-      matSuffix
-      (click)="clearSearchField()"
-      *ngIf="this.searchFormControl.value"
-    >
-      <mat-icon>close</mat-icon>
-    </button>
+        <button
+          mat-button
+          mat-icon-button
+          matSuffix
+          (click)="clearSearchField()"
+          *ngIf="this.searchFormControl.value"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
 
-    <mat-autocomplete
-      #auto="matAutocomplete"
-      [displayWith]="displayWithoutUnderscores"
-      autoActiveFirstOption
-      (optionSelected)="onOxIdSelectViaDropdown($event.option.value)"
-    >
-      <mat-option *ngFor="let oxId of oxIds$ | async" [value]="oxId">
-        {{ oxId | removeUnderscores }}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
-</form>
-
-<div *ngIf="selectedSense">
-  <h3>{{ selectedSense.ownEntryOxId | removeUnderscores }}</h3>
+        <mat-autocomplete
+          #auto="matAutocomplete"
+          [displayWith]="displayWithoutUnderscores"
+          autoActiveFirstOption
+          (optionSelected)="onOxIdSelectViaDropdown($event.option.value)"
+        >
+          <mat-option *ngFor="let oxId of oxIds$ | async" [value]="oxId">
+            {{ oxId | removeUnderscores }}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+    </form>
+  </div>
 </div>
+<div fxLayout="row" fxLayoutAlign="center">
+  <div fxFlex="100" fxFlex.gt-sm="50" fxFlexAlign="center">
+    <mat-card *ngIf="selectedSense">
+      <mat-card-header>
+        <div>
+          <h3 class="mat-display-2">
+            {{ selectedSense.ownEntryOxId | removeUnderscores }}
+          </h3>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngIf="senseSignsBs$ | async as senseSigns">
+          <edfu-sign
+            *ngFor="let senseSign of senseSigns"
+            [sign]="senseSign.sign"
+          ></edfu-sign>
+        </div>
 
-<div *ngIf="senseSignsBs$ | async as senseSigns">
-  <edfu-sign
-    *ngFor="let senseSign of senseSigns"
-    [sign]="senseSign.sign"
-  ></edfu-sign>
-</div>
-
-<div *ngIf="selectedSense">
-  <edfu-sense [sense]="selectedSense"> </edfu-sense>
+        <div *ngIf="selectedSense">
+          <edfu-sense [sense]="selectedSense"> </edfu-sense>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>

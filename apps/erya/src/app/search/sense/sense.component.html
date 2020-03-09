@@ -1,7 +1,6 @@
 <mat-list-item (click)="onSenseClick($event, sense)">
-  <h4 mat-line>{{ exampleOrDefinition }}</h4>
-
-  <p *ngIf="fromThesaurus" mat-line>
+  <h4 mat-line class="mat-h4">{{ exampleOrDefinition }}</h4>
+  <p *ngIf="fromThesaurus" mat-line class="mat-body">
     {{ sense.associationType }} - {{ sense.similarity | number: '1.2-2' }}
   </p>
 </mat-list-item>

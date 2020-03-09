@@ -15,6 +15,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { SenseArrangerService } from './sense-grouping/sense-arranger.service';
 import { SensesModalComponent } from './senses-modal/senses-modal.component';
 import { RemoveUnderscoresPipe } from './pipes';
+import { MatCardModule } from '@angular/material/card';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,9 @@ import { RemoveUnderscoresPipe } from './pipes';
     MatIconModule,
     MatButtonModule,
     MatDialogModule,
-    HotkeyModule
+    MatCardModule,
+    HotkeyModule,
+    FlexLayoutModule
   ],
   entryComponents: [SensesModalComponent],
   providers: [SenseArrangerService]

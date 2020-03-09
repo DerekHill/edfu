@@ -4,7 +4,7 @@
       Erya
     </a>
     <a
-      [ngClass]="{'is-active': isMenuOpen}"
+      [ngClass]="{ 'is-active': isMenuOpen }"
       role="button"
       class="navbar-burger burger"
       aria-label="menu"
@@ -17,16 +17,24 @@
       <span aria-hidden="true"></span>
     </a>
   </div>
-  <div id="navbarBasicExample" class="navbar-menu" [ngClass]="{'is-active': isMenuOpen}">
+  <div
+    id="navbarBasicExample"
+    class="navbar-menu"
+    [ngClass]="{ 'is-active': isMenuOpen }"
+  >
     <div class="navbar-start">
-      <a class="navbar-item" routerLink="/search" routerLinkActive="is-active">
+      <a
+        class="navbar-item"
+        (click)="navigateTo('/search')"
+        routerLinkActive="is-active"
+      >
         Search
       </a>
 
       <a
         class="navbar-item"
-        routerLink="/contribute"
         routerLinkActive="is-active"
+        (click)="navigateTo('/contribute')"
       >
         Contribute
       </a>

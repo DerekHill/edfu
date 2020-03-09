@@ -1,14 +1,13 @@
 
 <form>
   <mat-form-field>
+    <mat-label>Search</mat-label>
     <input
       #search_input
       type="text"
-      placeholder="Search"
-      aria-label="Type here
-    to search"
       matInput
       [formControl]="searchFormControl"
+      placeholder="Type here to search"
       [matAutocomplete]="auto"
     />
     <button
@@ -31,6 +30,7 @@
         {{ oxId | removeUnderscores }}
       </mat-option>
     </mat-autocomplete>
+    <mat-icon matSuffix>search</mat-icon>
   </mat-form-field>
 </form>
 <div *ngIf="selectedSense" class="content">

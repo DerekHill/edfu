@@ -3,12 +3,18 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { NavbarModule } from './navbar/navbar.module';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [AppComponent],
-      imports: [HttpClientModule, MatToolbarModule, RouterTestingModule]
+      imports: [
+        HttpClientModule,
+        MatToolbarModule,
+        RouterTestingModule,
+        NavbarModule
+      ]
     }).compileComponents();
   }));
 

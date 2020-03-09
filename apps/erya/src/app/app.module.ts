@@ -12,6 +12,7 @@ import { SearchModule } from './search/search.module';
 import { SearchComponent } from './search/search.component';
 import { HotkeyModule } from 'angular2-hotkeys';
 import { MatButtonModule } from '@angular/material/button';
+import { NavbarModule } from './navbar/navbar.module';
 
 const appRoutes: Routes = [
   {
@@ -31,6 +32,7 @@ const appRoutes: Routes = [
   imports: [
     ContributeModule,
     SearchModule,
+    NavbarModule,
     RouterModule.forRoot(
       appRoutes
       //   { enableTracing: true } // <-- debugging purposes only

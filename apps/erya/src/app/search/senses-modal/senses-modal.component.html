@@ -1,18 +1,15 @@
-<mat-action-list>
-  <div *ngFor="let entry of senseGroups">
-    <mat-list-item>
-      <b>{{ entry.oxId | removeUnderscores }}</b>
-    </mat-list-item>
-    <div *ngFor="let group of entry.senseGroups">
-      <mat-list-item>{{ group.lexicalCategory }}</mat-list-item>
-      <edfu-sense
-        *ngFor="let sense of group.senses"
-        [sense]="sense"
-        (senseEmitter)="closeDialog($event)"
-      >
-      </edfu-sense>
-    </div>
+<div *ngFor="let entry of senseGroups">
+  <p class="is-capitalized has-text-weight-bold">
+    {{ entry.oxId | removeUnderscores }}
+  </p>
+  <div *ngFor="let group of entry.senseGroups">
+    <span class="is-italic">{{ group.lexicalCategory }}</span>
+    <edfu-sense
+      *ngFor="let sense of group.senses"
+      [sense]="sense"
+      (senseEmitter)="closeDialog($event)"
+    >
+    </edfu-sense>
   </div>
-</mat-action-list>
-
-<button mat-button (click)="onNoClick()">Back</button>
+</div>
+<button class="button is-fullwidth" (click)="onNoClick()">Back</button>

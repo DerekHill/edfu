@@ -12,6 +12,9 @@ import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { environment } from '../environments/environment';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
+import { AuthController } from './auth/auth.controller';
 
 const CONFIG_CONFIG =
   process.env.TRAVIS === 'true'
@@ -29,7 +32,9 @@ const imports = [
     autoSchemaFile: 'schema.gql'
   }),
   OxfordApiModule,
-  ReferenceModule
+  ReferenceModule,
+  AuthModule,
+  UsersModule
 ];
 
 if (environment.production) {
@@ -42,7 +47,7 @@ if (environment.production) {
 
 @Module({
   imports: imports,
-  controllers: [AppController],
+  controllers: [AppController, AuthController],
   providers: [AppService]
 })
 export class AppModule {}

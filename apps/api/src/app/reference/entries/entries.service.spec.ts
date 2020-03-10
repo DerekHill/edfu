@@ -74,9 +74,7 @@ describe('EntriesService', () => {
       imports: [
         TestDatabaseModule,
         MongooseModule.forFeature([
-          { name: ENTRY_COLLECTION_NAME, schema: EntrySchema }
-        ]),
-        MongooseModule.forFeature([
+          { name: ENTRY_COLLECTION_NAME, schema: EntrySchema },
           { name: SENSE_COLLECTION_NAME, schema: SenseSchema }
         ])
       ],

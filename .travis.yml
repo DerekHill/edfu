@@ -9,6 +9,7 @@ before_script:
 script:
   - ng test api
   - ng test erya
+  - SKIP_TENSORFLOW=yes ng run api:e2e
 deploy:
   provider: heroku
   app: edfu

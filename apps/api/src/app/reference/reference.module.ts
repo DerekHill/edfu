@@ -19,7 +19,6 @@ import { SignSchema } from './signs/schemas/sign.schema';
 import { EntrySensesService } from './entry-senses/entry-senses.service';
 import { EntrySenseSchema } from './entry-senses/schemas/entry-sense.schema';
 import { SimilarityService } from './similarity/similarity.service';
-import * as use from '@tensorflow-models/universal-sentence-encoder';
 import { SenseSignSchema } from './signs/schemas/sense-sign.schema';
 import { DictionaryResolver, SignsResolver } from './reference.resolver';
 import { ReferenceService } from './reference.service';
@@ -36,18 +35,10 @@ class TfUseMock {
   imports: [
     OxfordSearchesModule,
     MongooseModule.forFeature([
-      { name: ENTRY_COLLECTION_NAME, schema: EntrySchema }
-    ]),
-    MongooseModule.forFeature([
-      { name: SENSE_COLLECTION_NAME, schema: SenseSchema }
-    ]),
-    MongooseModule.forFeature([
-      { name: ENTRY_SENSE_COLLECTION_NAME, schema: EntrySenseSchema }
-    ]),
-    MongooseModule.forFeature([
-      { name: SENSE_SIGN_COLLECTION_NAME, schema: SenseSignSchema }
-    ]),
-    MongooseModule.forFeature([
+      { name: ENTRY_COLLECTION_NAME, schema: EntrySchema },
+      { name: SENSE_COLLECTION_NAME, schema: SenseSchema },
+      { name: ENTRY_SENSE_COLLECTION_NAME, schema: EntrySenseSchema },
+      { name: SENSE_SIGN_COLLECTION_NAME, schema: SenseSignSchema },
       { name: SIGN_COLLECTION_NAME, schema: SignSchema }
     ])
   ],
@@ -73,6 +64,9 @@ class TfUseMock {
         } else {
           console.warn(
             'Loading Universal Sentence Encoder Tensorflow model...'
+          );
+          const use = await import(
+            '@tensorflow-models/universal-sentence-encoder'
           );
           return await use.load();
         }

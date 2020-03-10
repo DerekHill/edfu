@@ -1,15 +1,21 @@
 language: node_js
 node_js:
   - 12.16.1
+services:
+  - mongodb
 branches:
   only:
     - master
 before_script:
   - npm install -g @angular/cli
-script:
-  - ng test api
-  - ng test erya
-  - SKIP_TENSORFLOW=yes ng run api:e2e
+jobs:
+  include:
+    - name: Backend unit tests
+      script: ng test api
+    - name: Backend integration tests
+      script: SKIP_TENSORFLOW=yes ng run api:e2e
+    - name: Frontend
+      script: ng test erya
 deploy:
   provider: heroku
   app: edfu

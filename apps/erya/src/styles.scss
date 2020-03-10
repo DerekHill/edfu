@@ -10,16 +10,4 @@ body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
-
-/* Added by Derek */
-p {
-  text-align: center;
-}
-
-h1 {
-  text-align: center;
-}
-
-div {
-  text-align: center;
-}
+@import "~bulma/bulma";

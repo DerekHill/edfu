@@ -21,9 +21,7 @@ describe('SignsService', () => {
       imports: [
         TestDatabaseModule,
         MongooseModule.forFeature([
-          { name: SENSE_SIGN_COLLECTION_NAME, schema: SenseSignSchema }
-        ]),
-        MongooseModule.forFeature([
+          { name: SENSE_SIGN_COLLECTION_NAME, schema: SenseSignSchema },
           { name: SIGN_COLLECTION_NAME, schema: SignSchema }
         ])
       ],

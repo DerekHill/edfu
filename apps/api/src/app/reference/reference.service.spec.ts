@@ -30,18 +30,10 @@ describe('ReferenceService', () => {
       imports: [
         TestDatabaseModule,
         MongooseModule.forFeature([
-          { name: ENTRY_COLLECTION_NAME, schema: EntrySchema }
-        ]),
-        MongooseModule.forFeature([
-          { name: ENTRY_SENSE_COLLECTION_NAME, schema: EntrySenseSchema }
-        ]),
-        MongooseModule.forFeature([
-          { name: SENSE_COLLECTION_NAME, schema: SenseSchema }
-        ]),
-        MongooseModule.forFeature([
-          { name: SENSE_SIGN_COLLECTION_NAME, schema: SenseSignSchema }
-        ]),
-        MongooseModule.forFeature([
+          { name: ENTRY_COLLECTION_NAME, schema: EntrySchema },
+          { name: ENTRY_SENSE_COLLECTION_NAME, schema: EntrySenseSchema },
+          { name: SENSE_COLLECTION_NAME, schema: SenseSchema },
+          { name: SENSE_SIGN_COLLECTION_NAME, schema: SenseSignSchema },
           { name: SIGN_COLLECTION_NAME, schema: SignSchema }
         ])
       ],

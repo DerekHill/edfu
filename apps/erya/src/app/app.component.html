@@ -1,9 +1,10 @@
-<mat-toolbar color="primary">
-  <button mat-button routerLink="/search" routerLinkActive="mat-accent">
-    Search
-  </button>
-  <button mat-button routerLink="/contribute" routerLinkActive="mat-accent">
-    Contribute
-  </button>
-</mat-toolbar>
-<router-outlet></router-outlet>
+<edfu-navbar></edfu-navbar>
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-two-thirds-desktop">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+</section>

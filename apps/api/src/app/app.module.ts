@@ -24,8 +24,8 @@ const CONFIG_CONFIG =
     : {};
 
 const imports = [
-  ConsoleModule,
   ConfigModule.forRoot(CONFIG_CONFIG),
+  ConsoleModule,
   TaskModule,
   MongooseModule.forRoot(process.env.MONGODB_URI, MONGOOSE_OPTIONS),
   GraphQLModule.forRoot({

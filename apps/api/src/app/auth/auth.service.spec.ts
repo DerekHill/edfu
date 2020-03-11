@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { UsersService } from '../users/users.service';
 import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from './constants';
 import { MongooseModule } from '@nestjs/mongoose';
 import {
   EMAIL_VERIFICATION_COLLECTION_NAME,
@@ -22,7 +21,7 @@ describe('AuthService', () => {
       imports: [
         TestDatabaseModule,
         JwtModule.register({
-          secret: jwtConstants.secret
+          secret: process.env.JWT_SECRET
         }),
         MongooseModule.forFeature([
           {

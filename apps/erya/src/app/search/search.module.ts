@@ -13,6 +13,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { SenseArrangerService } from './sense-grouping/sense-arranger.service';
 import { SensesModalComponent } from './senses-modal/senses-modal.component';
 import { RemoveUnderscoresPipe } from './pipes';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { RemoveUnderscoresPipe } from './pipes';
     MatInputModule,
     MatIconModule,
     MatDialogModule,
+    MatButtonModule,
     HotkeyModule
   ],
   entryComponents: [SensesModalComponent],

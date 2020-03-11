@@ -42,7 +42,7 @@
     "@angular/platform-browser-dynamic": "^9.0.0",
     "@angular/router": "^9.0.0",
     "@nestjs/common": "^6.8.3",
-    "@nestjs/config": "^0.2.4",
+    "@nestjs/config": "^0.3.0",
     "@nestjs/core": "^6.8.3",
     "@nestjs/graphql": "^6.5.3",
     "@nestjs/jwt": "^6.1.2",

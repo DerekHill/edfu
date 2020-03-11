@@ -56,7 +56,7 @@
     "@tensorflow/tfjs": "^1.5.2",
     "@types/bcryptjs": "^2.4.2",
     "@types/nodemailer": "^6.4.0",
-    "angular2-hotkeys": "^2.1.5",
+    "angular2-hotkeys": "^2.2.0",
     "apollo-angular": "^1.8.0",
     "apollo-angular-link-http": "^1.9.0",
     "apollo-cache-inmemory": "^1.6.0",
@@ -84,7 +84,7 @@
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "0.803.23",
+    "@angular-devkit/build-angular": "^0.900.5",
     "@angular/cli": "9.0.1",
     "@angular/compiler-cli": "^9.0.0",
     "@angular/language-service": "^9.0.0",

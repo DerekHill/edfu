@@ -6,6 +6,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 import { first } from 'rxjs/operators';
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'edfu-login',
@@ -22,8 +24,10 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    public library: FaIconLibrary
   ) {
+    library.addIcons(faLock, faEnvelope);
     if (this.authService.currentUserValue) {
       this.router.navigate(['/']);
     }

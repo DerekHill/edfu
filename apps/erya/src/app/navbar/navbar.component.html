@@ -41,34 +41,25 @@
     </div>
 
     <div class="navbar-end">
-      <div class="navbar-item">
-        <div class="field">
-          <p class="control">
-            <a
-              *ngIf="currentUser$ | async; else logIn"
-              class="button is-primary is-inverted is-outlined"
-              (click)="logout()"
-            >
-              <span class="icon">
-                <fa-icon [icon]="['fas', 'sign-out-alt']"></fa-icon>
-              </span>
-              <span>Logout</span>
-            </a>
+      <a
+        *ngIf="currentUser$ | async; else logIn"
+        class="navbar-item"
+        (click)="logout()"
+      >
+        <span class="icon">
+          <fa-icon [icon]="['fas', 'sign-out-alt']"></fa-icon>
+        </span>
+        <span>Logout</span>
+      </a>
 
-            <ng-template #logIn>
-              <a
-                class="button is-sm is-primary is-inverted is-outlined"
-                (click)="navigateTo('/login')"
-              >
-                <span class="icon">
-                  <fa-icon [icon]="['fas', 'sign-in-alt']"></fa-icon>
-                </span>
-                <span>Login</span>
-              </a>
-            </ng-template>
-          </p>
-        </div>
-      </div>
+      <ng-template #logIn>
+        <a class="navbar-item" (click)="navigateTo('/login')">
+          <span class="icon">
+            <fa-icon [icon]="['fas', 'sign-in-alt']"></fa-icon>
+          </span>
+          <span>Login</span>
+        </a>
+      </ng-template>
     </div>
   </div>
 </nav>

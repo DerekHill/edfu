@@ -72,4 +72,66 @@ describe('AuthController (e2e)', () => {
       expect(res.body.success).toBeTruthy();
     });
   });
+
+  //   https://gabrieltanner.org/blog/nestjs-graphqlserver
+  describe('graphql authentication', () => {
+    it('unauthenticated query', () => {
+      const basicTestQuery = `
+        query {
+          getTestSign{mnemonic}
+        }`;
+
+      return request(server)
+        .post('/graphql')
+        .send({
+          operationName: null,
+          query: basicTestQuery
+        })
+        .expect(({ body }) => {
+          const data = body.data.getTestSign;
+          expect(data.mnemonic).toBe('remember me');
+        });
+    });
+
+    describe('authenticated query and user decorator', () => {
+      it('returns 401 if no token is supplied', () => {
+        const authenticatedTestQuery = `
+              query {
+                  getAuthenticatedTestSign{mnemonic}
+              }`;
+
+        return request(server)
+          .post('/graphql')
+          .send({
+            operationName: null,
+            query: authenticatedTestQuery
+          })
+          .expect(({ body }) => {
+            expect(body.errors[0].message.statusCode).toBe(401);
+          });
+      });
+
+      it('works if token is supplied', async () => {
+        await registerUser(server, USER);
+        const token = await login(USER.email, USER.password, server);
+
+        const authenticatedTestQuery = `
+              query {
+                  getAuthenticatedTestSign{mnemonic}
+              }`;
+
+        return request(server)
+          .post('/graphql')
+          .set('Authorization', 'bearer ' + token)
+          .send({
+            operationName: null,
+            query: authenticatedTestQuery
+          })
+          .expect(({ body }) => {
+            const data = body.data.getAuthenticatedTestSign;
+            expect(data.mnemonic).toBe(USER.email);
+          });
+      });
+    });
+  });
 });

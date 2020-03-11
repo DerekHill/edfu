@@ -20,7 +20,11 @@ import { EntrySensesService } from './entry-senses/entry-senses.service';
 import { EntrySenseSchema } from './entry-senses/schemas/entry-sense.schema';
 import { SimilarityService } from './similarity/similarity.service';
 import { SenseSignSchema } from './signs/schemas/sense-sign.schema';
-import { DictionaryResolver, SignsResolver } from './reference.resolver';
+import {
+  DictionaryResolver,
+  SignsResolver,
+  TestResolver
+} from './reference.resolver';
 import { ReferenceService } from './reference.service';
 
 class TfUseMock {
@@ -48,6 +52,7 @@ class TfUseMock {
     SensesService,
     DictionaryResolver,
     SignsResolver,
+    TestResolver,
     EntriesResolver,
     SignsService,
     EntrySensesService,

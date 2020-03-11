@@ -3,6 +3,11 @@ import { ReferenceService } from './reference.service';
 import { SenseForEntryDto } from './senses/dto/sense.dto';
 import { SenseSignDto } from './signs/dto/sense-sign.dto';
 import { SignDto } from './signs/dto/sign.dto';
+import { ObjectId } from 'bson';
+import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
+import { UseGuards } from '@nestjs/common';
+import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { BasicUser } from '@edfu/api-interfaces';
 
 @Resolver(of => SenseForEntryDto)
 export class DictionaryResolver {
@@ -45,5 +50,27 @@ export class SignsResolver {
   @ResolveProperty(returns => SignDto)
   sign(@Root() ss: SenseSignDto) {
     return this.service.findOneSign(ss.signId);
+  }
+}
+
+@Resolver('Test')
+export class TestResolver {
+  @Query(returns => SignDto)
+  getTestSign(): Promise<SignDto> {
+    return Promise.resolve({
+      _id: new ObjectId(),
+      mnemonic: 'remember me',
+      mediaUrl: 'www.com'
+    });
+  }
+
+  @Query(returns => SignDto)
+  @UseGuards(GqlAuthGuard)
+  getAuthenticatedTestSign(@CurrentUser() user: BasicUser): Promise<SignDto> {
+    return Promise.resolve({
+      _id: new ObjectId(),
+      mnemonic: user.email,
+      mediaUrl: 'www.com'
+    });
   }
 }

@@ -12,8 +12,8 @@ import {
 } from '../constants';
 import { transporter } from '../config/mail';
 import * as bcrypt from 'bcryptjs';
-import { UserDto } from '../users/dto/user.dto';
 import { ForgottenPassword } from './interfaces/forgottenpassword.interface';
+import { BasicUser } from '@edfu/api-interfaces';
 
 const EMAIL_VERIFICATION_TIMEOUT_MINUTES = 1;
 
@@ -38,7 +38,7 @@ export class AuthService {
     const isValidPass = await bcrypt.compare(password, userFromDb.password);
 
     if (isValidPass) {
-      const user: UserDto = {
+      const user: BasicUser = {
         email: userFromDb.email,
         username: userFromDb.username,
         roles: userFromDb.roles
@@ -49,10 +49,13 @@ export class AuthService {
     }
   }
 
-  async login(user: any) {
+  async login(user: BasicUser): Promise<BasicUser> {
     const payload = { email: user.email, sub: user.email };
     return {
-      access_token: this.jwtService.sign(payload)
+      ...user,
+      ...{
+        access_token: this.jwtService.sign(payload)
+      }
     };
   }
 

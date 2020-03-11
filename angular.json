@@ -24,9 +24,7 @@
             "aot": true,
             "assets": ["apps/erya/src/favicon.ico", "apps/erya/src/assets"],
             "stylePreprocessorOptions": {
-              "includePaths": [
-                "apps/erya/src/assets/stylesheets"
-              ]
+              "includePaths": ["apps/erya/src/assets/stylesheets"]
             },
             "styles": [
               "apps/erya/src/styles.scss",

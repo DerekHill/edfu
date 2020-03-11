@@ -20,7 +20,7 @@ const defaultOptions: DefaultOptions = {
 };
 
 export function createApollo(httpLink: HttpLink) {
-  const http = httpLink.create({ uri: environment.graphqlUri });
+  const http = httpLink.create({ uri: `${environment.apiUri}/graphql` });
 
   const error = onError((e: any) => {
     console.log('apollo-link-error found error:');

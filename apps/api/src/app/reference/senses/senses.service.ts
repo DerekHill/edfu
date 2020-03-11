@@ -222,7 +222,7 @@ export class SensesService {
       )
       .lean()
       .exec();
-    //   .replace(/,/g, '')
+
     for (const sense of senses) {
       console.log(
         `${sense.ownEntryOxId},${sense.senseId},${this.replace(

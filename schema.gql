@@ -27,6 +27,8 @@ type Query {
   oxIds(filter: Boolean = false, searchString: String!): [String!]!
   senses(senseId: String = "", filter: Boolean = false, oxId: String!): [SenseForEntryDto!]!
   signs(senseId: String!): [SenseSignDto!]!
+  getTestSign: SignDto!
+  getAuthenticatedTestSign: SignDto!
 }
 
 type SenseForEntryDto {

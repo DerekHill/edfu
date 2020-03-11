@@ -29,7 +29,8 @@ const imports = [
   TaskModule,
   MongooseModule.forRoot(process.env.MONGODB_URI, MONGOOSE_OPTIONS),
   GraphQLModule.forRoot({
-    autoSchemaFile: 'schema.gql'
+    autoSchemaFile: 'schema.gql',
+    context: ({ req }) => ({ req })
   }),
   OxfordApiModule,
   ReferenceModule,

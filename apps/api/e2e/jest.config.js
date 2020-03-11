@@ -7,5 +7,6 @@ module.exports = {
   testEnvironment: 'node', // https://mongoosejs.com/docs/jest.html
   transform: {
     '^.+\\.(ts|js|html)$': 'ts-jest'
-  }
+  },
+  verbose: false
 };

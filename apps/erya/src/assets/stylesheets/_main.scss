@@ -5,3 +5,10 @@ mat-form-field {
 .is-fullwidth-er {
   width: 100%;
 }
+
+.sub-navbar {
+  .mat-form-field-flex {
+    background-color: #ffffff;
+    padding: 5px;
+  }
+}

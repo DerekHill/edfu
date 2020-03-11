@@ -17,6 +17,7 @@ import { LoaderService } from './loader/loader.service';
 import { ReferenceModule } from '../reference/reference.module';
 import { SenseSignSchema } from '../reference/signs/schemas/sense-sign.schema';
 import { SignSchema } from '../reference/signs/schemas/sign.schema';
+import { UsersModule } from '../users/users.module';
 
 @Module({
   imports: [
@@ -28,7 +29,8 @@ import { SignSchema } from '../reference/signs/schemas/sign.schema';
       { name: SENSE_SIGN_COLLECTION_NAME, schema: SenseSignSchema },
       { name: SIGN_COLLECTION_NAME, schema: SignSchema }
     ]),
-    ReferenceModule
+    ReferenceModule,
+    UsersModule
   ],
   controllers: [],
   providers: [TaskService, FixturesService, LoaderService],

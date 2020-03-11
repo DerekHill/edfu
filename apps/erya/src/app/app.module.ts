@@ -11,6 +11,9 @@ import { SearchModule } from './search/search.module';
 import { SearchComponent } from './search/search.component';
 import { HotkeyModule } from 'angular2-hotkeys';
 import { NavbarModule } from './navbar/navbar.module';
+import { MatButtonModule } from '@angular/material/button';
+import { LoginComponent } from './login/login.component';
+import { LoginModule } from './login/login.module';
 
 const appRoutes: Routes = [
   {
@@ -22,6 +25,7 @@ const appRoutes: Routes = [
     component: SearchComponent
   },
   { path: 'contribute', component: ContributeComponent },
+  { path: 'login', component: LoginComponent },
   { path: '', redirectTo: '/search', pathMatch: 'full' }
 ];
 
@@ -29,6 +33,7 @@ const appRoutes: Routes = [
   declarations: [AppComponent],
   imports: [
     ContributeModule,
+    LoginModule,
     SearchModule,
     NavbarModule,
     RouterModule.forRoot(

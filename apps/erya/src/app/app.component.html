@@ -1,2 +1,7 @@
 <edfu-navbar></edfu-navbar>
 <router-outlet></router-outlet>
+
+<!-- Move somewhere better -->
+<div *ngIf="currentUser">
+  <button (click)="logout()">Logout</button>
+</div>

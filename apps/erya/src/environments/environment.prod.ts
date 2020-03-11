@@ -17,6 +17,6 @@ export class SentryErrorHandler implements ErrorHandler {
 
 export const environment = {
   production: true,
-  graphqlUri: 'https://edfu.herokuapp.com/graphql',
+  apiUri: 'https://edfu.herokuapp.com',
   providers: [{ provide: ErrorHandler, useClass: SentryErrorHandler }]
 };

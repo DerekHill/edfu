@@ -22,6 +22,8 @@ import { HeadwordOrPhrase } from '../../enums';
 import { EntrySenseRecordWithoutId } from '../../reference/entry-senses/interfaces/entry-sense.interface';
 import { ObjectId } from 'bson';
 import { SignRecord, SenseSignRecordWithoutId } from '@edfu/api-interfaces';
+import { CreateUserDto } from '../../users/dto/create-user.dto';
+import { UsersService } from '../../users/users.service';
 
 const FOOD = 'food';
 const FAST = 'fast';
@@ -1267,6 +1269,12 @@ const SIGNS: SignRecord[] = [
   }
 ];
 
+const USER: CreateUserDto = {
+  username: 'fred',
+  email: 'fred@gmail.com',
+  password: 'pass'
+};
+
 @Injectable()
 export class FixturesService {
   constructor(
@@ -1279,7 +1287,8 @@ export class FixturesService {
     @InjectModel(SENSE_SIGN_COLLECTION_NAME)
     private readonly senseSignModel: Model<SenseDocument>,
     @InjectModel(SIGN_COLLECTION_NAME)
-    private readonly signModel: Model<SenseDocument>
+    private readonly signModel: Model<SenseDocument>,
+    private userService: UsersService
   ) {}
 
   populateCollection(model: Model<any>, data: object[], conditionsGenerator) {
@@ -1355,6 +1364,7 @@ export class FixturesService {
       SIGNS,
       this.signConditionsGenerator
     );
+    await this.userService.createNewUser(USER);
     return console.log('Fixtures created!');
   }
 }

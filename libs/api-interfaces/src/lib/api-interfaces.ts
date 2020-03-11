@@ -46,3 +46,9 @@ export interface HydratedSense
     CombinedSenseOptionalExposedProperties {
   signs?: SignRecord[];
 }
+
+export interface BasicUser {
+  readonly email: string;
+  readonly username: string;
+  readonly roles: string[];
+}

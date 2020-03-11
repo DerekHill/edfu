@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { GraphQLModule } from './graphql.module';
 import { RouterModule, Routes } from '@angular/router';
@@ -11,9 +11,11 @@ import { SearchModule } from './search/search.module';
 import { SearchComponent } from './search/search.component';
 import { HotkeyModule } from 'angular2-hotkeys';
 import { NavbarModule } from './navbar/navbar.module';
-import { MatButtonModule } from '@angular/material/button';
 import { LoginComponent } from './login/login.component';
 import { LoginModule } from './login/login.module';
+import { JwtInterceptor } from './shared/interceptors/jwt.interceptor';
+import { ErrorInterceptor } from './shared/interceptors/error.interceptor';
+import { AuthGuard } from './auth/auth.guard';
 
 const appRoutes: Routes = [
   {
@@ -24,7 +26,11 @@ const appRoutes: Routes = [
     path: 'search',
     component: SearchComponent
   },
-  { path: 'contribute', component: ContributeComponent },
+  {
+    path: 'contribute',
+    component: ContributeComponent,
+    canActivate: [AuthGuard]
+  },
   { path: 'login', component: LoginComponent },
   { path: '', redirectTo: '/search', pathMatch: 'full' }
 ];
@@ -45,6 +51,10 @@ const appRoutes: Routes = [
     NoopAnimationsModule,
     GraphQLModule,
     HotkeyModule.forRoot()
+  ],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

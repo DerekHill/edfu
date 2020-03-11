@@ -5,8 +5,8 @@ import { Message } from '@edfu/api-interfaces';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { Subscription } from 'rxjs';
-import { untilDestroyed } from 'ngx-take-until-destroy';
 import { FormControl } from '@angular/forms';
+import { environment } from '../../environments/environment';
 
 const Hello = gql`
   query {
@@ -51,6 +51,12 @@ export class ContributeComponent implements OnInit, OnDestroy {
       .subscribe(({ data, loading }) => {
         this.hello2 = data;
       });
+
+    const jwtInterceptorTest = this.http.get<any>(
+      `${environment.apiUri}/api/auth/profile`
+    );
+
+    jwtInterceptorTest.subscribe(r => console.log(r));
   }
 
   ngOnDestroy() {}

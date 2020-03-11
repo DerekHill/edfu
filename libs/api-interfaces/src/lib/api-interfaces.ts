@@ -51,4 +51,5 @@ export interface BasicUser {
   readonly email: string;
   readonly username: string;
   readonly roles: string[];
+  readonly access_token?: string;
 }

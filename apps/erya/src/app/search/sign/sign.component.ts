@@ -31,7 +31,6 @@ export class SignComponent {
     } else if (/.mp4$/.test(filename)) {
       return true;
     } else {
-      console.log(`File of unknown media type: ${filename}`);
       return true;
     }
   }

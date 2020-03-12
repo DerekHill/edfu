@@ -6,6 +6,7 @@ import { MatListModule } from '@angular/material/list';
 import { SenseComponent } from '../sense/sense.component';
 import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
 import { YouTubePlayerModule } from '@angular/youtube-player';
+import { DeviceDetectorModule } from 'ngx-device-detector';
 
 describe('SignComponent', () => {
   let component: SignComponent;
@@ -14,7 +15,11 @@ describe('SignComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [SignComponent, SenseComponent],
-      imports: [MatListModule, YouTubePlayerModule]
+      imports: [
+        MatListModule,
+        YouTubePlayerModule,
+        DeviceDetectorModule.forRoot()
+      ]
     }).compileComponents();
   }));
 

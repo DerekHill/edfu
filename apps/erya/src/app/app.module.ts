@@ -16,6 +16,7 @@ import { LoginModule } from './login/login.module';
 import { JwtInterceptor } from './shared/interceptors/jwt.interceptor';
 import { ErrorInterceptor } from './shared/interceptors/error.interceptor';
 import { AuthGuard } from './auth/auth.guard';
+import { DeviceDetectorModule } from 'ngx-device-detector';
 
 const appRoutes: Routes = [
   {
@@ -50,7 +51,8 @@ const appRoutes: Routes = [
     HttpClientModule,
     NoopAnimationsModule,
     GraphQLModule,
-    HotkeyModule.forRoot()
+    HotkeyModule.forRoot(),
+    DeviceDetectorModule.forRoot()
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

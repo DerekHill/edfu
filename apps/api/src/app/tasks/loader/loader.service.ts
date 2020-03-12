@@ -16,6 +16,7 @@ export class LoaderService {
       const WAIT_TIME_MILLISECONDS = 60 * 1000;
       await new Promise(resolve => setTimeout(resolve, WAIT_TIME_MILLISECONDS));
     }
+    console.log('finished loading words');
   }
 
   printSenses() {

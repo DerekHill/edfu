@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { HydratedSense, SignRecord } from '@edfu/api-interfaces';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 export enum MediaType {
   htmlVideo = 'htmlVideo',
@@ -17,6 +18,8 @@ export class SignComponent implements OnInit {
   _sign: SignRecord;
   mediaType: MediaType;
   youtubeVideoId: string;
+
+  constructor(private deviceService: DeviceDetectorService) {}
 
   @Input() sense: HydratedSense;
   @Input()
@@ -40,15 +43,18 @@ export class SignComponent implements OnInit {
   }
 
   onYouTubePlayerReady() {
-    console.log('YouTube player is ready');
     this.youTubePlayer.mute();
-    this.youTubePlayer.playVideo();
-    console.log('player muted');
+    this._playIfNotMobile();
   }
 
   onYouTubePlayerStateChange(event) {
-    console.log(event);
     if (event.data === 0) {
+      this._playIfNotMobile();
+    }
+  }
+
+  _playIfNotMobile() {
+    if (!this.deviceService.isMobile()) {
       this.youTubePlayer.playVideo();
     }
   }

@@ -49,7 +49,8 @@ export class SignComponent implements OnInit {
 
   onYouTubePlayerStateChange(event) {
     if (event.data === 0) {
-      this._playIfNotMobile();
+      this.youTubePlayer.playVideo();
+      //   this._playIfNotMobile();
     }
   }
 

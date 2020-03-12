@@ -42,6 +42,10 @@ export class SignComponent implements OnInit {
     document.body.appendChild(tag);
   }
 
+  youtubePlayAgain() {
+    this.youTubePlayer.playVideo();
+  }
+
   onYouTubePlayerReady() {
     this.youTubePlayer.mute();
     this._playIfNotMobile();

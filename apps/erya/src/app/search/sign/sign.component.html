@@ -16,6 +16,7 @@
       (ready)="onYouTubePlayerReady($event)"
       (stateChange)="onYouTubePlayerStateChange($event)"
     ></youtube-player>
+    <button (click)="youtubePlayAgain()">play again</button>
   </div>
 
   <div *ngSwitchDefault>

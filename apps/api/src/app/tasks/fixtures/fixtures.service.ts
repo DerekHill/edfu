@@ -116,6 +116,14 @@ const SIGN_ID_THANK_YOU_2 = new ObjectId('000000000000000000000018');
 const SIGN_ID_FAST_SPEED = new ObjectId('000000000000000000000019');
 const SIGN_ID_SLOW = new ObjectId('00000000000000000000001A');
 const SIGN_ID_FAST_ABSTAIN = new ObjectId('00000000000000000000001B');
+const SIGN_ID_PLAYGROUND = new ObjectId('00000000000000000000001C');
+const SIGN_ID_SLIDE = new ObjectId('00000000000000000000001D');
+const SIGN_ID_PENGUIN = new ObjectId('00000000000000000000001E');
+const SIGN_ID_TREE = new ObjectId('00000000000000000000001F');
+const SIGN_ID_GRASS = new ObjectId('000000000000000000000020');
+const SIGN_ID_PANCAKE = new ObjectId('000000000000000000000021');
+const SIGN_ID_RAIN = new ObjectId('000000000000000000000022');
+const SIGN_ID_SUMMER = new ObjectId('000000000000000000000023');
 
 const ENTRIES: EntryRecordWithoutId[] = [
   {
@@ -1119,7 +1127,15 @@ const SENSE_SIGNS: SenseSignRecordWithoutId[] = [
   { senseId: 'm_en_gbus0352370.007', signId: SIGN_ID_FAST_SPEED },
   { senseId: 'm_en_gbus0352370.035', signId: SIGN_ID_FAST_SPEED },
   { senseId: 'm_en_gbus0352380.005', signId: SIGN_ID_FAST_ABSTAIN },
-  { senseId: 'm_en_gbus0352380.019', signId: SIGN_ID_FAST_ABSTAIN }
+  { senseId: 'm_en_gbus0352380.019', signId: SIGN_ID_FAST_ABSTAIN },
+  { senseId: 'm_en_gbus0789130.005', signId: SIGN_ID_PLAYGROUND },
+  { senseId: 'm_en_gbus0955100.022', signId: SIGN_ID_SLIDE },
+  { senseId: 'm_en_gbus0762390.005', signId: SIGN_ID_PENGUIN },
+  { senseId: 'm_en_gbus1071800.006', signId: SIGN_ID_TREE },
+  { senseId: 'm_en_gbus0428950.006', signId: SIGN_ID_GRASS },
+  { senseId: 'm_en_gbus0744430.006', signId: SIGN_ID_PANCAKE },
+  { senseId: 'm_en_gbus0842610.005', signId: SIGN_ID_RAIN },
+  { senseId: 'm_en_gbus1011890.005', signId: SIGN_ID_SUMMER }
 ];
 
 const SIGNS: SignRecord[] = [
@@ -1265,6 +1281,38 @@ const SIGNS: SignRecord[] = [
   {
     _id: SIGN_ID_FAST_ABSTAIN,
     mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/fast_abstain.mp4',
+    mnemonic: ''
+  },
+  {
+    _id: SIGN_ID_PLAYGROUND,
+    mediaUrl: 'https://youtu.be/5IzZidIUCJE',
+    mnemonic: ''
+  },
+  {
+    _id: SIGN_ID_SLIDE,
+    mediaUrl: 'https://youtu.be/L4AGZMh17-U',
+    mnemonic: ''
+  },
+  {
+    _id: SIGN_ID_PENGUIN,
+    mediaUrl: 'https://youtu.be/pTDNNh5QNMc',
+    mnemonic: ''
+  },
+  { _id: SIGN_ID_TREE, mediaUrl: 'https://youtu.be/eQ5Xaxe_WHQ', mnemonic: '' },
+  {
+    _id: SIGN_ID_GRASS,
+    mediaUrl: 'https://youtu.be/fAHuPixQcyE',
+    mnemonic: ''
+  },
+  {
+    _id: SIGN_ID_PANCAKE,
+    mediaUrl: 'https://youtu.be/6cxRS-XGIro',
+    mnemonic: ''
+  },
+  { _id: SIGN_ID_RAIN, mediaUrl: 'https://youtu.be/6D6yOWq0YNg', mnemonic: '' },
+  {
+    _id: SIGN_ID_SUMMER,
+    mediaUrl: 'https://youtu.be/4NVpNPo0yPk',
     mnemonic: ''
   }
 ];

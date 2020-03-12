@@ -2,29 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { EntriesService } from '../../reference/entries/entries.service';
 import { SensesService } from '../../reference/senses/senses.service';
 
-const WORDS = [
-  'good morning',
-  'good afternoon',
-  'help',
-  'more',
-  'please',
-  'thank you',
-  'break',
-  'bad',
-  'begin',
-  'good',
-  'goodbye',
-  'happy',
-  'hello',
-  'look',
-  'no',
-  'sad',
-  'slow',
-  'stop',
-  'toilet',
-  'yes'
-];
-
 @Injectable()
 export class LoaderService {
   constructor(
@@ -32,8 +9,8 @@ export class LoaderService {
     private readonly sensesService: SensesService
   ) {}
 
-  async load() {
-    for (const word of WORDS) {
+  async load(words: string[]) {
+    for (const word of words) {
       console.log(`-----Loading ${word}-----`);
       await this.loadWord(word);
       const WAIT_TIME_MILLISECONDS = 60 * 1000;

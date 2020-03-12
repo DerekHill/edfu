@@ -42,11 +42,55 @@ export class TaskService {
   }
 
   @Command({
-    command: 'load'
+    command: 'load1'
   })
-  async load() {
+  async load1() {
+    const words_1 = [
+      'good morning',
+      'good afternoon',
+      'help',
+      'more',
+      'please',
+      'thank you',
+      'break',
+      'bad',
+      'begin',
+      'good',
+      'goodbye',
+      'happy',
+      'hello',
+      'look',
+      'no',
+      'sad',
+      'slow',
+      'stop',
+      'toilet',
+      'yes'
+    ];
     try {
-      await this.loaderService.load();
+      await this.loaderService.load(words_1);
+    } catch (error) {
+      console.error(error);
+    }
+    process.exit();
+  }
+
+  @Command({
+    command: 'load2'
+  })
+  async load2() {
+    const words = [
+      'playground',
+      'slide',
+      'penguin',
+      'tree',
+      'grass',
+      'pancake',
+      'rain',
+      'summer'
+    ];
+    try {
+      await this.loaderService.load(words);
     } catch (error) {
       console.error(error);
     }

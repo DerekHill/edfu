@@ -14,6 +14,7 @@ import { SenseArrangerService } from './sense-grouping/sense-arranger.service';
 import { SensesModalComponent } from './senses-modal/senses-modal.component';
 import { RemoveUnderscoresPipe } from './pipes';
 import { MatButtonModule } from '@angular/material/button';
+import { YouTubePlayerModule } from '@angular/youtube-player';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatIconModule,
     MatDialogModule,
     MatButtonModule,
-    HotkeyModule
+    HotkeyModule,
+    YouTubePlayerModule
   ],
   entryComponents: [SensesModalComponent],
   providers: [SenseArrangerService]

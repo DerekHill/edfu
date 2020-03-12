@@ -1,11 +1,35 @@
-<div *ngIf="isVideo; then thenBlock; else elseBlock"></div>
-<ng-template #thenBlock>
+<div [ngSwitch]="mediaType">
+  <div *ngSwitchCase="'htmlVideo'">
     <video autoplay loop playsinline [muted]="true">
       <source src="{{ sign.mediaUrl }}" type="video/mp4" />
     </video>
-    <edfu-sense [sense]="sense"> </edfu-sense>
-</ng-template>
-<ng-template #elseBlock>
-      <img class="is-fullwidth-er" src="{{ sign.mediaUrl }}" />
-      <p class="has-text-centered">{{ sign.mnemonic }}</p>
-</ng-template>
+  </div>
+
+  <div *ngSwitchCase="'youtube'">
+    <!-- Dmitry: Here are the youtube player docs FYI. Feel free to delete these comments -->
+    <!-- Once you have had a look -->
+    <!-- https://github.com/angular/components/tree/master/src/youtube-player -->
+    <!-- https://medium.com/angular-in-depth/the-new-angular-youtube-player-component-9ce52ecf3dee -->
+    <youtube-player
+      #youtubeplayer
+      [videoId]="youtubeVideoId"
+      (ready)="onYouTubePlayerReady($event)"
+      (stateChange)="onYouTubePlayerStateChange($event)"
+    ></youtube-player>
+  </div>
+
+  <div *ngSwitchDefault>
+    <img class="is-fullwidth-er" src="{{ sign.mediaUrl }}" />
+  </div>
+</div>
+
+<!-- Dmitry: I moved this out of the video block because we should include this information -->
+<!-- regardless of the media type -->
+<edfu-sense [sense]="sense"> </edfu-sense>
+<!-- Dmitry: I moved this out of the elseBlock because we should include this information -->
+<!-- regardless of the media type.  However we need to figure out how the optional mnemonic -->
+<!-- (which is something to help you remember the sign) fit with the sense information -->
+<!-- (which is about the word that is being defined).  I think the mnemonic is more important -->
+<!-- but I'm not sure how many signs will have these.  Maybe we should display the mnemonic if it -->
+<!-- exists, otherwise the sense information -->
+<!-- <p class="has-text-centered">{{ sign.mnemonic }}</p> -->

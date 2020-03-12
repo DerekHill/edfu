@@ -72,7 +72,7 @@
     "bcryptjs": "^2.4.3",
     "bulma": "^0.8.0",
     "commander": "^4.1.1",
-    "core-js": "^2.5.4",
+    "core-js": "^3.6.4",
     "graphql": "^14.5.0",
     "graphql-tag": "^2.10.0",
     "mongoose": "^5.8.0",

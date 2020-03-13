@@ -9,7 +9,11 @@ import { TestDatabaseModule } from '../../config/test-database.module';
 import { SignSchema } from './schemas/sign.schema';
 import { ObjectId } from 'bson';
 import { SenseSignSchema } from './schemas/sense-sign.schema';
-import { SignRecord, SenseSignRecordWithoutId } from '@edfu/api-interfaces';
+import {
+  SignRecord,
+  SenseSignRecordWithoutId,
+  SignRecordWithoutId
+} from '@edfu/api-interfaces';
 import { SignTestSetupService } from './sign-test-setup.service';
 
 describe('SignsService', () => {
@@ -35,6 +39,7 @@ describe('SignsService', () => {
   it('SignsTestSetupService.create', async () => {
     const data: SignRecord = {
       _id: new ObjectId(),
+      userId: new ObjectId(),
       mnemonic: 'foo',
       mediaUrl: 'link'
     };
@@ -47,6 +52,7 @@ describe('SignsService', () => {
     const signId = new ObjectId();
     const senseSignData: SenseSignRecordWithoutId[] = [
       {
+        userId: new ObjectId(),
         senseId: senseId,
         signId: signId
       }
@@ -60,4 +66,18 @@ describe('SignsService', () => {
     const res = await service.getSenseSigns(senseId);
     expect(res[0].signId).toEqual(signId);
   });
+
+  it('createSignWithAssociations', async () => {
+    const mnemonic = 'remember!';
+    const signData: SignRecordWithoutId = {
+      userId: new ObjectId(),
+      mediaUrl: 'www.goo.com',
+      mnemonic: mnemonic
+    };
+    const senseIds = ['id1', 'id2'];
+    const sign = await service.createSignWithAssociations(signData, senseIds);
+    expect(sign.mnemonic).toBe(mnemonic);
+  });
+
+  it.skip('handles mediaUrl that already exists', () => {});
 });

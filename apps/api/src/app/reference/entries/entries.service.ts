@@ -25,6 +25,7 @@ import {
 import { HeadwordOrPhrase } from '../../enums';
 import { EntrySensesService } from '../entry-senses/entry-senses.service';
 import { SimilarityService } from '../similarity/similarity.service';
+import { UniqueEntry } from '@edfu/api-interfaces';
 
 @Injectable()
 export class EntriesService {
@@ -37,6 +38,16 @@ export class EntriesService {
     private readonly entrySensesService: EntrySensesService,
     private readonly similarityService: SimilarityService
   ) {}
+
+  async findOrCreateAndKickoffRelatedEntries(
+    chars: string
+  ): Promise<EntryRecord[]> {
+    const entries = await this.findOrCreateWithOwnSensesOnly(chars);
+    for (const entry of entries) {
+      this.addRelatedEntries(entry); // Not awaited
+    }
+    return entries;
+  }
 
   async findOrCreateWithOwnSensesOnly(chars: string): Promise<EntryRecord[]> {
     const existing: EntryRecord[] = await this.entryModel
@@ -66,7 +77,7 @@ export class EntriesService {
 
     const entries = await Promise.all(
       entrySearchResults.map(record =>
-        this.findOrCreateEntryFromSearchRecord(record)
+        this._findOrCreateEntryFromSearchRecord(record)
       )
     );
 
@@ -79,43 +90,49 @@ export class EntriesService {
     return Promise.all(entries.map(this.getLatest));
   }
 
-  async addRelatedEntries(
-    oxId: string,
-    homographC: number
-  ): Promise<EntryRecord[]> {
-    const res = await this.entryModel
-      .findOne({ oxId: oxId, homographC: homographC })
+  async addRelatedEntries(ue: UniqueEntry): Promise<EntryRecord[]> {
+    const existing = await this.entryModel
+      .findOne(ue)
       .lean()
       .exec();
 
-    if (!res) {
+    if (!existing) {
       throw new Error(
-        `Entry not found with oxId: ${oxId} and homographC: ${homographC}`
+        `Entry not found with oxId: ${ue.oxId} and homographC: ${ue.homographC}`
+      );
+    }
+
+    if (existing.relatedEntriesAdded) {
+      return [existing];
+    } else {
+      await this.entryModel.findOneAndUpdate(
+        { _id: existing._id },
+        { relatedEntriesAdded: true }
       );
     }
 
     const thesaurusSearchResults = await this.thesaurusSearchesService.findOrFetch(
-      oxId
+      ue.oxId
     );
 
     if (
       this.isNotFoundInOxfordApi(
         DictionaryOrThesaurus.thesaurus,
         thesaurusSearchResults,
-        oxId
+        ue.oxId
       )
     ) {
       return [];
     }
 
-    const matchingResult: OxfordSearchRecord = this.filterResultsByHomographC(
+    const matchingResult: OxfordSearchRecord = this._filterResultsByHomographC(
       thesaurusSearchResults,
-      homographC
+      ue.homographC
     );
 
     if (!matchingResult) {
       console.warn(
-        `No thesaurus result for ${oxId} with homographC: ${homographC}`
+        `No thesaurus result for ${ue.oxId} with homographC: ${ue.homographC}`
       );
       return [];
     }
@@ -156,7 +173,7 @@ export class EntriesService {
       for (const dictionarySense of sensePairing.dictionarySenses) {
         for (const synonym of sensePairing.thesaurusSense.synonyms) {
           promises2.push(
-            this.findOrCreateSynonymEntryAndAssociations(
+            this._findOrCreateSynonymEntryAndAssociations(
               dictionarySense,
               synonym,
               sensePairing.thesaurusSense.lexicalCategory,
@@ -172,7 +189,7 @@ export class EntriesService {
     return newSynonymEntries.flat();
   }
 
-  findOrCreateSensesWithAssociations = (
+  private findOrCreateSensesWithAssociations = (
     searchRecord: OxfordSearchRecord
   ): Promise<DictionarySenseRecord>[] => {
     const promises: Promise<DictionarySenseRecord>[] = [];
@@ -196,14 +213,14 @@ export class EntriesService {
     return promises;
   };
 
-  getLatest = (record: EntryRecord) => {
+  private getLatest = (record: EntryRecord) => {
     return this.entryModel
       .findById(record._id)
       .lean()
       .exec();
   };
 
-  isNotFoundInOxfordApi(
+  private isNotFoundInOxfordApi(
     dictionaryOrThesaurus: DictionaryOrThesaurus,
     results: OxfordSearchRecord[],
     string: string
@@ -224,7 +241,7 @@ export class EntriesService {
     }
   }
 
-  filterResultsByHomographC(
+  _filterResultsByHomographC(
     results: OxfordSearchRecord[],
     homographC: number
   ): OxfordSearchRecord {
@@ -234,7 +251,7 @@ export class EntriesService {
     return results.filter(result => result.homographC === homographC)[0];
   }
 
-  async findOrCreateSynonymEntryAndAssociations(
+  async _findOrCreateSynonymEntryAndAssociations(
     dictionarySense: DictionarySenseRecord,
     synonym: string,
     thesaurusSenseLexicalCategory: LexicalCategory,
@@ -270,7 +287,7 @@ export class EntriesService {
     return entries;
   }
 
-  findOrCreateEntryFromSearchRecord = async (
+  _findOrCreateEntryFromSearchRecord = async (
     record: OxfordSearchRecord
   ): Promise<EntryRecord> => {
     const conditions = {
@@ -306,11 +323,4 @@ export class EntriesService {
       }
     }
   };
-
-  //   find(oxId: string): Promise<EntryRecord[]> {
-  //     return this.entryModel
-  //       .find({ oxId: oxId })
-  //       .lean()
-  //       .exec();
-  //   }
 }

@@ -70,6 +70,7 @@ describe('ReferenceService', () => {
       };
 
       const senseSignData = {
+        userId: new ObjectId(),
         senseId: `${SENSE_ID}`,
         signId: new ObjectId()
       };
@@ -88,12 +89,14 @@ describe('ReferenceService', () => {
       const SIGN_ID = new ObjectId();
 
       const senseSignData = {
+        userId: new ObjectId(),
         senseId: `${SENSE_ID}`,
         signId: SIGN_ID
       };
 
       const signData: SignRecord = {
         _id: SIGN_ID,
+        userId: new ObjectId(),
         mnemonic: 'remember me',
         mediaUrl: 'www.my-picture-link.com'
       };
@@ -121,6 +124,7 @@ describe('ReferenceService', () => {
       };
 
       const senseSignData = {
+        userId: new ObjectId(),
         senseId: `${SENSE_ID}`,
         signId: new ObjectId()
       };

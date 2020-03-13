@@ -1,10 +1,13 @@
 import * as mongoose from 'mongoose';
+import { ObjectId } from 'bson';
 
-// Need to add userId
 export const SignSchema = new mongoose.Schema({
-  mnemonic: {
-    type: String,
+  userId: {
+    type: ObjectId,
     required: true
+  },
+  mnemonic: {
+    type: String
   },
   mediaUrl: {
     type: String,
@@ -12,4 +15,4 @@ export const SignSchema = new mongoose.Schema({
   }
 });
 
-SignSchema.index({ senseId: 1 });
+SignSchema.index({ mediaUrl: 1 });

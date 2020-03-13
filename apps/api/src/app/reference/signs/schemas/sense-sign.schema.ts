@@ -2,6 +2,10 @@ import { ObjectId } from 'bson';
 import * as mongoose from 'mongoose';
 
 export const SenseSignSchema = new mongoose.Schema({
+  userId: {
+    type: ObjectId,
+    required: true
+  },
   senseId: {
     type: String,
     required: true

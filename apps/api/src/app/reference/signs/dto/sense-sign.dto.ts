@@ -6,6 +6,9 @@ import { SenseSignDtoInterface } from '@edfu/api-interfaces';
 @ObjectType()
 export class SenseSignDto implements SenseSignDtoInterface {
   @Field(type => ID)
+  readonly userId: ObjectId;
+
+  @Field(type => ID)
   readonly senseId: string;
 
   @Field(type => ID)

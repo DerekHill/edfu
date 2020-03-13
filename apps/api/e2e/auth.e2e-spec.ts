@@ -6,11 +6,16 @@ import { AppModule } from '../src/app/app.module';
 import { login } from './test.helper';
 import { CreateUserDto } from '../src/app/users/dto/create-user.dto';
 import { TestDatabaseModule } from '../src/app/config/test-database.module';
+import { CreateSignInput } from '../src/app/reference/signs/dto/create-sign.input';
 
 const registerUser = (server: any, user: CreateUserDto) => {
   return request(server)
     .post('/auth/register')
     .send(user);
+};
+
+const jsonGqlString = (str: any): string => {
+  return JSON.stringify(str).replace(/\"([^(\")"]+)\":/g, '$1:');
 };
 
 describe('AuthController (e2e)', () => {
@@ -130,6 +135,66 @@ describe('AuthController (e2e)', () => {
           .expect(({ body }) => {
             const data = body.data.getAuthenticatedTestSign;
             expect(data.mnemonic).toBe(USER.email);
+          });
+      });
+    });
+
+    describe('LexicographerResolver', () => {
+      it('works if token is supplied', async () => {
+        await registerUser(server, USER);
+        const token = await login(USER.email, USER.password, server);
+        const mediaUrl = 'my-url.com';
+
+        const sign: CreateSignInput = { mediaUrl: mediaUrl, mnemonic: '' };
+
+        const senseIds = ['1', '2'];
+
+        const query = `
+          mutation {
+            createSignWithAssociations(
+              createSignData: ${jsonGqlString(sign)}
+              senseIds: ${jsonGqlString(senseIds)}
+            ) {
+              mnemonic
+              mediaUrl
+            }
+          }
+        `;
+
+        return request(server)
+          .post('/graphql')
+          .set('Authorization', 'bearer ' + token)
+          .send({
+            operationName: null,
+            query: query
+          })
+          .expect(({ body }) => {
+            const data = body.data.createSignWithAssociations;
+            expect(data.mediaUrl).toBe(mediaUrl);
+          });
+      });
+
+      it('returns 401 if token is not supplied', () => {
+        const query = `
+          mutation {
+            createSignWithAssociations(
+              createSignData: {mediaUrl: "mediaUrl", mnemonic: "" }
+              senseIds: []
+            ) {
+              mnemonic
+              mediaUrl
+            }
+          }
+        `;
+
+        return request(server)
+          .post('/graphql')
+          .send({
+            operationName: null,
+            query: query
+          })
+          .expect(({ body }) => {
+            expect(body.errors[0].message.statusCode).toBe(401);
           });
       });
     });

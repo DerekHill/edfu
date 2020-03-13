@@ -26,6 +26,8 @@ import {
   TestResolver
 } from './reference.resolver';
 import { ReferenceService } from './reference.service';
+import { LexicographerResolver } from './lexicographer.resolver';
+import { UsersModule } from '../users/users.module';
 
 class TfUseMock {
   embed(sentences: string[]) {
@@ -38,6 +40,7 @@ class TfUseMock {
 @Module({
   imports: [
     OxfordSearchesModule,
+    UsersModule,
     MongooseModule.forFeature([
       { name: ENTRY_COLLECTION_NAME, schema: EntrySchema },
       { name: SENSE_COLLECTION_NAME, schema: SenseSchema },
@@ -51,6 +54,7 @@ class TfUseMock {
     ReferenceService,
     SensesService,
     DictionaryResolver,
+    LexicographerResolver,
     SignsResolver,
     TestResolver,
     EntriesResolver,

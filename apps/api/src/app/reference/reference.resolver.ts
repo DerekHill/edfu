@@ -23,7 +23,7 @@ export class DictionaryResolver {
   }
 
   @Query(returns => [SenseForEntryDto], { name: 'senses' })
-  getSenses(
+  getSensesFromExisting(
     @Args('oxId') oxId: string,
     @Args({ name: 'filter', type: () => Boolean, defaultValue: false })
     filter: boolean,
@@ -59,6 +59,7 @@ export class TestResolver {
   getTestSign(): Promise<SignDto> {
     return Promise.resolve({
       _id: new ObjectId(),
+      userId: new ObjectId(),
       mnemonic: 'remember me',
       mediaUrl: 'www.com'
     });
@@ -69,6 +70,7 @@ export class TestResolver {
   getAuthenticatedTestSign(@CurrentUser() user: BasicUser): Promise<SignDto> {
     return Promise.resolve({
       _id: new ObjectId(),
+      userId: new ObjectId(),
       mnemonic: user.email,
       mediaUrl: 'www.com'
     });

@@ -26,6 +26,7 @@ describe('SignComponent', () => {
   beforeEach(() => {
     const signData: SignRecord = {
       _id: new ObjectId(),
+      userId: new ObjectId(),
       mnemonic: 'remember me',
       mediaUrl: 'www.my-picture-link.com'
     };

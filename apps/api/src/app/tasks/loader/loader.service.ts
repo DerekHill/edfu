@@ -33,7 +33,10 @@ export class LoaderService {
 
     const relatedEntryArrays = await Promise.all(
       entries.map(entry =>
-        this.entriesService.addRelatedEntries(entry.oxId, entry.homographC)
+        this.entriesService.addRelatedEntries({
+          oxId: entry.oxId,
+          homographC: entry.homographC
+        })
       )
     );
 

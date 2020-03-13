@@ -7,6 +7,9 @@ export class SignDto implements SignRecord {
   @Field(type => ID)
   _id: ObjectId;
 
+  @Field(type => ID)
+  userId: ObjectId;
+
   @Field()
   readonly mnemonic: string;
 

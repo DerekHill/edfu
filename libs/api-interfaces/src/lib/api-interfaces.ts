@@ -1,13 +1,21 @@
 import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
 import { ObjectId } from 'bson';
 
-export interface SignRecord {
-  readonly _id: ObjectId;
+export interface BasicSignRecord {
   readonly mnemonic: string;
   readonly mediaUrl: string;
 }
 
+export interface SignRecordWithoutId extends BasicSignRecord {
+  readonly userId: ObjectId;
+}
+
+export interface SignRecord extends SignRecordWithoutId {
+  readonly _id: ObjectId;
+}
+
 export interface SenseSignRecordWithoutId {
+  readonly userId: ObjectId;
   readonly senseId: string;
   readonly signId: ObjectId;
 }

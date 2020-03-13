@@ -3,6 +3,11 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+input CreateSignInput {
+  mnemonic: String!
+  mediaUrl: String!
+}
+
 enum DictionaryOrThesaurus {
   dictionary
   thesaurus
@@ -22,6 +27,10 @@ enum LexicalCategory {
   other
 }
 
+type Mutation {
+  createSignWithAssociations(senseIds: [String!]!, createSignData: CreateSignInput!): SignDto!
+}
+
 type Query {
   hello: String!
   oxIds(filter: Boolean = false, searchString: String!): [String!]!
@@ -29,6 +38,7 @@ type Query {
   signs(senseId: String!): [SenseSignDto!]!
   getTestSign: SignDto!
   getAuthenticatedTestSign: SignDto!
+  sensesFromApi(searchString: String!): [SenseForEntryDto!]!
 }
 
 type SenseForEntryDto {
@@ -47,6 +57,7 @@ type SenseForEntryDto {
 }
 
 type SenseSignDto {
+  userId: ID!
   senseId: ID!
   signId: ID!
   sign: SignDto
@@ -54,6 +65,7 @@ type SenseSignDto {
 
 type SignDto {
   _id: ID!
+  userId: ID!
   mnemonic: String!
   mediaUrl: String!
 }

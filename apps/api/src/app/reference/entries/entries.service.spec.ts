@@ -26,6 +26,9 @@ import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
 import { EntrySenseRecord } from '../entry-senses/interfaces/entry-sense.interface';
 import { EntrySensesService } from '../entry-senses/entry-senses.service';
 import { SimilarityService } from '../similarity/similarity.service';
+import { Injectable } from '@nestjs/common';
+import { EntryDocument, EntryRecord } from './interfaces/entry.interface';
+import { Model } from 'mongoose';
 
 class OxfordSearchesServiceMock {
   findOrFetch(): Promise<OxfordSearchRecord[]> {
@@ -61,6 +64,22 @@ class SimilarityServiceMock {
   }
 }
 
+@Injectable()
+export class EntriesTestSetupService {
+  constructor(
+    @InjectModel(ENTRY_COLLECTION_NAME)
+    private readonly entryModel: Model<EntryDocument>
+  ) {}
+
+  createEntry(entry: EntryRecord): Promise<EntryRecord> {
+    return this.entryModel.create(entry);
+  }
+
+  findEntry(_id: any): Promise<EntryRecord> {
+    return this.entryModel.findById(_id).exec();
+  }
+}
+
 describe('EntriesService', () => {
   let entriesService: EntriesService;
   let entrySearchesService: EntrySearchesService;
@@ -68,6 +87,7 @@ describe('EntriesService', () => {
   let sensesService: SensesService;
   let entrySensesService: EntrySensesService;
   let similarityService: SimilarityService;
+  let setupService: EntriesTestSetupService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -100,7 +120,8 @@ describe('EntriesService', () => {
         {
           provide: SimilarityService,
           useClass: SimilarityServiceMock
-        }
+        },
+        EntriesTestSetupService
       ]
     }).compile();
 
@@ -114,6 +135,7 @@ describe('EntriesService', () => {
     sensesService = module.get<SensesService>(SensesService);
     entrySensesService = module.get<EntrySensesService>(EntrySensesService);
     similarityService = module.get<SimilarityService>(SimilarityService);
+    setupService = module.get<EntriesTestSetupService>(EntriesTestSetupService);
   });
 
   describe('findOrCreateWithOwnSensesOnly() from Dictionary', () => {
@@ -136,8 +158,8 @@ describe('EntriesService', () => {
       const uppercaseRecord = createEntrySearchRecord('Orange', 1, TYPE);
       const lowerCaseRecord = createEntrySearchRecord(lowercaseWord, 1, TYPE);
 
-      await entriesService.findOrCreateEntryFromSearchRecord(uppercaseRecord);
-      await entriesService.findOrCreateEntryFromSearchRecord(lowerCaseRecord);
+      await entriesService._findOrCreateEntryFromSearchRecord(uppercaseRecord);
+      await entriesService._findOrCreateEntryFromSearchRecord(lowerCaseRecord);
 
       const res = await entriesService.findOrCreateWithOwnSensesOnly(
         lowercaseWord
@@ -150,7 +172,7 @@ describe('EntriesService', () => {
     it('throws error if entry does not exist', async () => {
       expect.assertions(1);
       try {
-        await entriesService.addRelatedEntries('food', 1);
+        await entriesService.addRelatedEntries({ oxId: 'food', homographC: 1 });
       } catch (e) {
         expect(e.message).toMatch(/not found/);
       }
@@ -222,12 +244,66 @@ describe('EntriesService', () => {
 
       await entriesService.findOrCreateWithOwnSensesOnly(WORD);
 
-      const entries = await entriesService.addRelatedEntries('food', 1);
+      const entries = await entriesService.addRelatedEntries({
+        oxId: 'food',
+        homographC: 1
+      });
 
       expect(entries.map(entry => entry.word).sort()).toEqual(SYNONYMS.sort());
     });
 
-    it.skip('finds related entries if synonyms contain spaces', () => {});
+    it('does not add related entries if relatedEntriesAdded is true', async () => {
+      const OXID = 'food';
+      const entryData = {
+        _id: new ObjectId(),
+        oxId: OXID,
+        homographC: 0,
+        word: OXID,
+        relatedEntriesAdded: true,
+        headwordOrPhrase: HeadwordOrPhrase.headword
+      };
+
+      const entry = await setupService.createEntry(entryData);
+      const res = await entriesService.addRelatedEntries({
+        oxId: entry.oxId,
+        homographC: entry.homographC
+      });
+      expect(res[0].oxId).toBe(OXID);
+    });
+
+    it('sets relatedEntriesAdded to true when related entries are added', async () => {
+      const OXID = 'food';
+      const HOMOGRAPH_C = 0;
+      const entryData = {
+        _id: new ObjectId(),
+        oxId: OXID,
+        homographC: HOMOGRAPH_C,
+        word: OXID,
+        relatedEntriesAdded: false,
+        headwordOrPhrase: HeadwordOrPhrase.headword
+      };
+
+      const blankThesaurusSearchResult = {
+        _id: new ObjectId(),
+        oxIdOrSearchTermLowercase: OXID,
+        result: null,
+        homographC: HOMOGRAPH_C
+      };
+
+      jest
+        .spyOn(thesaurusSearchesService, 'findOrFetch')
+        .mockImplementation(chars =>
+          Promise.resolve([blankThesaurusSearchResult])
+        );
+
+      const entry = await setupService.createEntry(entryData);
+      await entriesService.addRelatedEntries({
+        oxId: OXID,
+        homographC: HOMOGRAPH_C
+      });
+      const updatedEntry = await setupService.findEntry(entry._id);
+      expect(updatedEntry.relatedEntriesAdded).toBeTruthy();
+    });
   });
 
   describe('filterResultsByHomographC()', () => {
@@ -240,7 +316,7 @@ describe('EntriesService', () => {
         HOMOGRAPH_C
       );
       const thesaurusRecord2 = createThesaurusSearchRecord('word2', [], 2);
-      const res: OxfordSearchRecord = entriesService.filterResultsByHomographC(
+      const res: OxfordSearchRecord = entriesService._filterResultsByHomographC(
         [thesaurusRecord1, thesaurusRecord2],
         HOMOGRAPH_C
       );
@@ -256,7 +332,7 @@ describe('EntriesService', () => {
         [],
         HOMOGRAPH_C
       );
-      const res: OxfordSearchRecord = entriesService.filterResultsByHomographC(
+      const res: OxfordSearchRecord = entriesService._filterResultsByHomographC(
         [thesaurusRecord],
         HOMOGRAPH_C
       );
@@ -264,7 +340,7 @@ describe('EntriesService', () => {
     });
 
     it('returns null if null is supplied', () => {
-      const res: OxfordSearchRecord = entriesService.filterResultsByHomographC(
+      const res: OxfordSearchRecord = entriesService._filterResultsByHomographC(
         null,
         null
       );
@@ -272,7 +348,7 @@ describe('EntriesService', () => {
     });
 
     it('returns null if empty array is supplied', () => {
-      const res: OxfordSearchRecord = entriesService.filterResultsByHomographC(
+      const res: OxfordSearchRecord = entriesService._filterResultsByHomographC(
         [],
         null
       );
@@ -284,7 +360,7 @@ describe('EntriesService', () => {
     it('creates basic entry', async () => {
       const WORD = 'river';
       const record: OxfordSearchRecord = createEntrySearchRecord(WORD);
-      const origWord = await entriesService.findOrCreateEntryFromSearchRecord(
+      const origWord = await entriesService._findOrCreateEntryFromSearchRecord(
         record
       );
       expect(origWord.oxId).toEqual(WORD);
@@ -347,7 +423,7 @@ describe('EntriesService', () => {
           }
         );
 
-      await entriesService.findOrCreateSynonymEntryAndAssociations(
+      await entriesService._findOrCreateSynonymEntryAndAssociations(
         dictionarySense,
         synonymOxId,
         thesaurusSenseLexicalCategory,

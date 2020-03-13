@@ -98,6 +98,7 @@ describe('SenseArrangerService', () => {
       it('filters out senses with no signs at all', () => {
         const sign: SignRecord = {
           _id: new ObjectId(),
+          userId: new ObjectId(),
           mnemonic: 'remember me',
           mediaUrl: 'www.my_picture_link'
         };
@@ -116,6 +117,7 @@ describe('SenseArrangerService', () => {
       it('filers out senses which have signs already seen', () => {
         const sign: SignRecord = {
           _id: new ObjectId(),
+          userId: new ObjectId(),
           mnemonic: 'remember me',
           mediaUrl: 'www.my_picture_link'
         };

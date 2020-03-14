@@ -1,7 +1,7 @@
 import { HydratedSense, SignRecord, UniqueEntry } from '@edfu/api-interfaces';
 import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
 
-interface SenseGroup {
+export interface SenseGroup {
   lexicalCategory: LexicalCategory;
   senses: HydratedSense[];
 }
@@ -11,15 +11,20 @@ export interface UniqueEntryWithSenseGroups extends UniqueEntry {
 }
 
 export class SenseArrangerService {
-  sortFilterAndGroup(senses: HydratedSense[]): UniqueEntryWithSenseGroups[] {
-    const sortedSenses = this.sortAndFilter(senses);
+  sortFilterAndGroup(
+    senses: HydratedSense[],
+    filter = true
+  ): UniqueEntryWithSenseGroups[] {
+    const sortedSenses = this.sortAndFilter(senses, filter);
     return this.groupSenses(sortedSenses);
   }
 
-  sortAndFilter(senses: HydratedSense[]): HydratedSense[] {
+  sortAndFilter(senses: HydratedSense[], filter = true): HydratedSense[] {
     senses = this._sortSensesByFit(senses);
-    senses = this._filterForSensesWithDifferentSigns(senses);
-    senses = this._applyMaxSensesLimit(senses);
+    if (filter) {
+      senses = this._filterForSensesWithDifferentSigns(senses);
+      senses = this._applyMaxSensesLimit(senses);
+    }
     return this._groupSensesByLexicalCategoryAsList(senses);
   }
 

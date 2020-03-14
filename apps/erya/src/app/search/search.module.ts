@@ -12,17 +12,17 @@ import { SignComponent } from './sign/sign.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { SenseArrangerService } from './sense-grouping/sense-arranger.service';
 import { SensesModalComponent } from './senses-modal/senses-modal.component';
-import { RemoveUnderscoresPipe } from './pipes';
+import { RemoveUnderscoresPipe } from '../shared/pipes/remove-underscores.pipe';
 import { MatButtonModule } from '@angular/material/button';
 import { YouTubePlayerModule } from '@angular/youtube-player';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
     SearchComponent,
     SenseComponent,
     SignComponent,
-    SensesModalComponent,
-    RemoveUnderscoresPipe
+    SensesModalComponent
   ],
   imports: [
     CommonModule,
@@ -35,9 +35,10 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
     MatDialogModule,
     MatButtonModule,
     HotkeyModule,
-    YouTubePlayerModule
+    YouTubePlayerModule,
+    SharedModule
   ],
   entryComponents: [SensesModalComponent],
-  providers: [SenseArrangerService]
+  providers: [SenseArrangerService, RemoveUnderscoresPipe]
 })
 export class SearchModule {}

@@ -24,8 +24,7 @@ export function createApollo(httpLink: HttpLink) {
 
   const error = onError((e: any) => {
     console.log('apollo-link-error found error:');
-    // Switch to chaining once have typescript 3.7
-    if (e.networkError) {
+    if (e.networkError && e.networkError.error) {
       console.log(e.networkError.error.errors);
     }
     console.log(e);

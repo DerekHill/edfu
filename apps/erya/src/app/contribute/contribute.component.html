@@ -1,31 +1,43 @@
-<p>Contribute works!</p>
-<div>Message: {{ hello$ | async | json }}</div>
-<div>{{ words | json }}</div>
-<div>{{ hello | json }}</div>
-<div>Hello 2: {{ hello2 | json }}</div>
-<div>By id: {{ byId | json }}</div>
-
-<div *ngFor="let word of words">
-  <p>{{ word.word }}</p>
+<div>
+  <p>Enter word for which you would like to add a sign.</p>
+  <p>
+    This can be any word or phrase in the Oxford English Dictionary (check at
+    <a href="https://www.lexico.com/">lexico.com</a>).
+  </p>
 </div>
-<div *ngIf="loading">
-  <h1>Loading...</h1>
-</div>
+<input #searchString (keyup.enter)="onSearchButtonPress(searchString.value)" />
+<button (click)="onSearchButtonPress(searchString.value)">Search</button>
 
-<form class="example-form">
-  <mat-form-field class="example-full-width">
-    <input
-      type="text"
-      placeholder="Pick one"
-      aria-label="Number"
-      matInput
-      [formControl]="myControl"
-      [matAutocomplete]="auto"
-    />
-    <mat-autocomplete #auto="matAutocomplete">
-      <mat-option *ngFor="let option of options" [value]="option">
-        {{ option }}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
-</form>
+<div *ngIf="(senses$ | async)?.length">
+  <form [formGroup]="signFormGroup" (ngSubmit)="onSubmit()">
+    <div>
+      Link to sign (e.g. link to YouTube video):
+      <input type="text" formControlName="mediaUrl" />
+    </div>
+
+    <div>
+      Tick all the senses which apply to this sign.
+      <ng-container
+        *ngFor="let sense of senses$ | async; let i = index"
+        formArrayName="senseIds"
+      >
+        <p class="is-capitalized has-text-weight-bold">
+          {{ sense.oxId | removeUnderscores }}
+        </p>
+        <p>{{ sense.lexicalCategory }}</p>
+        <p>{{ sense.example }}</p>
+        <p>{{ sense.definition }}</p>
+        Select: <input type="checkbox" [formControlName]="i" />
+      </ng-container>
+    </div>
+
+    <div>
+      A description of the action in the sign to help people remember it. For
+      example "open the curtains" describes the sign for "good morning" (this is
+      optional).
+      <input type="text" formControlName="mnemonic" />
+    </div>
+    <button type="submit">Submit</button>
+  </form>
+  <p>Form Status: {{ signFormGroup.status }}</p>
+</div>

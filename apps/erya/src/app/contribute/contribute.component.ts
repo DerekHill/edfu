@@ -1,63 +1,135 @@
-// https://stackblitz.com/edit/basic-apollo-angular-app
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Message } from '@edfu/api-interfaces';
-import { Apollo } from 'apollo-angular';
+import { Apollo, QueryRef } from 'apollo-angular';
+import { Observable, Subscription } from 'rxjs';
 import gql from 'graphql-tag';
-import { Subscription } from 'rxjs';
-import { FormControl } from '@angular/forms';
-import { environment } from '../../environments/environment';
+import { HydratedSense } from '@edfu/api-interfaces';
+import { map } from 'rxjs/operators';
+import { ApolloQueryResult } from 'apollo-client';
+import { SenseArrangerService } from '../search/sense-grouping/sense-arranger.service';
+import {
+  FormBuilder,
+  FormArray,
+  FormGroup,
+  FormControl,
+  Validators,
+  ValidatorFn,
+  AbstractControl
+} from '@angular/forms';
 
-const Hello = gql`
-  query {
-    hello
+interface SensesFromApiSearchVariables {
+  searchString?: string;
+}
+
+interface SensesFromApiResult {
+  sensesFromApi: HydratedSense[];
+}
+
+const SensesFromApiQuery = gql`
+  query SensesFromApiQuery($searchString: String! = "") {
+    sensesFromApi(searchString: $searchString) {
+      oxId
+      homographC
+      ownEntryOxId
+      senseId
+      lexicalCategory
+      apiSenseIndex
+      example
+      definition
+      associationType
+    }
   }
 `;
+
+const URL_REGEX = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
+
+function checkedValidator(): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: any } | null => {
+    const checkedCount = control.value.filter((value: any) => !!value).length;
+    return checkedCount ? null : { checkedCount: { value: checkedCount } };
+  };
+}
 
 @Component({
   selector: 'edfu-contibute',
   templateUrl: './contribute.component.html'
 })
 export class ContributeComponent implements OnInit, OnDestroy {
-  myControl = new FormControl();
-  options: string[] = ['One', 'Two', 'Three'];
+  sensesFromApiSearchRef: QueryRef<
+    SensesFromApiResult,
+    SensesFromApiSearchVariables
+  >;
 
-  hello$ = this.http.get<Message>('/api/hello');
-  words: any;
-  loading = true;
-  error: any;
-  hello: any;
-  hello2: any;
-  byId: any;
+  senses$: Observable<HydratedSense[]>;
+  senses: HydratedSense[];
 
-  private querySubscription: Subscription;
+  public signFormGroup: FormGroup;
+  private checkboxControl: FormArray;
 
-  constructor(private http: HttpClient, private apollo: Apollo) {}
+  subscription: Subscription;
+
+  constructor(
+    private apollo: Apollo,
+    private senseArranger: SenseArrangerService,
+    private fb: FormBuilder
+  ) {}
 
   ngOnInit() {
-    this.querySubscription = this.apollo
-      .watchQuery<any>({
-        query: Hello
-      })
-      .valueChanges.subscribe(({ data, loading }) => {
-        this.loading = loading;
-        this.hello = data;
-      });
+    this.signFormGroup = this.fb.group({
+      senseIds: this.fb.array([], checkedValidator()),
+      mediaUrl: ['', [Validators.required, Validators.pattern(URL_REGEX)]],
+      mnemonic: ['', Validators.maxLength(200)]
+    });
 
-    this.apollo
-      .query<any>({
-        query: Hello
-      })
-      .subscribe(({ data, loading }) => {
-        this.hello2 = data;
-      });
+    this.checkboxControl = this.signFormGroup.controls.senseIds as FormArray;
 
-    const jwtInterceptorTest = this.http.get<any>(
-      `${environment.apiUri}/api/auth/profile`
+    this.sensesFromApiSearchRef = this.apollo.watchQuery<
+      SensesFromApiResult,
+      SensesFromApiSearchVariables
+    >({
+      query: SensesFromApiQuery
+    });
+
+    this.senses$ = this.sensesFromApiSearchRef.valueChanges.pipe(
+      map(
+        (res: ApolloQueryResult<SensesFromApiResult>) => res.data.sensesFromApi
+      ),
+      map(senses => this.senseArranger.sortAndFilter(senses, false))
     );
 
-    jwtInterceptorTest.subscribe(r => console.log(r));
+    this.senses$.subscribe(senses => {
+      this.checkboxControl.clear();
+      for (const _ of senses) {
+        this.checkboxControl.push(new FormControl(false));
+      }
+      this.senses = senses;
+    });
+
+    this.subscription = this.checkboxControl.valueChanges.subscribe(
+      checkbox => {
+        this.checkboxControl.setValue(
+          this.checkboxControl.value.map((value, i) =>
+            value ? this.senses[i].senseId : false
+          ),
+          { emitEvent: false }
+        );
+      }
+    );
   }
 
-  ngOnDestroy() {}
+  onSearchButtonPress(searchString: string) {
+    this.sensesFromApiSearchRef.setVariables({ searchString: searchString });
+  }
+
+  onSubmit() {
+    const formValue = {
+      ...this.signFormGroup.value,
+      senseIds: this.checkboxControl.value.filter(value => !!value)
+    };
+    console.log(this.checkboxControl.valid);
+    console.log(formValue);
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 }

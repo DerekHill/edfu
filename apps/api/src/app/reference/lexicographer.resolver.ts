@@ -25,6 +25,9 @@ export class LexicographerResolver {
   async getSensesFromApi(
     @Args('searchString') searchString: string
   ): Promise<SenseForEntryDto[]> {
+    if (!searchString) {
+      return [];
+    }
     const entries = await this.entriesService.findOrCreateAndKickoffRelatedEntries(
       searchString
     );

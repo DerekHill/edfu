@@ -59,6 +59,9 @@ describe('SignComponent', () => {
       expect(
         component._getMediaType('https://www.youtube.com/watch?v=6cxRS-XGIro')
       ).toBe(MediaType.youtube);
+      expect(component._getMediaType('https://vimeo.com/130196945')).toBe(
+        MediaType.vimeo
+      );
     });
   });
 
@@ -96,6 +99,31 @@ describe('SignComponent', () => {
 
       for (const video of videos) {
         expect(component._getYouTubeVideoId(video)).toBe(videoId);
+      }
+    });
+  });
+
+  describe('_getVimeoVideoId', () => {
+    it('works', () => {
+      const videoId = '130196946';
+
+      const videos = [
+        `https://vimeo.com/${videoId}`,
+        `http://vimeo.com/${videoId}`,
+        `https://www.vimeo.com/${videoId}`,
+        `http://www.vimeo.com/${videoId}`,
+        `https://vimeo.com/channels/${videoId}`,
+        `http://vimeo.com/channels/${videoId}`,
+        `https://vimeo.com/groups/name/videos/${videoId}`,
+        `http://vimeo.com/groups/name/videos/${videoId}`,
+        `https://vimeo.com/album/2222222/video/${videoId}`,
+        `http://vimeo.com/album/2222222/video/${videoId}`,
+        `https://vimeo.com/${videoId}?param=test`,
+        `http://vimeo.com/${videoId}?param=test`
+      ];
+
+      for (const video of videos) {
+        expect(component._getVimeoVideoId(video)).toBe(videoId);
       }
     });
   });

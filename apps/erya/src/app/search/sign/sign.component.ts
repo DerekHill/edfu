@@ -1,23 +1,34 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  ViewChild,
+  AfterViewInit
+} from '@angular/core';
 import { HydratedSense, SignRecord } from '@edfu/api-interfaces';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import * as Player from '@vimeo/player/dist/player.js';
 
 export enum MediaType {
   htmlVideo = 'htmlVideo',
   gif = 'gif',
-  youtube = 'youtube'
+  youtube = 'youtube',
+  vimeo = 'vimeo'
 }
 
 @Component({
   selector: 'edfu-sign',
   templateUrl: './sign.component.html'
 })
-export class SignComponent implements OnInit {
-  @ViewChild('youtubeplayer') youTubePlayer: any;
+export class SignComponent implements OnInit, AfterViewInit {
+  @ViewChild('youtube_player_container') youtubeContainer: any;
+  @ViewChild('vimeo_player_container') vimeoContainer: any;
+
+  private vimeoPlayer: Player;
 
   _sign: SignRecord;
   mediaType: MediaType;
-  youtubeVideoId: string;
+  platformVideoId: string;
 
   constructor(private deviceService: DeviceDetectorService) {}
 
@@ -27,9 +38,7 @@ export class SignComponent implements OnInit {
     const mediaUrl = sign.mediaUrl;
     this._sign = sign;
     this.mediaType = this._getMediaType(mediaUrl);
-    if (this.mediaType === MediaType.youtube) {
-      this.youtubeVideoId = this._getYouTubeVideoId(mediaUrl);
-    }
+    this.setPlatformVideoId(mediaUrl);
   }
 
   get sign(): SignRecord {
@@ -37,17 +46,33 @@ export class SignComponent implements OnInit {
   }
 
   ngOnInit() {
-    const tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    document.body.appendChild(tag);
+    if (this.mediaType === MediaType.youtube) {
+      const tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      document.body.appendChild(tag);
+    }
+  }
+
+  ngAfterViewInit() {
+    if (this.mediaType === MediaType.vimeo) {
+      this.vimeoPlayer = new Player(this.vimeoContainer.nativeElement, {
+        id: this.platformVideoId,
+        loop: true,
+        autoplay: true,
+        muted: true,
+        playsinline: true,
+        portrait: false,
+        title: false
+      });
+    }
   }
 
   youtubePlayAgain() {
-    this.youTubePlayer.playVideo();
+    this.youtubeContainer.playVideo();
   }
 
   onYouTubePlayerReady() {
-    this.youTubePlayer.mute();
+    this.youtubeContainer.mute();
     this._playIfNotMobile();
   }
 
@@ -59,7 +84,7 @@ export class SignComponent implements OnInit {
 
   _playIfNotMobile() {
     if (!this.deviceService.isMobile()) {
-      this.youTubePlayer.playVideo();
+      this.youtubeContainer.playVideo();
     }
   }
 
@@ -73,6 +98,8 @@ export class SignComponent implements OnInit {
       /youtube\.com\//.test(filename)
     ) {
       return MediaType.youtube;
+    } else if (/vimeo\.com\//.test(filename)) {
+      return MediaType.vimeo;
     } else {
       return MediaType.htmlVideo;
     }
@@ -80,5 +107,18 @@ export class SignComponent implements OnInit {
   _getYouTubeVideoId(url: string): string {
     const youtube_regex = /^.*(youtu\.be\/|vi?\/|u\/\w\/|embed\/|\?vi?=|\&vi?=)([^#\&\?]*).*/;
     return url.match(youtube_regex)[2];
+  }
+
+  _getVimeoVideoId(url: string): string {
+    const vimeo_regex = /https?:\/\/(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|video\/|)(\d+)(?:$|\/|\?)/;
+    return url.match(vimeo_regex)[3];
+  }
+
+  private setPlatformVideoId(mediaUrl: string) {
+    if (this.mediaType === MediaType.youtube) {
+      this.platformVideoId = this._getYouTubeVideoId(mediaUrl);
+    } else if (this.mediaType === MediaType.vimeo) {
+      this.platformVideoId = this._getVimeoVideoId(mediaUrl);
+    }
   }
 }

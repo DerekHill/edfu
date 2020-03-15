@@ -145,15 +145,16 @@ describe('AuthController (e2e)', () => {
         const token = await login(USER.email, USER.password, server);
         const mediaUrl = 'my-url.com';
 
-        const sign: CreateSignInput = { mediaUrl: mediaUrl, mnemonic: '' };
-
-        const senseIds = ['1', '2'];
+        const sign: CreateSignInput = {
+          mediaUrl: mediaUrl,
+          mnemonic: '',
+          senseIds: ['1', '2']
+        };
 
         const query = `
           mutation {
             createSignWithAssociations(
               createSignData: ${jsonGqlString(sign)}
-              senseIds: ${jsonGqlString(senseIds)}
             ) {
               mnemonic
               mediaUrl
@@ -178,8 +179,7 @@ describe('AuthController (e2e)', () => {
         const query = `
           mutation {
             createSignWithAssociations(
-              createSignData: {mediaUrl: "mediaUrl", mnemonic: "" }
-              senseIds: []
+              createSignData: {mediaUrl: "mediaUrl", mnemonic: "", senseIds: [] }
             ) {
               mnemonic
               mediaUrl

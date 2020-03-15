@@ -6,6 +6,7 @@
 input CreateSignInput {
   mnemonic: String!
   mediaUrl: String!
+  senseIds: [String!]!
 }
 
 enum DictionaryOrThesaurus {
@@ -28,7 +29,7 @@ enum LexicalCategory {
 }
 
 type Mutation {
-  createSignWithAssociations(senseIds: [String!]!, createSignData: CreateSignInput!): SignDto!
+  createSignWithAssociations(createSignData: CreateSignInput!): SignDto!
 }
 
 type Query {

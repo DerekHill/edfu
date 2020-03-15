@@ -15,4 +15,5 @@ export const SignSchema = new mongoose.Schema({
   }
 });
 
-SignSchema.index({ mediaUrl: 1 });
+SignSchema.index({ mediaUrl: 1 }, { unique: true });
+SignSchema.index({ userId: 1 });

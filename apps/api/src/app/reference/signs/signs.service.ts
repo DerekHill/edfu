@@ -12,11 +12,8 @@ import {
   SenseSignRecord
 } from './interfaces/sense-sign.interface';
 import { ObjectId } from 'bson';
-import {
-  SignRecord,
-  SignRecordWithoutId,
-  SenseSignRecordWithoutId
-} from '@edfu/api-interfaces';
+import { SignRecord, SenseSignRecordWithoutId } from '@edfu/api-interfaces';
+import { CreateSignInput } from './dto/create-sign.input';
 
 @Injectable()
 export class SignsService {
@@ -42,14 +39,17 @@ export class SignsService {
   }
 
   async createSignWithAssociations(
-    signRecord: SignRecordWithoutId,
-    senseIds: string[]
+    userId: ObjectId,
+    createSignInput: CreateSignInput
   ): Promise<any> {
-    const sign = await this.signModel.create(signRecord);
+    const sign = await this.signModel.create({
+      ...createSignInput,
+      ...{ userId: userId }
+    });
 
     const promises = [];
 
-    for (const senseId of senseIds) {
+    for (const senseId of createSignInput.senseIds) {
       promises.push(
         this.findOrCreateSenseSign({
           userId: sign.userId,

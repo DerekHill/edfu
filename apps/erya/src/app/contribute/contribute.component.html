@@ -37,7 +37,6 @@
       optional).
       <input type="text" formControlName="mnemonic" />
     </div>
-    <button type="submit">Submit</button>
+    <button type="submit" [disabled]="signFormGroup.invalid">Submit</button>
   </form>
-  <p>Form Status: {{ signFormGroup.status }}</p>
 </div>

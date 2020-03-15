@@ -1,13 +1,10 @@
 import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
 import { ObjectId } from 'bson';
 
-export interface BasicSignRecord {
+export interface SignRecordWithoutId {
+  readonly userId: ObjectId;
   readonly mnemonic: string;
   readonly mediaUrl: string;
-}
-
-export interface SignRecordWithoutId extends BasicSignRecord {
-  readonly userId: ObjectId;
 }
 
 export interface SignRecord extends SignRecordWithoutId {
@@ -60,4 +57,10 @@ export interface BasicUser {
   readonly username: string;
   readonly roles: string[];
   readonly access_token?: string;
+}
+
+export interface CreateSignInputInterface {
+  readonly mnemonic: string;
+  readonly mediaUrl: string;
+  readonly senseIds: string[];
 }

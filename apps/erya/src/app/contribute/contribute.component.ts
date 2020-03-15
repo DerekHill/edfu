@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Apollo, QueryRef } from 'apollo-angular';
 import { Observable, Subscription } from 'rxjs';
 import gql from 'graphql-tag';
-import { HydratedSense } from '@edfu/api-interfaces';
+import { HydratedSense, CreateSignInputInterface } from '@edfu/api-interfaces';
 import { map } from 'rxjs/operators';
 import { ApolloQueryResult } from 'apollo-client';
 import { SenseArrangerService } from '../search/sense-grouping/sense-arranger.service';
@@ -125,8 +125,39 @@ export class ContributeComponent implements OnInit, OnDestroy {
       ...this.signFormGroup.value,
       senseIds: this.checkboxControl.value.filter(value => !!value)
     };
-    console.log(this.checkboxControl.valid);
-    console.log(formValue);
+    if (this.checkboxControl.valid) {
+      this.callCreateSignMutation(formValue);
+    } else {
+      console.log('formValue not valid');
+    }
+  }
+
+  callCreateSignMutation(createSignData: CreateSignInputInterface) {
+    const createSignWithAssociationsMutation = gql`
+      mutation createSignWithAssociationsMutation(
+        $createSignData: CreateSignInput!
+      ) {
+        createSignWithAssociations(createSignData: $createSignData) {
+          mnemonic
+          mediaUrl
+        }
+      }
+    `;
+
+    this.apollo
+      .mutate({
+        mutation: createSignWithAssociationsMutation,
+        variables: { createSignData: createSignData }
+      })
+      .subscribe(
+        ({ data }) => {
+          console.log('response:');
+          console.log(data);
+        },
+        error => {
+          console.error(error);
+        }
+      );
   }
 
   ngOnDestroy() {

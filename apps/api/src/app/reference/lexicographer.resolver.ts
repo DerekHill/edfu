@@ -45,13 +45,13 @@ export class LexicographerResolver {
   @Mutation(returns => SignDto)
   async createSignWithAssociations(
     @CurrentUser() user: BasicUser,
-    @Args('createSignData') createSignData: CreateSignInput,
-    @Args({ name: 'senseIds', type: () => [String] }) senseIds: string[]
+    @Args('createSignData') createSignData: CreateSignInput
   ) {
+    //   TODO: validation
     const fullUser = await this.usersService.findByEmail(user.email);
     const sign = await this.signsService.createSignWithAssociations(
-      { ...createSignData, ...{ userId: fullUser._id } },
-      senseIds
+      fullUser._id,
+      createSignData
     );
     return sign;
   }

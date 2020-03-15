@@ -9,12 +9,9 @@ import { TestDatabaseModule } from '../../config/test-database.module';
 import { SignSchema } from './schemas/sign.schema';
 import { ObjectId } from 'bson';
 import { SenseSignSchema } from './schemas/sense-sign.schema';
-import {
-  SignRecord,
-  SenseSignRecordWithoutId,
-  SignRecordWithoutId
-} from '@edfu/api-interfaces';
+import { SignRecord, SenseSignRecordWithoutId } from '@edfu/api-interfaces';
 import { SignTestSetupService } from './sign-test-setup.service';
+import { CreateSignInput } from './dto/create-sign.input';
 
 describe('SignsService', () => {
   let service: SignsService;
@@ -69,13 +66,15 @@ describe('SignsService', () => {
 
   it('createSignWithAssociations', async () => {
     const mnemonic = 'remember!';
-    const signData: SignRecordWithoutId = {
-      userId: new ObjectId(),
+    const signData: CreateSignInput = {
       mediaUrl: 'www.goo.com',
-      mnemonic: mnemonic
+      mnemonic: mnemonic,
+      senseIds: ['id1', 'id2']
     };
-    const senseIds = ['id1', 'id2'];
-    const sign = await service.createSignWithAssociations(signData, senseIds);
+    const sign = await service.createSignWithAssociations(
+      new ObjectId(),
+      signData
+    );
     expect(sign.mnemonic).toBe(mnemonic);
   });
 

@@ -1,10 +1,14 @@
 import { InputType, Field } from 'type-graphql';
-import { BasicSignRecord } from '@edfu/api-interfaces';
+import { CreateSignInputInterface } from '@edfu/api-interfaces';
 
 @InputType()
-export class CreateSignInput implements BasicSignRecord {
+export class CreateSignInput implements CreateSignInputInterface {
   @Field()
   mnemonic: string;
+
   @Field()
   mediaUrl: string;
+
+  @Field(type => [String])
+  readonly senseIds: string[];
 }

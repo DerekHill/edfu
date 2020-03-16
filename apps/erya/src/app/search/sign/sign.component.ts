@@ -8,6 +8,8 @@ import {
 import { HydratedSense, SignRecord } from '@edfu/api-interfaces';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import * as Player from '@vimeo/player/dist/player.js';
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { faPlay } from '@fortawesome/free-solid-svg-icons';
 
 export enum MediaType {
   htmlVideo = 'htmlVideo',
@@ -21,8 +23,9 @@ export enum MediaType {
   templateUrl: './sign.component.html'
 })
 export class SignComponent implements OnInit, AfterViewInit {
-  @ViewChild('youtube_player_container') youtubeContainer: any;
   @ViewChild('vimeo_player_container') vimeoContainer: any;
+  @ViewChild('youtube_player_container') youtubeContainer: any;
+  @ViewChild('ytContainer') ytContainer: any;
 
   private vimeoPlayer: Player;
 
@@ -30,7 +33,12 @@ export class SignComponent implements OnInit, AfterViewInit {
   mediaType: MediaType;
   platformVideoId: string;
 
-  constructor(private deviceService: DeviceDetectorService) {}
+  constructor(
+    public deviceService: DeviceDetectorService,
+    public library: FaIconLibrary
+  ) {
+    library.addIcons(faPlay);
+  }
 
   @Input() sense: HydratedSense;
   @Input()

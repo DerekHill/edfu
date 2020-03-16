@@ -16,6 +16,7 @@ import { RemoveUnderscoresPipe } from '../shared/pipes/remove-underscores.pipe';
 import { MatButtonModule } from '@angular/material/button';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 import { SharedModule } from '../shared/shared.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { SharedModule } from '../shared/shared.module';
     MatButtonModule,
     HotkeyModule,
     YouTubePlayerModule,
-    SharedModule
+    SharedModule,
+    FontAwesomeModule
   ],
   entryComponents: [SensesModalComponent],
   providers: [SenseArrangerService, RemoveUnderscoresPipe]

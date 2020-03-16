@@ -14,9 +14,11 @@ import { NavbarModule } from './navbar/navbar.module';
 import { LoginComponent } from './login/login.component';
 import { LoginModule } from './login/login.module';
 import { JwtInterceptor } from './shared/interceptors/jwt.interceptor';
-import { ErrorInterceptor } from './shared/interceptors/error.interceptor';
+import { HttpErrorInterceptor } from './shared/interceptors/http-error.interceptor';
 import { AuthGuard } from './auth/auth.guard';
 import { DeviceDetectorModule } from 'ngx-device-detector';
+import { UploadComponent } from './contribute/upload/upload.component';
+import { ResponseErrorInterceptor } from './shared/interceptors/response-error.interceptor';
 
 const appRoutes: Routes = [
   {
@@ -33,6 +35,7 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   { path: 'login', component: LoginComponent },
+  { path: 'upload', component: UploadComponent, canActivate: [AuthGuard] },
   { path: '', redirectTo: '/search', pathMatch: 'full' }
 ];
 
@@ -56,7 +59,12 @@ const appRoutes: Routes = [
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ResponseErrorInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

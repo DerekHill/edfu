@@ -50,7 +50,7 @@ function checkedValidator(): ValidatorFn {
 }
 
 @Component({
-  selector: 'edfu-contibute',
+  selector: 'edfu-contribute',
   templateUrl: './contribute.component.html'
 })
 export class ContributeComponent implements OnInit, OnDestroy {

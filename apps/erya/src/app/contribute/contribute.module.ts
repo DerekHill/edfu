@@ -6,9 +6,11 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { SharedModule } from '../shared/shared.module';
+import { UploadComponent } from './upload/upload.component';
+import { UploadService } from './upload/upload.service';
 
 @NgModule({
-  declarations: [ContributeComponent],
+  declarations: [ContributeComponent, UploadComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -17,6 +19,7 @@ import { SharedModule } from '../shared/shared.module';
     MatFormFieldModule,
     MatInputModule,
     SharedModule
-  ]
+  ],
+  providers: [UploadService]
 })
 export class ContributeModule {}

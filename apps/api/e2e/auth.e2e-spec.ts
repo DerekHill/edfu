@@ -3,16 +3,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 import { AppModule } from '../src/app/app.module';
-import { login } from './test.helper';
-import { CreateUserDto } from '../src/app/users/dto/create-user.dto';
+import { login, registerUser, TEST_USER } from './test.helper';
 import { TestDatabaseModule } from '../src/app/config/test-database.module';
 import { CreateSignInput } from '../src/app/reference/signs/dto/create-sign.input';
-
-const registerUser = (server: any, user: CreateUserDto) => {
-  return request(server)
-    .post('/auth/register')
-    .send(user);
-};
 
 const jsonGqlString = (str: any): string => {
   return JSON.stringify(str).replace(/\"([^(\")"]+)\":/g, '$1:');
@@ -21,12 +14,6 @@ const jsonGqlString = (str: any): string => {
 describe('AuthController (e2e)', () => {
   let app: any;
   let server: any;
-
-  const USER: CreateUserDto = {
-    username: 'fred',
-    email: 'fred@gmail.com',
-    password: '12345'
-  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -43,10 +30,10 @@ describe('AuthController (e2e)', () => {
 
   describe('LocalAuthGuard /auth/login (POST)', () => {
     it('returns JWT token with valid credentials', async () => {
-      await registerUser(server, USER);
+      await registerUser(server, TEST_USER);
       return request(server)
         .post('/auth/login')
-        .send({ email: USER.email, password: USER.password })
+        .send({ email: TEST_USER.email, password: TEST_USER.password })
         .expect(/access_token/);
     });
 
@@ -60,20 +47,20 @@ describe('AuthController (e2e)', () => {
 
   describe('JwtAuthGuard', () => {
     it('/auth/profile (GET) returns 200', async () => {
-      await registerUser(server, USER);
-      const token = await login(USER.email, USER.password, server);
+      await registerUser(server, TEST_USER);
+      const token = await login(TEST_USER.email, TEST_USER.password, server);
 
       return request(server)
         .get('/auth/profile')
         .set('Authorization', 'bearer ' + token)
         .expect(200)
-        .then((res: any) => expect(res.body.email).toBe(USER.email));
+        .then((res: any) => expect(res.body.email).toBe(TEST_USER.email));
     });
   });
 
   describe('/register', () => {
     it('registers new user successfully', async () => {
-      const res = await registerUser(server, USER);
+      const res = await registerUser(server, TEST_USER);
       expect(res.body.success).toBeTruthy();
     });
   });
@@ -117,8 +104,8 @@ describe('AuthController (e2e)', () => {
       });
 
       it('works if token is supplied', async () => {
-        await registerUser(server, USER);
-        const token = await login(USER.email, USER.password, server);
+        await registerUser(server, TEST_USER);
+        const token = await login(TEST_USER.email, TEST_USER.password, server);
 
         const authenticatedTestQuery = `
               query {
@@ -134,15 +121,15 @@ describe('AuthController (e2e)', () => {
           })
           .expect(({ body }) => {
             const data = body.data.getAuthenticatedTestSign;
-            expect(data.mnemonic).toBe(USER.email);
+            expect(data.mnemonic).toBe(TEST_USER.email);
           });
       });
     });
 
     describe('LexicographerResolver', () => {
       it('works if token is supplied', async () => {
-        await registerUser(server, USER);
-        const token = await login(USER.email, USER.password, server);
+        await registerUser(server, TEST_USER);
+        const token = await login(TEST_USER.email, TEST_USER.password, server);
         const mediaUrl = 'my-url.com';
 
         const sign: CreateSignInput = {
@@ -195,6 +182,40 @@ describe('AuthController (e2e)', () => {
           })
           .expect(({ body }) => {
             expect(body.errors[0].message.statusCode).toBe(401);
+          });
+      });
+
+      it('returns error if senseIds length is zero', async () => {
+        await registerUser(server, TEST_USER);
+        const token = await login(TEST_USER.email, TEST_USER.password, server);
+        const mediaUrl = 'my-url.com';
+
+        const sign = {
+          mediaUrl: mediaUrl,
+          mnemonic: '',
+          senseIds: [] // required
+        };
+
+        const query = `
+          mutation {
+            createSignWithAssociations(
+              createSignData: ${jsonGqlString(sign)}
+            ) {
+              mnemonic
+              mediaUrl
+            }
+          }
+        `;
+
+        return request(server)
+          .post('/graphql')
+          .set('Authorization', 'bearer ' + token)
+          .send({
+            operationName: null,
+            query: query
+          })
+          .expect(({ body }) => {
+            expect(body.errors.length).toBeTruthy();
           });
       });
     });

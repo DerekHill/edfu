@@ -47,7 +47,10 @@ export class LexicographerResolver {
     @CurrentUser() user: BasicUser,
     @Args('createSignData') createSignData: CreateSignInput
   ) {
-    //   TODO: validation
+    //   Might be better way to do validation, but not so clear in docs https://github.com/nestjs/graphql/issues/102
+    if (!createSignData.senseIds.length) {
+      throw new Error('No senseIds supplied');
+    }
     const fullUser = await this.usersService.findByEmail(user.email);
     const sign = await this.signsService.createSignWithAssociations(
       fullUser._id,

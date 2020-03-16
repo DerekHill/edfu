@@ -7,10 +7,13 @@ async function bootstrap() {
     // logger: ['log', 'error', 'warn', 'debug', 'verbose']
     logger: console
   });
+
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
-  const port = process.env.PORT || 3333;
+
   app.enableCors();
+
+  const port = process.env.PORT || 3333;
   await app.listen(port, () => {
     console.log('Listening at domain:' + port + '/' + globalPrefix);
   });

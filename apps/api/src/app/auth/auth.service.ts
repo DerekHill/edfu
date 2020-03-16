@@ -34,9 +34,7 @@ export class AuthService {
       throw new HttpException('LOGIN.USER_NOT_FOUND', HttpStatus.NOT_FOUND);
     // if (!userFromDb.emailConfirmed)
     //   throw new HttpException('LOGIN.EMAIL_NOT_VERIFIED', HttpStatus.FORBIDDEN);
-
     const isValidPass = await bcrypt.compare(password, userFromDb.password);
-
     if (isValidPass) {
       const user: BasicUser = {
         email: userFromDb.email,

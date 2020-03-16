@@ -78,7 +78,7 @@
     "core-js": "^2.5.4",
     "graphql": "^14.5.0",
     "graphql-tag": "^2.10.3",
-    "mongoose": "^5.8.0",
+    "mongoose": "^5.9.4",
     "nestjs-console": "^2.1.0",
     "ngx-device-detector": "^1.4.0",
     "nodemailer": "^6.4.5",

@@ -12,7 +12,7 @@ import { catchError } from 'rxjs/operators';
 import { AuthService } from '../../auth/auth.service';
 
 @Injectable()
-export class ErrorInterceptor implements HttpInterceptor {
+export class HttpErrorInterceptor implements HttpInterceptor {
   constructor(private authenticationService: AuthService) {}
 
   intercept(
@@ -25,9 +25,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           this.authenticationService.logout();
           location.reload();
         }
-
-        const error = err.error.message || err.statusText;
-        return throwError(error);
+        return throwError(err);
       })
     );
   }

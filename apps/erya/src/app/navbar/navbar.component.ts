@@ -4,7 +4,7 @@ import { AuthService } from '../auth/auth.service';
 import { BasicUser } from '@edfu/api-interfaces';
 import { Observable } from 'rxjs';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { fas, faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'edfu-navbar',

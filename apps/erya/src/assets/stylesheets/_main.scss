@@ -22,3 +22,15 @@ mat-form-field {
     margin-bottom: -20px;
   }
 }
+
+.sense-container {
+  padding-top: 10px;
+}
+
+youtube-player iframe, .vimeo-container iframe {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}

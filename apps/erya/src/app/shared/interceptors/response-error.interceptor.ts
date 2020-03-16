@@ -20,7 +20,7 @@ export class ResponseErrorInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
       map((res: any) => {
-        if (res && res.body && !res.body.success) {
+        if (res && res.body && res.body.success === false) {
           console.warn('ResponseError', res.body.message);
         }
         return res;

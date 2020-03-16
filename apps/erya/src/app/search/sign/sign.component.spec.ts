@@ -7,6 +7,7 @@ import { SenseComponent } from '../sense/sense.component';
 import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 import { DeviceDetectorModule } from 'ngx-device-detector';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 describe('SignComponent', () => {
   let component: SignComponent;
@@ -18,7 +19,8 @@ describe('SignComponent', () => {
       imports: [
         MatListModule,
         YouTubePlayerModule,
-        DeviceDetectorModule.forRoot()
+        DeviceDetectorModule.forRoot(),
+        FontAwesomeModule
       ]
     }).compileComponents();
   }));

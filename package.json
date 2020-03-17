@@ -115,7 +115,7 @@
     "eslint": "6.1.0",
     "jest": "24.9.0",
     "jest-preset-angular": "7.0.0",
-    "mongodb-memory-server": "^6.3.2",
+    "mongodb-memory-server": "^6.3.3",
     "prettier": "1.18.2",
     "supertest": "^4.0.2",
     "ts-jest": "24.0.0",

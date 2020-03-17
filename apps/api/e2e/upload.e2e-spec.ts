@@ -3,7 +3,17 @@ import * as request from 'supertest';
 import { AppModule } from '../src/app/app.module';
 import { registerUser, login, TEST_USER } from './test.helper';
 import { TestDatabaseModule } from '../src/app/config/test-database.module';
-import { readFileSync } from 'fs';
+import { UploadService } from '../src/app/reference/upload/upload.service';
+
+class UploadServiceServiceMock {
+  upload = (file: Buffer | any, key: string) => {
+    return null;
+  };
+
+  public async getObject(key: string): Promise<any> {
+    return null;
+  }
+}
 
 describe('UploadController (e2e)', () => {
   let app: any;
@@ -15,7 +25,10 @@ describe('UploadController (e2e)', () => {
         TestDatabaseModule, // before AppModule,
         AppModule
       ]
-    }).compile();
+    })
+      .overrideProvider(UploadService)
+      .useValue(new UploadServiceServiceMock())
+      .compile();
 
     app = moduleFixture.createNestApplication();
     await app.init();
@@ -30,7 +43,7 @@ describe('UploadController (e2e)', () => {
     return request(server)
       .post('/upload/upload')
       .set('Authorization', 'bearer ' + token)
-      .attach('file', bufferFile, 'myfilename')
+      .attach('file', bufferFile, 'myfilename.mp4')
       .then(({ body }) => expect(body.success).toBeTruthy());
   });
 

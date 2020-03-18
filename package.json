@@ -48,7 +48,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.12.1",
     "@fortawesome/free-solid-svg-icons": "^5.12.1",
     "@nestjs/common": "^6.11.11",
-    "@nestjs/config": "^0.3.0",
+    "@nestjs/config": "^0.4.0",
     "@nestjs/core": "^6.11.11",
     "@nestjs/graphql": "^6.5.3",
     "@nestjs/jwt": "^6.1.2",

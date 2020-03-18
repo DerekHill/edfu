@@ -1,19 +1,19 @@
-import { UploadService } from './upload.service';
+import { S3Service } from './s3.service';
 import { TestingModule, Test } from '@nestjs/testing';
 
-describe('UploadService', () => {
-  let service: UploadService;
+describe('S3Service', () => {
+  let service: S3Service;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [],
-      providers: [UploadService]
+      providers: [S3Service]
     }).compile();
 
-    service = module.get<UploadService>(UploadService);
+    service = module.get<S3Service>(S3Service);
   });
 
-  describe.skip('UploadService (skipped because makes S3 calls)', () => {
+  describe.skip('S3Service (skipped because makes S3 calls)', () => {
     describe('with buffer', () => {
       const bufferKey = 'upload1';
       const bufferContents = 'dummy data1';

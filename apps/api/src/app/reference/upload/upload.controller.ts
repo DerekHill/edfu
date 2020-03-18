@@ -9,12 +9,12 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { ResponseSuccess, ResponseError } from '../../common/dto/response.dto';
-import { UploadService } from './upload.service';
+import { S3Service } from './s3.service';
 import { videoFilter, standardiseFileName } from './utils/utils';
 
 @Controller('upload')
 export class UploadController {
-  constructor(private uploadService: UploadService) {}
+  constructor(private uploadService: S3Service) {}
 
   @UseGuards(JwtAuthGuard)
   @Post('upload')

@@ -28,7 +28,7 @@ import {
 import { ReferenceService } from './reference.service';
 import { LexicographerResolver } from './lexicographer.resolver';
 import { UsersModule } from '../users/users.module';
-import { UploadService } from './upload/upload.service';
+import { S3Service } from './upload/s3.service';
 
 class TfUseMock {
   embed(sentences: string[]) {
@@ -61,7 +61,7 @@ class TfUseMock {
     EntriesResolver,
     SignsService,
     EntrySensesService,
-    UploadService,
+    S3Service,
     {
       provide: TF_MODEL_NAME,
       useFactory: async () => {
@@ -85,6 +85,6 @@ class TfUseMock {
     },
     SimilarityService
   ],
-  exports: [EntriesService, SensesService, UploadService]
+  exports: [EntriesService, SensesService, S3Service]
 })
 export class ReferenceModule {}

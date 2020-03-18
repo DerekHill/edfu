@@ -10,7 +10,7 @@ import {
 const BUCKET_NAME = 'edfu';
 
 @Injectable()
-export class UploadService {
+export class S3Service {
   s3: any;
   constructor() {
     this.s3 = new S3();

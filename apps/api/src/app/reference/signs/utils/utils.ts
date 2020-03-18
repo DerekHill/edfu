@@ -7,7 +7,7 @@ export const videoFilter = (req, file, callback) => {
   callback(null, true);
 };
 
-export const standardiseFileName = (originalname: string) => {
+export const standardiseFileNameDeprecated = (originalname: string) => {
   const baseName = originalname.split('.')[0];
   const extension = extname(originalname);
 

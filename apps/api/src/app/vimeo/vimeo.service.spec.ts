@@ -5,11 +5,8 @@ import {
   VimeoService,
   VimeoUploadParams,
   VimeoBuffer,
-  VimeoUploadDoneFn,
-  VimeoProgressFn,
-  VimeoErrorFn,
   VimeoGetParams,
-  VimeoCallback
+  SmooshedResponseBody
 } from './vimeo.service';
 
 describe('VimeoService', () => {
@@ -26,9 +23,7 @@ describe('VimeoService', () => {
 
   describe.skip('VimeoService (skipped because makes API calls)', () => {
     describe('upload', () => {
-      it('uploads video', async done => {
-        expect.assertions(1);
-
+      it('returns videoId', async () => {
         const params: VimeoUploadParams = {
           name: 'Test video',
           description: 'Test description.'
@@ -39,62 +34,29 @@ describe('VimeoService', () => {
         const data: VimeoBuffer = await fs.readFile(filePath);
         data.size = data.byteLength;
 
-        const vimeoDoneFn: VimeoUploadDoneFn = (uri: string) => {
-          console.log('Your video URI is: ' + uri);
-          expect(uri).toBeTruthy();
-          done();
-        };
-
-        const vimeoProgressFn: VimeoProgressFn = (
-          bytes_uploaded: number,
-          bytes_total: number
-        ) => {
-          const percentage = ((bytes_uploaded / bytes_total) * 100).toFixed(2);
-          console.log(bytes_uploaded, bytes_total, percentage + '%');
-        };
-
-        const vimeoErrorFn: VimeoErrorFn = (error: any) => {
-          console.log('Failed because: ' + error);
-          done(error);
-        };
-
-        return service.upload(
-          data,
-          params,
-          vimeoDoneFn,
-          vimeoProgressFn,
-          vimeoErrorFn
-        );
+        const res: string = await service.upload(data, params);
+        expect(res).toBeDefined();
       }, 20000);
     });
 
-    describe('getVideo', () => {
-      it('gets video information', done => {
+    describe('getVideo (videoId must exist for test to pass)', () => {
+      it('gets video information', async () => {
         const videoId = '398484228';
         const getParams: VimeoGetParams = {
           method: 'GET',
           path: `/videos/${videoId}`
         };
 
-        const callback: VimeoCallback = (error, body, status_code, headers) => {
-          if (error) {
-            done(error);
-          }
-
-          expect(status_code).toBe(200);
-          expect(body.type).toBe('video');
-          done();
-        };
-
-        return service.getVideo(getParams, callback);
+        const res: SmooshedResponseBody = await service.getVideo(getParams);
+        expect(res.status_code).toBe(200);
       });
     });
 
-    describe('getVideoIdFromUri', () => {
+    describe('_extractVideoId', () => {
       it('get id', () => {
         const videoId = '398464138';
         const uri = `/videos/${videoId}`;
-        const res = service.getVideoIdFromUri(uri);
+        const res = service._extractVideoId(uri);
         expect(res).toBe(videoId);
       });
     });

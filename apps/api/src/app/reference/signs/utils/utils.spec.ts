@@ -1,4 +1,4 @@
-import { videoFilter, standardiseFileName } from './utils';
+import { videoFilter, standardiseFileNameDeprecated } from './utils';
 
 describe('utils', () => {
   describe('videoFilter', () => {
@@ -28,7 +28,6 @@ describe('utils', () => {
         expect(mockCallback.mock.calls.length).toBe(1);
         expect(mockCallback.mock.calls[0][1]).toBeTruthy();
       }
-      console.log('yo');
     });
 
     it('rejects other file formats', () => {
@@ -63,10 +62,10 @@ describe('utils', () => {
     });
   });
 
-  describe('standardiseFileName', () => {
-    it.only('works', () => {
+  describe('standardiseFileNameDeprecated', () => {
+    it('works', () => {
       const originalname = 'hello.mp4';
-      const res = standardiseFileName(originalname);
+      const res = standardiseFileNameDeprecated(originalname);
       expect(res).toMatch(/hello/);
     });
   });

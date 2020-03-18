@@ -9,11 +9,9 @@
 <button (click)="onSearchButtonPress(searchString.value)">Search</button>
 
 <div *ngIf="(senses$ | async)?.length">
-  <form [formGroup]="signFormGroup" (ngSubmit)="onSubmit()">
-    <div>
-      Link to sign (e.g. link to YouTube video):
-      <input type="text" formControlName="mediaUrl" />
-    </div>
+  <form [formGroup]="signFormGroup" novalidate (ngSubmit)="onSubmit()">
+    <label for="file">Choose File</label>
+    <input type="file" (change)="onFileChange($event)" />
 
     <div>
       Tick all the senses which apply to this sign.

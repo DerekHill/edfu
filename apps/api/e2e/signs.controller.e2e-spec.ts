@@ -4,14 +4,23 @@ import { AppModule } from '../src/app/app.module';
 import { registerUser, login, TEST_USER } from './test.helper';
 import { TestDatabaseModule } from '../src/app/config/test-database.module';
 import { S3Service } from '../src/app/s3/s3.service';
+import { VimeoService } from '../src/app/vimeo/vimeo.service';
+
+const VIDEO_ID = '12345678';
 
 class S3ServiceMock {
   upload = (file: Buffer | any, key: string) => {
-    return null;
+    return Promise.resolve({ Key: VIDEO_ID });
   };
 
   public async getObject(key: string): Promise<any> {
     return null;
+  }
+}
+
+class VimeoServiceMock {
+  uploadBuffer(oxId, buffer) {
+    return VIDEO_ID;
   }
 }
 
@@ -28,6 +37,8 @@ describe('SignsController (e2e)', () => {
     })
       .overrideProvider(S3Service)
       .useValue(new S3ServiceMock())
+      .overrideProvider(VimeoService)
+      .useValue(new VimeoServiceMock())
       .compile();
 
     app = moduleFixture.createNestApplication();
@@ -35,16 +46,19 @@ describe('SignsController (e2e)', () => {
     server = await app.getHttpServer();
   });
 
-  it('is successful if file is supplied', async () => {
+  it('returns mediaUrl', async () => {
     await registerUser(server, TEST_USER);
     const token = await login(TEST_USER.email, TEST_USER.password, server);
     const bufferFile = Buffer.from('dummy data');
 
     return request(server)
-      .post('/signs/create')
+      .post('/signs/upload')
       .set('Authorization', 'bearer ' + token)
       .attach('file', bufferFile, 'myfilename.mp4')
-      .then(({ body }) => expect(body.success).toBeTruthy());
+      .then(({ body }) => {
+        expect(body.success).toBeTruthy();
+        expect(body.data.mediaUrl).toMatch(new RegExp(VIDEO_ID, 'i'));
+      });
   });
 
   it('is not successful if file is not supplied', async () => {
@@ -52,7 +66,7 @@ describe('SignsController (e2e)', () => {
     const token = await login(TEST_USER.email, TEST_USER.password, server);
 
     return request(server)
-      .post('/signs/create')
+      .post('/signs/upload')
       .set('Authorization', 'bearer ' + token)
       .then(({ body }) => expect(body.success).toBeFalsy());
   });

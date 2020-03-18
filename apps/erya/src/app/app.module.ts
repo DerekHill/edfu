@@ -17,7 +17,6 @@ import { JwtInterceptor } from './shared/interceptors/jwt.interceptor';
 import { HttpErrorInterceptor } from './shared/interceptors/http-error.interceptor';
 import { AuthGuard } from './auth/auth.guard';
 import { DeviceDetectorModule } from 'ngx-device-detector';
-import { UploadComponent } from './contribute/upload/upload.component';
 import { ResponseErrorInterceptor } from './shared/interceptors/response-error.interceptor';
 
 const appRoutes: Routes = [
@@ -35,7 +34,6 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   { path: 'login', component: LoginComponent },
-  { path: 'upload', component: UploadComponent, canActivate: [AuthGuard] },
   { path: '', redirectTo: '/search', pathMatch: 'full' }
 ];
 

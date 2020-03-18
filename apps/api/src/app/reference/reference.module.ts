@@ -28,7 +28,9 @@ import {
 import { ReferenceService } from './reference.service';
 import { LexicographerResolver } from './lexicographer.resolver';
 import { UsersModule } from '../users/users.module';
-import { S3Service } from './upload/s3.service';
+import { S3Service } from '../s3/s3.service';
+import { S3Module } from '../s3/s3.module';
+import { VimeoModule } from '../vimeo/vimeo.module';
 
 class TfUseMock {
   embed(sentences: string[]) {
@@ -48,7 +50,9 @@ class TfUseMock {
       { name: ENTRY_SENSE_COLLECTION_NAME, schema: EntrySenseSchema },
       { name: SENSE_SIGN_COLLECTION_NAME, schema: SenseSignSchema },
       { name: SIGN_COLLECTION_NAME, schema: SignSchema }
-    ])
+    ]),
+    S3Module,
+    VimeoModule
   ],
   providers: [
     EntriesService,

@@ -70,7 +70,7 @@ describe('VimeoService', () => {
 
     describe('getVideo', () => {
       it('gets video information', done => {
-        const videoId = '398464138';
+        const videoId = '398484228';
         const getParams: VimeoGetParams = {
           method: 'GET',
           path: `/videos/${videoId}`

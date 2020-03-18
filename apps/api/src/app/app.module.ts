@@ -15,7 +15,7 @@ import { environment } from '../environments/environment';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { AuthController } from './auth/auth.controller';
-import { UploadController } from './reference/upload/upload.controller';
+import { SignsController } from './reference/signs/signs.controller';
 
 const CONFIG_CONFIG =
   process.env.TRAVIS === 'true'
@@ -49,7 +49,7 @@ if (environment.production) {
 
 @Module({
   imports: imports,
-  controllers: [AppController, AuthController, UploadController],
+  controllers: [AppController, AuthController, SignsController],
   providers: [AppService]
 })
 export class AppModule {}

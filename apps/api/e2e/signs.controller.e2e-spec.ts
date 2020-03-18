@@ -3,9 +3,9 @@ import * as request from 'supertest';
 import { AppModule } from '../src/app/app.module';
 import { registerUser, login, TEST_USER } from './test.helper';
 import { TestDatabaseModule } from '../src/app/config/test-database.module';
-import { S3Service } from '../src/app/reference/upload/s3.service';
+import { S3Service } from '../src/app/s3/s3.service';
 
-class UploadServiceServiceMock {
+class S3ServiceMock {
   upload = (file: Buffer | any, key: string) => {
     return null;
   };
@@ -15,7 +15,7 @@ class UploadServiceServiceMock {
   }
 }
 
-describe('UploadController (e2e)', () => {
+describe('SignsController (e2e)', () => {
   let app: any;
   let server: any;
 
@@ -27,7 +27,7 @@ describe('UploadController (e2e)', () => {
       ]
     })
       .overrideProvider(S3Service)
-      .useValue(new UploadServiceServiceMock())
+      .useValue(new S3ServiceMock())
       .compile();
 
     app = moduleFixture.createNestApplication();
@@ -41,7 +41,7 @@ describe('UploadController (e2e)', () => {
     const bufferFile = Buffer.from('dummy data');
 
     return request(server)
-      .post('/upload/upload')
+      .post('/signs/create')
       .set('Authorization', 'bearer ' + token)
       .attach('file', bufferFile, 'myfilename.mp4')
       .then(({ body }) => expect(body.success).toBeTruthy());
@@ -52,7 +52,7 @@ describe('UploadController (e2e)', () => {
     const token = await login(TEST_USER.email, TEST_USER.password, server);
 
     return request(server)
-      .post('/upload/upload')
+      .post('/signs/create')
       .set('Authorization', 'bearer ' + token)
       .then(({ body }) => expect(body.success).toBeFalsy());
   });

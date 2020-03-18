@@ -9,27 +9,28 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { ResponseSuccess, ResponseError } from '../../common/dto/response.dto';
-import { S3Service } from './s3.service';
 import { videoFilter, standardiseFileName } from './utils/utils';
+import { S3Service } from '../../s3/s3.service';
 
-@Controller('upload')
-export class UploadController {
-  constructor(private uploadService: S3Service) {}
+@Controller('signs')
+export class SignsController {
+  constructor(private s3Service: S3Service) {}
 
   @UseGuards(JwtAuthGuard)
-  @Post('upload')
+  @Post('create')
   @UseInterceptors(
     FileInterceptor('file', {
       limits: { fileSize: 8388608 },
       fileFilter: videoFilter
     })
   )
-  async uploadFile(@UploadedFile() file) {
+  async createSign(@UploadedFile() videoFile) {
     //   TODO: record this as sign
-    if (file) {
-      const res = await this.uploadService.upload(
-        file.buffer,
-        standardiseFileName(file.originalname)
+    if (videoFile) {
+      console.log();
+      const res = await this.s3Service.upload(
+        videoFile.buffer,
+        standardiseFileName(videoFile.originalname)
       );
     } else {
       return new ResponseError('UPLOAD.ERROR.NO_FILE_ATTACHED');

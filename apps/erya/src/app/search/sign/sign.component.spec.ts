@@ -125,7 +125,9 @@ describe('SignComponent', () => {
       ];
 
       for (const video of videos) {
-        expect(component._getVimeoVideoId(video)).toBe(videoId);
+        expect(component._getVimeoVideoIdFromFullUrlDeprecated(video)).toBe(
+          videoId
+        );
       }
     });
   });

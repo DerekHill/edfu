@@ -14,7 +14,7 @@ export class ResponseError implements IResponse {
     );
   }
   message: string;
-  data: any[];
+  data: any;
   errorMessage: any;
   error: any;
   success: boolean;
@@ -39,7 +39,7 @@ export class ResponseSuccess implements IResponse {
     }
   }
   message: string;
-  data: any[];
+  data: any;
   errorMessage: any;
   error: any;
   success: boolean;

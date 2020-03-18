@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Apollo, QueryRef } from 'apollo-angular';
 import { Observable, Subscription } from 'rxjs';
 import gql from 'graphql-tag';
@@ -15,6 +15,7 @@ import {
   ValidatorFn,
   AbstractControl
 } from '@angular/forms';
+import { UploadService } from './upload/upload.service';
 
 interface SensesFromApiSearchVariables {
   searchString?: string;
@@ -63,6 +64,7 @@ export class ContributeComponent implements OnInit, OnDestroy {
   senses: HydratedSense[];
 
   public signFormGroup: FormGroup;
+  public fileToUpload: File = null;
   private checkboxControl: FormArray;
 
   subscription: Subscription;
@@ -70,14 +72,16 @@ export class ContributeComponent implements OnInit, OnDestroy {
   constructor(
     private apollo: Apollo,
     private senseArranger: SenseArrangerService,
-    private fb: FormBuilder
+    private fileUploadService: UploadService,
+    private fb: FormBuilder,
+    private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
     this.signFormGroup = this.fb.group({
       senseIds: this.fb.array([], checkedValidator()),
-      mediaUrl: ['', [Validators.required, Validators.pattern(URL_REGEX)]],
-      mnemonic: ['', Validators.maxLength(200)]
+      mnemonic: ['', Validators.maxLength(200)],
+      file: [null, Validators.required]
     });
 
     this.checkboxControl = this.signFormGroup.controls.senseIds as FormArray;
@@ -116,6 +120,21 @@ export class ContributeComponent implements OnInit, OnDestroy {
     );
   }
 
+  onFileChange(event: any) {
+    if (event.target.files && event.target.files.length) {
+      this.fileToUpload = event.target.files.item(0);
+      this.signFormGroup.patchValue({
+        file: 'Validate form, but send file separately'
+      });
+    } else {
+      this.fileToUpload = null;
+      this.signFormGroup.patchValue({
+        file: null
+      });
+    }
+    this.cd.markForCheck();
+  }
+
   onSearchButtonPress(searchString: string) {
     this.sensesFromApiSearchRef.setVariables({ searchString: searchString });
   }
@@ -126,10 +145,18 @@ export class ContributeComponent implements OnInit, OnDestroy {
       senseIds: this.checkboxControl.value.filter(value => !!value)
     };
     if (this.checkboxControl.valid) {
-      this.callCreateSignMutation(formValue);
+      console.log(formValue);
+      //   this.callCreateSignMutation(formValue);
     } else {
       console.log('formValue not valid');
     }
+  }
+
+  uploadVideoAndCreateSign() {
+    this.fileUploadService.postFile(this.fileToUpload).subscribe(res => {
+      // TODO: give user feedback on successful file upload
+      console.log(res);
+    });
   }
 
   callCreateSignMutation(createSignData: CreateSignInputInterface) {

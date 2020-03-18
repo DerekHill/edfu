@@ -117,7 +117,7 @@ export class SignComponent implements OnInit, AfterViewInit {
     return url.match(youtube_regex)[2];
   }
 
-  _getVimeoVideoId(url: string): string {
+  _getVimeoVideoIdFromFullUrlDeprecated(url: string): string {
     const vimeo_regex = /https?:\/\/(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|video\/|)(\d+)(?:$|\/|\?)/;
     return url.match(vimeo_regex)[3];
   }
@@ -126,7 +126,9 @@ export class SignComponent implements OnInit, AfterViewInit {
     if (this.mediaType === MediaType.youtube) {
       this.platformVideoId = this._getYouTubeVideoId(mediaUrl);
     } else if (this.mediaType === MediaType.vimeo) {
-      this.platformVideoId = this._getVimeoVideoId(mediaUrl);
+      this.platformVideoId = this._getVimeoVideoIdFromFullUrlDeprecated(
+        mediaUrl
+      );
     }
   }
 }

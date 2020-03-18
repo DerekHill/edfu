@@ -63,6 +63,7 @@
     "@types/bcryptjs": "^2.4.2",
     "@types/nodemailer": "^6.4.0",
     "@types/supertest": "^2.0.8",
+    "@types/vimeo": "0.0.31",
     "@types/vimeo__player": "^2.9.0",
     "@vimeo/player": "^2.10.0",
     "angular2-hotkeys": "^2.2.0",
@@ -91,6 +92,7 @@
     "rxjs": "~6.5.4",
     "ts-optchain": "^0.1.8",
     "tslib": "^1.11.1",
+    "vimeo": "^2.1.1",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {

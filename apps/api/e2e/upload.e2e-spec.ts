@@ -3,7 +3,7 @@ import * as request from 'supertest';
 import { AppModule } from '../src/app/app.module';
 import { registerUser, login, TEST_USER } from './test.helper';
 import { TestDatabaseModule } from '../src/app/config/test-database.module';
-import { UploadService } from '../src/app/reference/upload/upload.service';
+import { S3Service } from '../src/app/reference/upload/s3.service';
 
 class UploadServiceServiceMock {
   upload = (file: Buffer | any, key: string) => {
@@ -26,7 +26,7 @@ describe('UploadController (e2e)', () => {
         AppModule
       ]
     })
-      .overrideProvider(UploadService)
+      .overrideProvider(S3Service)
       .useValue(new UploadServiceServiceMock())
       .compile();
 

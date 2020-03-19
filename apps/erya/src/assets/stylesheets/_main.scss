@@ -70,8 +70,15 @@ input.sense-input {
     &:hover {
       cursor: pointer;
       border-color: $primary;
+
+      @media (hover: none) {
+        border-color: $white;
+      }
       &:after {
         border-color: $primary;
+        @media (hover: none) {
+          border-color: $grey;
+        }
       }
     }
   }

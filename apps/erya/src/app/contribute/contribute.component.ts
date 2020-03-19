@@ -16,6 +16,8 @@ import {
   AbstractControl
 } from '@angular/forms';
 import { UploadService } from './upload/upload.service';
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { faExternalLinkAlt, faUpload } from '@fortawesome/free-solid-svg-icons';
 
 interface SensesFromApiSearchVariables {
   searchString?: string;
@@ -74,8 +76,11 @@ export class ContributeComponent implements OnInit, OnDestroy {
     private senseArranger: SenseArrangerService,
     private fileUploadService: UploadService,
     private fb: FormBuilder,
-    private cd: ChangeDetectorRef
-  ) {}
+    private cd: ChangeDetectorRef,
+    public library: FaIconLibrary
+) {
+  library.addIcons(faExternalLinkAlt, faUpload);
+}
 
   ngOnInit() {
     this.signFormGroup = this.fb.group({

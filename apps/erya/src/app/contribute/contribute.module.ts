@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { SharedModule } from '../shared/shared.module';
 import { UploadService } from './upload/upload.service';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [ContributeComponent],
@@ -17,7 +18,8 @@ import { UploadService } from './upload/upload.service';
     MatAutocompleteModule,
     MatFormFieldModule,
     MatInputModule,
-    SharedModule
+    SharedModule,
+    FontAwesomeModule
   ],
   providers: [UploadService]
 })

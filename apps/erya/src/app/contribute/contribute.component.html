@@ -1,40 +1,134 @@
-<div>
-  <p>Enter word for which you would like to add a sign.</p>
-  <p>
-    This can be any word or phrase in the Oxford English Dictionary (check at
-    <a href="https://www.lexico.com/">lexico.com</a>).
-  </p>
-</div>
-<input #searchString (keyup.enter)="onSearchButtonPress(searchString.value)" />
-<button (click)="onSearchButtonPress(searchString.value)">Search</button>
-
-<div *ngIf="(senses$ | async)?.length">
-  <form [formGroup]="signFormGroup" novalidate (ngSubmit)="onSubmit()">
-    <label for="file">Choose File</label>
-    <input type="file" (change)="onFileChange($event)" />
-
-    <div>
-      Tick all the senses which apply to this sign.
-      <ng-container
-        *ngFor="let sense of senses$ | async; let i = index"
-        formArrayName="senseIds"
-      >
-        <p class="is-capitalized has-text-weight-bold">
-          {{ sense.oxId | removeUnderscores }}
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered content">
+      <div class="column is-two-thirds-desktop">
+        <p class="is-size-5 has-text-link has-text-weight-medium">
+          Enter word for which you would like to add a sign.
         </p>
-        <p>{{ sense.lexicalCategory }}</p>
-        <p>{{ sense.example }}</p>
-        <p>{{ sense.definition }}</p>
-        Select: <input type="checkbox" [formControlName]="i" />
-      </ng-container>
-    </div>
+        <div class="field has-addons">
+          <div class="control is-expanded">
+            <input
+              #searchString
+              (keyup.enter)="onSearchButtonPress(searchString.value)"
+              autofocus
+              class="input"
+            />
+          </div>
+          <div class="control">
+            <button
+              class="button is-link"
+              (click)="onSearchButtonPress(searchString.value)"
+            >
+              Search
+            </button>
+          </div>
+        </div>
 
-    <div>
-      A description of the action in the sign to help people remember it. For
-      example "open the curtains" describes the sign for "good morning" (this is
-      optional).
-      <input type="text" formControlName="mnemonic" />
+        <p class="has-text-grey-dark">
+          This can be any word or phrase in the Oxford English Dictionary. Check
+          at
+          <a href="https://www.lexico.com/" target="_blank"
+            >lexico.com
+            <fa-icon [icon]="['fas', 'external-link-alt']"></fa-icon></a
+          >.
+        </p>
+        <br />
+        <div class="is-inline-block" *ngIf="(senses$ | async)?.length">
+          <form [formGroup]="signFormGroup" (ngSubmit)="onSubmit()">
+            <p class="is-size-5 has-text-weight-medium has-text-link">
+              Upload video.
+            </p>
+            <div class="file has-name is-fullwidth">
+              <label class="file-label">
+                <input
+                  class="file-input"
+                  type="file"
+                  name="resume"
+                  (change)="onFileChange($event)"
+                />
+                <span class="file-cta">
+                  <span class="file-icon">
+                    <fa-icon [icon]="['fas', 'upload']"></fa-icon>
+                  </span>
+                  <span class="file-label">
+                    Choose a file…
+                  </span>
+                </span>
+                <span class="file-name">
+                  <span *ngIf="fileToUpload; else filePlaceholder">{{
+                    fileToUpload.name
+                  }}</span>
+                  <ng-template #filePlaceholder>No file added</ng-template>
+                </span>
+              </label>
+            </div>
+            <br />
+            <br />
+            <p class="title is-size-5 has-text-weight-medium has-text-link">
+              "<span class="is-capitalized">{{ searchString.value }}</span
+              >" has different senses.
+            </p>
+            <p class="is-size-6">
+              Tick all the senses which apply to this sign.
+            </p>
+            <div class="columns is-multiline">
+              <div
+                class="column is-one-third sense-column"
+                *ngFor="let sense of senses$ | async; let i = index"
+                formArrayName="senseIds"
+              >
+                <input
+                  type="checkbox"
+                  class="sense-input"
+                  [formControlName]="i"
+                  [id]="i"
+                />
+                <label class="box" [for]="i">
+                  <span
+                    ><span class="is-capitalized has-text-weight-bold">
+                      {{ sense.oxId | removeUnderscores }} </span
+                    ><span class="has-text-grey has-text-weight-medium">{{
+                      sense.lexicalCategory
+                    }}</span></span
+                  >
+                  <span class="sense-example has-text-grey is-italic">‘{{ sense.example }}’</span>
+                  <span class="sense-definition ">
+                   {{ sense.definition }}</span
+                  >
+                </label>
+              </div>
+            </div>
+            <br />
+            <p class="is-size-5 has-text-weight-medium has-text-link">
+              Add description of the action in the sign to help people remember
+              it (optional).
+            </p>
+
+            <div class="field">
+              <div class="control  is-expanded">
+                <input
+                  class="input"
+                  type="text"
+                  formControlName="mnemonic"
+                  placeholder="E.g. open the curtains"
+                />
+              </div>
+            </div>
+            <p class="has-text-grey-dark">
+              For example "open the curtains" describes the sign for "good
+              morning".
+            </p>
+            <br>
+            <button
+              class="is-pulled-right button is-primary is-fullwidth-mobile is-medium"
+              type="submit"
+              [disabled]="signFormGroup.invalid"
+            >
+              Add Sense
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
-    <button type="submit" [disabled]="signFormGroup.invalid">Submit</button>
-  </form>
-</div>
+  </div>
+</section>

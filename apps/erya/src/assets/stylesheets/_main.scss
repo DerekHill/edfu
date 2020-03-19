@@ -27,10 +27,70 @@ mat-form-field {
   padding-top: 10px;
 }
 
-youtube-player iframe, .vimeo-container iframe {
+youtube-player iframe,
+.vimeo-container iframe {
   height: 100%;
   width: 100%;
   position: absolute;
   top: 0;
   left: 0;
+}
+
+.sense {
+  &-example {
+    padding-top: 10px;
+  }
+  &-definition {
+    margin-top: auto;
+    padding-top: 10px;
+  }
+}
+
+input.sense-input {
+  visibility: hidden;
+  position: absolute;
+
+  & + label.box {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid $white;
+    &:after {
+      content: '';
+      width: 20px;
+      height: 20px;
+      border: 1px solid $grey;
+      display: block;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      border-radius: 3px;
+    }
+    &:hover {
+      cursor: pointer;
+      border-color: $primary;
+      &:after {
+        border-color: $primary;
+      }
+    }
+  }
+  &:checked + label.box {
+    border-color: $primary;
+    &:after {
+      content: '✔';
+      height: 20px;
+      border-color: $primary;
+      font-size: 13px;
+      text-align: center;
+      color: $primary;
+    }
+  }
+}
+
+@media screen and (max-width: 768px), print {
+  .button.is-fullwidth-mobile {
+    display: flex;
+    width: 100%;
+  }
 }

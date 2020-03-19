@@ -64,3 +64,20 @@ export interface CreateSignInputInterface {
   readonly mediaUrl: string;
   readonly senseIds: string[];
 }
+
+export interface IResponse {
+  success: boolean;
+  message: string;
+  errorMessage: string;
+  data: any;
+  error: any;
+}
+
+export enum VimeoVideoStatus {
+  available = 'available',
+  uploading = 'uploading',
+  transcoding = 'transcoding',
+  uploading_error = 'uploading_error',
+  transcoding_error = 'transcoding_error',
+  not_found = 'not_found' // requested video couldn't be found
+}

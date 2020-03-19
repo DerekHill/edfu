@@ -2,7 +2,11 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Apollo, QueryRef } from 'apollo-angular';
 import { Observable, Subscription } from 'rxjs';
 import gql from 'graphql-tag';
-import { HydratedSense, CreateSignInputInterface } from '@edfu/api-interfaces';
+import {
+  HydratedSense,
+  CreateSignInputInterface,
+  IResponse
+} from '@edfu/api-interfaces';
 import { map } from 'rxjs/operators';
 import { ApolloQueryResult } from 'apollo-client';
 import { SenseArrangerService } from '../search/sense-grouping/sense-arranger.service';
@@ -27,6 +31,14 @@ interface SensesFromApiResult {
   sensesFromApi: HydratedSense[];
 }
 
+enum UploadStatus {
+  none = 'none',
+  uploading = 'uploading',
+  creating = 'creating',
+  success = 'success',
+  error = 'error'
+}
+
 const SensesFromApiQuery = gql`
   query SensesFromApiQuery($searchString: String! = "") {
     sensesFromApi(searchString: $searchString) {
@@ -42,8 +54,6 @@ const SensesFromApiQuery = gql`
     }
   }
 `;
-
-const URL_REGEX = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
 
 function checkedValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
@@ -67,6 +77,8 @@ export class ContributeComponent implements OnInit, OnDestroy {
 
   public signFormGroup: FormGroup;
   public fileToUpload: File = null;
+  public uploadStatus = UploadStatus.none;
+
   private checkboxControl: FormArray;
 
   subscription: Subscription;
@@ -74,7 +86,7 @@ export class ContributeComponent implements OnInit, OnDestroy {
   constructor(
     private apollo: Apollo,
     private senseArranger: SenseArrangerService,
-    private fileUploadService: UploadService,
+    private uploadService: UploadService,
     private fb: FormBuilder,
     private cd: ChangeDetectorRef,
     public library: FaIconLibrary
@@ -144,27 +156,45 @@ export class ContributeComponent implements OnInit, OnDestroy {
     this.sensesFromApiSearchRef.setVariables({ searchString: searchString });
   }
 
-  onSubmit() {
+  async onSubmit() {
     const formValue = {
       ...this.signFormGroup.value,
       senseIds: this.checkboxControl.value.filter(value => !!value)
     };
     if (this.checkboxControl.valid) {
-      console.log(formValue);
-      //   this.callCreateSignMutation(formValue);
+      this.uploadStatus = UploadStatus.uploading;
+      this.uploadVideoAndCreateSign(formValue);
     } else {
-      console.log('formValue not valid');
+      console.error('formValue not valid');
     }
   }
 
-  uploadVideoAndCreateSign() {
-    this.fileUploadService.postFile(this.fileToUpload).subscribe(res => {
-      // TODO: give user feedback on successful file upload
-      console.log(res);
-    });
+  private async uploadVideoAndCreateSign(formValue: any) {
+    const oxId = this.senses[0].oxId;
+
+    const res: IResponse = await this.uploadService.postFile(
+      this.fileToUpload,
+      oxId
+    );
+
+    if (res.success) {
+      const mediaUrl = res.data.mediaUrl;
+      this.uploadStatus = UploadStatus.creating;
+
+      const { file, ...partialData } = formValue;
+
+      const createSignData: CreateSignInputInterface = {
+        ...partialData,
+        ...{ mediaUrl: mediaUrl }
+      };
+
+      this.callCreateSignMutation(createSignData);
+    } else {
+      this.uploadStatus = UploadStatus.error;
+    }
   }
 
-  callCreateSignMutation(createSignData: CreateSignInputInterface) {
+  private callCreateSignMutation(createSignData: CreateSignInputInterface) {
     const createSignWithAssociationsMutation = gql`
       mutation createSignWithAssociationsMutation(
         $createSignData: CreateSignInput!
@@ -183,10 +213,11 @@ export class ContributeComponent implements OnInit, OnDestroy {
       })
       .subscribe(
         ({ data }) => {
-          console.log('response:');
+          this.uploadStatus = UploadStatus.success;
           console.log(data);
         },
         error => {
+          this.uploadStatus = UploadStatus.error;
           console.error(error);
         }
       );

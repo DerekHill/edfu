@@ -5,9 +5,11 @@ import {
   VimeoService,
   VimeoUploadParams,
   VimeoBuffer,
-  VimeoGetParams,
+  VimeoCommonGetParams,
   SmooshedResponseBody
 } from './vimeo.service';
+import { makeBody } from './test/response.mock';
+import { VimeoVideoStatus } from '@edfu/api-interfaces';
 
 describe('VimeoService', () => {
   let service: VimeoService;
@@ -39,16 +41,33 @@ describe('VimeoService', () => {
       }, 20000);
     });
 
+    describe('getVideoStatus', () => {
+      it('gets correct status if video is not found', async () => {
+        const invalidVideoId = '000000000';
+        const res = await service.getVideoStatus(invalidVideoId);
+        expect(res).toBe(VimeoVideoStatus.not_found);
+      });
+    });
+
     describe('getVideo (videoId must exist for test to pass)', () => {
       it('gets video information', async () => {
-        const videoId = '398484228';
-        const getParams: VimeoGetParams = {
+        const videoId = '398789046';
+        const getParams: VimeoCommonGetParams = {
           method: 'GET',
           path: `/videos/${videoId}`
         };
 
-        const res: SmooshedResponseBody = await service.getVideo(getParams);
+        const res: SmooshedResponseBody = await service.commonGet(getParams);
         expect(res.status_code).toBe(200);
+      });
+    });
+
+    describe('_extractStatusFromApiResponse', () => {
+      it('does something', () => {
+        const status = VimeoVideoStatus.transcoding;
+        const body = makeBody(VimeoVideoStatus.transcoding);
+        const res = service._extractStatusFromApiResponse(body);
+        expect(res).toBe(status);
       });
     });
 

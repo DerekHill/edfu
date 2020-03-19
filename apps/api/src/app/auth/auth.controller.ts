@@ -12,9 +12,9 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { CreateUserDto } from '../users/dto/create-user.dto';
-import { IResponse } from '../common/interfaces/response.interface';
 import { ResponseSuccess, ResponseError } from '../common/dto/response.dto';
 import { UsersService } from '../users/users.service';
+import { IResponse } from '@edfu/api-interfaces';
 
 @Controller('auth')
 export class AuthController {

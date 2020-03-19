@@ -19,7 +19,8 @@
         </button>
       </div>
     </div>
-    <youtube-player class="image is-16by9"
+    <youtube-player
+      class="image is-16by9"
       #youtube_player_container
       [videoId]="platformVideoId"
       (ready)="onYouTubePlayerReady()"
@@ -27,7 +28,13 @@
     ></youtube-player>
   </div>
 
-  <div *ngSwitchCase="'vimeo'" #vimeo_player_container class="image is-16by9 vimeo-container"></div>
+  <div
+    *ngSwitchCase="'vimeo'"
+    #vimeo_player_container
+    class="image is-16by9 vimeo-container"
+  >
+    Vimeo status is: {{ vimeoVideoStatus }}
+  </div>
 
   <div *ngSwitchDefault>
     <img class="is-fullwidth-er" src="{{ sign.mediaUrl }}" />

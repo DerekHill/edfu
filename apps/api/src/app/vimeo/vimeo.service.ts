@@ -1,6 +1,7 @@
 import { promisify } from 'util';
 import { Injectable } from '@nestjs/common';
 import { VimeoGetVideoBody } from './vimeo.video.body.types';
+import { VimeoVideoStatus } from '@edfu/api-interfaces';
 
 const Vimeo = require('vimeo').Vimeo;
 
@@ -24,13 +25,19 @@ export interface VimeoUploadParams {
   readonly description: string;
 }
 
-export interface VimeoGetParams {
+export interface VimeoCommonGetParams {
   readonly method: string;
   readonly path: string;
 }
 
 export interface VimeoBuffer extends Buffer {
   size?: number;
+}
+
+enum VimeoUploadOrTranscodeStatus {
+  in_progress = 'in_progress',
+  complete = 'complete',
+  error = 'error'
 }
 
 type PromisifiableCallback = (error: Error, value: any) => any;
@@ -42,7 +49,7 @@ const client = new Vimeo(
 );
 
 const promisifableRequest = (
-  params: VimeoGetParams,
+  params: VimeoCommonGetParams,
   outerCb: PromisifiableCallback
 ) => {
   const innerCb = (
@@ -105,8 +112,29 @@ export class VimeoService {
     );
   }
 
-  getVideo(params: VimeoGetParams) {
+  commonGet(params: VimeoCommonGetParams): Promise<SmooshedResponseBody> {
     return promisifiedRequest(params);
+  }
+
+  async getVideoStatus(videoId: string): Promise<VimeoVideoStatus> {
+    const getParams: VimeoCommonGetParams = {
+      method: 'GET',
+      path: `/videos/${videoId}`
+    };
+    try {
+      const res = await this.commonGet(getParams);
+      return this._extractStatusFromApiResponse(res);
+    } catch (error) {
+      if (error.message.match(/The requested video couldn't be found/)) {
+        return VimeoVideoStatus.not_found;
+      } else {
+        throw error;
+      }
+    }
+  }
+
+  _extractStatusFromApiResponse(body: SmooshedResponseBody): VimeoVideoStatus {
+    return body.body.status;
   }
 
   _extractVideoId(uri: string): string {

@@ -5,11 +5,13 @@ import {
   ViewChild,
   AfterViewInit
 } from '@angular/core';
-import { HydratedSense, SignRecord } from '@edfu/api-interfaces';
+import { HydratedSense, SignRecord, IResponse } from '@edfu/api-interfaces';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import * as Player from '@vimeo/player/dist/player.js';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
+import { UploadService } from '../../contribute/upload/upload.service';
+import { VimeoVideoStatus } from '@edfu/api-interfaces';
 
 export enum MediaType {
   htmlVideo = 'htmlVideo',
@@ -27,15 +29,16 @@ export class SignComponent implements OnInit, AfterViewInit {
   @ViewChild('youtube_player_container') youtubeContainer: any;
   @ViewChild('ytContainer') ytContainer: any;
 
-  private vimeoPlayer: Player;
+  public mediaType: MediaType;
+  public platformVideoId: string;
+  public vimeoVideoStatus = VimeoVideoStatus.available;
 
-  _sign: SignRecord;
-  mediaType: MediaType;
-  platformVideoId: string;
+  private _sign: SignRecord;
 
   constructor(
     public deviceService: DeviceDetectorService,
-    public library: FaIconLibrary
+    public library: FaIconLibrary,
+    private uploadService: UploadService
   ) {
     library.addIcons(faPlay);
   }
@@ -62,17 +65,7 @@ export class SignComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if (this.mediaType === MediaType.vimeo) {
-      this.vimeoPlayer = new Player(this.vimeoContainer.nativeElement, {
-        id: this.platformVideoId,
-        loop: true,
-        autoplay: true,
-        muted: true,
-        playsinline: true,
-        portrait: false,
-        title: false
-      });
-    }
+    this.initializeVimeoPlayer();
   }
 
   youtubePlayAgain() {
@@ -81,18 +74,12 @@ export class SignComponent implements OnInit, AfterViewInit {
 
   onYouTubePlayerReady() {
     this.youtubeContainer.mute();
-    this._playIfNotMobile();
+    this.playIfNotMobile();
   }
 
   onYouTubePlayerStateChange(event) {
     if (event.data === 0) {
-      this._playIfNotMobile();
-    }
-  }
-
-  _playIfNotMobile() {
-    if (!this.deviceService.isMobile()) {
-      this.youtubeContainer.playVideo();
+      this.playIfNotMobile();
     }
   }
 
@@ -117,18 +104,56 @@ export class SignComponent implements OnInit, AfterViewInit {
     return url.match(youtube_regex)[2];
   }
 
-  _getVimeoVideoIdFromFullUrlDeprecated(url: string): string {
+  _getVimeoVideoIdFromFullUrl(url: string): string {
     const vimeo_regex = /https?:\/\/(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|video\/|)(\d+)(?:$|\/|\?)/;
     return url.match(vimeo_regex)[3];
+  }
+
+  private initializeVimeoPlayer() {
+    if (this.mediaType === MediaType.vimeo) {
+      let vimeoPlayer: Player;
+
+      vimeoPlayer = new Player(this.vimeoContainer.nativeElement, {
+        id: this.platformVideoId,
+        background: true,
+        muted: true,
+        playsinline: true
+      });
+
+      vimeoPlayer
+        .loadVideo(this.platformVideoId)
+        .then(id => {})
+        .catch(error => {
+          if (error.message.match(/was not found/)) {
+            this.vimeoVideoStatus = VimeoVideoStatus.uploading_error;
+            this.updateVimeoVideoStatus(this.platformVideoId);
+          } else {
+            throw error;
+          }
+        });
+    }
+  }
+
+  private playIfNotMobile() {
+    if (!this.deviceService.isMobile()) {
+      this.youtubeContainer.playVideo();
+    }
   }
 
   private setPlatformVideoId(mediaUrl: string) {
     if (this.mediaType === MediaType.youtube) {
       this.platformVideoId = this._getYouTubeVideoId(mediaUrl);
     } else if (this.mediaType === MediaType.vimeo) {
-      this.platformVideoId = this._getVimeoVideoIdFromFullUrlDeprecated(
-        mediaUrl
-      );
+      this.platformVideoId = this._getVimeoVideoIdFromFullUrl(mediaUrl);
+    }
+  }
+
+  private async updateVimeoVideoStatus(videoId: string) {
+    const res: IResponse = await this.uploadService.getStatus(videoId);
+
+    if (res.success) {
+      const status: VimeoVideoStatus = res.data.status;
+      this.vimeoVideoStatus = status;
     }
   }
 }

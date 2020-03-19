@@ -1,3 +1,5 @@
+import { VimeoVideoStatus } from '@edfu/api-interfaces';
+
 export interface VimeoGetVideoBody {
   uri: string;
   name: string;
@@ -27,7 +29,7 @@ export interface VimeoGetVideoBody {
   files?: (FilesEntity)[] | null;
   download?: (DownloadEntity)[] | null;
   app: App;
-  status: string;
+  status: VimeoVideoStatus;
   resource_key: string;
   upload: Upload;
   transcode: Transcode;

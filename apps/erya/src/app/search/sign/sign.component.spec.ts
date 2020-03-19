@@ -8,6 +8,13 @@ import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 import { DeviceDetectorModule } from 'ngx-device-detector';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { UploadService } from '../../contribute/upload/upload.service';
+
+class UploadServiceMock {
+  getStatus() {
+    return null;
+  }
+}
 
 describe('SignComponent', () => {
   let component: SignComponent;
@@ -16,6 +23,12 @@ describe('SignComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [SignComponent, SenseComponent],
+      providers: [
+        {
+          provide: UploadService,
+          useValue: new UploadServiceMock()
+        }
+      ],
       imports: [
         MatListModule,
         YouTubePlayerModule,
@@ -125,9 +138,7 @@ describe('SignComponent', () => {
       ];
 
       for (const video of videos) {
-        expect(component._getVimeoVideoIdFromFullUrlDeprecated(video)).toBe(
-          videoId
-        );
+        expect(component._getVimeoVideoIdFromFullUrl(video)).toBe(videoId);
       }
     });
   });

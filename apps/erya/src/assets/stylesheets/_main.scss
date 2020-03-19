@@ -60,7 +60,7 @@ input.sense-input {
       content: '';
       width: 20px;
       height: 20px;
-      border: 1px solid $grey;
+      border: 1px solid $grey-light;
       display: block;
       position: absolute;
       top: 10px;
@@ -77,7 +77,7 @@ input.sense-input {
       &:after {
         border-color: $primary;
         @media (hover: none) {
-          border-color: $grey;
+          border-color: $grey-light;
         }
       }
     }

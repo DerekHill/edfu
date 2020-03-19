@@ -108,7 +108,7 @@
     "@nrwl/node": "8.12.2",
     "@nrwl/workspace": "8.12.2",
     "@types/jest": "25.1.4",
-    "@types/mongoose": "^5.5.34",
+    "@types/mongoose": "^5.7.6",
     "@types/node": "^13.9.1",
     "@types/passport-jwt": "^3.0.3",
     "@types/passport-local": "^1.0.33",

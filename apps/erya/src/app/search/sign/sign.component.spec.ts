@@ -1,7 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { SignComponent, MediaType } from './sign.component';
 import { ObjectId } from 'bson';
-import { SignRecord, HydratedSense } from '@edfu/api-interfaces';
+import {
+  SignRecord,
+  HydratedSense,
+  VimeoVideoStatus
+} from '@edfu/api-interfaces';
 import { MatListModule } from '@angular/material/list';
 import { SenseComponent } from '../sense/sense.component';
 import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
@@ -139,6 +143,25 @@ describe('SignComponent', () => {
 
       for (const video of videos) {
         expect(component._getVimeoVideoIdFromFullUrl(video)).toBe(videoId);
+      }
+    });
+  });
+
+  describe('_notifySignNotFound', () => {
+    it('throws error if sign is not found', () => {
+      const videoId = '12345678';
+      const notifiableStatusStrings = [
+        'uploading_error',
+        'transcoding_error',
+        'not_found'
+      ];
+
+      for (const str of notifiableStatusStrings) {
+        try {
+          component._notifySignNotFound('12345678', str as VimeoVideoStatus);
+        } catch (error) {
+          expect(error.message).toMatch(videoId);
+        }
       }
     });
   });

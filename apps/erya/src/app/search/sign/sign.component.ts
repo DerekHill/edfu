@@ -109,6 +109,18 @@ export class SignComponent implements OnInit, AfterViewInit {
     return url.match(vimeo_regex)[3];
   }
 
+  _notifySignNotFound(videoId: string, status: VimeoVideoStatus) {
+    if (
+      [
+        VimeoVideoStatus.uploading_error,
+        VimeoVideoStatus.transcoding_error,
+        VimeoVideoStatus.not_found
+      ].includes(status)
+    ) {
+      throw new Error(`videoId: ${videoId} got error: ${status}`);
+    }
+  }
+
   private initializeVimeoPlayer() {
     if (this.mediaType === MediaType.vimeo) {
       let vimeoPlayer: Player;
@@ -125,7 +137,6 @@ export class SignComponent implements OnInit, AfterViewInit {
         .then(id => {})
         .catch(error => {
           if (error.message.match(/was not found/)) {
-            this.vimeoVideoStatus = VimeoVideoStatus.uploading_error;
             this.updateVimeoVideoStatus(this.platformVideoId);
           } else {
             throw error;
@@ -154,6 +165,7 @@ export class SignComponent implements OnInit, AfterViewInit {
     if (res.success) {
       const status: VimeoVideoStatus = res.data.status;
       this.vimeoVideoStatus = status;
+      this._notifySignNotFound(videoId, status);
     }
   }
 }

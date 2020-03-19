@@ -55,7 +55,7 @@
     "@nestjs/mongoose": "^6.4.0",
     "@nestjs/passport": "^6.2.0",
     "@nestjs/platform-express": "^6.8.3",
-    "@nestjs/serve-static": "^2.0.0",
+    "@nestjs/serve-static": "^2.1.0",
     "@nrwl/angular": "8.12.2",
     "@sentry/browser": "^5.14.0",
     "@tensorflow-models/universal-sentence-encoder": "^1.2.2",

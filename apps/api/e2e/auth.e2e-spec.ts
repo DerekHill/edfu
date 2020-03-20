@@ -135,7 +135,8 @@ describe('AuthController (e2e)', () => {
         const sign: CreateSignInput = {
           mediaUrl: mediaUrl,
           mnemonic: '',
-          senseIds: ['1', '2']
+          senseIds: ['1', '2'],
+          s3Key: '1234.mp4'
         };
 
         const query = `
@@ -166,7 +167,7 @@ describe('AuthController (e2e)', () => {
         const query = `
           mutation {
             createSignWithAssociations(
-              createSignData: {mediaUrl: "mediaUrl", mnemonic: "", senseIds: [] }
+              createSignData: {mediaUrl: "mediaUrl", s3Key: "123" ,mnemonic: "", senseIds: [] }
             ) {
               mnemonic
               mediaUrl

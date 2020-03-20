@@ -61,7 +61,8 @@ export class TestResolver {
       _id: new ObjectId(),
       userId: new ObjectId(),
       mnemonic: 'remember me',
-      mediaUrl: 'www.com'
+      mediaUrl: 'www.com',
+      s3Key: '1234.mp4'
     });
   }
 
@@ -72,7 +73,8 @@ export class TestResolver {
       _id: new ObjectId(),
       userId: new ObjectId(),
       mnemonic: user.email,
-      mediaUrl: 'www.com'
+      mediaUrl: 'www.com',
+      s3Key: '1234.mp4'
     });
   }
 }

@@ -6,6 +6,7 @@
 input CreateSignInput {
   mnemonic: String!
   mediaUrl: String!
+  s3Key: String!
   senseIds: [String!]!
 }
 
@@ -69,4 +70,5 @@ type SignDto {
   userId: ID!
   mnemonic: String!
   mediaUrl: String!
+  s3Key: String!
 }

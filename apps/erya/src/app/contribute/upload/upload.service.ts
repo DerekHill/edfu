@@ -16,10 +16,4 @@ export class UploadService {
 
     return this.http.post<IResponse>(endpoint, formData).toPromise();
   }
-
-  getStatus(videoId: string): Promise<IResponse> {
-    return this.http
-      .get<IResponse>(endpoint, { params: { videoId: videoId } })
-      .toPromise();
-  }
 }

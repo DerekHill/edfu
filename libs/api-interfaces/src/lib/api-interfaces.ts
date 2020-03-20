@@ -5,6 +5,7 @@ export interface SignRecordWithoutId {
   readonly userId: ObjectId;
   readonly mnemonic: string;
   readonly mediaUrl: string;
+  readonly s3Key: string;
 }
 
 export interface SignRecord extends SignRecordWithoutId {
@@ -62,6 +63,7 @@ export interface BasicUser {
 export interface CreateSignInputInterface {
   readonly mnemonic: string;
   readonly mediaUrl: string;
+  readonly s3Key: string;
   readonly senseIds: string[];
 }
 

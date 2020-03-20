@@ -15,4 +15,7 @@ export class SignDto implements SignRecord {
 
   @Field()
   readonly mediaUrl: string;
+
+  @Field()
+  readonly s3Key: string;
 }

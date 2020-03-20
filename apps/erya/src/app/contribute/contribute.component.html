@@ -3,7 +3,7 @@
     <div class="columns is-centered content">
       <div class="column is-two-thirds-desktop">
         <p class="is-size-5 has-text-link has-text-weight-medium">
-          Enter word for which you would like to add a sign.
+          Contribute your sign
         </p>
         <div class="field has-addons">
           <div class="control is-expanded">
@@ -12,6 +12,7 @@
               (keyup.enter)="onSearchButtonPress(searchString.value)"
               autofocus
               class="input"
+              placeholder="Enter word or phrase"
             />
           </div>
           <div class="control">
@@ -25,10 +26,9 @@
         </div>
 
         <p class="has-text-grey-dark">
-          This can be any word or phrase in the Oxford English Dictionary. Check
-          at
+          This can be any word or phrase in the
           <a href="https://www.lexico.com/" target="_blank"
-            >lexico.com
+            >Oxford English Dictionary
             <fa-icon [icon]="['fas', 'external-link-alt']"></fa-icon></a
           >.
         </p>
@@ -36,7 +36,7 @@
         <div class="is-inline-block" *ngIf="(senses$ | async)?.length">
           <form [formGroup]="signFormGroup" (ngSubmit)="onSubmit()">
             <p class="is-size-5 has-text-weight-medium has-text-link">
-              Upload video.
+              Add your video
             </p>
             <div class="file has-name is-fullwidth">
               <label class="file-label">
@@ -51,14 +51,14 @@
                     <fa-icon [icon]="['fas', 'upload']"></fa-icon>
                   </span>
                   <span class="file-label">
-                    Choose a file…
+                    Select video…
                   </span>
                 </span>
                 <span class="file-name">
                   <span *ngIf="fileToUpload; else filePlaceholder">{{
                     fileToUpload.name
                   }}</span>
-                  <ng-template #filePlaceholder>No file added</ng-template>
+                  <ng-template #filePlaceholder>None selected</ng-template>
                 </span>
               </label>
             </div>
@@ -66,10 +66,10 @@
             <br />
             <p class="title is-size-5 has-text-weight-medium has-text-link">
               "<span class="is-capitalized">{{ searchString.value }}</span
-              >" has different senses.
+              >" has different senses
             </p>
             <p class="is-size-6">
-              Tick all the senses which apply to this sign.
+              Select all that apply to your sign
             </p>
             <div class="columns is-multiline">
               <div
@@ -100,8 +100,7 @@
             </div>
             <br />
             <p class="is-size-5 has-text-weight-medium has-text-link">
-              Add description of the action in the sign to help people remember
-              it (optional).
+              Short description to help people remember the sign (optional)
             </p>
 
             <div class="field">
@@ -110,13 +109,12 @@
                   class="input"
                   type="text"
                   formControlName="mnemonic"
-                  placeholder="E.g. open the curtains"
+                  placeholder="Enter description"
                 />
               </div>
             </div>
             <p class="has-text-grey-dark">
-              For example "open the curtains" describes the sign for "good
-              morning".
+              E.g. "open the curtains" describes the sign for "good morning"
             </p>
             <br />
             <button
@@ -124,7 +122,7 @@
               type="submit"
               [disabled]="signFormGroup.invalid"
             >
-              Add Sense
+              Upload your sign
             </button>
           </form>
         </div>

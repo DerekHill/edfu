@@ -7,10 +7,17 @@ export const videoFilter = (req, file, callback) => {
   callback(null, true);
 };
 
+export const copyExtension = (
+  newName: string,
+  nameWithExtension: string
+): string => {
+  const extension = extname(nameWithExtension);
+  return `${newName}${extension}`;
+};
+
 export const standardiseFileNameDeprecated = (originalname: string) => {
   const baseName = originalname.split('.')[0];
   const extension = extname(originalname);
-
   const randomHex = Array(4)
     .fill(null)
     .map(() => Math.round(Math.random() * 16).toString(16))

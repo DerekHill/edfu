@@ -52,21 +52,6 @@ describe('SignsController (e2e)', () => {
     server = await app.getHttpServer();
   });
 
-  describe('Get', () => {
-    it('gets video status', async () => {
-      await registerUser(server, TEST_USER);
-      const token = await login(TEST_USER.email, TEST_USER.password, server);
-
-      return request(server)
-        .get('/signs')
-        .set('Authorization', 'bearer ' + token)
-        .query({ videoId: '12345678' })
-        .then(({ body }) => {
-          expect(body.data.status).toBe(STATUS);
-        });
-    });
-  });
-
   describe('Post', () => {
     it('returns mediaUrl', async () => {
       await registerUser(server, TEST_USER);

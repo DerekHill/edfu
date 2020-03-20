@@ -1306,219 +1306,254 @@ const SIGNS: SignRecord[] = [
     userId: FRED_USER_ID,
     mediaUrl:
       'https://0gis3zwqlg-flywheel.netdna-ssl.com/wp-content/uploads/2018/10/More.gif',
-    mnemonic: 'Adding more to a pile'
+    mnemonic: 'Adding more to a pile',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_HELP_1,
     userId: FRED_USER_ID,
     mediaUrl:
       'https://0gis3zwqlg-flywheel.netdna-ssl.com/wp-content/uploads/2018/10/Help-1.gif',
-    mnemonic: 'Help your hand up'
+    mnemonic: 'Help your hand up',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_GOOD_MORNING_1,
     userId: FRED_USER_ID,
     mediaUrl:
       'https://0gis3zwqlg-flywheel.netdna-ssl.com/wp-content/uploads/2018/10/Good_Morning.gif',
-    mnemonic: 'Open the curtains'
+    mnemonic: 'Open the curtains',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_PLEASE_1,
     userId: FRED_USER_ID,
     mediaUrl:
       'https://0gis3zwqlg-flywheel.netdna-ssl.com/wp-content/uploads/2018/10/Please.gif',
-    mnemonic: 'Please to the knees'
+    mnemonic: 'Please to the knees',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_THANK_YOU_1,
     userId: FRED_USER_ID,
     mediaUrl:
       'https://0gis3zwqlg-flywheel.netdna-ssl.com/wp-content/uploads/2018/10/Thank_you.gif',
-    mnemonic: 'Thank you to you'
+    mnemonic: 'Thank you to you',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_GOOD_AFTERNOON,
     userId: FRED_USER_ID,
     mediaUrl:
       'https://0gis3zwqlg-flywheel.netdna-ssl.com/wp-content/uploads/2018/10/Good_afternoon.gif',
-    mnemonic: 'To the person you are speaking to'
+    mnemonic: 'To the person you are speaking to',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_BREAK,
     userId: FRED_USER_ID,
     mediaUrl:
       'https://0gis3zwqlg-flywheel.netdna-ssl.com/wp-content/uploads/2018/10/Toilet_break.gif',
-    mnemonic: ''
+    mnemonic: '',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_PLEASE_2,
     userId: FRED_USER_ID,
     mediaUrl:
       'https://thumbs.gfycat.com/FocusedSlipperyIcelandichorse-size_restricted.gif',
-    mnemonic: ''
+    mnemonic: '',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_LOOK,
     userId: FRED_USER_ID,
     mediaUrl: 'https://thumbs.gfycat.com/HonorableDesertedBurro-mobile.mp4',
-    mnemonic: ''
+    mnemonic: '',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_HELP_2,
     userId: FRED_USER_ID,
     mediaUrl: 'https://thumbs.gfycat.com/NeatUnequaledKudu-size_restricted.gif',
-    mnemonic: ''
+    mnemonic: '',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_TOILET,
     userId: FRED_USER_ID,
     mediaUrl:
       'https://thumbs.gfycat.com/DemandingEnchantedAiredaleterrier-size_restricted.gif',
-    mnemonic: ''
+    mnemonic: '',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_BAD,
     userId: FRED_USER_ID,
     mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/bad.mp4',
-    mnemonic: ''
+    mnemonic: '',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_GOOD,
     userId: FRED_USER_ID,
     mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/good.mp4',
-    mnemonic: ''
+    mnemonic: '',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_GOODBYE,
     userId: FRED_USER_ID,
     mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/goodbye.mp4',
-    mnemonic: ''
+    mnemonic: '',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_HELLO,
     userId: FRED_USER_ID,
     mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/hello.mp4',
-    mnemonic: ''
+    mnemonic: '',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_PLEASE_3,
     userId: FRED_USER_ID,
     mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/please.mp4',
-    mnemonic: ''
+    mnemonic: '',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_STOP,
     userId: FRED_USER_ID,
     mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/stop.mp4',
-    mnemonic: ''
+    mnemonic: '',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_YES,
     userId: FRED_USER_ID,
     mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/yes.mp4',
-    mnemonic: ''
+    mnemonic: '',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_BEGIN,
     userId: FRED_USER_ID,
     mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/begin.mp4',
-    mnemonic: ''
+    mnemonic: '',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_GOOD_MORNING_2,
     userId: FRED_USER_ID,
     mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/good_morning.mp4',
-    mnemonic: ''
+    mnemonic: '',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_HAPPY,
     userId: FRED_USER_ID,
     mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/happy.mp4',
-    mnemonic: ''
+    mnemonic: '',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_NO,
     userId: FRED_USER_ID,
     mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/no.mp4',
-    mnemonic: ''
+    mnemonic: '',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_SAD,
     userId: FRED_USER_ID,
     mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/sad.mp4',
-    mnemonic: ''
+    mnemonic: '',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_THANK_YOU_2,
     userId: FRED_USER_ID,
     mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/thank_you.mp4',
-    mnemonic: ''
+    mnemonic: '',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_FAST_SPEED,
     userId: FRED_USER_ID,
     mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/fast.mp4',
-    mnemonic: ''
+    mnemonic: '',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_SLOW,
     userId: FRED_USER_ID,
     mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/slow.mp4',
-    mnemonic: ''
+    mnemonic: '',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_FAST_ABSTAIN,
     userId: FRED_USER_ID,
     mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/fast_abstain.mp4',
-    mnemonic: ''
+    mnemonic: '',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_PLAYGROUND,
     userId: FRED_USER_ID,
     mediaUrl: 'https://youtu.be/5IzZidIUCJE',
-    mnemonic: ''
+    mnemonic: '',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_SLIDE,
     userId: FRED_USER_ID,
     mediaUrl: 'https://youtu.be/L4AGZMh17-U',
-    mnemonic: ''
+    mnemonic: '',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_PENGUIN,
     userId: FRED_USER_ID,
     mediaUrl: 'https://youtu.be/pTDNNh5QNMc',
-    mnemonic: ''
+    mnemonic: '',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_TREE,
     userId: FRED_USER_ID,
     mediaUrl: 'https://youtu.be/eQ5Xaxe_WHQ',
-    mnemonic: ''
+    mnemonic: '',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_GRASS,
     userId: FRED_USER_ID,
     mediaUrl: 'https://youtu.be/fAHuPixQcyE',
-    mnemonic: ''
+    mnemonic: '',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_PANCAKE,
     userId: FRED_USER_ID,
     mediaUrl: 'https://youtu.be/6cxRS-XGIro',
-    mnemonic: ''
+    mnemonic: '',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_RAIN,
     userId: FRED_USER_ID,
     mediaUrl: 'https://youtu.be/6D6yOWq0YNg',
-    mnemonic: ''
+    mnemonic: '',
+    s3Key: 'not_defined'
   },
   {
     _id: SIGN_ID_SUMMER,
     userId: FRED_USER_ID,
     mediaUrl: 'https://youtu.be/4NVpNPo0yPk',
-    mnemonic: ''
+    mnemonic: '',
+    s3Key: 'not_defined'
   }
 ];
 

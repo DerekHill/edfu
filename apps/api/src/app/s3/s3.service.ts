@@ -25,7 +25,8 @@ export class S3Service {
     const putParams: PutObjectRequest = {
       Bucket: BUCKET_NAME,
       Key: key,
-      Body: file
+      Body: file,
+      ACL: 'public-read'
     };
 
     const managedUpload: S3.ManagedUpload = this.s3.upload(putParams);

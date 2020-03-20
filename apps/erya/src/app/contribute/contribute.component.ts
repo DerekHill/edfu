@@ -90,9 +90,9 @@ export class ContributeComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private cd: ChangeDetectorRef,
     public library: FaIconLibrary
-) {
-  library.addIcons(faExternalLinkAlt, faUpload);
-}
+  ) {
+    library.addIcons(faExternalLinkAlt, faUpload);
+  }
 
   ngOnInit() {
     this.signFormGroup = this.fb.group({
@@ -178,14 +178,14 @@ export class ContributeComponent implements OnInit, OnDestroy {
     );
 
     if (res.success) {
-      const mediaUrl = res.data.mediaUrl;
       this.uploadStatus = UploadStatus.creating;
 
       const { file, ...partialData } = formValue;
 
       const createSignData: CreateSignInputInterface = {
         ...partialData,
-        ...{ mediaUrl: mediaUrl }
+        ...{ mediaUrl: res.data.mediaUrl },
+        ...{ s3Key: res.data.s3Key }
       };
 
       this.callCreateSignMutation(createSignData);
@@ -202,6 +202,7 @@ export class ContributeComponent implements OnInit, OnDestroy {
         createSignWithAssociations(createSignData: $createSignData) {
           mnemonic
           mediaUrl
+          s3Key
         }
       }
     `;
@@ -214,11 +215,10 @@ export class ContributeComponent implements OnInit, OnDestroy {
       .subscribe(
         ({ data }) => {
           this.uploadStatus = UploadStatus.success;
-          console.log(data);
         },
         error => {
           this.uploadStatus = UploadStatus.error;
-          console.error(error);
+          throw error;
         }
       );
   }

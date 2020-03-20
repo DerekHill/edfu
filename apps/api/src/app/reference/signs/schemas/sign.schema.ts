@@ -12,6 +12,10 @@ export const SignSchema = new mongoose.Schema({
   mediaUrl: {
     type: String,
     required: true
+  },
+  s3Key: {
+    type: String,
+    required: true
   }
 });
 

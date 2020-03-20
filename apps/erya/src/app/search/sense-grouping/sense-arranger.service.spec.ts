@@ -100,7 +100,8 @@ describe('SenseArrangerService', () => {
           _id: new ObjectId(),
           userId: new ObjectId(),
           mnemonic: 'remember me',
-          mediaUrl: 'www.my_picture_link'
+          mediaUrl: 'www.my_picture_link',
+          s3Key: '1234'
         };
         const senses: HydratedSense[] = [
           createSense({
@@ -119,7 +120,8 @@ describe('SenseArrangerService', () => {
           _id: new ObjectId(),
           userId: new ObjectId(),
           mnemonic: 'remember me',
-          mediaUrl: 'www.my_picture_link'
+          mediaUrl: 'www.my_picture_link',
+          s3Key: '1234'
         };
         const senses: HydratedSense[] = [
           createSense({

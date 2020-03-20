@@ -120,7 +120,8 @@ export class ContributeComponent implements OnInit, OnDestroy {
     this.senses$.subscribe(senses => {
       this.checkboxControl.clear();
       for (const _ of senses) {
-        this.checkboxControl.push(new FormControl(false));
+        const checkboxDefaultState = senses.length < 2;
+        this.checkboxControl.push(new FormControl(checkboxDefaultState));
       }
       this.senses = senses;
     });

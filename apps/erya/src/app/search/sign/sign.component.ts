@@ -10,7 +10,6 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 import * as Player from '@vimeo/player/dist/player.js';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
-import { VimeoVideoStatus } from '@edfu/api-interfaces';
 import { CDN_URI } from '../../constants';
 
 export enum MediaType {
@@ -31,7 +30,6 @@ export class SignComponent implements OnInit, AfterViewInit {
 
   public mediaType: MediaType;
   public platformVideoId: string;
-  public vimeoVideoStatus = VimeoVideoStatus.available;
 
   private _sign: SignRecord;
 

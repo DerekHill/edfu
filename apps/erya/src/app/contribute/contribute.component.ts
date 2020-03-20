@@ -21,7 +21,7 @@ import {
 } from '@angular/forms';
 import { UploadService } from './upload/upload.service';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faExternalLinkAlt, faUpload } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faExclamationCircle, faExternalLinkAlt, faUpload } from '@fortawesome/free-solid-svg-icons';
 
 interface SensesFromApiSearchVariables {
   searchString?: string;
@@ -91,7 +91,7 @@ export class ContributeComponent implements OnInit, OnDestroy {
     private cd: ChangeDetectorRef,
     public library: FaIconLibrary
   ) {
-    library.addIcons(faExternalLinkAlt, faUpload);
+    library.addIcons(faExternalLinkAlt, faUpload, faCheckCircle, faExclamationCircle);
   }
 
   ngOnInit() {

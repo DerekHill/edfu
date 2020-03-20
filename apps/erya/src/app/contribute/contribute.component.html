@@ -66,7 +66,6 @@
               </label>
             </div>
             <br />
-
             <div *ngIf="senses$ | async as senses">
               <div *ngIf="senses.length > 1">
                 <br />
@@ -128,16 +127,44 @@
             </p>
             <br />
             <button
-              class="is-pulled-right button is-primary is-fullwidth-mobile is-medium"
+              class="is-pulled-right button is-primary is-fullwidth-mobile is-medium upload-sign-button"
               type="submit"
               [disabled]="signFormGroup.invalid"
+              [ngClass]="{
+                'is-primary':
+                  uploadStatus === 'none' ||
+                  uploadStatus === 'creating' ||
+                  uploadStatus === 'uploading',
+                'is-success': uploadStatus === 'success',
+                'is-danger': uploadStatus === 'error'
+              }"
             >
-              Upload your sign
+              <span class="icon" *ngIf="uploadStatus !== 'none'">
+                <i
+                  *ngIf="
+                    uploadStatus === 'uploading' || uploadStatus === 'creating'
+                  "
+                  class="loader"
+                ></i>
+
+                <fa-icon
+                  *ngIf="uploadStatus === 'success'"
+                  [icon]="['fas', 'check-circle']"
+                ></fa-icon>
+                <fa-icon
+                  *ngIf="uploadStatus === 'error'"
+                  [icon]="['fas', 'exclamation-circle']"
+                ></fa-icon>
+              </span>
+              <span *ngIf="uploadStatus === 'none'">Upload your sign</span>
+              <span *ngIf="uploadStatus === 'uploading'">Uploading...</span>
+              <span *ngIf="uploadStatus === 'creating'">Creating...</span>
+              <span *ngIf="uploadStatus === 'success'">Done! </span>
+              <span *ngIf="uploadStatus === 'error'">Something goes wrong</span>
             </button>
           </form>
         </div>
       </div>
     </div>
   </div>
-  Upload status: {{ uploadStatus }}
 </section>

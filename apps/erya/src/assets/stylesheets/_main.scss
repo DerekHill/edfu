@@ -101,3 +101,10 @@ input.sense-input {
     width: 100%;
   }
 }
+
+.upload-sign-button {
+  .icon .loader {
+    border-bottom-color: $white;
+    border-left-color: $white;
+  }
+}

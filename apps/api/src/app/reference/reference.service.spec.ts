@@ -98,7 +98,8 @@ describe('ReferenceService', () => {
         _id: SIGN_ID,
         userId: new ObjectId(),
         mnemonic: 'remember me',
-        mediaUrl: 'www.my-picture-link.com'
+        mediaUrl: 'www.my-picture-link.com',
+        s3Key: '1234.mp4'
       };
 
       await setupService.createSenseSign(senseSignData);

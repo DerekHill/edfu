@@ -9,6 +9,9 @@ export class CreateSignInput implements CreateSignInputInterface {
   @Field()
   mediaUrl: string;
 
+  @Field()
+  s3Key: string;
+
   @Field(type => [String])
   readonly senseIds: string[];
 }

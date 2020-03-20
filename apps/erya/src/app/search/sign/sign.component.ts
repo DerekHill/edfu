@@ -5,13 +5,12 @@ import {
   ViewChild,
   AfterViewInit
 } from '@angular/core';
-import { HydratedSense, SignRecord, IResponse } from '@edfu/api-interfaces';
+import { HydratedSense, SignRecord } from '@edfu/api-interfaces';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import * as Player from '@vimeo/player/dist/player.js';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
-import { UploadService } from '../../contribute/upload/upload.service';
-import { VimeoVideoStatus } from '@edfu/api-interfaces';
+import { CDN_URI } from '../../constants';
 
 export enum MediaType {
   htmlVideo = 'htmlVideo',
@@ -31,14 +30,12 @@ export class SignComponent implements OnInit, AfterViewInit {
 
   public mediaType: MediaType;
   public platformVideoId: string;
-  public vimeoVideoStatus = VimeoVideoStatus.available;
 
   private _sign: SignRecord;
 
   constructor(
     public deviceService: DeviceDetectorService,
-    public library: FaIconLibrary,
-    private uploadService: UploadService
+    public library: FaIconLibrary
   ) {
     library.addIcons(faPlay);
   }
@@ -46,10 +43,7 @@ export class SignComponent implements OnInit, AfterViewInit {
   @Input() sense: HydratedSense;
   @Input()
   set sign(sign: SignRecord) {
-    const mediaUrl = sign.mediaUrl;
-    this._sign = sign;
-    this.mediaType = this._getMediaType(mediaUrl);
-    this.setPlatformVideoId(mediaUrl);
+    this.configureComponent(sign);
   }
 
   get sign(): SignRecord {
@@ -57,11 +51,7 @@ export class SignComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    if (this.mediaType === MediaType.youtube) {
-      const tag = document.createElement('script');
-      tag.src = 'https://www.youtube.com/iframe_api';
-      document.body.appendChild(tag);
-    }
+    this.setupYouTubePlayer();
   }
 
   ngAfterViewInit() {
@@ -77,10 +67,16 @@ export class SignComponent implements OnInit, AfterViewInit {
     this.playIfNotMobile();
   }
 
-  onYouTubePlayerStateChange(event) {
+  onYouTubePlayerStateChange(event: YT.OnStateChangeEvent) {
     if (event.data === 0) {
       this.playIfNotMobile();
     }
+  }
+
+  onHtmlVideoError(event: { target: HTMLInputElement }) {
+    throw new Error(
+      `htmlVideo error for video: ${this.platformVideoId}, mediaUrl: ${event.target.src}`
+    );
   }
 
   _getMediaType(filename: string): MediaType {
@@ -109,16 +105,17 @@ export class SignComponent implements OnInit, AfterViewInit {
     return url.match(vimeo_regex)[3];
   }
 
-  _notifySignNotFound(videoId: string, status: VimeoVideoStatus) {
-    if (
-      [
-        VimeoVideoStatus.uploading_error,
-        VimeoVideoStatus.transcoding_error,
-        VimeoVideoStatus.not_found
-      ].includes(status)
-    ) {
-      throw new Error(`videoId: ${videoId} got error: ${status}`);
-    }
+  private configureComponent(sign: SignRecord) {
+    const mediaUrl = sign.mediaUrl;
+    this._sign = sign;
+    this.mediaType = this._getMediaType(mediaUrl);
+    this.setPlatformVideoId(mediaUrl);
+  }
+
+  private useFallbackMediaUrl() {
+    const fallbackMediaUrl = `${CDN_URI}/${this._sign.s3Key}`;
+    const updatedSign = { ...this.sign, ...{ mediaUrl: fallbackMediaUrl } };
+    this.configureComponent(updatedSign);
   }
 
   private initializeVimeoPlayer() {
@@ -134,12 +131,13 @@ export class SignComponent implements OnInit, AfterViewInit {
 
       vimeoPlayer
         .loadVideo(this.platformVideoId)
-        .then(id => {})
-        .catch(error => {
-          if (error.message.match(/was not found/)) {
-            this.updateVimeoVideoStatus(this.platformVideoId);
-          } else {
-            throw error;
+        .then((id: string) => {})
+        .catch((error: Error) => {
+          this.useFallbackMediaUrl();
+          if (!error.message.match(/was not found/)) {
+            throw new Error(
+              'Unknown Vimeo error' + this.platformVideoId + error
+            );
           }
         });
     }
@@ -159,13 +157,11 @@ export class SignComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private async updateVimeoVideoStatus(videoId: string) {
-    const res: IResponse = await this.uploadService.getStatus(videoId);
-
-    if (res.success) {
-      const status: VimeoVideoStatus = res.data.status;
-      this.vimeoVideoStatus = status;
-      this._notifySignNotFound(videoId, status);
+  private setupYouTubePlayer() {
+    if (this.mediaType === MediaType.youtube) {
+      const tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      document.body.appendChild(tag);
     }
   }
 }

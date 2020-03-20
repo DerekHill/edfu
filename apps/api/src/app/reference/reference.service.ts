@@ -149,7 +149,8 @@ export class ReferenceService {
         $project: {
           _id: '$signs._id',
           mnemonic: '$signs.mnemonic',
-          mediaUrl: '$signs.mediaUrl'
+          mediaUrl: '$signs.mediaUrl',
+          s3Key: '$signs.s3Key'
         }
       }
     ]);

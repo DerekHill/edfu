@@ -1,7 +1,11 @@
 <div [ngSwitch]="mediaType">
   <div *ngSwitchCase="'htmlVideo'">
     <video autoplay loop playsinline [muted]="true">
-      <source src="{{ sign.mediaUrl }}" type="video/mp4" />
+      <source
+        src="{{ sign.mediaUrl }}"
+        (error)="onHtmlVideoError($event)"
+        type="video/mp4"
+      />
     </video>
   </div>
 
@@ -32,9 +36,7 @@
     *ngSwitchCase="'vimeo'"
     #vimeo_player_container
     class="image is-16by9 vimeo-container"
-  >
-    Vimeo status is: {{ vimeoVideoStatus }}
-  </div>
+  ></div>
 
   <div *ngSwitchDefault>
     <img class="is-fullwidth-er" src="{{ sign.mediaUrl }}" />

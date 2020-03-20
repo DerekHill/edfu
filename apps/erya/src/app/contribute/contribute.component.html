@@ -33,7 +33,10 @@
           >.
         </p>
         <br />
-        <div class="is-inline-block" *ngIf="(senses$ | async)?.length">
+        <div
+          class="is-inline-block is-fullwidth-er"
+          *ngIf="(senses$ | async)?.length"
+        >
           <form [formGroup]="signFormGroup" (ngSubmit)="onSubmit()">
             <p class="is-size-5 has-text-weight-medium has-text-link">
               Add your video
@@ -63,39 +66,45 @@
               </label>
             </div>
             <br />
-            <br />
-            <p class="title is-size-5 has-text-weight-medium has-text-link">
-              "<span class="is-capitalized">{{ searchString.value }}</span
-              >" has different senses
-            </p>
-            <p class="is-size-6">
-              Select all that apply to your sign
-            </p>
-            <div class="columns is-multiline">
-              <div
-                class="column is-one-third sense-column"
-                *ngFor="let sense of senses$ | async; let i = index"
-                formArrayName="senseIds"
-              >
-                <input
-                  type="checkbox"
-                  class="sense-input"
-                  [formControlName]="i"
-                  [id]="i"
-                />
-                <label class="box" [for]="i">
-                  <span
-                    ><span class="is-capitalized has-text-weight-bold">
-                      {{ sense.oxId | removeUnderscores }} </span
-                    ><span class="has-text-grey has-text-weight-medium">{{
-                      sense.lexicalCategory
-                    }}</span></span
+            <div *ngIf="senses$ | async as senses">
+              <div *ngIf="senses.length > 1">
+                <br />
+                <p class="title is-size-5 has-text-weight-medium has-text-link">
+                  "<span class="is-capitalized">{{ searchString.value }}</span
+                  >" has different senses.
+                </p>
+                <p class="is-size-6">
+                  Tick all the senses which apply to this sign.
+                </p>
+                <div class="columns is-multiline">
+                  <div
+                    class="column is-one-third sense-column"
+                    *ngFor="let sense of senses; let i = index"
+                    formArrayName="senseIds"
                   >
-                  <span class="sense-example has-text-grey is-italic"
-                    >‘{{ sense.example }}’</span
-                  >
-                  <span class="sense-definition "> {{ sense.definition }}</span>
-                </label>
+                    <input
+                      type="checkbox"
+                      class="sense-input"
+                      [formControlName]="i"
+                      [id]="i"
+                    />
+                    <label class="box" [for]="i">
+                      <span
+                        ><span class="is-capitalized has-text-weight-bold">
+                          {{ sense.oxId | removeUnderscores }} </span
+                        ><span class="has-text-grey has-text-weight-medium">{{
+                          sense.lexicalCategory
+                        }}</span></span
+                      >
+                      <span class="sense-example has-text-grey is-italic"
+                        >‘{{ sense.example }}’</span
+                      >
+                      <span class="sense-definition ">
+                        {{ sense.definition }}</span
+                      >
+                    </label>
+                  </div>
+                </div>
               </div>
             </div>
             <br />
@@ -118,16 +127,44 @@
             </p>
             <br />
             <button
-              class="is-pulled-right button is-primary is-fullwidth-mobile is-medium"
+              class="is-pulled-right button is-primary is-fullwidth-mobile is-medium upload-sign-button"
               type="submit"
               [disabled]="signFormGroup.invalid"
+              [ngClass]="{
+                'is-primary':
+                  uploadStatus === 'none' ||
+                  uploadStatus === 'creating' ||
+                  uploadStatus === 'uploading',
+                'is-success': uploadStatus === 'success',
+                'is-danger': uploadStatus === 'error'
+              }"
             >
-              Upload your sign
+              <span class="icon" *ngIf="uploadStatus !== 'none'">
+                <i
+                  *ngIf="
+                    uploadStatus === 'uploading' || uploadStatus === 'creating'
+                  "
+                  class="loader"
+                ></i>
+
+                <fa-icon
+                  *ngIf="uploadStatus === 'success'"
+                  [icon]="['fas', 'check-circle']"
+                ></fa-icon>
+                <fa-icon
+                  *ngIf="uploadStatus === 'error'"
+                  [icon]="['fas', 'exclamation-circle']"
+                ></fa-icon>
+              </span>
+              <span *ngIf="uploadStatus === 'none'">Upload your sign</span>
+              <span *ngIf="uploadStatus === 'uploading'">Uploading...</span>
+              <span *ngIf="uploadStatus === 'creating'">Creating...</span>
+              <span *ngIf="uploadStatus === 'success'">Done! </span>
+              <span *ngIf="uploadStatus === 'error'">Something goes wrong</span>
             </button>
           </form>
         </div>
       </div>
     </div>
   </div>
-  Upload status: {{ uploadStatus }}
 </section>

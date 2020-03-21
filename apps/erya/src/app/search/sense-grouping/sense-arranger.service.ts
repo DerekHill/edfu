@@ -23,6 +23,7 @@ export class SenseArrangerService {
     senses = this._sortSensesByFit(senses);
     if (filter) {
       senses = this._filterForSensesWithDifferentSigns(senses);
+      senses = this._removeThesaurusSensesIfHaveDictionarySense(senses);
       senses = this._applyMaxSensesLimit(senses);
     }
     return this._groupSensesByLexicalCategoryAsList(senses);
@@ -162,5 +163,18 @@ export class SenseArrangerService {
     }
 
     return groups;
+  }
+
+  _removeThesaurusSensesIfHaveDictionarySense(
+    senses: HydratedSense[]
+  ): HydratedSense[] {
+    const dictionarySenses = senses.filter(
+      sense => sense.associationType === DictionaryOrThesaurus.dictionary
+    );
+    if (dictionarySenses.length) {
+      return dictionarySenses;
+    } else {
+      return senses;
+    }
   }
 }

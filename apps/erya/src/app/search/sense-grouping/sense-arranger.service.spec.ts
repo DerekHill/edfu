@@ -138,6 +138,34 @@ describe('SenseArrangerService', () => {
         expect(res.length).toBe(1);
       });
     });
+
+    describe('_removeThesaurusSensesIfHaveDictionarySense()', () => {
+      it('filters out thesaurus senses if there is a dictionary sense present', () => {
+        const senses: HydratedSense[] = [
+          createSense({
+            associationType: DictionaryOrThesaurus.dictionary
+          }),
+          createSense({
+            associationType: DictionaryOrThesaurus.thesaurus
+          })
+        ];
+        const res = service._removeThesaurusSensesIfHaveDictionarySense(senses);
+        expect(res.length).toBe(1);
+      });
+
+      it('returns all senses if there is no thesaurus sense present', () => {
+        const senses: HydratedSense[] = [
+          createSense({
+            associationType: DictionaryOrThesaurus.dictionary
+          }),
+          createSense({
+            associationType: DictionaryOrThesaurus.dictionary
+          })
+        ];
+        const res = service._removeThesaurusSensesIfHaveDictionarySense(senses);
+        expect(res.length).toBe(2);
+      });
+    });
   });
 
   describe('Grouping senses', () => {

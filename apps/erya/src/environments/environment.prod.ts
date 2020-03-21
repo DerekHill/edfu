@@ -10,8 +10,7 @@ export class SentryErrorHandler implements ErrorHandler {
   constructor() {}
   handleError(error) {
     const eventId = Sentry.captureException(error.originalError || error);
-    throw error;
-    // Sentry.showReportDialog({ eventId });
+    throw error; // TODO: remove when scale up
   }
 }
 

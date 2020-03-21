@@ -23,11 +23,11 @@ export function createApollo(httpLink: HttpLink) {
   const http = httpLink.create({ uri: `${environment.apiUri}/graphql` });
 
   const error = onError((e: any) => {
-    console.log('apollo-link-error found error:');
     if (e.networkError && e.networkError.error) {
-      console.log(e.networkError.error.errors);
+      throw new Error(e.networkError.error.errors);
+    } else {
+      throw e;
     }
-    console.log(e);
   });
 
   const link = error.concat(http);

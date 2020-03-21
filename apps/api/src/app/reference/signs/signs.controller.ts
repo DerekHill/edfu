@@ -16,6 +16,7 @@ import { ResponseSuccess, ResponseError } from '../../common/dto/response.dto';
 import { videoFilter, copyExtension } from './utils/utils';
 import { S3Service } from '../../s3/s3.service';
 import { VimeoService, VimeoBuffer } from '../../vimeo/vimeo.service';
+import { MAX_UPLOAD_SIZE_BYTES } from '@edfu/api-interfaces';
 
 @Controller('signs')
 export class SignsController {
@@ -27,7 +28,7 @@ export class SignsController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(
     FileInterceptor('file', {
-      limits: { fileSize: 8388608 },
+      limits: { fileSize: MAX_UPLOAD_SIZE_BYTES },
       fileFilter: videoFilter
     })
   )

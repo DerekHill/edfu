@@ -1,7 +1,8 @@
 import { extname } from 'path';
+import { VALID_VIDEO_FILE_REGEX } from '@edfu/api-interfaces';
 
 export const videoFilter = (req, file, callback) => {
-  if (!file.originalname.match(/\.(mp4|mov|wmv|avi|flv)$/i)) {
+  if (!file.originalname.match(VALID_VIDEO_FILE_REGEX)) {
     return callback(new Error('Only video files are allowed'), false);
   }
   callback(null, true);

@@ -65,6 +65,25 @@
                 </span>
               </label>
             </div>
+            <div
+              *ngIf="
+                signFormGroup.controls.file.invalid &&
+                signFormGroup.controls.file.touched
+              "
+              class="alert alert-danger"
+            >
+              <div *ngIf="signFormGroup.controls.file.errors.required">
+                Please add a video
+              </div>
+              <div *ngIf="signFormGroup.controls.file.errors.fileSize">
+                Video is too large. The maximum size is
+                {{ maxUploadSizeFriendly }}
+              </div>
+              <div *ngIf="signFormGroup.controls.file.errors.fileType">
+                Video is of wrong type. Supported video formats are
+                {{ supportedVideoFormats }}
+              </div>
+            </div>
             <br />
             <div *ngIf="senses$ | async as senses">
               <div *ngIf="senses.length > 1">

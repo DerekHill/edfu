@@ -5,7 +5,10 @@ import gql from 'graphql-tag';
 import {
   HydratedSense,
   CreateSignInputInterface,
-  IResponse
+  IResponse,
+  MAX_UPLOAD_SIZE_BYTES,
+  VALID_VIDEO_FILE_REGEX,
+  SUPPORTED_VIDEO_FORMATS_STRING
 } from '@edfu/api-interfaces';
 import { map } from 'rxjs/operators';
 import { ApolloQueryResult } from 'apollo-client';
@@ -21,7 +24,12 @@ import {
 } from '@angular/forms';
 import { UploadService } from './upload/upload.service';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faCheckCircle, faExclamationCircle, faExternalLinkAlt, faUpload } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCheckCircle,
+  faExclamationCircle,
+  faExternalLinkAlt,
+  faUpload
+} from '@fortawesome/free-solid-svg-icons';
 
 interface SensesFromApiSearchVariables {
   searchString?: string;
@@ -62,6 +70,28 @@ function checkedValidator(): ValidatorFn {
   };
 }
 
+function fileSizeValidator(): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: any } | null => {
+    if (control.value && control.value.size > MAX_UPLOAD_SIZE_BYTES) {
+      return { fileSize: { value: control.value.size } };
+    } else {
+      return null;
+    }
+  };
+}
+
+function fileTypeValidator(): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: any } | null => {
+    if (control.value && !control.value.name.match(VALID_VIDEO_FILE_REGEX)) {
+      const filename = control.value.name;
+      const ext = filename.split('.').pop();
+      return { fileType: { value: ext } };
+    } else {
+      return null;
+    }
+  };
+}
+
 @Component({
   selector: 'edfu-contribute',
   templateUrl: './contribute.component.html'
@@ -78,6 +108,8 @@ export class ContributeComponent implements OnInit, OnDestroy {
   public signFormGroup: FormGroup;
   public fileToUpload: File = null;
   public uploadStatus = UploadStatus.none;
+  public maxUploadSizeFriendly = this.formatBytes(MAX_UPLOAD_SIZE_BYTES);
+  public supportedVideoFormats = SUPPORTED_VIDEO_FORMATS_STRING;
 
   private checkboxControl: FormArray;
 
@@ -91,14 +123,22 @@ export class ContributeComponent implements OnInit, OnDestroy {
     private cd: ChangeDetectorRef,
     public library: FaIconLibrary
   ) {
-    library.addIcons(faExternalLinkAlt, faUpload, faCheckCircle, faExclamationCircle);
+    library.addIcons(
+      faExternalLinkAlt,
+      faUpload,
+      faCheckCircle,
+      faExclamationCircle
+    );
   }
 
   ngOnInit() {
     this.signFormGroup = this.fb.group({
       senseIds: this.fb.array([], checkedValidator()),
       mnemonic: ['', Validators.maxLength(200)],
-      file: [null, Validators.required]
+      file: [
+        null,
+        [Validators.required, fileTypeValidator(), fileSizeValidator()]
+      ]
     });
 
     this.checkboxControl = this.signFormGroup.controls.senseIds as FormArray;
@@ -140,9 +180,11 @@ export class ContributeComponent implements OnInit, OnDestroy {
 
   onFileChange(event: any) {
     if (event.target.files && event.target.files.length) {
-      this.fileToUpload = event.target.files.item(0);
+      const file = event.target.files.item(0);
+      this.fileToUpload = file;
+      this.signFormGroup.controls.file.markAsTouched();
       this.signFormGroup.patchValue({
-        file: 'Validate form, but send file separately'
+        file: file
       });
     } else {
       this.fileToUpload = null;
@@ -166,7 +208,7 @@ export class ContributeComponent implements OnInit, OnDestroy {
       this.uploadStatus = UploadStatus.uploading;
       this.uploadVideoAndCreateSign(formValue);
     } else {
-      console.error('formValue not valid');
+      throw new Error('formValue not valid');
     }
   }
 
@@ -222,6 +264,15 @@ export class ContributeComponent implements OnInit, OnDestroy {
           throw error;
         }
       );
+  }
+
+  private formatBytes(bytes: number, decimals = 2) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   }
 
   ngOnDestroy() {

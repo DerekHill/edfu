@@ -71,14 +71,14 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private apollo: Apollo,
-    private _hotkeysService: HotkeysService,
+    private hotkeysService: HotkeysService,
     public dialog: MatDialog,
     private senseArranger: SenseArrangerService,
     private route: ActivatedRoute,
     private router: Router,
     private cd: ChangeDetectorRef
   ) {
-    this._hotkeysService.add(
+    this.hotkeysService.add(
       new Hotkey(
         'esc',
         (event: KeyboardEvent): boolean => {
@@ -209,7 +209,6 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
 
   openDialog(senses: HydratedSense[]): void {
     const dialogRef = this.dialog.open(SensesModalComponent, {
-      //   width: '250px',
       data: senses
     });
 
@@ -228,6 +227,9 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
     const newOxIdLower = oxId.toLowerCase();
     this.router.navigate(['/search', newOxIdLower]);
     this.searchInput.nativeElement.blur();
+    this.oxIdsSearchRef.setVariables({
+      searchString: ''
+    });
   }
 
   onVariablesSelectViaRouter(oxId: string, senseId?: string) {
@@ -255,7 +257,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
     this.senseSignsBs$.next(null);
     this.searchFormControl.reset();
     // Needs to be cleared because otherwise valueChanges will not fire if next search is the same
-    // Might be better way to clear this without sending request to API
+    // Might be better way to clear this. Not sure if this sends request to API, or GraphQL takes care of it
     this.sensesSearchRef.setVariables({
       oxId: ''
     });

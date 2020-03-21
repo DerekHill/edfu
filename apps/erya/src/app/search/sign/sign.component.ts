@@ -125,6 +125,9 @@ export class SignComponent implements OnInit, AfterViewInit {
       vimeoPlayer = new Player(this.vimeoContainer.nativeElement, {
         id: this.platformVideoId,
         background: true,
+        controls: false, // remove once have no more 3rd party (non Pro) Vimeo videos
+        autoplay: true, // remove once have no more 3rd party (non Pro) Vimeo videos
+        title: false,
         muted: true,
         playsinline: true
       });

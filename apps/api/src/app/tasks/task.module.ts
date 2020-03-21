@@ -18,6 +18,7 @@ import { ReferenceModule } from '../reference/reference.module';
 import { SenseSignSchema } from '../reference/signs/schemas/sense-sign.schema';
 import { SignSchema } from '../reference/signs/schemas/sign.schema';
 import { UsersModule } from '../users/users.module';
+import { MigrateService } from './migrate/migrate.service';
 
 @Module({
   imports: [
@@ -33,7 +34,7 @@ import { UsersModule } from '../users/users.module';
     UsersModule
   ],
   controllers: [],
-  providers: [TaskService, FixturesService, LoaderService],
+  providers: [TaskService, FixturesService, LoaderService, MigrateService],
   exports: []
 })
 export class TaskModule {}

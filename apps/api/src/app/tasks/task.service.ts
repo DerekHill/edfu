@@ -2,14 +2,23 @@ import { Console, Command } from 'nestjs-console';
 import { OxfordApiService } from '../oxford-api/oxford-api.service';
 import { FixturesService } from './fixtures/fixtures.service';
 import { LoaderService } from './loader/loader.service';
+import { MigrateService } from './migrate/migrate.service';
 
 @Console()
 export class TaskService {
   constructor(
     private readonly oxfordService: OxfordApiService,
     private readonly fixturesService: FixturesService,
-    private readonly loaderService: LoaderService
+    private readonly loaderService: LoaderService,
+    private readonly migrateService: MigrateService
   ) {}
+
+  @Command({
+    command: 'migrate <filename>'
+  })
+  async migrate(filename: string) {
+    await this.migrateService.up(filename);
+  }
 
   @Command({
     command: 'oxfordEntries'

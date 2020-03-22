@@ -115,10 +115,10 @@
                           sense.lexicalCategory
                         }}</span></span
                       >
-                      <span class="sense-example has-text-grey is-italic"
-                        >‘{{ sense.example }}’</span
+                      <span *ngIf="sense.example" class="sense-text-padding has-text-grey is-italic"
+                      >‘{{ sense.example }}’</span
                       >
-                      <span class="sense-definition ">
+                      <span [ngClass]="{'sense-definition': sense.example, 'sense-text-padding': !sense.example}">
                         {{ sense.definition }}</span
                       >
                     </label>

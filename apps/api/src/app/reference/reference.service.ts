@@ -24,6 +24,7 @@ import * as pluralize from 'mongoose-legacy-pluralize';
 import { DictionaryOrThesaurus } from '@edfu/enums';
 
 const OXIDS_LIMIT = 100;
+const SITEMAP_URL_LIMIT = 50_000;
 
 interface SensesForOxIdCaseInsensitiveParams {
   oxId: string;
@@ -239,10 +240,9 @@ export class ReferenceService {
     const pipeline = [
       ...match,
       ...senseSignInnerJoin('senseId'),
-      ...projectAndGroup
+      ...projectAndGroup,
+      ...[{ $limit: SITEMAP_URL_LIMIT }]
     ];
-
-    console.log(JSON.stringify(pipeline));
 
     const objs = await this.senseModel.aggregate(pipeline);
     return objs.map(i => i._id);

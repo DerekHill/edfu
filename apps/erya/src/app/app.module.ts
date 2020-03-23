@@ -35,7 +35,11 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   { path: 'login', component: LoginComponent },
-  { path: '', redirectTo: `/${SEARCH_COMPONENT_PATH}`, pathMatch: 'full' }
+  { path: '', redirectTo: `/${SEARCH_COMPONENT_PATH}`, pathMatch: 'full' },
+  {
+    path: '**',
+    redirectTo: `/${SEARCH_COMPONENT_PATH}`
+  }
 ];
 
 @NgModule({

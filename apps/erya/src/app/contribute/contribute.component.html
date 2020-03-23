@@ -65,6 +65,10 @@
                 </span>
               </label>
             </div>
+            <!-- Debug for mobile -->
+            <p class="is-size-7" *ngIf="fileToUpload">
+              {{ fileToUpload.name }}
+            </p>
             <div
               *ngIf="
                 signFormGroup.controls.file.invalid &&
@@ -115,10 +119,17 @@
                           sense.lexicalCategory
                         }}</span></span
                       >
-                      <span *ngIf="sense.example" class="sense-text-padding has-text-grey is-italic"
-                      >‘{{ sense.example }}’</span
+                      <span
+                        *ngIf="sense.example"
+                        class="sense-text-padding has-text-grey is-italic"
+                        >‘{{ sense.example }}’</span
                       >
-                      <span [ngClass]="{'sense-definition': sense.example, 'sense-text-padding': !sense.example}">
+                      <span
+                        [ngClass]="{
+                          'sense-definition': sense.example,
+                          'sense-text-padding': !sense.example
+                        }"
+                      >
                         {{ sense.definition }}</span
                       >
                     </label>

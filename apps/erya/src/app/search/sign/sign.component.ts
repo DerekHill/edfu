@@ -30,6 +30,7 @@ export class SignComponent implements OnInit, AfterViewInit {
 
   public mediaType: MediaType;
   public platformVideoId: string;
+  private vimeoPlayer: Player;
 
   private _sign: SignRecord;
 
@@ -58,8 +59,12 @@ export class SignComponent implements OnInit, AfterViewInit {
     this.initializeVimeoPlayer();
   }
 
-  youtubePlayAgain() {
+  youtubePlay() {
     this.youtubeContainer.playVideo();
+  }
+
+  vimeoPlay() {
+    this.vimeoPlayer.play();
   }
 
   onYouTubePlayerReady() {
@@ -120,9 +125,7 @@ export class SignComponent implements OnInit, AfterViewInit {
 
   private initializeVimeoPlayer() {
     if (this.mediaType === MediaType.vimeo) {
-      let vimeoPlayer: Player;
-
-      vimeoPlayer = new Player(this.vimeoContainer.nativeElement, {
+      this.vimeoPlayer = new Player(this.vimeoContainer.nativeElement, {
         id: this.platformVideoId,
         background: true,
         controls: false, // remove once have no more 3rd party (non Pro) Vimeo videos
@@ -132,7 +135,7 @@ export class SignComponent implements OnInit, AfterViewInit {
         playsinline: true
       });
 
-      vimeoPlayer
+      this.vimeoPlayer
         .loadVideo(this.platformVideoId)
         .then((id: string) => {})
         .catch((error: Error) => {

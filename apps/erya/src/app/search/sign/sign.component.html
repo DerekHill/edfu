@@ -12,14 +12,11 @@
   <div *ngSwitchCase="'youtube'">
     <div class="columns is-centered" *ngIf="deviceService.isMobile()">
       <div class="column is-one-third">
-        <button
-          class="button is-primary is-fullwidth"
-          (click)="youtubePlayAgain()"
-        >
+        <button class="button is-primary is-fullwidth" (click)="youtubePlay()">
           <span class="icon">
             <fa-icon [icon]="['fas', 'play']"></fa-icon>
           </span>
-          <span>Play Video</span>
+          <span>Play</span>
         </button>
       </div>
     </div>
@@ -36,7 +33,18 @@
     *ngSwitchCase="'vimeo'"
     #vimeo_player_container
     class="image is-16by9 vimeo-container"
-  ></div>
+  >
+    <div class="columns is-centered" *ngIf="deviceService.isMobile()">
+      <div class="column is-one-third">
+        <button class="button is-primary is-fullwidth" (click)="vimeoPlay()">
+          <span class="icon">
+            <fa-icon [icon]="['fas', 'play']"></fa-icon>
+          </span>
+          <span>Play</span>
+        </button>
+      </div>
+    </div>
+  </div>
 
   <div *ngSwitchDefault>
     <img class="is-fullwidth-er" src="{{ sign.mediaUrl }}" />

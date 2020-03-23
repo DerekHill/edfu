@@ -30,7 +30,11 @@ export class DictionaryResolver {
     @Args({ name: 'senseId', type: () => String, defaultValue: '' })
     senseId: string
   ): Promise<SenseForEntryDto[]> {
-    return this.service.getSensesForOxIdCaseInsensitive(oxId, filter, senseId);
+    return this.service.sensesForOxIdCaseInsensitive({
+      oxId: oxId,
+      senseId: senseId,
+      filterForHasSign: filter
+    });
   }
 
   @ResolveProperty(returns => [SignDto])

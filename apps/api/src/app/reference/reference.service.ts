@@ -20,8 +20,75 @@ import {
 import { SignRecord } from '@edfu/api-interfaces';
 import { SignDocument } from './signs/interfaces/sign.interface';
 import { ObjectId } from 'bson';
+import * as pluralize from 'mongoose-legacy-pluralize';
+import { DictionaryOrThesaurus } from '@edfu/enums';
 
 const OXIDS_LIMIT = 100;
+
+interface SensesForOxIdCaseInsensitiveParams {
+  oxId: string;
+  senseId?: string;
+  filterForHasSign?: boolean;
+  filterForDictionarySenses?: boolean;
+}
+
+const ENTRY_SENSES_INNER_JOIN = [
+  {
+    $lookup: {
+      from: `${pluralize(ENTRY_SENSE_COLLECTION_NAME)}`,
+      localField: 'oxId',
+      foreignField: 'oxId',
+      as: 'entrySenses'
+    }
+  },
+  {
+    $unwind: '$entrySenses'
+  }
+];
+
+const SENSES_INNER_JOIN = [
+  {
+    $lookup: {
+      from: `${pluralize(SENSE_COLLECTION_NAME)}`,
+      localField: 'senseId',
+      foreignField: 'senseId',
+      as: 'senses'
+    }
+  },
+  {
+    $unwind: '$senses'
+  }
+];
+
+const senseSignInnerJoin = (localField: string) => {
+  return [
+    {
+      $lookup: {
+        from: `${pluralize(SENSE_SIGN_COLLECTION_NAME)}`,
+        localField: localField,
+        foreignField: 'senseId',
+        as: 'senseSigns'
+      }
+    },
+    {
+      $unwind: '$senseSigns'
+    }
+  ];
+};
+
+const SIGNS_INNER_JOIN = [
+  {
+    $lookup: {
+      from: `${pluralize(SIGN_COLLECTION_NAME)}`,
+      localField: 'signId',
+      foreignField: '_id',
+      as: 'signs'
+    }
+  },
+  {
+    $unwind: '$signs'
+  }
+];
 
 @Injectable()
 export class ReferenceService {
@@ -38,7 +105,7 @@ export class ReferenceService {
     private readonly signModel: Model<SignDocument>
   ) {}
 
-  async searchOxIds(chars: string, filter: boolean): Promise<string[]> {
+  searchOxIds(chars: string, filter: boolean): Promise<string[]> {
     const sanitizedChars = this._removeInvalidRegexChars(chars);
 
     if (!sanitizedChars) {
@@ -46,35 +113,31 @@ export class ReferenceService {
     }
 
     if (filter) {
-      return this.searchOxIdsAndFilterForSigns(chars);
+      return this.searchOxIdsWithSigns(chars);
     } else {
-      return this.searchOxIdsWithoutFilteringForSigns(chars);
+      return this.searchOxIdsAll(chars);
     }
   }
 
-  async getSensesForOxIdCaseInsensitive(
-    oxId: string,
-    filter: boolean,
-    senseId?: string
-  ): Promise<SenseForEntryDto[]> {
-    const match = { oxId: oxId };
+  sensesForOxIdCaseInsensitive({
+    oxId,
+    senseId = null,
+    filterForHasSign = true,
+    filterForDictionarySenses = false
+  }: SensesForOxIdCaseInsensitiveParams): Promise<SenseForEntryDto[]> {
+    const query = { oxId: oxId };
+
     if (senseId) {
-      match['senseId'] = senseId;
+      query['senseId'] = senseId;
     }
 
-    const basePipeline = [
-      { $match: match },
-      {
-        $lookup: {
-          from: `${SENSE_COLLECTION_NAME.toLowerCase()}s`,
-          localField: 'senseId',
-          foreignField: 'senseId',
-          as: 'senses'
-        }
-      },
-      {
-        $unwind: '$senses'
-      },
+    if (filterForDictionarySenses) {
+      query['associationType'] = DictionaryOrThesaurus.dictionary;
+    }
+
+    const match = [{ $match: query }];
+
+    const projectWithExampleOrDefinition = [
       {
         $project: {
           oxId: 1,
@@ -97,15 +160,13 @@ export class ReferenceService {
       }
     ];
 
-    const filterForHasSignsPipeline = [
-      {
-        $lookup: {
-          from: `${SENSE_SIGN_COLLECTION_NAME.toLowerCase()}s`,
-          localField: 'senseId',
-          foreignField: 'senseId',
-          as: 'senseSigns'
-        }
-      },
+    const pipeline = [
+      ...match,
+      ...SENSES_INNER_JOIN,
+      ...projectWithExampleOrDefinition
+    ];
+
+    const dropUneededFields = [
       {
         $project: {
           _id: 0,
@@ -114,14 +175,20 @@ export class ReferenceService {
       }
     ];
 
-    if (filter) {
+    const filterForHasSignsPipeline = [
+      ...senseSignInnerJoin('senseId'),
+      ...dropUneededFields
+    ];
+
+    if (filterForHasSign) {
       // @ts-ignore
-      basePipeline.push(...filterForHasSignsPipeline);
+      pipeline.push(...filterForHasSignsPipeline);
     }
 
     return this.entrySenseModel
-      .aggregate(basePipeline)
-      .collation(CASE_INSENSITIVE_COLLATION);
+      .aggregate(pipeline)
+      .collation(CASE_INSENSITIVE_COLLATION)
+      .exec();
   }
 
   getSenseSigns(senseId: string): Promise<SenseSignRecord[]> {
@@ -131,20 +198,10 @@ export class ReferenceService {
       .exec();
   }
 
-  async getSigns(senseId: string): Promise<SignRecord[]> {
-    return this.senseSignModel.aggregate([
-      { $match: { senseId: senseId } },
-      {
-        $lookup: {
-          from: `${SIGN_COLLECTION_NAME.toLowerCase()}s`,
-          localField: 'signId',
-          foreignField: '_id',
-          as: 'signs'
-        }
-      },
-      {
-        $unwind: '$signs'
-      },
+  getSigns(senseId: string): Promise<SignRecord[]> {
+    const match = [{ $match: { senseId: senseId } }];
+
+    const project = [
       {
         $project: {
           _id: '$signs._id',
@@ -153,7 +210,11 @@ export class ReferenceService {
           s3Key: '$signs.s3Key'
         }
       }
-    ]);
+    ];
+
+    const pipeline = [...match, ...SIGNS_INNER_JOIN, ...project];
+
+    return this.senseSignModel.aggregate(pipeline).exec();
   }
 
   findOneSign(_id: ObjectId): Promise<SignRecord> {
@@ -163,13 +224,35 @@ export class ReferenceService {
       .exec();
   }
 
+  async allOxIdsLowercaseThatHaveDictionarySensesAndSigns(): Promise<string[]> {
+    const match = [
+      { $match: { dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary } }
+    ];
+    const projectAndGroup = [
+      {
+        $project: {
+          oxId: { $toLower: '$ownEntryOxId' }
+        }
+      },
+      { $group: { _id: '$oxId' } }
+    ];
+    const pipeline = [
+      ...match,
+      ...senseSignInnerJoin('senseId'),
+      ...projectAndGroup
+    ];
+
+    console.log(JSON.stringify(pipeline));
+
+    const objs = await this.senseModel.aggregate(pipeline);
+    return objs.map(i => i._id);
+  }
+
   _removeInvalidRegexChars(chars: string): string {
     return chars.replace('\\', '');
   }
 
-  private async searchOxIdsWithoutFilteringForSigns(
-    chars: string
-  ): Promise<string[]> {
+  private async searchOxIdsAll(chars: string): Promise<string[]> {
     const objs = await this.entryModel
       .find({ word: { $regex: `^${chars}`, $options: '$i' } }, { oxId: 1 })
       .limit(OXIDS_LIMIT)
@@ -178,36 +261,24 @@ export class ReferenceService {
     return [...new Set(ids)];
   }
 
-  private async searchOxIdsAndFilterForSigns(chars: string): Promise<string[]> {
-    const objs = await this.entryModel.aggregate([
+  private async searchOxIdsWithSigns(chars: string): Promise<string[]> {
+    const match = [
       {
         $match: { word: { $regex: `^${chars}`, $options: '$i' } }
-      },
-      {
-        $lookup: {
-          from: `${ENTRY_SENSE_COLLECTION_NAME.toLowerCase()}s`,
-          localField: 'oxId',
-          foreignField: 'oxId',
-          as: 'entrySenses'
-        }
-      },
-      {
-        $unwind: '$entrySenses'
-      },
-      {
-        $lookup: {
-          from: `${SENSE_SIGN_COLLECTION_NAME.toLowerCase()}s`,
-          localField: 'entrySenses.senseId',
-          foreignField: 'senseId',
-          as: 'senseSigns'
-        }
-      },
-      {
-        $unwind: '$senseSigns'
-      },
+      }
+    ];
+    const groupAndLimit = [
       { $group: { _id: '$oxId' } },
       { $limit: OXIDS_LIMIT }
-    ]);
+    ];
+    const pipeline = [
+      ...match,
+      ...ENTRY_SENSES_INNER_JOIN,
+      ...senseSignInnerJoin('entrySenses.senseId'),
+      ...groupAndLimit
+    ];
+
+    const objs = await this.entryModel.aggregate(pipeline);
     return objs.map(i => i._id);
   }
 }

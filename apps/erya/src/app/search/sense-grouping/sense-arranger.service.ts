@@ -1,6 +1,8 @@
 import { HydratedSense, SignRecord, UniqueEntry } from '@edfu/api-interfaces';
 import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
 
+const MAX_SENSES_LIMIT = 20;
+
 export interface SenseGroup {
   lexicalCategory: LexicalCategory;
   senses: HydratedSense[];
@@ -9,6 +11,20 @@ export interface SenseGroup {
 export interface UniqueEntryWithSenseGroups extends UniqueEntry {
   senseGroups: SenseGroup[];
 }
+
+const lexicalCategoryOrder = [
+  LexicalCategory.noun,
+  LexicalCategory.verb,
+  LexicalCategory.adjective,
+  LexicalCategory.adverb,
+  LexicalCategory.pronoun,
+  LexicalCategory.preposition,
+  LexicalCategory.conjunction,
+  LexicalCategory.interjection,
+  LexicalCategory.determiner,
+  LexicalCategory.residual,
+  LexicalCategory.other
+];
 
 export class SenseArrangerService {
   sortFilterAndGroup(
@@ -20,38 +36,54 @@ export class SenseArrangerService {
   }
 
   sortAndFilter(senses: HydratedSense[], filter = true): HydratedSense[] {
-    senses = this._sortSensesByFit(senses);
+    senses = this._orderByFit(senses);
     if (filter) {
       senses = this._filterForSensesWithDifferentSigns(senses);
       senses = this._removeThesaurusSensesIfHaveDictionarySense(senses);
       senses = this._applyMaxSensesLimit(senses);
     }
-    return this._groupSensesByLexicalCategoryAsList(senses);
+    return senses;
   }
 
-  _sortSensesByFit(senses: HydratedSense[]): HydratedSense[] {
-    return senses.sort(this._compareSensesForFit);
+  _orderByFit(senses: HydratedSense[]): HydratedSense[] {
+    const sorted = senses.sort(
+      this._compareSensesByHomographSenseIndexAndSimilarity
+    );
+    return sorted;
   }
 
-  _compareSensesForFit(a: HydratedSense, b: HydratedSense) {
-    if (a.associationType !== b.associationType) {
-      if (a.associationType === DictionaryOrThesaurus.dictionary) {
+  _compareSensesByHomographSenseIndexAndSimilarity(
+    a: HydratedSense,
+    b: HydratedSense
+  ) {
+    if (a.homographC !== b.homographC) {
+      if (a.homographC < b.homographC) {
         return -1;
       } else {
         return 1;
       }
     } else {
-      if (a.associationType === DictionaryOrThesaurus.dictionary) {
-        if (a.apiSenseIndex < b.apiSenseIndex) {
+      const aLexicalPosition = lexicalCategoryOrder.indexOf(a.lexicalCategory);
+      const bLexicalPosition = lexicalCategoryOrder.indexOf(b.lexicalCategory);
+      if (aLexicalPosition !== bLexicalPosition) {
+        if (aLexicalPosition < bLexicalPosition) {
           return -1;
         } else {
           return 1;
         }
       } else {
-        if (a.similarity > b.similarity) {
-          return -1;
+        if (a.apiSenseIndex !== b.apiSenseIndex) {
+          if (a.apiSenseIndex < b.apiSenseIndex) {
+            return -1;
+          } else {
+            return 1;
+          }
         } else {
-          return 1;
+          if (a.similarity < b.similarity) {
+            return -1;
+          } else {
+            return 1;
+          }
         }
       }
     }
@@ -77,31 +109,7 @@ export class SenseArrangerService {
   }
 
   _applyMaxSensesLimit(senses: HydratedSense[]): HydratedSense[] {
-    const MAX_SENSES_LIMIT = 10;
     return senses.slice(0, MAX_SENSES_LIMIT);
-  }
-
-  _groupSensesByLexicalCategoryAsList(
-    senses: HydratedSense[]
-  ): HydratedSense[] {
-    const categoryOrder = senses.reduce((acc, curr) => {
-      const cat = curr.lexicalCategory;
-      if (!acc.includes(cat)) {
-        acc.push(cat);
-      }
-      return acc;
-    }, []);
-
-    const grouped = [];
-    for (const cat of categoryOrder) {
-      for (const sense of senses) {
-        if (sense.lexicalCategory === cat) {
-          grouped.push(sense);
-        }
-      }
-    }
-
-    return grouped;
   }
 
   groupSenses(senses: HydratedSense[]): UniqueEntryWithSenseGroups[] {

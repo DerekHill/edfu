@@ -13,7 +13,7 @@ import {
   SenseSignRecord
 } from './signs/interfaces/sense-sign.interface';
 import { SignDocument } from './signs/interfaces/sign.interface';
-import { SignRecord, SenseSignRecordWithoutId } from '@edfu/api-interfaces';
+import { SignRecord } from '@edfu/api-interfaces';
 import {
   EntryDocument,
   EntryRecord
@@ -24,8 +24,16 @@ import {
 } from './entry-senses/interfaces/entry-sense.interface';
 import {
   SenseDocument,
-  SharedSenseRecordWithoutId
+  DictionarySenseRecordWithoutId
 } from './senses/interfaces/sense.interface';
+import { HeadwordOrPhrase } from '../enums';
+import { ObjectId } from 'bson';
+import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
+
+const DEFAULT_OXID = 'oxId';
+const DEFAULT_SENSE_ID = 'senseId';
+const DEFAULT_SIGN_ID = new ObjectId();
+const DEFAULT_USER_ID = new ObjectId();
 
 @Injectable()
 export class ReferenceTestSetupService {
@@ -42,25 +50,62 @@ export class ReferenceTestSetupService {
     private readonly signModel: Model<SignDocument>
   ) {}
 
-  createEntry(entry: EntryRecord): Promise<EntryRecord> {
-    return this.entryModel.create(entry);
+  createEntry(params: any): Promise<EntryRecord> {
+    const defaults: EntryRecord = {
+      _id: new ObjectId(),
+      oxId: DEFAULT_OXID,
+      homographC: 0,
+      word: DEFAULT_OXID,
+      relatedEntriesAdded: false,
+      headwordOrPhrase: HeadwordOrPhrase.headword
+    };
+    return this.entryModel.create({ ...defaults, ...params });
   }
 
-  createEntrySense(entrySense: EntrySenseRecord): Promise<EntrySenseRecord> {
-    return this.entrySenseModel.create(entrySense);
+  createEntrySense(params: any): Promise<EntrySenseRecord> {
+    const defaults = {
+      _id: new ObjectId(),
+      oxId: DEFAULT_OXID,
+      homographC: 0,
+      senseId: DEFAULT_SENSE_ID,
+      associationType: DictionaryOrThesaurus.dictionary,
+      similarity: 0.7
+    };
+    return this.entrySenseModel.create({ ...defaults, ...params });
   }
 
-  createSense(sense: SharedSenseRecordWithoutId): Promise<SenseDocument> {
-    return this.senseModel.create(sense);
+  createSense(params: any): Promise<SenseDocument> {
+    const defaults: DictionarySenseRecordWithoutId = {
+      senseId: DEFAULT_SENSE_ID,
+      ownEntryOxId: 'jump',
+      ownEntryHomographC: 0,
+      lexicalCategory: LexicalCategory.noun,
+      apiSenseIndex: 0,
+      dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
+      thesaurusSenseIds: [],
+      definition: 'jump in the air',
+      example: 'look how high it jumped!'
+    };
+    return this.senseModel.create({ ...defaults, ...params });
   }
 
-  createSenseSign(
-    senseSign: SenseSignRecordWithoutId
-  ): Promise<SenseSignRecord> {
-    return this.senseSignModel.create(senseSign);
+  createSenseSign(params: any): Promise<SenseSignRecord> {
+    const defaults = {
+      userId: new ObjectId(),
+      senseId: DEFAULT_SENSE_ID,
+      signId: new ObjectId()
+    };
+    return this.senseSignModel.create({ ...defaults, ...params });
   }
 
-  createSign(sign: SignRecord): Promise<SignRecord> {
-    return this.signModel.create(sign);
+  createSign(params: any): Promise<SignRecord> {
+    const defaults = {
+      _id: DEFAULT_SIGN_ID,
+      userId: DEFAULT_USER_ID,
+      mnemonic: 'remember me',
+      mediaUrl: 'www.my-picture-link.com',
+      s3Key: '1234.mp4'
+    };
+    return this.signModel.create({ ...defaults, ...params });
   }
 }

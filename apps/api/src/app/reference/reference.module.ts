@@ -32,6 +32,7 @@ import { S3Service } from '../s3/s3.service';
 import { S3Module } from '../s3/s3.module';
 import { VimeoModule } from '../vimeo/vimeo.module';
 import { VimeoService } from '../vimeo/vimeo.service';
+import { SitemapController } from './sitemap/sitemap.controller';
 
 class TfUseMock {
   embed(sentences: string[]) {
@@ -91,6 +92,7 @@ class TfUseMock {
     },
     SimilarityService
   ],
-  exports: [EntriesService, SensesService, S3Service, VimeoService]
+  exports: [EntriesService, SensesService, S3Service, VimeoService],
+  controllers: [SitemapController]
 })
 export class ReferenceModule {}

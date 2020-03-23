@@ -90,6 +90,7 @@
     "passport-local": "^1.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~6.5.4",
+    "sitemap": "^6.1.0",
     "ts-optchain": "^0.1.8",
     "tslib": "^1.11.1",
     "vimeo": "^2.1.1",

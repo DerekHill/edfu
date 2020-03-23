@@ -18,6 +18,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { SensesModalComponent } from './senses-modal/senses-modal.component';
 import { SenseArrangerService } from './sense-grouping/sense-arranger.service';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { SEARCH_COMPONENT_PATH } from '../constants';
 
 interface OxIdSearchVariables {
   searchString?: string;
@@ -225,7 +226,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onOxIdSelectViaDropdown(oxId: string) {
     const newOxIdLower = oxId.toLowerCase();
-    this.router.navigate(['/search', newOxIdLower]);
+    this.router.navigate([`/${SEARCH_COMPONENT_PATH}`, newOxIdLower]);
     this.searchInput.nativeElement.blur();
     this.oxIdsSearchRef.setVariables({
       searchString: ''

@@ -18,14 +18,15 @@ import { HttpErrorInterceptor } from './shared/interceptors/http-error.intercept
 import { AuthGuard } from './auth/auth.guard';
 import { DeviceDetectorModule } from 'ngx-device-detector';
 import { ResponseErrorInterceptor } from './shared/interceptors/response-error.interceptor';
+import { SEARCH_COMPONENT_PATH } from './constants';
 
 const appRoutes: Routes = [
   {
-    path: 'search/:oxIdLower',
+    path: `${SEARCH_COMPONENT_PATH}/:oxIdLower`,
     component: SearchComponent
   },
   {
-    path: 'search',
+    path: SEARCH_COMPONENT_PATH,
     component: SearchComponent
   },
   {
@@ -34,7 +35,7 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   { path: 'login', component: LoginComponent },
-  { path: '', redirectTo: '/search', pathMatch: 'full' }
+  { path: '', redirectTo: `/${SEARCH_COMPONENT_PATH}`, pathMatch: 'full' }
 ];
 
 @NgModule({

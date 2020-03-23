@@ -34,11 +34,11 @@ export class LexicographerResolver {
     if (!entries.length) {
       return [];
     } else {
-      return this.referenceService.getSensesForOxIdCaseInsensitive(
-        entries[0].oxId,
-        false,
-        ''
-      );
+      return this.referenceService.sensesForOxIdCaseInsensitive({
+        oxId: entries[0].oxId,
+        filterForHasSign: false,
+        filterForDictionarySenses: true
+      });
     }
   }
 

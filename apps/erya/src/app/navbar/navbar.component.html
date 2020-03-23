@@ -1,6 +1,6 @@
 <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
-    <a class="navbar-item" routerLink="/search">
+    <a class="navbar-item" routerLink="{{ searchComponentPath }}">
       Erya
     </a>
     <a
@@ -25,7 +25,7 @@
     <div class="navbar-start">
       <a
         class="navbar-item"
-        (click)="navigateTo('/search')"
+        (click)="navigateTo(searchComponentPath)"
         routerLinkActive="is-active"
       >
         Search

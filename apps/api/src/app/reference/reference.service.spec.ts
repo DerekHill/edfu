@@ -16,10 +16,7 @@ import { SenseSignSchema } from './signs/schemas/sense-sign.schema';
 import { SignSchema } from './signs/schemas/sign.schema';
 import { ReferenceTestSetupService } from './reference-test-setup.service';
 import { ObjectId } from 'bson';
-import { HeadwordOrPhrase } from '../enums';
-import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
-import { DictionarySenseRecordWithoutId } from './senses/interfaces/sense.interface';
-import { SignRecord } from '@edfu/api-interfaces';
+import { DictionaryOrThesaurus } from '@edfu/enums';
 
 describe('ReferenceService', () => {
   let service: ReferenceService;
@@ -49,37 +46,27 @@ describe('ReferenceService', () => {
   describe('searchOxIds with filter for signs', () => {
     it('returns oxId if it has signs', async () => {
       const OXID = 'food';
-      const HOMOGRAPH_C = 0;
-      const SENSE_ID = 'sense_id';
-      const entryData = {
-        _id: new ObjectId(),
-        oxId: OXID,
-        homographC: HOMOGRAPH_C,
-        word: OXID,
-        relatedEntriesAdded: false,
-        headwordOrPhrase: HeadwordOrPhrase.headword
-      };
 
-      const entrySenseData = {
-        _id: new ObjectId(),
+      await setupService.createEntry({
         oxId: OXID,
-        homographC: HOMOGRAPH_C,
-        senseId: SENSE_ID,
-        associationType: DictionaryOrThesaurus.dictionary,
-        similarity: 0.7
-      };
-
-      const senseSignData = {
-        userId: new ObjectId(),
-        senseId: `${SENSE_ID}`,
-        signId: new ObjectId()
-      };
-      await setupService.createEntry(entryData);
-      await setupService.createEntrySense(entrySenseData);
-      await setupService.createSenseSign(senseSignData);
-      const FILTER = true;
-      const res = await service.searchOxIds('foo', FILTER);
+        word: OXID
+      });
+      await setupService.createEntrySense({
+        oxId: OXID
+      });
+      await setupService.createSenseSign({});
+      const res = await service.searchOxIds('foo', true);
       expect(res.includes(OXID)).toBeTruthy();
+    });
+
+    it('does not return oxId if it does not have signs', async () => {
+      const OXID = 'food';
+      await setupService.createEntry({
+        oxId: OXID
+      });
+      const FILTER = true;
+      const res = await service.searchOxIds(OXID, FILTER);
+      expect(res.includes(OXID)).toBeFalsy();
     });
   });
 
@@ -88,66 +75,73 @@ describe('ReferenceService', () => {
       const SENSE_ID = 'sense_id';
       const SIGN_ID = new ObjectId();
 
-      const senseSignData = {
-        userId: new ObjectId(),
-        senseId: `${SENSE_ID}`,
+      await setupService.createSenseSign({
+        senseId: SENSE_ID,
         signId: SIGN_ID
-      };
-
-      const signData: SignRecord = {
-        _id: SIGN_ID,
-        userId: new ObjectId(),
-        mnemonic: 'remember me',
-        mediaUrl: 'www.my-picture-link.com',
-        s3Key: '1234.mp4'
-      };
-
-      await setupService.createSenseSign(senseSignData);
-      await setupService.createSign(signData);
+      });
+      await setupService.createSign({
+        _id: SIGN_ID
+      });
       const res = await service.getSigns(SENSE_ID);
       expect(res[0]._id).toEqual(SIGN_ID);
     });
   });
 
-  describe('getSensesForOxIdCaseInsensitive', () => {
+  describe('sensesForOxIdCaseInsensitive', () => {
     it('returns correct sense', async () => {
       const OXID = 'food';
-      const HOMOGRAPH_C = 0;
       const SENSE_ID = 'sense_id';
 
-      const entrySenseData = {
-        _id: new ObjectId(),
+      await setupService.createEntrySense({
         oxId: OXID,
-        homographC: HOMOGRAPH_C,
-        senseId: SENSE_ID,
-        associationType: DictionaryOrThesaurus.dictionary,
-        similarity: 0.7
-      };
+        senseId: SENSE_ID
+      });
+      await setupService.createSense({
+        senseId: SENSE_ID
+      });
+      await setupService.createSenseSign({
+        senseId: `${SENSE_ID}`
+      });
 
-      const senseSignData = {
-        userId: new ObjectId(),
-        senseId: `${SENSE_ID}`,
-        signId: new ObjectId()
-      };
-
-      const senseData: DictionarySenseRecordWithoutId = {
-        senseId: SENSE_ID,
-        ownEntryOxId: 'jump',
-        ownEntryHomographC: 0,
-        lexicalCategory: LexicalCategory.noun,
-        apiSenseIndex: 0,
-        dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
-        thesaurusSenseIds: [],
-        definition: 'jump in the air',
-        example: 'look how high it jumped!'
-      };
-
-      await setupService.createEntrySense(entrySenseData);
-      await setupService.createSense(senseData);
-      await setupService.createSenseSign(senseSignData);
-
-      const res = await service.getSensesForOxIdCaseInsensitive(OXID, true);
+      const res = await service.sensesForOxIdCaseInsensitive({ oxId: OXID });
       expect(res[0].senseId).toBe(SENSE_ID);
+    });
+
+    it('filters for hasSign', async () => {
+      const OXID = 'food';
+      const SENSE_ID = 'sense_id';
+
+      await setupService.createEntrySense({
+        oxId: OXID,
+        senseId: SENSE_ID
+      });
+      await setupService.createSense({
+        senseId: SENSE_ID
+      });
+
+      const res = await service.sensesForOxIdCaseInsensitive({
+        oxId: OXID,
+        filterForHasSign: true
+      });
+      expect(res.length).toBeFalsy();
+    });
+
+    it('filters for dictionary senses only', async () => {
+      const OXID = 'food';
+
+      await setupService.createEntrySense({
+        oxId: OXID,
+        associationType: DictionaryOrThesaurus.thesaurus
+      });
+
+      await setupService.createSense({});
+
+      const res = await service.sensesForOxIdCaseInsensitive({
+        oxId: OXID,
+        filterForHasSign: false,
+        filterForDictionarySenses: true
+      });
+      expect(res.length).toBeFalsy();
     });
   });
 

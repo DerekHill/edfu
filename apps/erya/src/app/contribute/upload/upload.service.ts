@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { IResponse } from '@edfu/api-interfaces';
 
-const endpoint = `${environment.apiUri}/api/signs`;
+const endpoint = `${environment.apiUri}/signs`;
 
 @Injectable()
 export class UploadService {

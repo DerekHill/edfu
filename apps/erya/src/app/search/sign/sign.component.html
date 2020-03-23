@@ -29,11 +29,7 @@
     ></youtube-player>
   </div>
 
-  <div
-    *ngSwitchCase="'vimeo'"
-    #vimeo_player_container
-    class="image is-16by9 vimeo-container"
-  >
+  <div *ngSwitchCase="'vimeo'">
     <div class="columns is-centered" *ngIf="deviceService.isMobile()">
       <div class="column is-one-third">
         <button class="button is-primary is-fullwidth" (click)="vimeoPlay()">
@@ -44,6 +40,7 @@
         </button>
       </div>
     </div>
+    <div #vimeo_player_container class="image is-16by9 vimeo-container"></div>
   </div>
 
   <div *ngSwitchDefault>

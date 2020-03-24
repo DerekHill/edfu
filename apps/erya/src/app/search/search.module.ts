@@ -11,19 +11,19 @@ import { SenseComponent } from './sense/sense.component';
 import { SignComponent } from './sign/sign.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { SenseArrangerService } from './sense-grouping/sense-arranger.service';
-import { SensesModalComponent } from './senses-modal/senses-modal.component';
 import { RemoveUnderscoresPipe } from '../shared/pipes/remove-underscores.pipe';
 import { MatButtonModule } from '@angular/material/button';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 import { SharedModule } from '../shared/shared.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { SensesComponent } from './senses/senses.component';
 
 @NgModule({
   declarations: [
     SearchComponent,
     SenseComponent,
     SignComponent,
-    SensesModalComponent
+    SensesComponent
   ],
   imports: [
     CommonModule,
@@ -40,7 +40,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     SharedModule,
     FontAwesomeModule
   ],
-  entryComponents: [SensesModalComponent],
   providers: [SenseArrangerService, RemoveUnderscoresPipe]
 })
 export class SearchModule {}

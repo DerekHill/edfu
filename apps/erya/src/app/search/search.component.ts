@@ -18,6 +18,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { SenseArrangerService } from './sense-grouping/sense-arranger.service';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { SEARCH_COMPONENT_PATH } from '../constants';
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 interface OxIdSearchVariables {
   searchString?: string;
@@ -77,8 +79,10 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
     private senseArranger: SenseArrangerService,
     private route: ActivatedRoute,
     private router: Router,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    public library: FaIconLibrary
   ) {
+    library.addIcons(faSearch);
     this.hotkeysService.add(
       new Hotkey(
         'esc',

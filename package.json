@@ -100,7 +100,7 @@
     "@angular-devkit/build-angular": "^0.900.6",
     "@angular/cli": "9.0.5",
     "@angular/compiler-cli": "^9.0.0",
-    "@angular/language-service": "^9.0.0",
+    "@angular/language-service": "^9.0.7",
     "@nestjs/schematics": "^7.0.0",
     "@nestjs/testing": "^7.0.0",
     "@nrwl/cypress": "8.12.2",

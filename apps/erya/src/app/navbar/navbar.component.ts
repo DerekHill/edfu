@@ -4,7 +4,7 @@ import { AuthService } from '../auth/auth.service';
 import { BasicUser } from '@edfu/api-interfaces';
 import { Observable } from 'rxjs';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faPlus, faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { SEARCH_COMPONENT_PATH } from '../constants';
 
 @Component({
@@ -22,7 +22,7 @@ export class NavbarComponent {
     private authService: AuthService,
     public library: FaIconLibrary
   ) {
-    library.addIcons(faSignInAlt, faSignOutAlt);
+    library.addIcons(faSignInAlt, faSignOutAlt, faHome, faPlus);
   }
 
   toggleNavbar() {

@@ -34,7 +34,7 @@
                   {{ oxId | removeUnderscores }}
                 </mat-option>
               </mat-autocomplete>
-              <mat-icon matSuffix>search</mat-icon>
+              <fa-icon matSuffix [icon]="['fas', 'search']"></fa-icon>
             </mat-form-field>
           </form>
         </div>
@@ -46,6 +46,9 @@
   <div class="container">
     <div class="columns is-centered">
       <div class="column is-two-thirds-desktop">
+        <div *ngIf="selectedSenses">
+          <edfu-senses [senses]="selectedSenses" (senseEmitter)="onSenseSelect($event, true)"></edfu-senses>
+        </div>
         <div *ngIf="selectedSense" class="content">
           <h1 class="has-text-centered is-capitalized">
             {{ selectedSense.ownEntryOxId | removeUnderscores }}

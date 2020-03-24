@@ -1,7 +1,7 @@
 <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
     <a class="navbar-item" routerLink="{{ searchComponentPath }}">
-      Erya
+      <fa-icon [icon]="['fas', 'home']"></fa-icon>
     </a>
     <a
       [ngClass]="{ 'is-active': isMenuOpen }"
@@ -22,25 +22,22 @@
     class="navbar-menu"
     [ngClass]="{ 'is-active': isMenuOpen }"
   >
-    <div class="navbar-start">
-      <a
-        class="navbar-item"
-        (click)="navigateTo(searchComponentPath)"
-        routerLinkActive="is-active"
-      >
-        Search
-      </a>
-
-      <a
-        class="navbar-item"
-        routerLinkActive="is-active"
-        (click)="navigateTo('/contribute')"
-      >
-        Contribute
-      </a>
-    </div>
+    <div class="navbar-start"></div>
 
     <div class="navbar-end">
+      <div class="navbar-item">
+        <div class="buttons">
+          <a
+            class="button is-primary is-inverted"
+            (click)="navigateTo('/contribute')"
+          >
+            <span class="icon"
+              ><fa-icon [icon]="['fas', 'plus']"></fa-icon
+            ></span>
+            <span><strong>Contribute</strong></span>
+          </a>
+        </div>
+      </div>
       <a
         *ngIf="currentUser$ | async; else logIn"
         class="navbar-item"

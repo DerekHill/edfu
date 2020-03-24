@@ -15,10 +15,11 @@ import { HydratedSense, SenseSignDtoInterface } from '@edfu/api-interfaces';
 import { ApolloQueryResult } from 'apollo-client';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 import { MatDialog } from '@angular/material/dialog';
-import { SensesModalComponent } from './senses-modal/senses-modal.component';
 import { SenseArrangerService } from './sense-grouping/sense-arranger.service';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { SEARCH_COMPONENT_PATH } from '../constants';
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 interface OxIdSearchVariables {
   searchString?: string;
@@ -63,6 +64,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
   senseSignsBs$: BehaviorSubject<SenseSignDtoInterface[]>;
 
   selectedSense: HydratedSense;
+  selectedSenses: HydratedSense[];
 
   routeOxIdLower$: Observable<string>;
   currentOxIdLower: string;
@@ -77,8 +79,10 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
     private senseArranger: SenseArrangerService,
     private route: ActivatedRoute,
     private router: Router,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    public library: FaIconLibrary
   ) {
+    library.addIcons(faSearch);
     this.hotkeysService.add(
       new Hotkey(
         'esc',
@@ -196,7 +200,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.senses$.subscribe((senses: HydratedSense[]) => {
       if (senses.length > 1) {
-        this.openDialog(senses);
+        this.setSenses(senses);
       }
       if (senses.length === 1) {
         this.onSenseSelect(senses[0]);
@@ -208,16 +212,9 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  openDialog(senses: HydratedSense[]): void {
-    const dialogRef = this.dialog.open(SensesModalComponent, {
-      data: senses
-    });
-
-    dialogRef.afterClosed().subscribe((sense: HydratedSense) => {
-      if (sense) {
-        this.onSenseSelect(sense, true);
-      }
-    });
+  setSenses(senses: HydratedSense[]): void {
+    this.selectedSenses = senses;
+    this.selectedSense = null;
   }
 
   displayWithoutUnderscores(oxId: string): string {
@@ -251,6 +248,8 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
     this.signsSearchRef.setVariables({
       senseId: sense.senseId
     });
+
+    this.selectedSenses = null;
     this.selectedSense = sense;
   }
 

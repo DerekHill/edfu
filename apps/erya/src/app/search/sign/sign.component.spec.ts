@@ -3,7 +3,6 @@ import { SignComponent, MediaType } from './sign.component';
 import { ObjectId } from 'bson';
 import { SignRecord, HydratedSense } from '@edfu/api-interfaces';
 import { MatListModule } from '@angular/material/list';
-import { SenseComponent } from '../sense/sense.component';
 import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 import { DeviceDetectorModule } from 'ngx-device-detector';
@@ -15,7 +14,7 @@ describe('SignComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [SignComponent, SenseComponent],
+      declarations: [SignComponent],
       imports: [
         MatListModule,
         YouTubePlayerModule,

@@ -7,7 +7,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { HotkeyModule } from 'angular2-hotkeys';
-import { SenseComponent } from './sense/sense.component';
 import { SignComponent } from './sign/sign.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { SenseArrangerService } from './sense-grouping/sense-arranger.service';
@@ -19,12 +18,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SensesComponent } from './senses/senses.component';
 
 @NgModule({
-  declarations: [
-    SearchComponent,
-    SenseComponent,
-    SignComponent,
-    SensesComponent
-  ],
+  declarations: [SearchComponent, SignComponent, SensesComponent],
   imports: [
     CommonModule,
     FormsModule,

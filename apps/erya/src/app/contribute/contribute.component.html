@@ -47,6 +47,7 @@
                   class="file-input"
                   type="file"
                   name="resume"
+                  accept="video/mp4, video/wmv, video/mov, video/flv, video/avi"
                   (change)="onFileChange($event)"
                 />
                 <span class="file-cta">
@@ -75,28 +76,33 @@
               <div *ngIf="signFormGroup.controls.file.errors.required">
                 Please add a video
               </div>
-              <div *ngIf="signFormGroup.controls.file.errors.fileSize">
+              <p
+                class="help is-danger"
+                *ngIf="signFormGroup.controls.file.errors.fileSize"
+              >
                 Video is too large. The maximum size is
                 {{ maxUploadSizeFriendly }}
-              </div>
-              <div *ngIf="signFormGroup.controls.file.errors.fileType">
+              </p>
+              <p
+                class="help is-danger"
+                *ngIf="signFormGroup.controls.file.errors.fileType"
+              >
                 Video is of wrong type. Supported video formats are
                 {{ supportedVideoFormats }}
-              </div>
+              </p>
             </div>
             <br />
             <div *ngIf="senses$ | async as senses">
               <div *ngIf="senses.length > 1">
                 <br />
-
-
                 <p class="title is-size-5 has-text-weight-medium has-text-info">
-                  "<span>{{ searchString.value }}</span
-                  >" has different senses
+                  “{{ searchString.value }}” has different senses. Tick all the
+                  senses which apply to this sign.
+                  <sup class="has-text-grey has-text-weight-light"
+                    >required</sup
+                  >
                 </p>
-                <p class="is-size-6">
-                  Tick all the senses which apply to this sign.
-                </p>
+
                 <div class="columns is-multiline">
                   <div
                     class="column is-one-third sense-column"
@@ -137,7 +143,8 @@
             </div>
             <br />
             <p class="is-size-5 has-text-weight-medium has-text-info">
-              Short description to help people remember the sign (optional)
+              Short description to help people remember the sign
+              <sup class="has-text-grey has-text-weight-light">optional</sup>
             </p>
 
             <div class="field">

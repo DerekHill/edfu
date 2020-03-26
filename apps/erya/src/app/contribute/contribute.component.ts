@@ -12,7 +12,7 @@ import {
 } from '@edfu/api-interfaces';
 import { map } from 'rxjs/operators';
 import { ApolloQueryResult } from 'apollo-client';
-import { SenseArrangerService } from '../search/sense-grouping/sense-arranger.service';
+import { SenseArrangerService } from '../search/sense-arranger/sense-arranger.service';
 import {
   FormBuilder,
   FormArray,

@@ -27,29 +27,15 @@ const lexicalCategoryOrder = [
 ];
 
 export class SenseArrangerService {
-  sortFilterAndGroup(
-    senses: HydratedSense[],
-    filter = true
-  ): UniqueEntryWithSenseGroups[] {
-    const sortedSenses = this.sortAndFilter(senses, filter);
-    return this.groupSenses(sortedSenses);
-  }
-
   sortAndFilter(senses: HydratedSense[], filter = true): HydratedSense[] {
-    senses = this._orderByFit(senses);
+    senses = senses.sort(this._compareSensesByHomographSenseIndexAndSimilarity);
+
     if (filter) {
       senses = this._filterForSensesWithDifferentSigns(senses);
       senses = this._removeThesaurusSensesIfHaveDictionarySense(senses);
       senses = this._applyMaxSensesLimit(senses);
     }
     return senses;
-  }
-
-  _orderByFit(senses: HydratedSense[]): HydratedSense[] {
-    const sorted = senses.sort(
-      this._compareSensesByHomographSenseIndexAndSimilarity
-    );
-    return sorted;
   }
 
   _compareSensesByHomographSenseIndexAndSimilarity(
@@ -112,35 +98,6 @@ export class SenseArrangerService {
     return senses.slice(0, MAX_SENSES_LIMIT);
   }
 
-  groupSenses(senses: HydratedSense[]): UniqueEntryWithSenseGroups[] {
-    const uniqueEntries: UniqueEntry[] = [];
-    for (const sense of senses) {
-      if (
-        !uniqueEntries.some(
-          entry =>
-            entry.oxId === sense.oxId && entry.homographC === sense.homographC
-        )
-      ) {
-        uniqueEntries.push({ oxId: sense.oxId, homographC: sense.homographC });
-      }
-    }
-    const uniqueEntryWithSenseGroupsArray: UniqueEntryWithSenseGroups[] = [];
-    for (const entry of uniqueEntries) {
-      const relevantSenses = this._extractRelevantSensesPreservingOrder(
-        senses,
-        entry
-      );
-
-      uniqueEntryWithSenseGroupsArray.push({
-        oxId: entry.oxId,
-        homographC: entry.homographC,
-        senseGroups: this._groupSensesByLexicalCategoryAsObjects(relevantSenses)
-      });
-    }
-
-    return uniqueEntryWithSenseGroupsArray;
-  }
-
   _extractRelevantSensesPreservingOrder(
     senses: HydratedSense[],
     uniqueEntry: UniqueEntry
@@ -150,27 +107,6 @@ export class SenseArrangerService {
         sense.oxId === uniqueEntry.oxId &&
         sense.homographC === uniqueEntry.homographC
     );
-  }
-
-  _groupSensesByLexicalCategoryAsObjects(
-    senses: HydratedSense[]
-  ): SenseGroup[] {
-    const categoryOrder = senses.reduce((acc, curr) => {
-      const cat = curr.lexicalCategory;
-      if (!acc.includes(cat)) {
-        acc.push(cat);
-      }
-      return acc;
-    }, []);
-    const groups: SenseGroup[] = [];
-    for (const cat of categoryOrder) {
-      groups.push({
-        lexicalCategory: cat,
-        senses: senses.filter(sense => sense.lexicalCategory === cat)
-      });
-    }
-
-    return groups;
   }
 
   _removeThesaurusSensesIfHaveDictionarySense(

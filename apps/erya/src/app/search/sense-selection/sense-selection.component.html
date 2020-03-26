@@ -1,0 +1,30 @@
+<ng-container *ngIf="senses">
+  <h1 class="title has-text-weight-medium">
+    <span>“{{ senses[0].oxId }}”</span> has more than one sense
+  </h1>
+  <div class="columns is-multiline">
+    <div
+      class="column is-one-third sense-column content is-half-desktop is-one-third-widescreen"
+      *ngFor="let sense of senses"
+    >
+      <div class="box">
+        <p>
+          <span class="has-text-weight-bold">
+            {{ sense.oxId | removeUnderscores }}
+          </span>
+          <span class="has-text-grey">{{ sense.lexicalCategory }}</span>
+        </p>
+        <p class="has-text-grey is-italic">‘{{ sense.example }}’</p>
+        <button
+          class="button is-primary is-fullwidth"
+          (click)="onSenseClick($event, sense)"
+        >
+          <span class="icon">
+            <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+          </span>
+          <span>View sign</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-container>

@@ -8,17 +8,16 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { HotkeyModule } from 'angular2-hotkeys';
 import { SignComponent } from './sign/sign.component';
-import { MatDialogModule } from '@angular/material/dialog';
-import { SenseArrangerService } from './sense-grouping/sense-arranger.service';
+import { SenseArrangerService } from './sense-arranger/sense-arranger.service';
 import { RemoveUnderscoresPipe } from '../shared/pipes/remove-underscores.pipe';
 import { MatButtonModule } from '@angular/material/button';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 import { SharedModule } from '../shared/shared.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { SensesComponent } from './senses/senses.component';
+import { SenseSelectionComponent } from './sense-selection/sense-selection.component';
 
 @NgModule({
-  declarations: [SearchComponent, SignComponent, SensesComponent],
+  declarations: [SearchComponent, SignComponent, SenseSelectionComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -27,7 +26,6 @@ import { SensesComponent } from './senses/senses.component';
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
-    MatDialogModule,
     MatButtonModule,
     HotkeyModule,
     YouTubePlayerModule,

@@ -14,8 +14,7 @@ import { Apollo, QueryRef } from 'apollo-angular';
 import { HydratedSense, SenseSignDtoInterface } from '@edfu/api-interfaces';
 import { ApolloQueryResult } from 'apollo-client';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
-import { MatDialog } from '@angular/material/dialog';
-import { SenseArrangerService } from './sense-grouping/sense-arranger.service';
+import { SenseArrangerService } from './sense-arranger/sense-arranger.service';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { SEARCH_COMPONENT_PATH } from '../constants';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
@@ -45,6 +44,12 @@ interface SignsResult {
   signs: SenseSignDtoInterface[];
 }
 
+enum SenseCount {
+  zero = 'zero',
+  one = 'one',
+  moreThanOne = 'moreThanOne'
+}
+
 @Component({
   selector: 'edfu-search',
   templateUrl: './search.component.html'
@@ -64,18 +69,18 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
   senseSignsBs$: BehaviorSubject<SenseSignDtoInterface[]>;
 
   selectedSense: HydratedSense;
-  selectedSenses: HydratedSense[];
 
   routeOxIdLower$: Observable<string>;
   currentOxIdLower: string;
   focusSearch = true;
+
+  public senseCount = SenseCount.zero;
 
   @ViewChild('search_input') searchInput: any;
 
   constructor(
     private apollo: Apollo,
     private hotkeysService: HotkeysService,
-    public dialog: MatDialog,
     private senseArranger: SenseArrangerService,
     private route: ActivatedRoute,
     private router: Router,
@@ -200,9 +205,10 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.senses$.subscribe((senses: HydratedSense[]) => {
       if (senses.length > 1) {
-        this.setSenses(senses);
+        this.senseCount = SenseCount.moreThanOne;
       }
       if (senses.length === 1) {
+        this.senseCount = SenseCount.one;
         this.onSenseSelect(senses[0]);
       }
     });
@@ -210,11 +216,6 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
     this.senseSigns$.subscribe(signs => {
       this.senseSignsBs$.next(signs);
     });
-  }
-
-  setSenses(senses: HydratedSense[]): void {
-    this.selectedSenses = senses;
-    this.selectedSense = null;
   }
 
   displayWithoutUnderscores(oxId: string): string {
@@ -249,7 +250,6 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
       senseId: sense.senseId
     });
 
-    this.selectedSenses = null;
     this.selectedSense = sense;
   }
 

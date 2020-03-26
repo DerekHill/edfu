@@ -32,22 +32,9 @@ describe('SignComponent', () => {
       mediaUrl: 'www.my-picture-link.com',
       s3Key: '1234.mp4'
     };
-    const senseData: HydratedSense = {
-      oxId: 'food',
-      homographC: null,
-      associationType: DictionaryOrThesaurus.dictionary,
-      similarity: 0.5,
-      senseId: 'senseId',
-      ownEntryOxId: 'food',
-      ownEntryHomographC: null,
-      lexicalCategory: LexicalCategory.noun,
-      apiSenseIndex: 1,
-      example: 'eat some food'
-    };
     fixture = TestBed.createComponent(SignComponent);
     component = fixture.componentInstance;
     component.sign = signData;
-    component.sense = senseData;
     fixture.detectChanges();
   });
 

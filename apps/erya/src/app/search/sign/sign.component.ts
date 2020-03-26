@@ -5,7 +5,7 @@ import {
   ViewChild,
   AfterViewInit
 } from '@angular/core';
-import { HydratedSense, SignRecord } from '@edfu/api-interfaces';
+import { SignRecord } from '@edfu/api-interfaces';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import * as Player from '@vimeo/player/dist/player.js';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
@@ -41,7 +41,6 @@ export class SignComponent implements OnInit, AfterViewInit {
     library.addIcons(faPlay);
   }
 
-  @Input() sense: HydratedSense;
   @Input()
   set sign(sign: SignRecord) {
     this.configureComponent(sign);

@@ -2,7 +2,7 @@
   <div class="container">
     <div class="columns is-centered content">
       <div class="column is-two-thirds-desktop">
-        <p class="is-size-5 has-text-link has-text-weight-medium">
+        <p class="is-size-5 has-text-info has-text-weight-medium">
           Contribute your sign
         </p>
         <div class="field has-addons">
@@ -11,13 +11,13 @@
               #searchString
               (keyup.enter)="onSearchButtonPress(searchString.value)"
               autofocus
-              class="input"
+              class="input is-info"
               placeholder="Enter word or phrase"
             />
           </div>
           <div class="control">
             <button
-              class="button is-link"
+              class="button is-info"
               (click)="onSearchButtonPress(searchString.value)"
             >
               Search
@@ -38,7 +38,7 @@
           *ngIf="(senses$ | async)?.length"
         >
           <form [formGroup]="signFormGroup" (ngSubmit)="onSubmit()">
-            <p class="is-size-5 has-text-weight-medium has-text-link">
+            <p class="is-size-5 has-text-weight-medium has-text-info">
               Add your video
             </p>
             <div class="file has-name is-fullwidth">
@@ -47,6 +47,7 @@
                   class="file-input"
                   type="file"
                   name="resume"
+                  accept="video/mp4, video/wmv, video/mov, video/flv, video/avi"
                   (change)="onFileChange($event)"
                 />
                 <span class="file-cta">
@@ -70,34 +71,43 @@
                 signFormGroup.controls.file.invalid &&
                 signFormGroup.controls.file.touched
               "
-              class="alert alert-danger"
             >
-              <div *ngIf="signFormGroup.controls.file.errors.required">
+              <p
+                class="help"
+                *ngIf="signFormGroup.controls.file.errors.required"
+              >
                 Please add a video
-              </div>
-              <div *ngIf="signFormGroup.controls.file.errors.fileSize">
+              </p>
+              <p
+                class="help is-danger"
+                *ngIf="signFormGroup.controls.file.errors.fileSize"
+              >
                 Video is too large. The maximum size is
                 {{ maxUploadSizeFriendly }}
-              </div>
-              <div *ngIf="signFormGroup.controls.file.errors.fileType">
+              </p>
+              <p
+                class="help is-danger"
+                *ngIf="signFormGroup.controls.file.errors.fileType"
+              >
                 Video is of wrong type. Supported video formats are
                 {{ supportedVideoFormats }}
-              </div>
+              </p>
             </div>
             <br />
             <div *ngIf="senses$ | async as senses">
               <div *ngIf="senses.length > 1">
                 <br />
-                <p class="title is-size-5 has-text-weight-medium has-text-link">
-                  "<span>{{ searchString.value }}</span
-                  >" has different senses
+                <p class="title is-size-5 has-text-weight-medium has-text-info">
+                  “{{ searchString.value }}” has different senses. Tick all the
+                  senses which apply to this sign.
+                  <sup class="has-text-grey has-text-weight-light"
+                    >required</sup
+                  >
                 </p>
-                <p class="is-size-6">
-                  Tick all the senses which apply to this sign.
-                </p>
+
                 <div class="columns is-multiline">
                   <div
-                    class="column is-one-third sense-column"
+                    class="column is-one-third sense-column is-half-desktop is-one-third-widescreen"
                     *ngFor="let sense of senses; let i = index"
                     formArrayName="senseIds"
                   >
@@ -134,8 +144,9 @@
               </div>
             </div>
             <br />
-            <p class="is-size-5 has-text-weight-medium has-text-link">
-              Short description to help people remember the sign (optional)
+            <p class="is-size-5 has-text-weight-medium has-text-info">
+              Short description to help people remember the sign
+              <sup class="has-text-grey has-text-weight-light">optional</sup>
             </p>
 
             <div class="field">

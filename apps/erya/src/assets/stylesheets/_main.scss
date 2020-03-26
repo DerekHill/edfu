@@ -21,6 +21,13 @@ mat-form-field {
   .mat-form-field-appearance-legacy .mat-form-field-underline {
     margin-bottom: -20px;
   }
+
+  .mat-form-field.mat-focused .mat-form-field-ripple {
+    background-color: #4311a1;
+  }
+  .mat-form-field.mat-focused .mat-form-field-label {
+    color: #4311a1;
+  }
 }
 
 .sense-container {

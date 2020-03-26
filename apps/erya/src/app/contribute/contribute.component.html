@@ -71,11 +71,13 @@
                 signFormGroup.controls.file.invalid &&
                 signFormGroup.controls.file.touched
               "
-              class="alert alert-danger"
             >
-              <div *ngIf="signFormGroup.controls.file.errors.required">
+              <p
+                class="help"
+                *ngIf="signFormGroup.controls.file.errors.required"
+              >
                 Please add a video
-              </div>
+              </p>
               <p
                 class="help is-danger"
                 *ngIf="signFormGroup.controls.file.errors.fileSize"

@@ -1,6 +1,5 @@
 <h1 class="title has-text-weight-medium">
-  <span class="is-capitalized">“{{ senseGroups[0].oxId }}”</span> has many
-  senses
+  <span>“{{ senseGroups[0].oxId }}”</span> has many senses
 </h1>
 <div class="columns is-multiline">
   <div
@@ -9,7 +8,7 @@
   >
     <div class="box" *ngFor="let group of entry.senseGroups">
       <p>
-        <span class="is-capitalized has-text-weight-bold">
+        <span class="has-text-weight-bold">
           {{ entry.oxId | removeUnderscores }}
         </span>
         <span class="has-text-grey">{{ group.lexicalCategory }}</span>

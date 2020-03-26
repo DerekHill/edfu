@@ -47,10 +47,13 @@
     <div class="columns is-centered">
       <div class="column is-two-thirds-desktop">
         <div *ngIf="selectedSenses">
-          <edfu-senses [senses]="selectedSenses" (senseEmitter)="onSenseSelect($event, true)"></edfu-senses>
+          <edfu-senses
+            [senses]="selectedSenses"
+            (senseEmitter)="onSenseSelect($event, true)"
+          ></edfu-senses>
         </div>
         <div *ngIf="selectedSense" class="content">
-          <h1 class="has-text-centered is-capitalized">
+          <h1 class="has-text-centered">
             {{ selectedSense.ownEntryOxId | removeUnderscores }}
           </h1>
           <div

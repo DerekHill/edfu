@@ -1,7 +1,0 @@
-<div class="sense-container" (click)="onSenseClick($event, sense)">
-  <p class="has-text-centered is-size-4">{{ exampleOrDefinition }}</p>
-
-  <p class="has-text-centered" *ngIf="fromThesaurus">
-    {{ sense.associationType }} - {{ sense.similarity | number: '1.2-2' }}
-  </p>
-</div>

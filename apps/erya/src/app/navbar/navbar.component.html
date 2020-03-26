@@ -1,6 +1,6 @@
 <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
-    <a class="navbar-item" routerLink="{{ searchComponentPath }}">
+    <a class="navbar-item has-text-warning" routerLink="{{ searchComponentPath }}">
       <fa-icon [icon]="['fas', 'home']"></fa-icon>
     </a>
     <a
@@ -28,7 +28,7 @@
       <div class="navbar-item">
         <div class="buttons">
           <a
-            class="button is-primary is-inverted"
+            class="button is-warning "
             (click)="navigateTo('/contribute')"
           >
             <span class="icon"

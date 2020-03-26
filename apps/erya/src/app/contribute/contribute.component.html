@@ -2,7 +2,7 @@
   <div class="container">
     <div class="columns is-centered content">
       <div class="column is-two-thirds-desktop">
-        <p class="is-size-5 has-text-link has-text-weight-medium">
+        <p class="is-size-5 has-text-info has-text-weight-medium">
           Contribute your sign
         </p>
         <div class="field has-addons">
@@ -11,13 +11,13 @@
               #searchString
               (keyup.enter)="onSearchButtonPress(searchString.value)"
               autofocus
-              class="input"
+              class="input is-info"
               placeholder="Enter word or phrase"
             />
           </div>
           <div class="control">
             <button
-              class="button is-link"
+              class="button is-info"
               (click)="onSearchButtonPress(searchString.value)"
             >
               Search
@@ -38,7 +38,7 @@
           *ngIf="(senses$ | async)?.length"
         >
           <form [formGroup]="signFormGroup" (ngSubmit)="onSubmit()">
-            <p class="is-size-5 has-text-weight-medium has-text-link">
+            <p class="is-size-5 has-text-weight-medium has-text-info">
               Add your video
             </p>
             <div class="file has-name is-fullwidth">
@@ -88,7 +88,9 @@
             <div *ngIf="senses$ | async as senses">
               <div *ngIf="senses.length > 1">
                 <br />
-                <p class="title is-size-5 has-text-weight-medium has-text-link">
+
+
+                <p class="title is-size-5 has-text-weight-medium has-text-info">
                   "<span>{{ searchString.value }}</span
                   >" has different senses
                 </p>
@@ -134,7 +136,7 @@
               </div>
             </div>
             <br />
-            <p class="is-size-5 has-text-weight-medium has-text-link">
+            <p class="is-size-5 has-text-weight-medium has-text-info">
               Short description to help people remember the sign (optional)
             </p>
 

@@ -21,12 +21,7 @@ import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
 import { HeadwordOrPhrase } from '../../enums';
 import { EntrySenseRecordWithoutId } from '../../reference/entry-senses/interfaces/entry-sense.interface';
 import { ObjectId } from 'bson';
-import {
-  SignRecord,
-  SenseSignRecordWithoutId,
-  BasicUser
-} from '@edfu/api-interfaces';
-import { CreateUserDto } from '../../users/dto/create-user.dto';
+import { SignRecord, SenseSignRecordWithoutId } from '@edfu/api-interfaces';
 import { UsersService } from '../../users/users.service';
 
 const FOOD = 'food';
@@ -120,14 +115,6 @@ const SIGN_ID_THANK_YOU_2 = new ObjectId('000000000000000000000018');
 const SIGN_ID_FAST_SPEED = new ObjectId('000000000000000000000019');
 const SIGN_ID_SLOW = new ObjectId('00000000000000000000001A');
 const SIGN_ID_FAST_ABSTAIN = new ObjectId('00000000000000000000001B');
-const SIGN_ID_PLAYGROUND = new ObjectId('00000000000000000000001C');
-const SIGN_ID_SLIDE = new ObjectId('00000000000000000000001D');
-const SIGN_ID_PENGUIN = new ObjectId('00000000000000000000001E');
-const SIGN_ID_TREE = new ObjectId('00000000000000000000001F');
-const SIGN_ID_GRASS = new ObjectId('000000000000000000000020');
-const SIGN_ID_PANCAKE = new ObjectId('000000000000000000000021');
-const SIGN_ID_RAIN = new ObjectId('000000000000000000000022');
-const SIGN_ID_SUMMER = new ObjectId('000000000000000000000023');
 
 const FRED_USER_ID = new ObjectId('000000000000000000010001');
 
@@ -1257,46 +1244,6 @@ const SENSE_SIGNS: SenseSignRecordWithoutId[] = [
     userId: FRED_USER_ID,
     senseId: 'm_en_gbus0352380.019',
     signId: SIGN_ID_FAST_ABSTAIN
-  },
-  {
-    userId: FRED_USER_ID,
-    senseId: 'm_en_gbus0789130.005',
-    signId: SIGN_ID_PLAYGROUND
-  },
-  {
-    userId: FRED_USER_ID,
-    senseId: 'm_en_gbus0955100.022',
-    signId: SIGN_ID_SLIDE
-  },
-  {
-    userId: FRED_USER_ID,
-    senseId: 'm_en_gbus0762390.005',
-    signId: SIGN_ID_PENGUIN
-  },
-  {
-    userId: FRED_USER_ID,
-    senseId: 'm_en_gbus1071800.006',
-    signId: SIGN_ID_TREE
-  },
-  {
-    userId: FRED_USER_ID,
-    senseId: 'm_en_gbus0428950.006',
-    signId: SIGN_ID_GRASS
-  },
-  {
-    userId: FRED_USER_ID,
-    senseId: 'm_en_gbus0744430.006',
-    signId: SIGN_ID_PANCAKE
-  },
-  {
-    userId: FRED_USER_ID,
-    senseId: 'm_en_gbus0842610.005',
-    signId: SIGN_ID_RAIN
-  },
-  {
-    userId: FRED_USER_ID,
-    senseId: 'm_en_gbus1011890.005',
-    signId: SIGN_ID_SUMMER
   }
 ];
 
@@ -1496,62 +1443,6 @@ const SIGNS: SignRecord[] = [
     _id: SIGN_ID_FAST_ABSTAIN,
     userId: FRED_USER_ID,
     mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/fast_abstain.mp4',
-    mnemonic: '',
-    s3Key: 'not_defined'
-  },
-  {
-    _id: SIGN_ID_PLAYGROUND,
-    userId: FRED_USER_ID,
-    mediaUrl: 'https://youtu.be/5IzZidIUCJE',
-    mnemonic: '',
-    s3Key: 'not_defined'
-  },
-  {
-    _id: SIGN_ID_SLIDE,
-    userId: FRED_USER_ID,
-    mediaUrl: 'https://youtu.be/L4AGZMh17-U',
-    mnemonic: '',
-    s3Key: 'not_defined'
-  },
-  {
-    _id: SIGN_ID_PENGUIN,
-    userId: FRED_USER_ID,
-    mediaUrl: 'https://youtu.be/pTDNNh5QNMc',
-    mnemonic: '',
-    s3Key: 'not_defined'
-  },
-  {
-    _id: SIGN_ID_TREE,
-    userId: FRED_USER_ID,
-    mediaUrl: 'https://youtu.be/eQ5Xaxe_WHQ',
-    mnemonic: '',
-    s3Key: 'not_defined'
-  },
-  {
-    _id: SIGN_ID_GRASS,
-    userId: FRED_USER_ID,
-    mediaUrl: 'https://youtu.be/fAHuPixQcyE',
-    mnemonic: '',
-    s3Key: 'not_defined'
-  },
-  {
-    _id: SIGN_ID_PANCAKE,
-    userId: FRED_USER_ID,
-    mediaUrl: 'https://youtu.be/6cxRS-XGIro',
-    mnemonic: '',
-    s3Key: 'not_defined'
-  },
-  {
-    _id: SIGN_ID_RAIN,
-    userId: FRED_USER_ID,
-    mediaUrl: 'https://youtu.be/6D6yOWq0YNg',
-    mnemonic: '',
-    s3Key: 'not_defined'
-  },
-  {
-    _id: SIGN_ID_SUMMER,
-    userId: FRED_USER_ID,
-    mediaUrl: 'https://youtu.be/4NVpNPo0yPk',
     mnemonic: '',
     s3Key: 'not_defined'
   }

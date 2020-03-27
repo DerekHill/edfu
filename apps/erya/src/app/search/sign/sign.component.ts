@@ -1,10 +1,4 @@
-import {
-  Component,
-  Input,
-  OnInit,
-  ViewChild,
-  AfterViewInit
-} from '@angular/core';
+import { Component, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { SignRecord } from '@edfu/api-interfaces';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import * as Player from '@vimeo/player/dist/player.js';
@@ -15,7 +9,6 @@ import { CDN_URI } from '../../constants';
 export enum MediaType {
   htmlVideo = 'htmlVideo',
   gif = 'gif',
-  youtube = 'youtube',
   vimeo = 'vimeo'
 }
 
@@ -23,9 +16,8 @@ export enum MediaType {
   selector: 'edfu-sign',
   templateUrl: './sign.component.html'
 })
-export class SignComponent implements OnInit, AfterViewInit {
+export class SignComponent implements AfterViewInit {
   @ViewChild('vimeo_player_container') vimeoContainer: any;
-  @ViewChild('youtube_player_container') youtubeContainer: any;
   @ViewChild('ytContainer') ytContainer: any;
 
   public mediaType: MediaType;
@@ -50,31 +42,12 @@ export class SignComponent implements OnInit, AfterViewInit {
     return this._sign;
   }
 
-  ngOnInit() {
-    this.setupYouTubePlayer();
-  }
-
   ngAfterViewInit() {
     this.initializeVimeoPlayer();
   }
 
-  youtubePlay() {
-    this.youtubeContainer.playVideo();
-  }
-
   vimeoPlay() {
     this.vimeoPlayer.play();
-  }
-
-  onYouTubePlayerReady() {
-    this.youtubeContainer.mute();
-    this.playIfNotMobile();
-  }
-
-  onYouTubePlayerStateChange(event: YT.OnStateChangeEvent) {
-    if (event.data === 0) {
-      this.playIfNotMobile();
-    }
   }
 
   onHtmlVideoError(event: { target: HTMLInputElement }) {
@@ -88,20 +61,11 @@ export class SignComponent implements OnInit, AfterViewInit {
       return MediaType.gif;
     } else if (/.mp4$/.test(filename)) {
       return MediaType.htmlVideo;
-    } else if (
-      /youtu\.be\//.test(filename) ||
-      /youtube\.com\//.test(filename)
-    ) {
-      return MediaType.youtube;
     } else if (/vimeo\.com\//.test(filename)) {
       return MediaType.vimeo;
     } else {
       return MediaType.htmlVideo;
     }
-  }
-  _getYouTubeVideoId(url: string): string {
-    const youtube_regex = /^.*(youtu\.be\/|vi?\/|u\/\w\/|embed\/|\?vi?=|\&vi?=)([^#\&\?]*).*/;
-    return url.match(youtube_regex)[2];
   }
 
   _getVimeoVideoIdFromFullUrl(url: string): string {
@@ -148,25 +112,9 @@ export class SignComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private playIfNotMobile() {
-    if (!this.deviceService.isMobile()) {
-      this.youtubeContainer.playVideo();
-    }
-  }
-
   private setPlatformVideoId(mediaUrl: string) {
-    if (this.mediaType === MediaType.youtube) {
-      this.platformVideoId = this._getYouTubeVideoId(mediaUrl);
-    } else if (this.mediaType === MediaType.vimeo) {
+    if (this.mediaType === MediaType.vimeo) {
       this.platformVideoId = this._getVimeoVideoIdFromFullUrl(mediaUrl);
-    }
-  }
-
-  private setupYouTubePlayer() {
-    if (this.mediaType === MediaType.youtube) {
-      const tag = document.createElement('script');
-      tag.src = 'https://www.youtube.com/iframe_api';
-      document.body.appendChild(tag);
     }
   }
 }

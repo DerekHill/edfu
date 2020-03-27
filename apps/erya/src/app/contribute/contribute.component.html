@@ -128,8 +128,10 @@
                       <span
                         *ngIf="sense.example"
                         class="sense-text-padding has-text-grey is-italic"
-                        >‘{{ sense.example }}’</span
-                      >
+                        [innerHTML]="
+                          sense.example | highlightEntry: sense.ownEntryOxId
+                        "
+                      ></span>
                       <span
                         [ngClass]="{
                           'sense-definition': sense.example,

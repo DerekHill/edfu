@@ -1,6 +1,6 @@
-<nav class="navbar is-primary" role="navigation" aria-label="main navigation">
+<nav class="navbar is-dark" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
-    <a class="navbar-item has-text-warning" routerLink="{{ searchComponentPath }}">
+    <a class="navbar-item" routerLink="{{ searchComponentPath }}">
       <fa-icon [icon]="['fas', 'home']"></fa-icon>
     </a>
     <a
@@ -28,7 +28,7 @@
       <div class="navbar-item">
         <div class="buttons">
           <a
-            class="button is-warning "
+            class="button is-info"
             (click)="navigateTo('/contribute')"
           >
             <span class="icon"

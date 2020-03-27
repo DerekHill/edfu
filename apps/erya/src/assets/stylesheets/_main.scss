@@ -23,10 +23,10 @@ mat-form-field {
   }
 
   .mat-form-field.mat-focused .mat-form-field-ripple {
-    background-color: #4311a1;
+    background-color: #002147;
   }
   .mat-form-field.mat-focused .mat-form-field-label {
-    color: #4311a1;
+    color: #002147;
   }
 }
 
@@ -75,13 +75,13 @@ input.sense-input {
     }
     &:hover {
       cursor: pointer;
-      border-color: $primary;
+      border-color: $info;
 
       @media (hover: none) {
         border-color: $white;
       }
       &:after {
-        border-color: $primary;
+        border-color: $info;
         @media (hover: none) {
           border-color: $grey-light;
         }
@@ -89,14 +89,14 @@ input.sense-input {
     }
   }
   &:checked + label.box {
-    border-color: $primary;
+    border-color: $info;
     &:after {
       content: '✔';
       height: 20px;
-      border-color: $primary;
+      border-color: $info;
       font-size: 13px;
       text-align: center;
-      color: $primary;
+      color: $info;
     }
   }
 }

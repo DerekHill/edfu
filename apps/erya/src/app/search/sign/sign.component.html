@@ -9,26 +9,6 @@
     </video>
   </div>
 
-  <div *ngSwitchCase="'youtube'">
-    <div class="columns is-centered" *ngIf="deviceService.isMobile()">
-      <div class="column is-one-third">
-        <button class="button is-primary is-fullwidth" (click)="youtubePlay()">
-          <span class="icon">
-            <fa-icon [icon]="['fas', 'play']"></fa-icon>
-          </span>
-          <span>Play</span>
-        </button>
-      </div>
-    </div>
-    <youtube-player
-      class="image is-16by9"
-      #youtube_player_container
-      [videoId]="platformVideoId"
-      (ready)="onYouTubePlayerReady()"
-      (stateChange)="onYouTubePlayerStateChange($event)"
-    ></youtube-player>
-  </div>
-
   <div *ngSwitchCase="'vimeo'">
     <div class="columns is-centered" *ngIf="deviceService.isMobile()">
       <div class="column is-one-third">

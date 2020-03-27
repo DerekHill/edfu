@@ -11,7 +11,6 @@ import { SignComponent } from './sign/sign.component';
 import { SenseArrangerService } from './sense-arranger/sense-arranger.service';
 import { RemoveUnderscoresPipe } from '../shared/pipes/remove-underscores.pipe';
 import { MatButtonModule } from '@angular/material/button';
-import { YouTubePlayerModule } from '@angular/youtube-player';
 import { SharedModule } from '../shared/shared.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SenseSelectionComponent } from './sense-selection/sense-selection.component';
@@ -28,7 +27,6 @@ import { SenseSelectionComponent } from './sense-selection/sense-selection.compo
     MatIconModule,
     MatButtonModule,
     HotkeyModule,
-    YouTubePlayerModule,
     SharedModule,
     FontAwesomeModule
   ],

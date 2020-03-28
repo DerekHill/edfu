@@ -39,7 +39,7 @@ describe('SignsService', () => {
       userId: new ObjectId(),
       mnemonic: 'foo',
       mediaUrl: 'link',
-      s3Key: '1234.mp4'
+      s3KeyOrig: '1234.mp4'
     };
     const record = await setupService.createSign(data);
     expect(record.mediaUrl).toEqual(data.mediaUrl);
@@ -71,7 +71,7 @@ describe('SignsService', () => {
       mediaUrl: 'www.goo.com',
       mnemonic: mnemonic,
       senseIds: ['id1', 'id2'],
-      s3Key: '1234.mp4'
+      s3KeyOrig: '1234.mp4'
     };
     const sign = await service.createSignWithAssociations(
       new ObjectId(),

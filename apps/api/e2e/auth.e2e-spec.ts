@@ -67,65 +67,6 @@ describe('AuthController (e2e)', () => {
 
   //   https://gabrieltanner.org/blog/nestjs-graphqlserver
   describe('graphql authentication', () => {
-    it('unauthenticated query', () => {
-      const basicTestQuery = `
-        query {
-          getTestSign{mnemonic}
-        }`;
-
-      return request(server)
-        .post('/graphql')
-        .send({
-          operationName: null,
-          query: basicTestQuery
-        })
-        .expect(({ body }) => {
-          const data = body.data.getTestSign;
-          expect(data.mnemonic).toBe('remember me');
-        });
-    });
-
-    describe('authenticated query and user decorator', () => {
-      it('returns 401 if no token is supplied', () => {
-        const authenticatedTestQuery = `
-              query {
-                  getAuthenticatedTestSign{mnemonic}
-              }`;
-
-        return request(server)
-          .post('/graphql')
-          .send({
-            operationName: null,
-            query: authenticatedTestQuery
-          })
-          .expect(({ body }) => {
-            expect(body.errors[0].message.statusCode).toBe(401);
-          });
-      });
-
-      it('works if token is supplied', async () => {
-        await registerUser(server, TEST_USER);
-        const token = await login(TEST_USER.email, TEST_USER.password, server);
-
-        const authenticatedTestQuery = `
-              query {
-                  getAuthenticatedTestSign{mnemonic}
-              }`;
-
-        return request(server)
-          .post('/graphql')
-          .set('Authorization', 'bearer ' + token)
-          .send({
-            operationName: null,
-            query: authenticatedTestQuery
-          })
-          .expect(({ body }) => {
-            const data = body.data.getAuthenticatedTestSign;
-            expect(data.mnemonic).toBe(TEST_USER.email);
-          });
-      });
-    });
-
     describe('LexicographerResolver', () => {
       it('works if token is supplied', async () => {
         await registerUser(server, TEST_USER);
@@ -136,7 +77,7 @@ describe('AuthController (e2e)', () => {
           mediaUrl: mediaUrl,
           mnemonic: '',
           senseIds: ['1', '2'],
-          s3Key: '1234.mp4'
+          s3KeyOrig: '1234.mp4'
         };
 
         const query = `
@@ -167,7 +108,7 @@ describe('AuthController (e2e)', () => {
         const query = `
           mutation {
             createSignWithAssociations(
-              createSignData: {mediaUrl: "mediaUrl", s3Key: "123" ,mnemonic: "", senseIds: [] }
+              createSignData: {mediaUrl: "mediaUrl", s3KeyOrig: "123" ,mnemonic: "", senseIds: [] }
             ) {
               mnemonic
               mediaUrl

@@ -228,7 +228,7 @@ export class ContributeComponent implements OnInit, OnDestroy {
       const createSignData: CreateSignInputInterface = {
         ...partialData,
         ...{ mediaUrl: res.data.mediaUrl },
-        ...{ s3Key: res.data.s3Key }
+        ...{ s3KeyOrig: res.data.s3KeyOrig }
       };
 
       this.callCreateSignMutation(createSignData);

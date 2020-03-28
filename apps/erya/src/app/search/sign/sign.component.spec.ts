@@ -27,7 +27,7 @@ describe('SignComponent', () => {
       userId: new ObjectId(),
       mnemonic: 'remember me',
       mediaUrl: 'www.my-picture-link.com',
-      s3Key: '1234.mp4'
+      s3KeyOrig: '1234.mp4'
     };
     fixture = TestBed.createComponent(SignComponent);
     component = fixture.componentInstance;

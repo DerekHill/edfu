@@ -6,7 +6,7 @@
 input CreateSignInput {
   mnemonic: String!
   mediaUrl: String!
-  s3Key: String!
+  s3KeyOrig: String!
   senseIds: [String!]!
 }
 
@@ -38,8 +38,6 @@ type Query {
   oxIds(filter: Boolean = false, searchString: String!): [String!]!
   senses(senseId: String = "", filter: Boolean = false, oxId: String!): [SenseForEntryDto!]!
   signs(senseId: String!): [SenseSignDto!]!
-  getTestSign: SignDto!
-  getAuthenticatedTestSign: SignDto!
   sensesFromApi(searchString: String!): [SenseForEntryDto!]!
 }
 
@@ -70,5 +68,5 @@ type SignDto {
   userId: ID!
   mnemonic: String!
   mediaUrl: String!
-  s3Key: String!
+  s3KeyOrig: String!
 }

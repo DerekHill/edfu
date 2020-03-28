@@ -208,7 +208,7 @@ export class ReferenceService {
           _id: '$signs._id',
           mnemonic: '$signs.mnemonic',
           mediaUrl: '$signs.mediaUrl',
-          s3Key: '$signs.s3Key'
+          s3KeyOrig: '$signs.s3KeyOrig'
         }
       }
     ];

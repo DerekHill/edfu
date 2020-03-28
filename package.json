@@ -80,6 +80,7 @@
     "core-js": "^2.5.4",
     "graphql": "^14.5.0",
     "graphql-tag": "^2.10.3",
+    "handbrake-js": "^5.0.0",
     "mongoose": "^5.9.6",
     "nestjs-console": "^2.1.0",
     "ngx-device-detector": "^1.4.1",

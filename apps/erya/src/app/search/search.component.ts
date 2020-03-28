@@ -139,7 +139,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
             _id
             mnemonic
             mediaUrl
-            s3Key
+            s3KeyOrig
           }
         }
       }
@@ -162,7 +162,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
             _id
             mnemonic
             mediaUrl
-            s3Key
+            s3KeyOrig
           }
         }
       }

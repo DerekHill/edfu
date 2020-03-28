@@ -81,7 +81,7 @@ export class SignComponent implements AfterViewInit {
   }
 
   private useFallbackMediaUrl() {
-    const fallbackMediaUrl = `${CDN_URI}/${this._sign.s3Key}`;
+    const fallbackMediaUrl = `${CDN_URI}/${this._sign.s3KeyOrig}`;
     const updatedSign = { ...this.sign, ...{ mediaUrl: fallbackMediaUrl } };
     this.configureComponent(updatedSign);
   }

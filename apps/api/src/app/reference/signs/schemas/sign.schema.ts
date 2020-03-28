@@ -13,7 +13,7 @@ export const SignSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  s3Key: {
+  s3KeyOrig: {
     type: String,
     required: true
   }
@@ -21,3 +21,4 @@ export const SignSchema = new mongoose.Schema({
 
 SignSchema.index({ mediaUrl: 1 }, { unique: true });
 SignSchema.index({ userId: 1 });
+SignSchema.index({ s3KeyOrig: 1 });

@@ -29,6 +29,7 @@ import {
 import { HeadwordOrPhrase } from '../enums';
 import { ObjectId } from 'bson';
 import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
+import { CreateSignInput } from './signs/dto/create-sign.input';
 
 const DEFAULT_OXID = 'oxId';
 const DEFAULT_SENSE_ID = 'senseId';
@@ -104,7 +105,7 @@ export class ReferenceTestSetupService {
       userId: DEFAULT_USER_ID,
       mnemonic: 'remember me',
       mediaUrl: 'www.my-picture-link.com',
-      s3Key: '1234.mp4'
+      s3KeyOrig: '1234.mp4'
     };
     return this.signModel.create({ ...defaults, ...params });
   }

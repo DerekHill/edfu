@@ -56,29 +56,3 @@ export class SignsResolver {
     return this.service.findOneSign(ss.signId);
   }
 }
-
-@Resolver('Test')
-export class TestResolver {
-  @Query(returns => SignDto)
-  getTestSign(): Promise<SignDto> {
-    return Promise.resolve({
-      _id: new ObjectId(),
-      userId: new ObjectId(),
-      mnemonic: 'remember me',
-      mediaUrl: 'www.com',
-      s3Key: '1234.mp4'
-    });
-  }
-
-  @Query(returns => SignDto)
-  @UseGuards(GqlAuthGuard)
-  getAuthenticatedTestSign(@CurrentUser() user: BasicUser): Promise<SignDto> {
-    return Promise.resolve({
-      _id: new ObjectId(),
-      userId: new ObjectId(),
-      mnemonic: user.email,
-      mediaUrl: 'www.com',
-      s3Key: '1234.mp4'
-    });
-  }
-}

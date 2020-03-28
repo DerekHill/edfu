@@ -38,5 +38,5 @@ describe('HandbrakeService', () => {
     await service.deleteFile(transcodedVideoPath);
 
     expect(fs.access(rawVideoPath)).rejects.toThrowError();
-  });
+  }, 20000);
 });

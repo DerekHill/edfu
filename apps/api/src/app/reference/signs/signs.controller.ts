@@ -49,7 +49,7 @@ export class SignsController {
       });
       return new ResponseSuccess('SIGNS.UPLOADED_SUCCESSFULLY', {
         mediaUrl: mediaUrl,
-        s3Key: s3Key
+        s3KeyOrig: s3Key
       });
     } else {
       return new ResponseError('SIGNS.ERROR.NO_FILE_ATTACHED');

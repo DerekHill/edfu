@@ -1,5 +1,5 @@
 import { TestingModule, Test } from '@nestjs/testing';
-import { HandbrakeService } from './handbrake.service';
+import { HandbrakeService, TEMP_DIR } from './handbrake.service';
 import * as path from 'path';
 import { promises as fs } from 'fs';
 
@@ -7,8 +7,6 @@ const TEST_VIDEO_PATH = path.resolve(
   __dirname,
   './test/short_sample_video.mp4'
 );
-
-const TEMP_DIR = './tmp';
 
 describe('HandbrakeService', () => {
   let service: HandbrakeService;

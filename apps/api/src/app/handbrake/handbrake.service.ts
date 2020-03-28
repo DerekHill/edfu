@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import * as hbjs from 'handbrake-js';
-import { promises as fs } from 'fs';
+import * as fs from 'fs';
+
+export const TEMP_DIR = './tmp';
 
 // https://handbrake.fr/docs/en/latest/technical/official-presets.html
 enum HandbrakePreset {
@@ -14,6 +16,12 @@ interface HandbrakeResult {
 
 @Injectable()
 export class HandbrakeService {
+  constructor() {
+    if (!fs.existsSync(TEMP_DIR)) {
+      fs.mkdirSync(TEMP_DIR);
+    }
+  }
+
   run(input: string, output: string): Promise<HandbrakeResult> {
     const options = {
       input: input,
@@ -26,10 +34,10 @@ export class HandbrakeService {
   }
 
   writeToFs(path: string, data: any): Promise<void> {
-    return fs.writeFile(path, data);
+    return fs.promises.writeFile(path, data);
   }
 
   deleteFile(path: string): Promise<void> {
-    return fs.unlink(path);
+    return fs.promises.unlink(path);
   }
 }

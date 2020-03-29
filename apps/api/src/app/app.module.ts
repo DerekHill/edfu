@@ -16,6 +16,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { AuthController } from './auth/auth.controller';
 import { SignsController } from './reference/signs/signs.controller';
+import { TranscodeModule } from './transcoding/transcode.module';
 
 const CONFIG_CONFIG =
   process.env.TRAVIS === 'true'
@@ -36,7 +37,8 @@ const imports = [
   OxfordApiModule,
   ReferenceModule,
   AuthModule,
-  UsersModule
+  UsersModule,
+  TranscodeModule
 ];
 
 if (environment.production) {

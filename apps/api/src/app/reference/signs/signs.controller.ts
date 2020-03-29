@@ -4,10 +4,7 @@ import {
   UseInterceptors,
   UploadedFile,
   UseGuards,
-  Body,
-  Get,
-  Param,
-  Query
+  Body
 } from '@nestjs/common';
 
 import { FileInterceptor } from '@nestjs/platform-express';

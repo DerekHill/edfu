@@ -1,4 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Processor,
+  Process,
+  OnQueueError,
+  OnQueueCompleted,
+  OnQueueFailed
+} from '@nestjs/bull';
+import { Job } from 'bull';
+import { TRANSCODE_QUEUE_NAME } from '../constants';
+import { TranscodeJobData } from './transcode-queue.producer';
 import * as hbjs from 'handbrake-js';
 import * as fs from 'fs';
 
@@ -14,12 +23,17 @@ interface HandbrakeResult {
   stderr: string;
 }
 
-@Injectable()
-export class HandbrakeService {
+@Processor(TRANSCODE_QUEUE_NAME)
+export class TranscodeQueueConsumer {
   constructor() {
     if (!fs.existsSync(TEMP_DIR)) {
       fs.mkdirSync(TEMP_DIR);
     }
+  }
+  @Process()
+  async transcode(job: Job<TranscodeJobData>) {
+    console.log('transcoding...');
+    return {};
   }
 
   run(input: string, output: string): Promise<HandbrakeResult> {
@@ -39,5 +53,21 @@ export class HandbrakeService {
 
   deleteFile(path: string): Promise<void> {
     return fs.promises.unlink(path);
+  }
+
+  @OnQueueError()
+  onError(error: Error) {
+    throw error;
+  }
+
+  @OnQueueCompleted()
+  onCompleted(job: Job<TranscodeJobData>, result: any) {
+    console.log(`Completed job ${job.id} for key ${job.data.s3KeyOrig}`);
+  }
+
+  @OnQueueFailed()
+  onFailed(job: Job<TranscodeJobData>, error: Error) {
+    console.error(`Failed job ${job.id} for key ${job.data.s3KeyOrig}`);
+    throw error;
   }
 }

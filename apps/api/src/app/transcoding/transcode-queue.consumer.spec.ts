@@ -1,5 +1,5 @@
 import { TestingModule, Test } from '@nestjs/testing';
-import { HandbrakeService, TEMP_DIR } from './handbrake.service';
+import { TranscodeQueueConsumer, TEMP_DIR } from './transcode-queue.consumer';
 import * as path from 'path';
 import { promises as fs } from 'fs';
 
@@ -8,16 +8,16 @@ const TEST_VIDEO_PATH = path.resolve(
   './test/short_sample_video.mp4'
 );
 
-describe('HandbrakeService', () => {
-  let service: HandbrakeService;
+describe('TranscodeQueueConsumer', () => {
+  let service: TranscodeQueueConsumer;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [],
-      providers: [HandbrakeService]
+      providers: [TranscodeQueueConsumer]
     }).compile();
 
-    service = module.get<HandbrakeService>(HandbrakeService);
+    service = module.get<TranscodeQueueConsumer>(TranscodeQueueConsumer);
   });
 
   it('writes, transcodes and deletes file', async () => {

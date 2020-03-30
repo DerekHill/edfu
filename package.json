@@ -81,7 +81,7 @@
     "bulma": "^0.8.1",
     "commander": "^4.1.1",
     "core-js": "^2.5.4",
-    "graphql": "^14.5.0",
+    "graphql": "^14.6.0",
     "graphql-tag": "^2.10.3",
     "handbrake-js": "^5.0.0",
     "mongoose": "^5.9.6",

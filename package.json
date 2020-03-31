@@ -84,7 +84,7 @@
     "graphql": "^14.6.0",
     "graphql-tag": "^2.10.3",
     "handbrake-js": "^5.0.0",
-    "mongoose": "^5.9.6",
+    "mongoose": "^5.9.7",
     "nestjs-console": "^2.1.0",
     "ngx-device-detector": "^1.4.1",
     "nodemailer": "^6.4.6",

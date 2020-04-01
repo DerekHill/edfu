@@ -59,7 +59,7 @@
     "@nrwl/angular": "8.12.2",
     "@sentry/browser": "^5.15.4",
     "@tensorflow-models/universal-sentence-encoder": "^1.2.2",
-    "@tensorflow/tfjs": "^1.7.1",
+    "@tensorflow/tfjs": "^1.7.0",
     "@types/bcryptjs": "^2.4.2",
     "@types/nodemailer": "^6.4.0",
     "@types/supertest": "^2.0.8",

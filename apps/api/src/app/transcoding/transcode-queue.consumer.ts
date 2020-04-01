@@ -210,7 +210,7 @@ export class TranscodeQueueConsumer {
 
   @OnQueueError()
   private onError(error: Error) {
-    throw error;
+    console.error(`Job got error: ${error.message}`);
   }
 
   @OnQueueCompleted()
@@ -220,7 +220,8 @@ export class TranscodeQueueConsumer {
 
   @OnQueueFailed()
   private onFailed(job: Job<TranscodeJobData>, error: Error) {
-    console.error(`Failed job ${job.id} for key ${job.data.s3KeyOrig}`);
-    throw error;
+    console.error(
+      `Failed job ${job.id} for key ${job.data.s3KeyOrig}: ${error.message}`
+    );
   }
 }

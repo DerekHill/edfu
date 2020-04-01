@@ -245,7 +245,7 @@ export class ContributeComponent implements OnInit, OnDestroy {
         createSignWithAssociations(createSignData: $createSignData) {
           mnemonic
           mediaUrl
-          s3Key
+          s3KeyOrig
         }
       }
     `;

@@ -19,7 +19,7 @@ export class S3Service {
   // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#upload-property
   // "Uploads an arbitrarily sized buffer, blob, or stream" (alternative to `putObject`)
   public async upload(
-    file: Buffer | any,
+    file: Buffer,
     key: string
   ): Promise<CompleteMultipartUploadOutput> {
     const putParams: PutObjectRequest = {

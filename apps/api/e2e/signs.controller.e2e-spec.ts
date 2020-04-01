@@ -11,7 +11,7 @@ const VIDEO_ID = '12345678';
 const STATUS = VimeoVideoStatus.available;
 
 class S3ServiceMock {
-  upload = (file: Buffer | any, key: string) => {
+  upload = (file: Buffer, key: string) => {
     return Promise.resolve({ Key: VIDEO_ID });
   };
 

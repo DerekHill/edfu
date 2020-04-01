@@ -24,7 +24,9 @@ export function createApollo(httpLink: HttpLink) {
 
   const error = onError((e: any) => {
     if (e.networkError && e.networkError.error) {
-      throw new Error(e.networkError.error.errors);
+      throw new Error(
+        'networkError' + e.networkError.error.errors.join('\n').toString()
+      );
     } else {
       throw e;
     }

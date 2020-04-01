@@ -10,6 +10,10 @@ import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { BasicUser } from '@edfu/api-interfaces';
 import { UsersService } from '../users/users.service';
+import { InjectQueue } from '@nestjs/bull';
+import { TRANSCODE_QUEUE_NAME } from '../constants';
+import { Queue } from 'bull';
+import { TranscodeJobData } from '../transcoding/interfaces/transcode-job-data.interface';
 
 @Resolver('Lexicographer')
 @UseGuards(GqlAuthGuard)
@@ -18,7 +22,9 @@ export class LexicographerResolver {
     private readonly referenceService: ReferenceService,
     private readonly entriesService: EntriesService,
     private readonly signsService: SignsService,
-    private readonly usersService: UsersService
+    private readonly usersService: UsersService,
+    @InjectQueue(TRANSCODE_QUEUE_NAME)
+    private transcodeQueue: Queue<TranscodeJobData>
   ) {}
 
   @Query(returns => [SenseForEntryDto], { name: 'sensesFromApi' })
@@ -56,6 +62,9 @@ export class LexicographerResolver {
       fullUser._id,
       createSignData
     );
+    const job = await this.transcodeQueue.add({
+      s3KeyOrig: createSignData.s3KeyOrig
+    });
     return sign;
   }
 }

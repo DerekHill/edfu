@@ -1,6 +1,7 @@
 import { ObjectType, Field, ID } from 'type-graphql';
 import { ObjectId } from 'bson';
-import { SignRecord } from '@edfu/api-interfaces';
+import { SignRecord, Transcoding } from '@edfu/api-interfaces';
+import { TranscodingDto } from './transcoding.dto';
 
 @ObjectType()
 export class SignDto implements SignRecord {
@@ -18,4 +19,7 @@ export class SignDto implements SignRecord {
 
   @Field()
   readonly s3KeyOrig: string;
+
+  @Field(type => TranscodingDto)
+  readonly transcodings: Transcoding[];
 }

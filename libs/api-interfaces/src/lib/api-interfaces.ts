@@ -6,6 +6,7 @@ export interface SignRecordWithoutId {
   readonly mnemonic: string;
   readonly mediaUrl: string;
   readonly s3KeyOrig: string;
+  readonly transcodings?: Transcoding[];
 }
 
 export interface SignRecord extends SignRecordWithoutId {
@@ -82,4 +83,22 @@ export enum VimeoVideoStatus {
   uploading_error = 'uploading_error',
   transcoding_error = 'transcoding_error',
   not_found = 'not_found' // requested video couldn't be found
+}
+
+// https://handbrake.fr/docs/en/latest/technical/official-presets.html
+export enum HandbrakePreset {
+  Very_Fast_480p30 = 'Very Fast 480p30',
+  noop = 'noop'
+}
+
+export interface HandbrakeVideoProperties {
+  height: number;
+  width: number;
+  durationSeconds: number;
+}
+
+export interface Transcoding extends HandbrakeVideoProperties {
+  s3Key: string;
+  size: number;
+  preset: HandbrakePreset;
 }

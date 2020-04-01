@@ -82,8 +82,6 @@ describe('SensesService', () => {
       );
       expect(res.senseId).toEqual(SENSE_ID);
     });
-
-    it.skip('creates association', () => {});
   });
 
   describe('extractThesaurusLinks', () => {

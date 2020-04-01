@@ -1,6 +1,15 @@
 import * as mongoose from 'mongoose';
 import { ObjectId } from 'bson';
 
+const TranscodingSchema = new mongoose.Schema({
+  height: Number,
+  width: Number,
+  durationSeconds: Number,
+  s3Key: String,
+  size: Number,
+  preset: String
+});
+
 export const SignSchema = new mongoose.Schema({
   userId: {
     type: ObjectId,
@@ -16,7 +25,8 @@ export const SignSchema = new mongoose.Schema({
   s3KeyOrig: {
     type: String,
     required: true
-  }
+  },
+  transcodings: [TranscodingSchema]
 });
 
 SignSchema.index({ mediaUrl: 1 }, { unique: true });

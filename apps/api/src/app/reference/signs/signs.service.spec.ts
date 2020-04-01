@@ -79,6 +79,4 @@ describe('SignsService', () => {
     );
     expect(sign.mnemonic).toBe(mnemonic);
   });
-
-  it.skip('handles mediaUrl that already exists', () => {});
 });

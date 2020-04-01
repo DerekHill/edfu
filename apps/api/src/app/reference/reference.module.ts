@@ -8,7 +8,8 @@ import {
   SIGN_COLLECTION_NAME,
   ENTRY_SENSE_COLLECTION_NAME,
   TF_MODEL_NAME,
-  SENSE_SIGN_COLLECTION_NAME
+  SENSE_SIGN_COLLECTION_NAME,
+  TRANSCODE_QUEUE_NAME
 } from '../constants';
 import { EntrySchema } from './entries/schemas/entry.schema';
 import { SensesService } from './senses/senses.service';
@@ -29,6 +30,7 @@ import { S3Module } from '../s3/s3.module';
 import { VimeoModule } from '../vimeo/vimeo.module';
 import { VimeoService } from '../vimeo/vimeo.service';
 import { SitemapController } from './sitemap/sitemap.controller';
+import { BullModule } from '@nestjs/bull';
 
 class TfUseMock {
   embed(sentences: string[]) {
@@ -50,7 +52,11 @@ class TfUseMock {
       { name: SIGN_COLLECTION_NAME, schema: SignSchema }
     ]),
     S3Module,
-    VimeoModule
+    VimeoModule,
+    BullModule.registerQueue({
+      name: TRANSCODE_QUEUE_NAME,
+      redis: process.env.REDIS_URL
+    })
   ],
   providers: [
     EntriesService,

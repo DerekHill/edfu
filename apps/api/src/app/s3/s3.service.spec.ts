@@ -29,20 +29,5 @@ describe('S3Service', () => {
         expect(res.toString()).toBe(bufferContents);
       });
     });
-
-    describe('with blob', () => {
-      const blobKey = 'upload2';
-      const blobContents = 'dummy data2';
-
-      it('uploads', async () => {
-        const res = await service.upload(blobContents, blobKey);
-        expect(res.Key).toBe(blobKey);
-      });
-
-      it('downloads', async () => {
-        const res = await service.getObject(blobKey);
-        expect(res.toString()).toBe(blobContents);
-      });
-    });
   });
 });

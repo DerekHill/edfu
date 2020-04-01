@@ -51,7 +51,7 @@ describe('VimeoService', () => {
 
     describe('getVideo (videoId must exist for test to pass)', () => {
       it('gets video information', async () => {
-        const videoId = '398789046';
+        const videoId = '401328253';
         const getParams: VimeoCommonGetParams = {
           method: 'GET',
           path: `/videos/${videoId}`

@@ -18,7 +18,7 @@ async function bootstrap() {
           {
             name: TRANSCODE_QUEUE_NAME,
             hostId: 'worker',
-            redis: { url: process.env.REDIS_URL }
+            redis: process.env.REDIS_URL
           }
         ]
       },

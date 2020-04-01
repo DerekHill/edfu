@@ -18,7 +18,6 @@ export enum MediaType {
 })
 export class SignComponent implements AfterViewInit {
   @ViewChild('vimeo_player_container') vimeoContainer: any;
-  @ViewChild('ytContainer') ytContainer: any;
 
   public mediaType: MediaType;
   public platformVideoId: string;

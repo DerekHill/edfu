@@ -96,7 +96,7 @@ class SetupService {
   }
 }
 
-describe('TranscodeQueueConsumer', () => {
+describe.skip('TranscodeQueueConsumer, skip because deprecated', () => {
   let service: TranscodeQueueConsumer;
   let setupService: SetupService;
 

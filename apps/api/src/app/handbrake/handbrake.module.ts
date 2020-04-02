@@ -31,4 +31,4 @@ const transcodeQueueConsumerProvider = {
   providers: [transcodeQueueConsumerProvider],
   exports: []
 })
-export class TranscodeModule {}
+export class HandbrakeModule {}

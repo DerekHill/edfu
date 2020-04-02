@@ -16,6 +16,8 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { AuthController } from './auth/auth.controller';
 import { SignsController } from './reference/signs/signs.controller';
+import { FfmpegTestController } from './transcode/ffmpeg.test.controller';
+import { TranscodeModule } from './transcode/transcode.module';
 
 const CONFIG_CONFIG =
   process.env.TRAVIS === 'true'
@@ -36,7 +38,8 @@ const imports = [
   OxfordApiModule,
   ReferenceModule,
   AuthModule,
-  UsersModule
+  UsersModule,
+  TranscodeModule
 ];
 
 if (environment.production) {
@@ -49,7 +52,12 @@ if (environment.production) {
 
 @Module({
   imports: imports,
-  controllers: [AppController, AuthController, SignsController],
+  controllers: [
+    AppController,
+    AuthController,
+    SignsController,
+    FfmpegTestController //
+  ],
   providers: [AppService]
 })
 export class AppModule {}

@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
+import { TranscodeService } from './transcode.service';
 
 @Module({
   imports: [],
-  providers: [],
-  exports: []
+  providers: [TranscodeService],
+  exports: [TranscodeService]
 })
 export class TranscodeModule {}

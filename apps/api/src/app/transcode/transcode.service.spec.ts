@@ -1,5 +1,5 @@
-import { TranscodeService } from './transcode.service';
 import { TestingModule, Test } from '@nestjs/testing';
+import { TranscodeService } from './transcode.service';
 import * as path from 'path';
 
 const TEST_VIDEO_PATH = path.resolve(

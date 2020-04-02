@@ -13,7 +13,7 @@ import { UsersService } from '../users/users.service';
 import { InjectQueue } from '@nestjs/bull';
 import { TRANSCODE_QUEUE_NAME } from '../constants';
 import { Queue } from 'bull';
-import { TranscodeJobData } from '../transcoding/interfaces/transcode-job-data.interface';
+import { TranscodeJobData } from '../handbrake/interfaces/transcode-job-data.interface';
 
 @Resolver('Lexicographer')
 @UseGuards(GqlAuthGuard)

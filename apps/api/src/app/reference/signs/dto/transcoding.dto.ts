@@ -1,12 +1,11 @@
-import { ObjectType, Field, registerEnumType } from 'type-graphql';
-import { Transcoding, HandbrakePreset } from '@edfu/api-interfaces';
-
-registerEnumType(HandbrakePreset, {
-  name: 'HandbrakePreset'
-});
+import { ObjectType, Field } from 'type-graphql';
+import { Transcoding } from '@edfu/api-interfaces';
 
 @ObjectType()
 export class TranscodingDto implements Transcoding {
+  @Field()
+  s3Key: string;
+
   @Field()
   height: number;
 
@@ -14,14 +13,14 @@ export class TranscodingDto implements Transcoding {
   width: number;
 
   @Field()
-  durationSeconds: number;
-
-  @Field()
-  s3Key: string;
+  duration: number;
 
   @Field()
   size: number;
 
-  @Field(type => HandbrakePreset)
-  preset: HandbrakePreset;
+  @Field()
+  bitrate: number;
+
+  @Field()
+  rotation: number;
 }

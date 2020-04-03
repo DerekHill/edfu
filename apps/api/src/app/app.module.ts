@@ -16,7 +16,6 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { AuthController } from './auth/auth.controller';
 import { SignsController } from './reference/signs/signs.controller';
-import { FfmpegTestController } from './transcode/ffmpeg.test.controller';
 import { TranscodeModule } from './transcode/transcode.module';
 
 const CONFIG_CONFIG =
@@ -52,12 +51,7 @@ if (environment.production) {
 
 @Module({
   imports: imports,
-  controllers: [
-    AppController,
-    AuthController,
-    SignsController,
-    FfmpegTestController //
-  ],
+  controllers: [AppController, AuthController, SignsController],
   providers: [AppService]
 })
 export class AppModule {}

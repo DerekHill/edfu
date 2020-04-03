@@ -2,12 +2,13 @@ import * as mongoose from 'mongoose';
 import { ObjectId } from 'bson';
 
 const TranscodingSchema = new mongoose.Schema({
+  s3Key: String,
   height: Number,
   width: Number,
-  durationSeconds: Number,
-  s3Key: String,
+  duration: Number,
   size: Number,
-  preset: String
+  bitrate: Number,
+  rotation: Number
 });
 
 export const SignSchema = new mongoose.Schema({

@@ -6,6 +6,7 @@ import {
   PutObjectRequest,
   CompleteMultipartUploadOutput
 } from 'aws-sdk/clients/s3';
+import * as fs from 'fs';
 
 const BUCKET_NAME = 'edfu';
 
@@ -19,7 +20,7 @@ export class S3Service {
   // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#upload-property
   // "Uploads an arbitrarily sized buffer, blob, or stream" (alternative to `putObject`)
   public async upload(
-    file: Buffer,
+    file: Buffer | fs.WriteStream,
     key: string
   ): Promise<CompleteMultipartUploadOutput> {
     const putParams: PutObjectRequest = {

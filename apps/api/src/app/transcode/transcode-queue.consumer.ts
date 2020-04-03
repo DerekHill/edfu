@@ -134,11 +134,9 @@ export class TranscodeQueueConsumer {
         })
         .on('error', (err: Error, stdout, stderr) => {
           console.error('Cannot process video:');
-          console.error(err.message);
           console.error(err);
-          console.error(JSON.stringify(err, Object.getOwnPropertyNames(err)));
           console.error(stderr);
-          //   console.error(err.)
+          console.error(stdout);
           reject(err);
         })
         .save(outputPath)

@@ -27,10 +27,11 @@ function mediumPreset(command: ffmpeg.FfmpegCommand) {
   command
     .format(FORMAT_EXTENSION)
     .videoCodec('libx264')
-    .audioCodec('libmp3lame')
     .videoBitrate(900)
-    .size('480x?');
+    .size('480x?')
+    .inputOptions('-strict -2');
 }
+// .audioCodec('libmp3lame')
 
 @Processor(TRANSCODE_QUEUE_NAME)
 export class TranscodeQueueConsumer {

@@ -85,6 +85,7 @@ export enum VimeoVideoStatus {
   not_found = 'not_found' // requested video couldn't be found
 }
 
+//
 // https://handbrake.fr/docs/en/latest/technical/official-presets.html
 export enum HandbrakePreset {
   Very_Fast_480p30 = 'Very Fast 480p30',
@@ -97,8 +98,15 @@ export interface HandbrakeVideoProperties {
   durationSeconds: number;
 }
 
-export interface Transcoding extends HandbrakeVideoProperties {
-  s3Key: string;
+export interface FfprobeVideoPropertiesTemp {
+  height: number;
+  width: number;
+  duration: number;
   size: number;
-  preset: HandbrakePreset;
+  bitRate: number;
+  rotation: number;
+}
+
+export interface Transcoding extends FfprobeVideoPropertiesTemp {
+  s3Key: string;
 }

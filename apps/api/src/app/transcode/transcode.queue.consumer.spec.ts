@@ -1,26 +1,19 @@
 import { TestingModule, Test } from '@nestjs/testing';
-import {
-  TranscodeQueueConsumer,
-  DEFAULT_HANDBRAKE_PRESET
-} from './transcode-queue.consumer';
+import { TranscodeQueueConsumer } from './transcode-queue.consumer';
 import * as path from 'path';
 import { promises as fs } from 'fs';
 import * as Bull from 'bull';
-import { S3Service } from '../s3/s3.service';
-import {
-  createHandbrakeOutputExampleIPhone,
-  CreateHandbrakeOutputExampleIPhoneParams
-} from './test/handbrake-output-example';
-import { TestDatabaseModule } from '../config/test-database.module';
-import { MongooseModule, InjectModel } from '@nestjs/mongoose';
-import { SIGN_COLLECTION_NAME } from '../constants';
-import { SignSchema } from '../reference/signs/schemas/sign.schema';
+import { TranscodeJobData } from './interfaces/transcode-job-data.interface';
+import { ObjectId } from 'bson';
 import { Injectable } from '@nestjs/common';
+import { InjectModel, MongooseModule } from '@nestjs/mongoose';
+import { SIGN_COLLECTION_NAME } from '../constants';
 import { Model } from 'mongoose';
 import { SignDocument } from '../reference/signs/interfaces/sign.interface';
 import { SignRecord, Transcoding } from '@edfu/api-interfaces';
-import { ObjectId } from 'bson';
-import { TranscodeJobData } from './interfaces/transcode-job-data.interface';
+import { TestDatabaseModule } from '../config/test-database.module';
+import { SignSchema } from '../reference/signs/schemas/sign.schema';
+import { S3Service } from '../s3/s3.service';
 
 const TEST_VIDEO_PATH = path.resolve(
   __dirname,
@@ -84,6 +77,18 @@ const createSignRecord = (s3KeyOrig: string, transcodings = []) => {
   };
 };
 
+const createTranscoding = (key: string): Transcoding => {
+  return {
+    height: 100,
+    width: 200,
+    duration: 5,
+    size: 10,
+    s3Key: key,
+    bitRate: 100,
+    rotation: 0
+  };
+};
+
 @Injectable()
 class SetupService {
   constructor(
@@ -96,7 +101,7 @@ class SetupService {
   }
 }
 
-describe.skip('TranscodeQueueConsumer, skip because deprecated', () => {
+describe('TranscodeService', () => {
   let service: TranscodeQueueConsumer;
   let setupService: SetupService;
 
@@ -122,6 +127,22 @@ describe.skip('TranscodeQueueConsumer, skip because deprecated', () => {
     setupService = module.get<SetupService>(SetupService);
   });
 
+  describe('ffprobe()', () => {
+    it('returns size of test video file', async () => {
+      const res = await service.ffprobe(TEST_VIDEO_PATH);
+      expect(res.format.size).toBe(149139);
+    });
+  });
+
+  describe('runFfmpeg()', () => {
+    it('transcodes video from one path to another', async () => {
+      const outputPath = path.resolve(__dirname, './test/output.mp4');
+      return expect(
+        service.runFfmpeg(TEST_VIDEO_PATH, outputPath)
+      ).resolves.toBeUndefined();
+    });
+  });
+
   describe('transcode()', () => {
     it('returns transcodings', async () => {
       const s3KeyOrig = '1234.mp4';
@@ -133,55 +154,11 @@ describe.skip('TranscodeQueueConsumer, skip because deprecated', () => {
     });
   });
 
-  describe('parseJsonJobHandbrakeOutput()', () => {
-    it('parses json job', () => {
-      const height = 480;
-      const width = 270;
-      const params: CreateHandbrakeOutputExampleIPhoneParams = {
-        outputHeight: height,
-        outputWidth: width,
-        durationSecondsMod: 3,
-        durationMinutesMod: 2,
-        durationHoursMod: 1
-      };
-      const handbrakeOutput = createHandbrakeOutputExampleIPhone(params);
-      const res = service._parseJsonJobHandbrakeOutput(handbrakeOutput);
-      expect(res.height).toBe(height);
-      expect(res.width).toBe(width);
-      expect(res.durationSeconds).toBe(3 + 2 * 60 + 1 * 60 * 60);
-    });
-  });
-
-  describe('parseFullHandbrakeOutput', () => {
-    it('parses full output', () => {
-      const height = 1280;
-      const width = 720;
-      const handbrakeOutput = createHandbrakeOutputExampleIPhone({
-        inputHeight: height,
-        inputWidth: width,
-        inputDurationString: '01:02:03'
-      });
-      const res = service._parseFullHandbrakeOutput(handbrakeOutput);
-      expect(res.height).toBe(height);
-      expect(res.width).toBe(width);
-      expect(res.durationSeconds).toBe(3 + 2 * 60 + 1 * 60 * 60);
-    });
-  });
-
   describe('addTranscodingsToSet()', () => {
     it('adds transcodings', async () => {
       const s3KeyOrig = 'myVideo.mp4';
       const s3KeyNew = service._appendToName(s3KeyOrig, 1);
-      const transcodings: Transcoding[] = [
-        {
-          height: 100,
-          width: 200,
-          durationSeconds: 5,
-          size: 10,
-          s3Key: s3KeyNew,
-          preset: DEFAULT_HANDBRAKE_PRESET
-        }
-      ];
+      const transcodings: Transcoding[] = [createTranscoding(s3KeyNew)];
 
       const signRecord = {
         _id: new ObjectId(),
@@ -203,16 +180,7 @@ describe.skip('TranscodeQueueConsumer, skip because deprecated', () => {
     it('returns transcoding if none exist', async () => {
       const s3KeyOrig = 'myVideo.mp4';
       const s3KeyNew = service._appendToName(s3KeyOrig, 1);
-      const transcodings: Transcoding[] = [
-        {
-          height: 100,
-          width: 200,
-          durationSeconds: 5,
-          size: 10,
-          s3Key: s3KeyNew,
-          preset: DEFAULT_HANDBRAKE_PRESET
-        }
-      ];
+      const transcodings: Transcoding[] = [createTranscoding(s3KeyNew)];
 
       await setupService.createSign(createSignRecord(s3KeyOrig));
       const res = await service._filterOutExistingTranscodings(
@@ -225,16 +193,7 @@ describe.skip('TranscodeQueueConsumer, skip because deprecated', () => {
     it('does not return transcoding if it does exist', async () => {
       const s3KeyOrig = 'myVideo.mp4';
       const s3KeyNew = service._appendToName(s3KeyOrig, 1);
-      const transcodings: Transcoding[] = [
-        {
-          height: 100,
-          width: 200,
-          durationSeconds: 5,
-          size: 10,
-          s3Key: s3KeyNew,
-          preset: DEFAULT_HANDBRAKE_PRESET
-        }
-      ];
+      const transcodings: Transcoding[] = [createTranscoding(s3KeyNew)];
 
       await setupService.createSign(createSignRecord(s3KeyOrig, transcodings));
       const res = await service._filterOutExistingTranscodings(

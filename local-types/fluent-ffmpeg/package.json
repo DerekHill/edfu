@@ -1,0 +1,13 @@
+{
+  "name": "@types/fluent-ffmpeg",
+  "version": "1.0.0",
+  "description": "A fix by Derek per https://stackoverflow.com/a/44796040/1450420; https://stackoverflow.com/a/50079418/1450420",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {}
+}

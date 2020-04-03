@@ -126,18 +126,16 @@ export class TranscodeQueueConsumer {
     return new Promise((resolve, reject) => {
       ffmpeg(inputPath)
         .preset(mediumPreset)
-        .inputOptions('-loglevel debug')
         .on('start', commandLine => {
           console.log('start ffmpeg with command: ' + commandLine);
         })
         .on('codecData', data => {
           console.log(`Input is ${data.audio} audio with ${data.video} video`);
         })
-        .on('error', (err: Error, stdout, stderr) => {
+        .on('error', (err, stdout, stderr) => {
           console.error('Cannot process video:');
           console.error(err);
           console.error(stderr);
-          console.error(stdout);
           reject(err);
         })
         .save(outputPath)

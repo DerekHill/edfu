@@ -132,11 +132,13 @@ export class TranscodeQueueConsumer {
         .on('codecData', data => {
           console.log(`Input is ${data.audio} audio with ${data.video} video`);
         })
-        .on('error', (err, stdout, stderr) => {
+        .on('error', (err: Error, stdout, stderr) => {
           console.error('Cannot process video:');
           console.error(err.message);
           console.error(err);
+          console.error(JSON.stringify(err, Object.getOwnPropertyNames(err)));
           console.error(stderr);
+          //   console.error(err.)
           reject(err);
         })
         .save(outputPath)

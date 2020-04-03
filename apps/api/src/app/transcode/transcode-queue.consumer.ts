@@ -29,9 +29,8 @@ function mediumPreset(command: ffmpeg.FfmpegCommand) {
     .videoCodec('libx264')
     .videoBitrate(900)
     .size('480x?')
-    .inputOptions('-strict -2');
+    .outputOptions('-strict -2'); // for ffmpeg version 2.8.15 on Travis where aac audio is experimental
 }
-// .audioCodec('libmp3lame')
 
 @Processor(TRANSCODE_QUEUE_NAME)
 export class TranscodeQueueConsumer {

@@ -135,7 +135,7 @@ describe('TranscodeService', () => {
   });
 
   describe('runFfmpeg()', () => {
-    it('transcodes video from one path to another', async () => {
+    it.only('transcodes video from one path to another', async () => {
       const outputPath = path.resolve(__dirname, './test/output.mp4');
       return expect(
         service.runFfmpeg(TEST_VIDEO_PATH, outputPath)

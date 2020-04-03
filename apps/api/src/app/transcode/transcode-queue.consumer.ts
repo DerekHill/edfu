@@ -126,6 +126,7 @@ export class TranscodeQueueConsumer {
     return new Promise((resolve, reject) => {
       ffmpeg(inputPath)
         .preset(mediumPreset)
+        .inputOptions('-loglevel debug')
         .on('start', commandLine => {
           console.log('start ffmpeg with command: ' + commandLine);
         })

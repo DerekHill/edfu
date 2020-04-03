@@ -202,20 +202,5 @@ describe('TranscodeService', () => {
       );
       expect(res.length).toBeFalsy();
     });
-
-    it.only('', async () => {
-      const all = await service.getAvailableCodecs();
-      const filtered = [];
-      for (const key in all) {
-        if (all.hasOwnProperty(key)) {
-          if (all[key].type === 'audio') {
-            filtered.push({ ...all[key], ...{ name: key } });
-          }
-        }
-      }
-      for (const obj of filtered) {
-        console.log(obj);
-      }
-    });
   });
 });

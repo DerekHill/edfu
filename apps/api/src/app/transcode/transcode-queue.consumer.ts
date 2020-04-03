@@ -27,6 +27,7 @@ function mediumPreset(command: ffmpeg.FfmpegCommand) {
   command
     .format(FORMAT_EXTENSION)
     .videoCodec('libx264')
+    .audioCodec('libmp3lame')
     .videoBitrate(900)
     .size('480x?');
 }

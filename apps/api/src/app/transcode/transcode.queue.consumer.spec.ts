@@ -84,7 +84,7 @@ const createTranscoding = (key: string): Transcoding => {
     duration: 5,
     size: 10,
     s3Key: key,
-    bitRate: 100,
+    bitrate: 100,
     rotation: 0
   };
 };

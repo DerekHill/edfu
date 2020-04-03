@@ -16,7 +16,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { Job } from 'bull';
 import { TranscodeJobData } from './interfaces/transcode-job-data.interface';
-import { Transcoding, FfprobeVideoPropertiesTemp } from '@edfu/api-interfaces';
+import { Transcoding, VideoProperties } from '@edfu/api-interfaces';
 
 const TEMP_DIR = './tmp';
 
@@ -150,7 +150,7 @@ export class TranscodeQueueConsumer {
   private async getSummaryStatsAndLog(
     filePath: string,
     descriptor = ''
-  ): Promise<FfprobeVideoPropertiesTemp> {
+  ): Promise<VideoProperties> {
     const probeData = await this.ffprobe(filePath);
     const stats = this.summarizeFfprobe(probeData);
     console.log(descriptor);
@@ -158,25 +158,25 @@ export class TranscodeQueueConsumer {
     return stats;
   }
 
-  summarizeFfprobe(input: ffmpeg.FfprobeData): FfprobeVideoPropertiesTemp {
+  summarizeFfprobe(input: ffmpeg.FfprobeData): VideoProperties {
     const videoStream = input.streams.find(s => s.height);
     return {
       height: videoStream.height,
       width: videoStream.width,
       duration: input.format.duration,
       size: input.format.size,
-      bitRate: input.format.bit_rate,
+      bitrate: input.format.bit_rate,
       rotation: videoStream.rotation || 0
     };
   }
 
-  humanReadableSummaryStats(summaryStats: FfprobeVideoPropertiesTemp) {
+  humanReadableSummaryStats(summaryStats: VideoProperties) {
     return {
       height: summaryStats.height,
       width: summaryStats.width,
       duration: summaryStats.duration,
       size: this.humanFileSize(summaryStats.size),
-      bitRate: this.humanFileSize(summaryStats.bitRate),
+      bitrate: this.humanFileSize(summaryStats.bitrate),
       rotation: summaryStats.rotation
     };
   }

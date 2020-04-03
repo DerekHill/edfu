@@ -15,11 +15,6 @@ enum DictionaryOrThesaurus {
   thesaurus
 }
 
-enum HandbrakePreset {
-  Very_Fast_480p30
-  noop
-}
-
 enum LexicalCategory {
   noun
   pronoun
@@ -78,10 +73,11 @@ type SignDto {
 }
 
 type TranscodingDto {
+  s3Key: String!
   height: Float!
   width: Float!
-  durationSeconds: Float!
-  s3Key: String!
+  duration: Float!
   size: Float!
-  preset: HandbrakePreset!
+  bitrate: Float!
+  rotation: Float!
 }

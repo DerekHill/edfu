@@ -133,7 +133,9 @@ export class TranscodeQueueConsumer {
           console.log(`Input is ${data.audio} audio with ${data.video} video`);
         })
         .on('error', (err, stdout, stderr) => {
-          console.error('Cannot process video: ' + err.message);
+          console.error('Cannot process video:');
+          console.error(err.message);
+          console.error(err);
           console.error(stderr);
           reject(err);
         })

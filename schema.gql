@@ -3,13 +3,6 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
-input CreateSignInput {
-  mnemonic: String!
-  mediaUrl: String!
-  s3KeyOrig: String!
-  senseIds: [String!]!
-}
-
 enum DictionaryOrThesaurus {
   dictionary
   thesaurus
@@ -27,10 +20,6 @@ enum LexicalCategory {
   determiner
   residual
   other
-}
-
-type Mutation {
-  createSignWithAssociations(createSignData: CreateSignInput!): SignDto!
 }
 
 type Query {
@@ -67,7 +56,6 @@ type SignDto {
   _id: ID!
   userId: ID!
   mnemonic: String!
-  mediaUrl: String!
   s3KeyOrig: String!
   transcodings: [TranscodingDto!]!
 }

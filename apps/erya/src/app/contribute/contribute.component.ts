@@ -4,8 +4,6 @@ import { Observable, Subscription } from 'rxjs';
 import gql from 'graphql-tag';
 import {
   HydratedSense,
-  CreateSignInputInterface,
-  IResponse,
   MAX_UPLOAD_SIZE_BYTES,
   VALID_VIDEO_FILE_REGEX,
   SUPPORTED_VIDEO_FORMATS_STRING
@@ -22,7 +20,6 @@ import {
   ValidatorFn,
   AbstractControl
 } from '@angular/forms';
-import { UploadService } from './upload/upload.service';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import {
   faCheckCircle,
@@ -30,6 +27,10 @@ import {
   faExternalLinkAlt,
   faUpload
 } from '@fortawesome/free-solid-svg-icons';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+
+const endpoint = `${environment.apiUri}/signs`;
 
 interface SensesFromApiSearchVariables {
   searchString?: string;
@@ -117,8 +118,8 @@ export class ContributeComponent implements OnInit, OnDestroy {
 
   constructor(
     private apollo: Apollo,
+    private http: HttpClient,
     private senseArranger: SenseArrangerService,
-    private uploadService: UploadService,
     private fb: FormBuilder,
     private cd: ChangeDetectorRef,
     public library: FaIconLibrary
@@ -213,57 +214,20 @@ export class ContributeComponent implements OnInit, OnDestroy {
   }
 
   private async uploadVideoAndCreateSign(formValue: any) {
-    const oxId = this.senses[0].oxId;
-
-    const res: IResponse = await this.uploadService.postFile(
-      this.fileToUpload,
-      oxId
-    );
-
-    if (res.success) {
-      this.uploadStatus = UploadStatus.creating;
-
+    try {
+      const formData: FormData = new FormData();
       const { file, ...partialData } = formValue;
-
-      const createSignData: CreateSignInputInterface = {
-        ...partialData,
-        ...{ mediaUrl: res.data.mediaUrl },
-        ...{ s3KeyOrig: res.data.s3KeyOrig }
-      };
-
-      this.callCreateSignMutation(createSignData);
-    } else {
-      this.uploadStatus = UploadStatus.error;
-    }
-  }
-
-  private callCreateSignMutation(createSignData: CreateSignInputInterface) {
-    const createSignWithAssociationsMutation = gql`
-      mutation createSignWithAssociationsMutation(
-        $createSignData: CreateSignInput!
-      ) {
-        createSignWithAssociations(createSignData: $createSignData) {
-          mnemonic
-          mediaUrl
-          s3KeyOrig
-        }
+      formData.append('file', this.fileToUpload, this.fileToUpload.name);
+      formData.append('mnemonic', partialData.mnemonic);
+      for (const senseId of partialData.senseIds) {
+        formData.append('senseIds[]', senseId);
       }
-    `;
-
-    this.apollo
-      .mutate({
-        mutation: createSignWithAssociationsMutation,
-        variables: { createSignData: createSignData }
-      })
-      .subscribe(
-        ({ data }) => {
-          this.uploadStatus = UploadStatus.success;
-        },
-        error => {
-          this.uploadStatus = UploadStatus.error;
-          throw error;
-        }
-      );
+      await this.http.post<any>(endpoint, formData).toPromise();
+      this.uploadStatus = UploadStatus.success;
+    } catch (error) {
+      this.uploadStatus = UploadStatus.error;
+      throw error;
+    }
   }
 
   private formatBytes(bytes: number, decimals = 2) {

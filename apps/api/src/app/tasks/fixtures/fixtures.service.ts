@@ -1251,198 +1251,162 @@ const SIGNS: SignRecord[] = [
   {
     _id: SIGN_ID_MORE,
     userId: FRED_USER_ID,
-    mediaUrl:
-      'https://0gis3zwqlg-flywheel.netdna-ssl.com/wp-content/uploads/2018/10/More.gif',
     mnemonic: 'Adding more to a pile',
     s3KeyOrig: 'fixtures_more.mp4'
   },
   {
     _id: SIGN_ID_HELP_1,
     userId: FRED_USER_ID,
-    mediaUrl:
-      'https://0gis3zwqlg-flywheel.netdna-ssl.com/wp-content/uploads/2018/10/Help-1.gif',
     mnemonic: 'Help your hand up',
     s3KeyOrig: 'fixtures_help_1.mp4'
   },
   {
     _id: SIGN_ID_GOOD_MORNING_1,
     userId: FRED_USER_ID,
-    mediaUrl:
-      'https://0gis3zwqlg-flywheel.netdna-ssl.com/wp-content/uploads/2018/10/Good_Morning.gif',
     mnemonic: 'Open the curtains',
     s3KeyOrig: 'fixtures_good_morning_1.mp4'
   },
   {
     _id: SIGN_ID_PLEASE_1,
     userId: FRED_USER_ID,
-    mediaUrl:
-      'https://0gis3zwqlg-flywheel.netdna-ssl.com/wp-content/uploads/2018/10/Please.gif',
     mnemonic: 'Please to the knees',
     s3KeyOrig: 'fixtures_please_1.mp4'
   },
   {
     _id: SIGN_ID_THANK_YOU_1,
     userId: FRED_USER_ID,
-    mediaUrl:
-      'https://0gis3zwqlg-flywheel.netdna-ssl.com/wp-content/uploads/2018/10/Thank_you.gif',
     mnemonic: 'Thank you to you',
     s3KeyOrig: 'fixtures_thank_you_1.mp4'
   },
   {
     _id: SIGN_ID_GOOD_AFTERNOON,
     userId: FRED_USER_ID,
-    mediaUrl:
-      'https://0gis3zwqlg-flywheel.netdna-ssl.com/wp-content/uploads/2018/10/Good_afternoon.gif',
     mnemonic: 'To the person you are speaking to',
     s3KeyOrig: 'fixtures_good_afternoon.mp4'
   },
   {
     _id: SIGN_ID_BREAK,
     userId: FRED_USER_ID,
-    mediaUrl:
-      'https://0gis3zwqlg-flywheel.netdna-ssl.com/wp-content/uploads/2018/10/Toilet_break.gif',
     mnemonic: '',
     s3KeyOrig: 'fixtures_break.mp4'
   },
   {
     _id: SIGN_ID_PLEASE_2,
     userId: FRED_USER_ID,
-    mediaUrl:
-      'https://thumbs.gfycat.com/FocusedSlipperyIcelandichorse-size_restricted.gif',
     mnemonic: '',
     s3KeyOrig: 'fixtures_please_2.mp4'
   },
   {
     _id: SIGN_ID_LOOK,
     userId: FRED_USER_ID,
-    mediaUrl: 'https://thumbs.gfycat.com/HonorableDesertedBurro-mobile.mp4',
     mnemonic: '',
     s3KeyOrig: 'fixtures_look.mp4'
   },
   {
     _id: SIGN_ID_HELP_2,
     userId: FRED_USER_ID,
-    mediaUrl: 'https://thumbs.gfycat.com/NeatUnequaledKudu-size_restricted.gif',
     mnemonic: '',
     s3KeyOrig: 'fixtures_help_2.mp4'
   },
   {
     _id: SIGN_ID_TOILET,
     userId: FRED_USER_ID,
-    mediaUrl:
-      'https://thumbs.gfycat.com/DemandingEnchantedAiredaleterrier-size_restricted.gif',
     mnemonic: '',
     s3KeyOrig: 'fixtures_toilet.mp4'
   },
   {
     _id: SIGN_ID_BAD,
     userId: FRED_USER_ID,
-    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/bad.mp4',
     mnemonic: '',
     s3KeyOrig: 'fixtures_bad.mp4'
   },
   {
     _id: SIGN_ID_GOOD,
     userId: FRED_USER_ID,
-    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/good.mp4',
     mnemonic: '',
     s3KeyOrig: 'fixtures_good.mp4'
   },
   {
     _id: SIGN_ID_GOODBYE,
     userId: FRED_USER_ID,
-    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/goodbye.mp4',
     mnemonic: '',
     s3KeyOrig: 'fixtures_goodbye.mp4'
   },
   {
     _id: SIGN_ID_HELLO,
     userId: FRED_USER_ID,
-    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/hello.mp4',
     mnemonic: '',
     s3KeyOrig: 'fixtures_hello.mp4'
   },
   {
     _id: SIGN_ID_PLEASE_3,
     userId: FRED_USER_ID,
-    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/please.mp4',
     mnemonic: '',
     s3KeyOrig: 'fixtures_please_3.mp4'
   },
   {
     _id: SIGN_ID_STOP,
     userId: FRED_USER_ID,
-    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/stop.mp4',
     mnemonic: '',
     s3KeyOrig: 'fixtures_stop.mp4'
   },
   {
     _id: SIGN_ID_YES,
     userId: FRED_USER_ID,
-    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/yes.mp4',
     mnemonic: '',
     s3KeyOrig: 'fixtures_yes.mp4'
   },
   {
     _id: SIGN_ID_BEGIN,
     userId: FRED_USER_ID,
-    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/begin.mp4',
     mnemonic: '',
     s3KeyOrig: 'fixtures_begin.mp4'
   },
   {
     _id: SIGN_ID_GOOD_MORNING_2,
     userId: FRED_USER_ID,
-    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/good_morning.mp4',
     mnemonic: '',
     s3KeyOrig: 'fixtures_good_morning_2.mp4'
   },
   {
     _id: SIGN_ID_HAPPY,
     userId: FRED_USER_ID,
-    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/happy.mp4',
     mnemonic: '',
     s3KeyOrig: 'fixtures_happy.mp4'
   },
   {
     _id: SIGN_ID_NO,
     userId: FRED_USER_ID,
-    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/no.mp4',
     mnemonic: '',
     s3KeyOrig: 'fixtures_no.mp4'
   },
   {
     _id: SIGN_ID_SAD,
     userId: FRED_USER_ID,
-    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/sad.mp4',
     mnemonic: '',
     s3KeyOrig: 'fixtures_sad.mp4'
   },
   {
     _id: SIGN_ID_THANK_YOU_2,
     userId: FRED_USER_ID,
-    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/thank_you.mp4',
     mnemonic: '',
     s3KeyOrig: 'fixtures_thank_you_2.mp4'
   },
   {
     _id: SIGN_ID_FAST_SPEED,
     userId: FRED_USER_ID,
-    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/fast.mp4',
     mnemonic: '',
     s3KeyOrig: 'fixtures_fast_speed.mp4'
   },
   {
     _id: SIGN_ID_SLOW,
     userId: FRED_USER_ID,
-    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/slow.mp4',
     mnemonic: '',
     s3KeyOrig: 'fixtures_slow.mp4'
   },
   {
     _id: SIGN_ID_FAST_ABSTAIN,
     userId: FRED_USER_ID,
-    mediaUrl: 'https://makaton.s3.eu-west-2.amazonaws.com/fast_abstain.mp4',
     mnemonic: '',
     s3KeyOrig: 'fixtures_fast_abstain.mp4'
   }

@@ -4,22 +4,33 @@ import {
   UseInterceptors,
   UploadedFile,
   UseGuards,
-  Body
+  Body,
+  ValidationPipe
 } from '@nestjs/common';
 
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
-import { ResponseSuccess, ResponseError } from '../../common/dto/response.dto';
+import { ResponseError } from '../../common/dto/response.dto';
 import { videoFilter, copyExtension } from './utils/utils';
 import { S3Service } from '../../s3/s3.service';
-import { VimeoService, VimeoBuffer } from '../../vimeo/vimeo.service';
-import { MAX_UPLOAD_SIZE_BYTES } from '@edfu/api-interfaces';
+import { MAX_UPLOAD_SIZE_BYTES, BasicUser } from '@edfu/api-interfaces';
+import { CurrentUserRest } from '../../common/decorators/current-user.decorator';
+import { CreateSignDto } from './dto/create-sign.dto';
+import { InjectQueue } from '@nestjs/bull';
+import { TRANSCODE_QUEUE_NAME } from '../../constants';
+import { Queue } from 'bull';
+import { TranscodeJobData } from '../../transcode/interfaces/transcode-job-data.interface';
+import { SignsService } from './signs.service';
+import { UsersService } from '../../users/users.service';
 
 @Controller('signs')
 export class SignsController {
   constructor(
-    private s3Service: S3Service,
-    private vimeoService: VimeoService
+    private readonly s3Service: S3Service,
+    private readonly signsService: SignsService,
+    private readonly usersService: UsersService,
+    @InjectQueue(TRANSCODE_QUEUE_NAME)
+    private transcodeQueue: Queue<TranscodeJobData>
   ) {}
 
   @UseGuards(JwtAuthGuard)
@@ -30,23 +41,32 @@ export class SignsController {
     })
   )
   @Post()
-  async uploadSign(@UploadedFile() videoFile, @Body('oxId') oxId: string) {
+  async uploadSign(
+    @UploadedFile() videoFile,
+    @CurrentUserRest() user: BasicUser,
+    @Body(new ValidationPipe()) createSignDto: CreateSignDto
+  ) {
     if (videoFile) {
-      const buffer: VimeoBuffer = videoFile.buffer;
-      buffer.size = buffer.byteLength;
+      const fullUser = await this.usersService.findByEmail(user.email);
+      const sign = await this.signsService.createSignWithAssociations(
+        fullUser._id,
+        createSignDto
+      );
 
-      const videoId = await this.vimeoService.uploadBuffer(oxId, buffer);
-      console.log('Uploaded to Vimeo with videoId:', videoId);
-      const mediaUrl = `https://player.vimeo.com/video/${videoId}`;
+      const s3Key = copyExtension(sign.id, videoFile.originalname);
 
-      const s3Key = copyExtension(videoId, videoFile.originalname);
-      await this.s3Service.upload(buffer, s3Key).then(upload => {
-        console.log('Uploaded to S3 with key:', upload.Key);
-      });
-      return new ResponseSuccess('SIGNS.UPLOADED_SUCCESSFULLY', {
-        mediaUrl: mediaUrl,
+      await Promise.all([
+        this.s3Service.upload(videoFile.buffer, s3Key).then(upload => {
+          console.log('Uploaded to S3 with key:', upload.Key);
+        }),
+        this.signsService.findSignByIdAndUpdate(sign._id, { s3KeyOrig: s3Key })
+      ]);
+
+      await this.transcodeQueue.add({
         s3KeyOrig: s3Key
       });
+
+      return { ...sign.toObject(), ...{ s3KeyOrig: s3Key } };
     } else {
       return new ResponseError('SIGNS.ERROR.NO_FILE_ATTACHED');
     }

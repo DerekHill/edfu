@@ -207,7 +207,6 @@ export class ReferenceService {
         $project: {
           _id: '$signs._id',
           mnemonic: '$signs.mnemonic',
-          mediaUrl: '$signs.mediaUrl',
           s3KeyOrig: '$signs.s3KeyOrig'
         }
       }

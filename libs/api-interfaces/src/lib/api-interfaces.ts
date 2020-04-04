@@ -4,7 +4,6 @@ import { ObjectId } from 'bson';
 export interface SignRecordWithoutId {
   readonly userId: ObjectId;
   readonly mnemonic: string;
-  readonly mediaUrl: string;
   readonly s3KeyOrig: string;
   readonly transcodings?: Transcoding[];
 }
@@ -59,13 +58,6 @@ export interface BasicUser {
   readonly username: string;
   readonly roles: string[];
   readonly access_token?: string;
-}
-
-export interface CreateSignInputInterface {
-  readonly mnemonic: string;
-  readonly mediaUrl: string;
-  readonly s3KeyOrig: string;
-  readonly senseIds: string[];
 }
 
 export interface IResponse {

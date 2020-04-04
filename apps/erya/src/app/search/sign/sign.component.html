@@ -1,29 +1,7 @@
-<div [ngSwitch]="mediaType">
-  <div *ngSwitchCase="'htmlVideo'">
-    <video autoplay loop playsinline [muted]="true">
-      <source
-        src="{{ sign.mediaUrl }}"
-        (error)="onHtmlVideoError($event)"
-        type="video/mp4"
-      />
-    </video>
-  </div>
-
-  <div *ngSwitchCase="'vimeo'">
-    <div class="columns is-centered" *ngIf="deviceService.isMobile()">
-      <div class="column is-one-third">
-        <button class="button is-primary is-fullwidth" (click)="vimeoPlay()">
-          <span class="icon">
-            <fa-icon [icon]="['fas', 'play']"></fa-icon>
-          </span>
-          <span>Play</span>
-        </button>
-      </div>
-    </div>
-    <div #vimeo_player_container class="image is-16by9 vimeo-container"></div>
-  </div>
-
-  <div *ngSwitchDefault>
-    <img class="is-fullwidth-er" src="{{ sign.mediaUrl }}" />
-  </div>
-</div>
+<video autoplay loop playsinline [muted]="true">
+  <source
+    src="{{ mediaUrl }}"
+    (error)="onHtmlVideoError($event)"
+    type="video/mp4"
+  />
+</video>

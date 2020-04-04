@@ -71,7 +71,6 @@ const createSignRecord = (s3KeyOrig: string, transcodings = []) => {
     _id: new ObjectId(),
     userId: new ObjectId(),
     mnemonic: '',
-    mediaUrl: 'www.foo.com',
     s3KeyOrig: s3KeyOrig,
     transcodings: transcodings
   };
@@ -164,7 +163,6 @@ describe('TranscodeService', () => {
         _id: new ObjectId(),
         userId: new ObjectId(),
         mnemonic: '',
-        mediaUrl: 'www.foo.com',
         s3KeyOrig: s3KeyOrig
       };
 

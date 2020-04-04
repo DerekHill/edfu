@@ -3,11 +3,6 @@ import { ReferenceService } from './reference.service';
 import { SenseForEntryDto } from './senses/dto/sense.dto';
 import { SenseSignDto } from './signs/dto/sense-sign.dto';
 import { SignDto } from './signs/dto/sign.dto';
-import { ObjectId } from 'bson';
-import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
-import { UseGuards } from '@nestjs/common';
-import { CurrentUser } from '../common/decorators/current-user.decorator';
-import { BasicUser } from '@edfu/api-interfaces';
 
 @Resolver(of => SenseForEntryDto)
 export class DictionaryResolver {

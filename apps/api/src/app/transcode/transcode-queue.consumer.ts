@@ -29,7 +29,7 @@ function mediumPreset(command: ffmpeg.FfmpegCommand) {
     .videoCodec('libx264')
     .videoBitrate(900)
     .size('480x?')
-    .outputOptions('-strict -2'); // for ffmpeg version 2.8.15 on Travis where aac audio is experimental
+    .outputOptions(['-movflags faststart', '-strict -2']); // `-strict -2` for ffmpeg version 2.8.15 on Travis where aac audio is experimental
 }
 
 @Processor(TRANSCODE_QUEUE_NAME)

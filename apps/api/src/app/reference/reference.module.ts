@@ -31,6 +31,7 @@ import { VimeoModule } from '../vimeo/vimeo.module';
 import { VimeoService } from '../vimeo/vimeo.service';
 import { SitemapController } from './sitemap/sitemap.controller';
 import { BullModule } from '@nestjs/bull';
+import { SignsController } from './signs/signs.controller';
 
 class TfUseMock {
   embed(sentences: string[]) {
@@ -94,6 +95,6 @@ class TfUseMock {
     SimilarityService
   ],
   exports: [EntriesService, SensesService, S3Service, VimeoService],
-  controllers: [SitemapController]
+  controllers: [SitemapController, SignsController]
 })
 export class ReferenceModule {}

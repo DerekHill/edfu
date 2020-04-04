@@ -19,17 +19,11 @@ export const SignSchema = new mongoose.Schema({
   mnemonic: {
     type: String
   },
-  mediaUrl: {
-    type: String,
-    required: true
-  },
   s3KeyOrig: {
-    type: String,
-    required: true
+    type: String
   },
   transcodings: [TranscodingSchema]
 });
 
-SignSchema.index({ mediaUrl: 1 }, { unique: true });
 SignSchema.index({ userId: 1 });
 SignSchema.index({ s3KeyOrig: 1 });

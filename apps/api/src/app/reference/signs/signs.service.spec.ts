@@ -11,7 +11,6 @@ import { ObjectId } from 'bson';
 import { SenseSignSchema } from './schemas/sense-sign.schema';
 import { SignRecord, SenseSignRecordWithoutId } from '@edfu/api-interfaces';
 import { SignTestSetupService } from './sign-test-setup.service';
-import { CreateSignInput } from './dto/create-sign.input';
 
 describe('SignsService', () => {
   let service: SignsService;
@@ -33,18 +32,6 @@ describe('SignsService', () => {
     setupService = module.get<SignTestSetupService>(SignTestSetupService);
   });
 
-  it('SignsTestSetupService.create', async () => {
-    const data: SignRecord = {
-      _id: new ObjectId(),
-      userId: new ObjectId(),
-      mnemonic: 'foo',
-      mediaUrl: 'link',
-      s3KeyOrig: '1234.mp4'
-    };
-    const record = await setupService.createSign(data);
-    expect(record.mediaUrl).toEqual(data.mediaUrl);
-  });
-
   it('getSenseSigns', async () => {
     const senseId = 'm_en_gbus0423120.004';
     const signId = new ObjectId();
@@ -63,20 +50,5 @@ describe('SignsService', () => {
 
     const res = await service.getSenseSigns(senseId);
     expect(res[0].signId).toEqual(signId);
-  });
-
-  it('createSignWithAssociations', async () => {
-    const mnemonic = 'remember!';
-    const signData: CreateSignInput = {
-      mediaUrl: 'www.goo.com',
-      mnemonic: mnemonic,
-      senseIds: ['id1', 'id2'],
-      s3KeyOrig: '1234.mp4'
-    };
-    const sign = await service.createSignWithAssociations(
-      new ObjectId(),
-      signData
-    );
-    expect(sign.mnemonic).toBe(mnemonic);
   });
 });

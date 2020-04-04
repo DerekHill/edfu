@@ -15,9 +15,6 @@ export class SignDto implements SignRecord {
   readonly mnemonic: string;
 
   @Field()
-  readonly mediaUrl: string;
-
-  @Field()
   readonly s3KeyOrig: string;
 
   @Field(type => TranscodingDto)

@@ -1,15 +1,8 @@
-// https://github.com/marcomelilli/nestjs-email-authentication
-
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 import { AppModule } from '../src/app/app.module';
 import { login, registerUser, TEST_USER } from './test.helper';
 import { TestDatabaseModule } from '../src/app/config/test-database.module';
-import { CreateSignInput } from '../src/app/reference/signs/dto/create-sign.input';
-
-const jsonGqlString = (str: any): string => {
-  return JSON.stringify(str).replace(/\"([^(\")"]+)\":/g, '$1:');
-};
 
 describe('AuthController (e2e)', () => {
   let app: any;
@@ -62,104 +55,6 @@ describe('AuthController (e2e)', () => {
     it('registers new user successfully', async () => {
       const res = await registerUser(server, TEST_USER);
       expect(res.body.success).toBeTruthy();
-    });
-  });
-
-  //   https://gabrieltanner.org/blog/nestjs-graphqlserver
-  describe('graphql authentication', () => {
-    describe('LexicographerResolver', () => {
-      it('works if token is supplied', async () => {
-        await registerUser(server, TEST_USER);
-        const token = await login(TEST_USER.email, TEST_USER.password, server);
-        const mediaUrl = 'my-url.com';
-
-        const sign: CreateSignInput = {
-          mediaUrl: mediaUrl,
-          mnemonic: '',
-          senseIds: ['1', '2'],
-          s3KeyOrig: '1234.mp4'
-        };
-
-        const query = `
-          mutation {
-            createSignWithAssociations(
-              createSignData: ${jsonGqlString(sign)}
-            ) {
-              mnemonic
-              mediaUrl
-            }
-          }
-        `;
-
-        return request(server)
-          .post('/graphql')
-          .set('Authorization', 'bearer ' + token)
-          .send({
-            operationName: null,
-            query: query
-          })
-          .expect(({ body }) => {
-            const data = body.data.createSignWithAssociations;
-            expect(data.mediaUrl).toBe(mediaUrl);
-          });
-      });
-
-      it('returns 401 if token is not supplied', () => {
-        const query = `
-          mutation {
-            createSignWithAssociations(
-              createSignData: {mediaUrl: "mediaUrl", s3KeyOrig: "123" ,mnemonic: "", senseIds: [] }
-            ) {
-              mnemonic
-              mediaUrl
-            }
-          }
-        `;
-
-        return request(server)
-          .post('/graphql')
-          .send({
-            operationName: null,
-            query: query
-          })
-          .expect(({ body }) => {
-            expect(body.errors[0].message.statusCode).toBe(401);
-          });
-      });
-
-      it('returns error if senseIds length is zero', async () => {
-        await registerUser(server, TEST_USER);
-        const token = await login(TEST_USER.email, TEST_USER.password, server);
-        const mediaUrl = 'my-url.com';
-
-        const sign = {
-          mediaUrl: mediaUrl,
-          mnemonic: '',
-          senseIds: [] // required
-        };
-
-        const query = `
-          mutation {
-            createSignWithAssociations(
-              createSignData: ${jsonGqlString(sign)}
-            ) {
-              mnemonic
-              mediaUrl
-            }
-          }
-        `;
-
-        return request(server)
-          .post('/graphql')
-          .set('Authorization', 'bearer ' + token)
-          .send({
-            operationName: null,
-            query: query
-          })
-          .expect(({ body }) => {
-            expect(body.errors.length).toBeTruthy();
-          });
-      });
     });
   });
 });

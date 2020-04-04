@@ -141,7 +141,6 @@ export class TranscodeQueueConsumer {
         })
         .save(outputPath)
         .on('end', (stdout, stderr) => {
-          console.log(stderr);
           console.log('Transcoding succeeded !');
           resolve();
         });

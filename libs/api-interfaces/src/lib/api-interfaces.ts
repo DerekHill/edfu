@@ -68,15 +68,6 @@ export interface IResponse {
   error: any;
 }
 
-export enum VimeoVideoStatus {
-  available = 'available',
-  uploading = 'uploading',
-  transcoding = 'transcoding',
-  uploading_error = 'uploading_error',
-  transcoding_error = 'transcoding_error',
-  not_found = 'not_found' // requested video couldn't be found
-}
-
 export interface VideoProperties {
   height: number;
   width: number;

@@ -27,8 +27,6 @@ import { LexicographerResolver } from './lexicographer.resolver';
 import { UsersModule } from '../users/users.module';
 import { S3Service } from '../s3/s3.service';
 import { S3Module } from '../s3/s3.module';
-import { VimeoModule } from '../vimeo/vimeo.module';
-import { VimeoService } from '../vimeo/vimeo.service';
 import { SitemapController } from './sitemap/sitemap.controller';
 import { BullModule } from '@nestjs/bull';
 import { SignsController } from './signs/signs.controller';
@@ -53,7 +51,6 @@ class TfUseMock {
       { name: SIGN_COLLECTION_NAME, schema: SignSchema }
     ]),
     S3Module,
-    VimeoModule,
     BullModule.registerQueue({
       name: TRANSCODE_QUEUE_NAME,
       redis: process.env.REDIS_URL
@@ -70,7 +67,6 @@ class TfUseMock {
     SignsService,
     EntrySensesService,
     S3Service,
-    VimeoService,
     {
       provide: TF_MODEL_NAME,
       useFactory: async () => {
@@ -94,7 +90,7 @@ class TfUseMock {
     },
     SimilarityService
   ],
-  exports: [EntriesService, SensesService, S3Service, VimeoService],
+  exports: [EntriesService, SensesService, S3Service],
   controllers: [SitemapController, SignsController]
 })
 export class ReferenceModule {}

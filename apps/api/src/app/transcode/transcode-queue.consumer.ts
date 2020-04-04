@@ -70,11 +70,11 @@ export class TranscodeQueueConsumer {
 
     await this.runFfmpeg(origVideoPath, newVideoPath);
 
-    const inputVideoProps = await this.getSummaryStatsAndLog(
+    const inputVideoProps = await this._getSummaryStatsAndLog(
       origVideoPath,
       `${s3KeyOrig} input:`
     );
-    const ouputVideoProps = await this.getSummaryStatsAndLog(
+    const ouputVideoProps = await this._getSummaryStatsAndLog(
       newVideoPath,
       `${newKey} output:`
     );
@@ -141,13 +141,14 @@ export class TranscodeQueueConsumer {
         })
         .save(outputPath)
         .on('end', (stdout, stderr) => {
+          console.log(stderr);
           console.log('Transcoding succeeded !');
           resolve();
         });
     });
   }
 
-  private async getSummaryStatsAndLog(
+  async _getSummaryStatsAndLog(
     filePath: string,
     descriptor = ''
   ): Promise<VideoProperties> {

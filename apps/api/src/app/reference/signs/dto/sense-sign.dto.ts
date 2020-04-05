@@ -1,4 +1,4 @@
-import { ObjectType, Field, ID } from 'type-graphql';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { ObjectId } from 'bson';
 import { SignDto } from './sign.dto';
 import { SenseSignDtoInterface } from '@edfu/api-interfaces';

@@ -22,6 +22,7 @@ export class SignComponent {
 
   @Input()
   set sign(sign: SignRecord) {
+    console.log(sign);
     const transcodings = sign.transcodings;
     if (transcodings && transcodings.length && this.deviceService.isMobile()) {
       const smallestTranscoding = transcodings.sort(this.sortBySize)[0];
@@ -29,6 +30,7 @@ export class SignComponent {
     } else {
       this.mediaUrl = this.generateMediaUrl(sign.s3KeyOrig);
     }
+    console.log(this.mediaUrl);
     this._sign = sign;
   }
 

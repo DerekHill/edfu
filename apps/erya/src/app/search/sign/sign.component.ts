@@ -22,15 +22,17 @@ export class SignComponent {
 
   @Input()
   set sign(sign: SignRecord) {
-    console.log(sign);
-    const transcodings = sign.transcodings;
-    if (transcodings && transcodings.length && this.deviceService.isMobile()) {
-      const smallestTranscoding = transcodings.sort(this.sortBySize)[0];
+    if (
+      sign &&
+      sign.transcodings &&
+      sign.transcodings.length &&
+      this.deviceService.isMobile()
+    ) {
+      const smallestTranscoding = sign.transcodings.sort(this.sortBySize)[0];
       this.mediaUrl = this.generateMediaUrl(smallestTranscoding.s3Key);
     } else {
       this.mediaUrl = this.generateMediaUrl(sign.s3KeyOrig);
     }
-    console.log(this.mediaUrl);
     this._sign = sign;
   }
 

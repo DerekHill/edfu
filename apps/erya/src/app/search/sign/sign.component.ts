@@ -26,7 +26,6 @@ export class SignComponent {
     if (transcodings && transcodings.length && this.deviceService.isMobile()) {
       const smallestTranscoding = transcodings.sort(this.sortBySize)[0];
       this.mediaUrl = this.generateMediaUrl(smallestTranscoding.s3Key);
-      console.log(this.mediaUrl);
     } else {
       this.mediaUrl = this.generateMediaUrl(sign.s3KeyOrig);
     }

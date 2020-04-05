@@ -50,7 +50,6 @@ export class SignsService {
     const promises = [];
 
     for (const senseId of createSignInput.senseIds) {
-      console.log(`senseId is ${senseId}`);
       promises.push(
         this.findOrCreateSenseSign({
           userId: sign.userId,

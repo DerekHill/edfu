@@ -65,8 +65,8 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
   senses$: Observable<HydratedSense[]>;
 
   signsSearchRef: QueryRef<SignsResult, SignSearchVariables>;
-  senseSigns$: Observable<SenseSignDtoInterface[]>;
-  senseSignsBs$: BehaviorSubject<SenseSignDtoInterface[]>;
+  signs$: Observable<SenseSignDtoInterface[]>;
+  signsBs$: BehaviorSubject<SenseSignDtoInterface[]>;
 
   selectedSense: HydratedSense;
 
@@ -101,7 +101,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
-    this.senseSignsBs$ = new BehaviorSubject(null);
+    this.signsBs$ = new BehaviorSubject(null);
 
     this.searchChars$ = this.searchFormControl.valueChanges.pipe(startWith(''));
 
@@ -122,8 +122,8 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
       map((res: ApolloQueryResult<OxIdsResult>) => res.data.oxIds)
     );
 
-    const EntrySensesQuery = gql`
-      query EntrySensesQuery($oxId: String! = "", $senseId: String! = "") {
+    const SensesQuery = gql`
+      query SensesQuery($oxId: String! = "", $senseId: String! = "") {
         senses(oxId: $oxId, filter: true, senseId: $senseId) {
           oxId
           homographC
@@ -137,8 +137,6 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
           similarity
           signs {
             _id
-            mnemonic
-            s3KeyOrig
           }
         }
       }
@@ -149,7 +147,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
       SensesResult,
       SenseSearchVariables
     >({
-      query: EntrySensesQuery
+      query: SensesQuery
     });
 
     const SignsQuery = gql`
@@ -161,6 +159,10 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
             _id
             mnemonic
             s3KeyOrig
+            transcodings {
+              s3Key
+              size
+            }
           }
         }
       }
@@ -187,7 +189,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
       map(senses => this.senseArranger.sortAndFilter(senses))
     );
 
-    this.senseSigns$ = this.signsSearchRef.valueChanges.pipe(
+    this.signs$ = this.signsSearchRef.valueChanges.pipe(
       map((res: ApolloQueryResult<SignsResult>) => res.data.signs)
     );
 
@@ -211,8 +213,8 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     });
 
-    this.senseSigns$.subscribe(signs => {
-      this.senseSignsBs$.next(signs);
+    this.signs$.subscribe(signs => {
+      this.signsBs$.next(signs);
     });
   }
 
@@ -252,7 +254,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   clearSearchField() {
-    this.senseSignsBs$.next(null);
+    this.signsBs$.next(null);
     this.searchFormControl.reset();
     // Needs to be cleared because otherwise valueChanges will not fire if next search is the same
     // Might be better way to clear this. Not sure if this sends request to API, or GraphQL takes care of it

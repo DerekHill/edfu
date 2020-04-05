@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { SignRecord } from '@edfu/api-interfaces';
+import { SignRecord, Transcoding } from '@edfu/api-interfaces';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
@@ -14,15 +14,22 @@ export class SignComponent {
   private _sign: SignRecord;
 
   constructor(
-    public deviceService: DeviceDetectorService,
-    public library: FaIconLibrary
+    private deviceService: DeviceDetectorService,
+    private library: FaIconLibrary
   ) {
     library.addIcons(faPlay);
   }
 
   @Input()
   set sign(sign: SignRecord) {
-    this.mediaUrl = `${CDN_URI}/${sign.s3KeyOrig}`;
+    const transcodings = sign.transcodings;
+    if (transcodings && this.deviceService.isMobile()) {
+      const smallestTranscoding = transcodings.sort(this.sortBySize)[0];
+      this.mediaUrl = this.generateMediaUrl(smallestTranscoding.s3Key);
+      console.log(this.mediaUrl);
+    } else {
+      this.mediaUrl = this.generateMediaUrl(sign.s3KeyOrig);
+    }
     this._sign = sign;
   }
 
@@ -34,5 +41,17 @@ export class SignComponent {
     throw new Error(
       `htmlVideo error for video: ${this.mediaUrl}, mediaUrl: ${event.target.src}`
     );
+  }
+
+  private generateMediaUrl(key: string) {
+    return `${CDN_URI}/${key}`;
+  }
+
+  private sortBySize(a: Transcoding, b: Transcoding) {
+    if (a.size < b.size) {
+      return -1;
+    } else {
+      return 1;
+    }
   }
 }

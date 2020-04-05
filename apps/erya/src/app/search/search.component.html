@@ -57,11 +57,11 @@
                 </h1>
                 <div
                   class="columns is-multiline"
-                  *ngIf="senseSignsBs$ | async as senseSigns"
+                  *ngIf="signsBs$ | async as signs"
                 >
                   <edfu-sign
                     class="column is-full"
-                    *ngFor="let senseSign of senseSigns"
+                    *ngFor="let senseSign of signs"
                     [sign]="senseSign.sign"
                   ></edfu-sign>
                 </div>

@@ -1,4 +1,4 @@
-import { Resolver, Query, Args, ResolveProperty, Root } from '@nestjs/graphql';
+import { Resolver, Query, Args, Root, ResolveField } from '@nestjs/graphql';
 import { ReferenceService } from './reference.service';
 import { SenseForEntryDto } from './senses/dto/sense.dto';
 import { SenseSignDto } from './signs/dto/sense-sign.dto';
@@ -32,8 +32,8 @@ export class DictionaryResolver {
     });
   }
 
-  @ResolveProperty(returns => [SignDto])
-  async signs(@Root() ss: SenseForEntryDto) {
+  @ResolveField(returns => [SignDto])
+  signs(@Root() ss: SenseForEntryDto) {
     return this.service.getSigns(ss.senseId);
   }
 }
@@ -46,7 +46,7 @@ export class SignsResolver {
     return this.service.getSenseSigns(senseId);
   }
 
-  @ResolveProperty(returns => SignDto)
+  @ResolveField(returns => SignDto)
   sign(@Root() ss: SenseSignDto) {
     return this.service.findOneSign(ss.signId);
   }

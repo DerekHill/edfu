@@ -1,4 +1,4 @@
-import { ObjectType, Field, ID } from 'type-graphql';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { ObjectId } from 'bson';
 import { SignRecord, Transcoding } from '@edfu/api-interfaces';
 import { TranscodingDto } from './transcoding.dto';
@@ -17,6 +17,6 @@ export class SignDto implements SignRecord {
   @Field()
   readonly s3KeyOrig: string;
 
-  @Field(type => TranscodingDto)
+  @Field(type => [TranscodingDto])
   readonly transcodings: Transcoding[];
 }

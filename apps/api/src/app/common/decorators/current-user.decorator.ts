@@ -1,7 +1,8 @@
-import { createParamDecorator } from '@nestjs/common';
+import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
-export const CurrentUserGraphQl = createParamDecorator(
-  (data, [root, args, ctx, info]) => ctx.req.user
+export const CurrentUserRest = createParamDecorator(
+  (data: unknown, ctx: ExecutionContext) => {
+    const request = ctx.switchToHttp().getRequest();
+    return request.user;
+  }
 );
-
-export const CurrentUserRest = createParamDecorator((_, req) => req.user);

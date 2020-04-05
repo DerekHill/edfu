@@ -1,4 +1,4 @@
-import { ObjectType, Field, Int, ID, registerEnumType } from 'type-graphql';
+import { ObjectType, Field, Int, ID, registerEnumType } from '@nestjs/graphql';
 import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
 import { HydratedSense } from '@edfu/api-interfaces';
 import { SignDto } from '../../signs/dto/sign.dto';
@@ -46,6 +46,6 @@ export class SenseForEntryDto implements HydratedSense {
   @Field()
   readonly similarity: number;
 
-  @Field(type => SignDto, { nullable: true })
+  @Field(type => [SignDto], { nullable: true })
   readonly signs: SignDto[];
 }

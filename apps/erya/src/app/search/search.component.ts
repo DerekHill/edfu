@@ -190,7 +190,8 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
     );
 
     this.signs$ = this.signsSearchRef.valueChanges.pipe(
-      map((res: ApolloQueryResult<SignsResult>) => res.data.signs)
+      map((res: ApolloQueryResult<SignsResult>) => res.data.signs),
+      map(signs => this.filterOutDeletedSigns(signs))
     );
 
     this.searchChars$.subscribe(input => {
@@ -278,5 +279,11 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
       this.searchInput.nativeElement.blur();
       this.cd.detectChanges();
     }
+  }
+
+  private filterOutDeletedSigns(
+    senseSigns: SenseSignDtoInterface[]
+  ): SenseSignDtoInterface[] {
+    return senseSigns.filter(senseSign => senseSign.sign);
   }
 }

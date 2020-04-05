@@ -1252,163 +1252,209 @@ const SIGNS: SignRecord[] = [
     _id: SIGN_ID_MORE,
     userId: FRED_USER_ID,
     mnemonic: 'Adding more to a pile',
-    s3KeyOrig: 'fixtures_more.mp4'
+    s3KeyOrig: 'fixtures_more.mp4',
+    transcodings: []
   },
   {
     _id: SIGN_ID_HELP_1,
     userId: FRED_USER_ID,
     mnemonic: 'Help your hand up',
-    s3KeyOrig: 'fixtures_help_1.mp4'
+    s3KeyOrig: 'fixtures_help_1.mp4',
+    transcodings: []
   },
   {
     _id: SIGN_ID_GOOD_MORNING_1,
     userId: FRED_USER_ID,
     mnemonic: 'Open the curtains',
-    s3KeyOrig: 'fixtures_good_morning_1.mp4'
+    s3KeyOrig: 'fixtures_good_morning_1.mp4',
+    transcodings: []
   },
   {
     _id: SIGN_ID_PLEASE_1,
     userId: FRED_USER_ID,
     mnemonic: 'Please to the knees',
-    s3KeyOrig: 'fixtures_please_1.mp4'
+    s3KeyOrig: 'fixtures_please_1.mp4',
+    transcodings: []
   },
   {
     _id: SIGN_ID_THANK_YOU_1,
     userId: FRED_USER_ID,
     mnemonic: 'Thank you to you',
-    s3KeyOrig: 'fixtures_thank_you_1.mp4'
+    s3KeyOrig: 'fixtures_thank_you_1.mp4',
+    transcodings: []
   },
   {
     _id: SIGN_ID_GOOD_AFTERNOON,
     userId: FRED_USER_ID,
     mnemonic: 'To the person you are speaking to',
-    s3KeyOrig: 'fixtures_good_afternoon.mp4'
+    s3KeyOrig: 'fixtures_good_afternoon.mp4',
+    transcodings: []
   },
   {
     _id: SIGN_ID_BREAK,
     userId: FRED_USER_ID,
     mnemonic: '',
-    s3KeyOrig: 'fixtures_break.mp4'
+    s3KeyOrig: 'fixtures_break.mp4',
+    transcodings: []
   },
   {
     _id: SIGN_ID_PLEASE_2,
     userId: FRED_USER_ID,
     mnemonic: '',
-    s3KeyOrig: 'fixtures_please_2.mp4'
+    s3KeyOrig: 'fixtures_please_2.mp4',
+    transcodings: []
   },
   {
     _id: SIGN_ID_LOOK,
     userId: FRED_USER_ID,
     mnemonic: '',
-    s3KeyOrig: 'fixtures_look.mp4'
+    s3KeyOrig: 'fixtures_look.mp4',
+    transcodings: []
   },
   {
     _id: SIGN_ID_HELP_2,
     userId: FRED_USER_ID,
     mnemonic: '',
-    s3KeyOrig: 'fixtures_help_2.mp4'
+    s3KeyOrig: 'fixtures_help_2.mp4',
+    transcodings: []
   },
   {
     _id: SIGN_ID_TOILET,
     userId: FRED_USER_ID,
     mnemonic: '',
-    s3KeyOrig: 'fixtures_toilet.mp4'
+    s3KeyOrig: 'fixtures_toilet.mp4',
+    transcodings: []
   },
   {
     _id: SIGN_ID_BAD,
     userId: FRED_USER_ID,
     mnemonic: '',
-    s3KeyOrig: 'fixtures_bad.mp4'
+    s3KeyOrig: 'fixtures_bad.mp4',
+    transcodings: []
   },
   {
     _id: SIGN_ID_GOOD,
     userId: FRED_USER_ID,
     mnemonic: '',
-    s3KeyOrig: 'fixtures_good.mp4'
+    s3KeyOrig: 'fixtures_good.mp4',
+    transcodings: [
+      {
+        height: 540,
+        width: 960,
+        duration: 1.791,
+        size: 1234,
+        bitrate: 1100,
+        rotation: 0,
+        s3Key: 'fixtures_good.mp4'
+      },
+      {
+        height: 270,
+        width: 480,
+        duration: 1.791,
+        size: 163.6,
+        bitrate: 730,
+        rotation: 0,
+        s3Key: 'fixtures_good_1.mp4'
+      }
+    ]
   },
   {
     _id: SIGN_ID_GOODBYE,
     userId: FRED_USER_ID,
     mnemonic: '',
-    s3KeyOrig: 'fixtures_goodbye.mp4'
+    s3KeyOrig: 'fixtures_goodbye.mp4',
+    transcodings: []
   },
   {
     _id: SIGN_ID_HELLO,
     userId: FRED_USER_ID,
     mnemonic: '',
-    s3KeyOrig: 'fixtures_hello.mp4'
+    s3KeyOrig: 'fixtures_hello.mp4',
+    transcodings: []
   },
   {
     _id: SIGN_ID_PLEASE_3,
     userId: FRED_USER_ID,
     mnemonic: '',
-    s3KeyOrig: 'fixtures_please_3.mp4'
+    s3KeyOrig: 'fixtures_please_3.mp4',
+    transcodings: []
   },
   {
     _id: SIGN_ID_STOP,
     userId: FRED_USER_ID,
     mnemonic: '',
-    s3KeyOrig: 'fixtures_stop.mp4'
+    s3KeyOrig: 'fixtures_stop.mp4',
+    transcodings: []
   },
   {
     _id: SIGN_ID_YES,
     userId: FRED_USER_ID,
     mnemonic: '',
-    s3KeyOrig: 'fixtures_yes.mp4'
+    s3KeyOrig: 'fixtures_yes.mp4',
+    transcodings: []
   },
   {
     _id: SIGN_ID_BEGIN,
     userId: FRED_USER_ID,
     mnemonic: '',
-    s3KeyOrig: 'fixtures_begin.mp4'
+    s3KeyOrig: 'fixtures_begin.mp4',
+    transcodings: []
   },
   {
     _id: SIGN_ID_GOOD_MORNING_2,
     userId: FRED_USER_ID,
     mnemonic: '',
-    s3KeyOrig: 'fixtures_good_morning_2.mp4'
+    s3KeyOrig: 'fixtures_good_morning_2.mp4',
+    transcodings: []
   },
   {
     _id: SIGN_ID_HAPPY,
     userId: FRED_USER_ID,
     mnemonic: '',
-    s3KeyOrig: 'fixtures_happy.mp4'
+    s3KeyOrig: 'fixtures_happy.mp4',
+    transcodings: []
   },
   {
     _id: SIGN_ID_NO,
     userId: FRED_USER_ID,
     mnemonic: '',
-    s3KeyOrig: 'fixtures_no.mp4'
+    s3KeyOrig: 'fixtures_no.mp4',
+    transcodings: []
   },
   {
     _id: SIGN_ID_SAD,
     userId: FRED_USER_ID,
     mnemonic: '',
-    s3KeyOrig: 'fixtures_sad.mp4'
+    s3KeyOrig: 'fixtures_sad.mp4',
+    transcodings: []
   },
   {
     _id: SIGN_ID_THANK_YOU_2,
     userId: FRED_USER_ID,
     mnemonic: '',
-    s3KeyOrig: 'fixtures_thank_you_2.mp4'
+    s3KeyOrig: 'fixtures_thank_you_2.mp4',
+    transcodings: []
   },
   {
     _id: SIGN_ID_FAST_SPEED,
     userId: FRED_USER_ID,
     mnemonic: '',
-    s3KeyOrig: 'fixtures_fast_speed.mp4'
+    s3KeyOrig: 'fixtures_fast_speed.mp4',
+    transcodings: []
   },
   {
     _id: SIGN_ID_SLOW,
     userId: FRED_USER_ID,
     mnemonic: '',
-    s3KeyOrig: 'fixtures_slow.mp4'
+    s3KeyOrig: 'fixtures_slow.mp4',
+    transcodings: []
   },
   {
     _id: SIGN_ID_FAST_ABSTAIN,
     userId: FRED_USER_ID,
     mnemonic: '',
-    s3KeyOrig: 'fixtures_fast_abstain.mp4'
+    s3KeyOrig: 'fixtures_fast_abstain.mp4',
+    transcodings: []
   }
 ];
 

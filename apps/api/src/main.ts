@@ -29,6 +29,11 @@ async function bootstrap() {
     )
   );
 
+  app.use('/ping', (req, res, next) => {
+    res.sendStatus(200);
+    // next();
+  });
+
   const port = process.env.PORT || 3333;
   await app.listen(port, () => {
     console.log(`Listening on port ${port}`);

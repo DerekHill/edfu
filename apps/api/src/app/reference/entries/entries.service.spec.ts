@@ -7,7 +7,11 @@ import {
 import { TestingModule, Test } from '@nestjs/testing';
 import { TestDatabaseModule } from '../../config/test-database.module';
 import { MongooseModule, InjectModel } from '@nestjs/mongoose';
-import { ENTRY_COLLECTION_NAME, SENSE_COLLECTION_NAME } from '../../constants';
+import {
+  ENTRY_COLLECTION_NAME,
+  SENSE_COLLECTION_NAME,
+  OXFORD_API_QUEUE_NAME
+} from '../../constants';
 import { EntrySchema } from './schemas/entry.schema';
 import { SenseSchema } from '../senses/schemas/sense.schema';
 import { SensesService } from '../senses/senses.service';
@@ -29,6 +33,7 @@ import { SimilarityService } from '../similarity/similarity.service';
 import { Injectable } from '@nestjs/common';
 import { EntryDocument, EntryRecord } from './interfaces/entry.interface';
 import { Model } from 'mongoose';
+import { BullModule } from '@nestjs/bull';
 
 class OxfordSearchesServiceMock {
   findOrFetch(): Promise<OxfordSearchRecord[]> {
@@ -96,7 +101,11 @@ describe('EntriesService', () => {
         MongooseModule.forFeature([
           { name: ENTRY_COLLECTION_NAME, schema: EntrySchema },
           { name: SENSE_COLLECTION_NAME, schema: SenseSchema }
-        ])
+        ]),
+        BullModule.registerQueue({
+          name: OXFORD_API_QUEUE_NAME,
+          redis: process.env.REDIS_URL
+        })
       ],
       providers: [
         EntriesService,
@@ -147,7 +156,10 @@ describe('EntriesService', () => {
         .spyOn(entrySearchesService, 'findOrFetch')
         .mockImplementation(chars => Promise.resolve([record]));
 
-      const res = await entriesService.findOrCreateWithOwnSensesOnly(WORD);
+      const res = await entriesService.findOrCreateWithOwnSensesOnly(
+        WORD,
+        false
+      );
       expect(res[0].word).toEqual(WORD);
       expect(res[0].headwordOrPhrase).toEqual(TYPE);
     });
@@ -162,7 +174,8 @@ describe('EntriesService', () => {
       await entriesService._findOrCreateEntryFromSearchRecord(lowerCaseRecord);
 
       const res = await entriesService.findOrCreateWithOwnSensesOnly(
-        lowercaseWord
+        lowercaseWord,
+        false
       );
       expect(res.length).toBe(2);
     });
@@ -172,7 +185,10 @@ describe('EntriesService', () => {
     it('throws error if entry does not exist', async () => {
       expect.assertions(1);
       try {
-        await entriesService.addRelatedEntries({ oxId: 'food', homographC: 1 });
+        await entriesService.addRelatedEntries(
+          { oxId: 'food', homographC: 1 },
+          false
+        );
       } catch (e) {
         expect(e.message).toMatch(/not found/);
       }
@@ -242,12 +258,15 @@ describe('EntriesService', () => {
           }
         );
 
-      await entriesService.findOrCreateWithOwnSensesOnly(WORD);
+      await entriesService.findOrCreateWithOwnSensesOnly(WORD, false);
 
-      const entries = await entriesService.addRelatedEntries({
-        oxId: 'food',
-        homographC: 1
-      });
+      const entries = await entriesService.addRelatedEntries(
+        {
+          oxId: 'food',
+          homographC: 1
+        },
+        false
+      );
 
       expect(entries.map(entry => entry.word).sort()).toEqual(SYNONYMS.sort());
     });
@@ -264,10 +283,13 @@ describe('EntriesService', () => {
       };
 
       const entry = await setupService.createEntry(entryData);
-      const res = await entriesService.addRelatedEntries({
-        oxId: entry.oxId,
-        homographC: entry.homographC
-      });
+      const res = await entriesService.addRelatedEntries(
+        {
+          oxId: entry.oxId,
+          homographC: entry.homographC
+        },
+        false
+      );
       expect(res[0].oxId).toBe(OXID);
     });
 
@@ -297,10 +319,13 @@ describe('EntriesService', () => {
         );
 
       const entry = await setupService.createEntry(entryData);
-      await entriesService.addRelatedEntries({
-        oxId: OXID,
-        homographC: HOMOGRAPH_C
-      });
+      await entriesService.addRelatedEntries(
+        {
+          oxId: OXID,
+          homographC: HOMOGRAPH_C
+        },
+        false
+      );
       const updatedEntry = await setupService.findEntry(entry._id);
       expect(updatedEntry.relatedEntriesAdded).toBeTruthy();
     });
@@ -427,7 +452,8 @@ describe('EntriesService', () => {
         dictionarySense,
         synonymOxId,
         thesaurusSenseLexicalCategory,
-        thesaurusSenseExample
+        thesaurusSenseExample,
+        false
       );
     });
   });

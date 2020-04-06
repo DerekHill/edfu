@@ -15,3 +15,4 @@ export const CASE_INSENSITIVE_COLLATION = { locale: 'en', strength: 2 };
 export const EDFU_FROM_EMAIL = 'do_not_reply@until.we.sort.out.our.email';
 
 export const TRANSCODE_QUEUE_NAME = 'transcodeQueue';
+export const OXFORD_API_QUEUE_NAME = 'oxfordApiQueue';

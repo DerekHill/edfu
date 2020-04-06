@@ -9,7 +9,8 @@ import {
   ENTRY_SENSE_COLLECTION_NAME,
   TF_MODEL_NAME,
   SENSE_SIGN_COLLECTION_NAME,
-  TRANSCODE_QUEUE_NAME
+  TRANSCODE_QUEUE_NAME,
+  OXFORD_API_QUEUE_NAME
 } from '../constants';
 import { EntrySchema } from './entries/schemas/entry.schema';
 import { SensesService } from './senses/senses.service';
@@ -30,6 +31,7 @@ import { S3Module } from '../s3/s3.module';
 import { SitemapController } from './sitemap/sitemap.controller';
 import { BullModule } from '@nestjs/bull';
 import { SignsController } from './signs/signs.controller';
+import { OxfordApiQueueConsumer } from './entries/oxford-api-queue.consumer';
 
 class TfUseMock {
   embed(sentences: string[]) {
@@ -51,10 +53,17 @@ class TfUseMock {
       { name: SIGN_COLLECTION_NAME, schema: SignSchema }
     ]),
     S3Module,
-    BullModule.registerQueue({
-      name: TRANSCODE_QUEUE_NAME,
-      redis: process.env.REDIS_URL
-    })
+    BullModule.registerQueue(
+      {
+        name: TRANSCODE_QUEUE_NAME,
+        redis: process.env.REDIS_URL
+      },
+      {
+        name: OXFORD_API_QUEUE_NAME,
+        redis: process.env.REDIS_URL,
+        limiter: { max: 200, duration: 60 * 1000 } // 500 is max, 250 triggers warning, keep allowance of unqueued request
+      }
+    )
   ],
   providers: [
     EntriesService,
@@ -88,7 +97,8 @@ class TfUseMock {
         }
       }
     },
-    SimilarityService
+    SimilarityService,
+    OxfordApiQueueConsumer
   ],
   exports: [EntriesService, SensesService, S3Service],
   controllers: [SitemapController, SignsController]

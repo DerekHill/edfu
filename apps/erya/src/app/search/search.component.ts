@@ -250,7 +250,6 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
     this.signsSearchRef.setVariables({
       senseId: sense.senseId
     });
-
     this.selectedSense = sense;
   }
 

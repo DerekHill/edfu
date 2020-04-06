@@ -46,17 +46,17 @@ export class BaseSearchesService {
 
     return await Promise.all(
       results.map((result: OxResult) => {
-        return this.findOrCreateFromResult(searchTerm, result);
+        return this._findOrCreateFromResult(searchTerm, result);
       })
     );
   }
 
-  findOrCreateFromResult = async (
+  _findOrCreateFromResult = async (
     searchTerm: string,
     result: OxResult
   ): Promise<OxfordSearchRecord> => {
-    const homographC = this.extractHomographC(result);
-    const oxIdOrSearchTermLowercase = this.extractOxIdOrSearchTermLowercase(
+    const homographC = this._extractHomographC(result);
+    const oxIdOrSearchTermLowercase = this._extractOxIdOrSearchTermLowercase(
       searchTerm,
       result
     );
@@ -88,7 +88,7 @@ export class BaseSearchesService {
     }
   };
 
-  extractHomographC(result: any) {
+  _extractHomographC(result: any) {
     const homographNumber = oc(
       result
     ).lexicalEntries[0].entries[0].homographNumber();
@@ -99,7 +99,7 @@ export class BaseSearchesService {
     }
   }
 
-  extractOxIdOrSearchTermLowercase(
+  _extractOxIdOrSearchTermLowercase(
     searchTerm: string,
     result: OxResult
   ): string {

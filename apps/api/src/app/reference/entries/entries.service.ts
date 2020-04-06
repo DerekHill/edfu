@@ -3,7 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import {
   ENTRY_COLLECTION_NAME,
   MONGO_DUPLICATE_ERROR_CODE,
-  CASE_INSENSITIVE_COLLATION
+  CASE_INSENSITIVE_COLLATION,
+  OXFORD_API_QUEUE_NAME
 } from '../../constants';
 import { Model } from 'mongoose';
 import {
@@ -26,6 +27,9 @@ import { HeadwordOrPhrase } from '../../enums';
 import { EntrySensesService } from '../entry-senses/entry-senses.service';
 import { SimilarityService } from '../similarity/similarity.service';
 import { UniqueEntry } from '@edfu/api-interfaces';
+import { InjectQueue } from '@nestjs/bull';
+import { Queue } from 'bull';
+import { OxfordApiJobData } from './interfaces/oxford-api-job-data.interface';
 
 @Injectable()
 export class EntriesService {
@@ -36,20 +40,25 @@ export class EntriesService {
     private readonly thesaurusSearchesService: ThesaurusSearchesService,
     private readonly sensesService: SensesService,
     private readonly entrySensesService: EntrySensesService,
-    private readonly similarityService: SimilarityService
+    private readonly similarityService: SimilarityService,
+    @InjectQueue(OXFORD_API_QUEUE_NAME)
+    private oxfordApiQueue: Queue<OxfordApiJobData>
   ) {}
 
   async findOrCreateAndKickoffRelatedEntries(
     chars: string
   ): Promise<EntryRecord[]> {
-    const entries = await this.findOrCreateWithOwnSensesOnly(chars);
+    const entries = await this.findOrCreateWithOwnSensesOnly(chars, false);
     for (const entry of entries) {
-      this.addRelatedEntries(entry); // Not awaited
+      this.addRelatedEntries(entry, true); // Not awaited
     }
     return entries;
   }
 
-  async findOrCreateWithOwnSensesOnly(chars: string): Promise<EntryRecord[]> {
+  async findOrCreateWithOwnSensesOnly(
+    chars: string,
+    queue: boolean
+  ): Promise<EntryRecord[]> {
     const existing: EntryRecord[] = await this.entryModel
       .find({
         word: chars
@@ -61,6 +70,18 @@ export class EntriesService {
       return existing;
     }
 
+    if (queue) {
+      await this.oxfordApiQueue.add({
+        chars: chars
+      });
+      console.log(`${chars} added to oxfordApiQueue`);
+      return [];
+    } else {
+      return this.createWithOwnSensesOnly(chars);
+    }
+  }
+
+  async createWithOwnSensesOnly(chars: string): Promise<EntryRecord[]> {
     const entrySearchResults: OxfordSearchRecord[] = await this.entrySearchesService.findOrFetch(
       chars
     );
@@ -90,7 +111,10 @@ export class EntriesService {
     return Promise.all(entries.map(this.getLatest));
   }
 
-  async addRelatedEntries(ue: UniqueEntry): Promise<EntryRecord[]> {
+  async addRelatedEntries(
+    ue: UniqueEntry,
+    queue: boolean
+  ): Promise<EntryRecord[]> {
     const existing = await this.entryModel
       .findOne(ue)
       .lean()
@@ -177,7 +201,8 @@ export class EntriesService {
               dictionarySense,
               synonym,
               sensePairing.thesaurusSense.lexicalCategory,
-              sensePairing.thesaurusSense.example
+              sensePairing.thesaurusSense.example,
+              queue
             )
           );
         }
@@ -255,11 +280,12 @@ export class EntriesService {
     dictionarySense: DictionarySenseRecord,
     synonym: string,
     thesaurusSenseLexicalCategory: LexicalCategory,
-    thesaurusSenseExample: string
+    thesaurusSenseExample: string,
+    queue: boolean
   ): Promise<EntryRecord[]> {
     let entries: EntryRecord[];
 
-    entries = await this.findOrCreateWithOwnSensesOnly(synonym);
+    entries = await this.findOrCreateWithOwnSensesOnly(synonym, queue);
 
     if (!entries.length) {
       return [];

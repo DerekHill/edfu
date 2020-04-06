@@ -87,10 +87,10 @@ describe('BaseSearchesService', () => {
 
   describe('homographC extraction', () => {
     it('returns null if no homographNumber is given', () => {
-      expect(bss.extractHomographC(RESULT_WITHOUT_HOMOGRAPH_NUMBER)).toBe(0);
+      expect(bss._extractHomographC(RESULT_WITHOUT_HOMOGRAPH_NUMBER)).toBe(0);
     });
     it('returns the number if given', () => {
-      expect(bss.extractHomographC(RESULT_WITH_HOMOGRAPH_NUMBER_200)).toEqual(
+      expect(bss._extractHomographC(RESULT_WITH_HOMOGRAPH_NUMBER_200)).toEqual(
         2
       );
     });
@@ -100,13 +100,13 @@ describe('BaseSearchesService', () => {
     it('extracts oxId if exists keeping capitalisation', () => {
       const SEARCH_TERM = 'more';
       expect(
-        bss.extractOxIdOrSearchTermLowercase(SEARCH_TERM, MORE_RESULT_LANGUAGE)
+        bss._extractOxIdOrSearchTermLowercase(SEARCH_TERM, MORE_RESULT_LANGUAGE)
       ).toEqual('More');
     });
 
     it('uses search term if result is null, making it lowercase', () => {
       const SEARCH_TERM = 'Orange juice';
-      expect(bss.extractOxIdOrSearchTermLowercase(SEARCH_TERM, null)).toEqual(
+      expect(bss._extractOxIdOrSearchTermLowercase(SEARCH_TERM, null)).toEqual(
         'orange juice'
       );
     });
@@ -148,9 +148,9 @@ describe('EntrySearchesService', () => {
       const homographC = 0;
       const one = 1;
       const result = createOxResult(oxId);
-      await ess.findOrCreateFromResult(oxId, result);
+      await ess._findOrCreateFromResult(oxId, result);
       await expect(setupService.count(oxId, homographC)).resolves.toEqual(one);
-      await ess.findOrCreateFromResult(oxId, result);
+      await ess._findOrCreateFromResult(oxId, result);
       await expect(setupService.count(oxId, homographC)).resolves.toEqual(one);
     });
   });
@@ -158,7 +158,7 @@ describe('EntrySearchesService', () => {
   describe('findOrFetch()', () => {
     it('returns existing record if already exists', async () => {
       const searchTerm = 'cheese';
-      const existing = await ess.findOrCreateFromResult(
+      const existing = await ess._findOrCreateFromResult(
         searchTerm,
         createOxResult(searchTerm)
       );
@@ -169,7 +169,7 @@ describe('EntrySearchesService', () => {
     it('finds in case insensitive way', async () => {
       const oxId = 'Orange';
       const searchTerm = 'orange';
-      const existing = await ess.findOrCreateFromResult(
+      const existing = await ess._findOrCreateFromResult(
         oxId,
         createOxResult(oxId)
       );

@@ -25,7 +25,8 @@ export class LoaderService {
 
   async loadWord(word: string) {
     const entries = await this.entriesService.findOrCreateWithOwnSensesOnly(
-      word
+      word,
+      false
     );
 
     console.log('Entries:');
@@ -33,16 +34,19 @@ export class LoaderService {
 
     const relatedEntryArrays = await Promise.all(
       entries.map(entry =>
-        this.entriesService.addRelatedEntries({
-          oxId: entry.oxId,
-          homographC: entry.homographC
-        })
+        this.entriesService.addRelatedEntries(
+          {
+            oxId: entry.oxId,
+            homographC: entry.homographC
+          },
+          true
+        )
       )
     );
 
     const relatedEntries = relatedEntryArrays.flat();
 
-    console.log('relatedEntries:');
+    console.log('Unqueued relatedEntries (also need to clear queue):');
     console.log(relatedEntries.filter(i => i).map(i => i.oxId));
   }
 }

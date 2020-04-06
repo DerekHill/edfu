@@ -255,18 +255,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   clearSearchField() {
-    this.signsBs$.next(null);
-    this.searchFormControl.reset();
-    // Needs to be cleared because otherwise valueChanges will not fire if next search is the same
-    // Might be better way to clear this. Not sure if this sends request to API, or GraphQL takes care of it
-    this.sensesSearchRef.setVariables({
-      oxId: ''
-    });
-    this.signsSearchRef.setVariables({
-      senseId: ''
-    });
-    this.selectedSense = null;
-    this.searchInput.nativeElement.focus();
+    this.router.navigate([`/${SEARCH_COMPONENT_PATH}`]);
   }
 
   ngOnDestroy() {}

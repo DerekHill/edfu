@@ -29,7 +29,6 @@ jobs:
       script: ng test erya
     - name: Cypress E2E
       script:
-        - $(npm bin)/print-env TRAVIS
         - SKIP_TENSORFLOW=yes ng serve api & wait-on http://localhost:3333
         - SKIP_TENSORFLOW=yes ng run erya-e2e:e2e
 deploy:

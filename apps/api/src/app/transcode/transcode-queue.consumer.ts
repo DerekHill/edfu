@@ -119,7 +119,7 @@ export class TranscodeQueueConsumer {
   @OnQueueFailed()
   private onFailed(job: Job<TranscodeJobData>, error: Error) {
     console.error(
-      `Failed job ${job.id} for key ${job.data.s3KeyOrig}: ${error.message}`
+      `Error: Failed job ${job.id} for key ${job.data.s3KeyOrig}: ${error.message}`
     );
   }
 

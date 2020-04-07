@@ -1,2 +1,2 @@
-web: npm run start:prod
-worker: PROVIDE_CONSUMER=yes npm run start:prod
+web: IS_WEB_PROCESS_TYPE=yes npm run start:prod
+worker: IS_WORKER_PROCESS_TYPE=yes npm run start:prod

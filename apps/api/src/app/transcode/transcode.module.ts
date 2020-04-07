@@ -6,17 +6,6 @@ import { S3Module } from '../s3/s3.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { SignSchema } from '../reference/signs/schemas/sign.schema';
 
-@Injectable()
-class EmpyTranscodeQueueConsumer {}
-
-const transcodeQueueConsumerProvider = {
-  provide: TranscodeQueueConsumer,
-  useClass:
-    process.env.PROVIDE_CONSUMER === 'yes'
-      ? TranscodeQueueConsumer
-      : EmpyTranscodeQueueConsumer
-};
-
 @Module({
   imports: [
     BullModule.registerQueue({
@@ -28,7 +17,7 @@ const transcodeQueueConsumerProvider = {
       { name: SIGN_COLLECTION_NAME, schema: SignSchema }
     ])
   ],
-  providers: [transcodeQueueConsumerProvider],
+  providers: [TranscodeQueueConsumer],
   exports: []
 })
 export class TranscodeModule {}

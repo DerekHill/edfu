@@ -8,36 +8,38 @@ async function bootstrap() {
     logger: console
   });
 
-  app.enableCors();
+  if (process.env.IS_WEB_PROCESS_TYPE === 'yes') {
+    app.enableCors();
 
-  app.use(
-    '/bull-arena',
-    Arena(
-      {
-        queues: [
-          {
-            name: TRANSCODE_QUEUE_NAME,
-            hostId: 'worker',
-            redis: process.env.REDIS_URL
-          },
-          {
-            name: OXFORD_API_QUEUE_NAME,
-            hostId: 'worker',
-            redis: process.env.REDIS_URL
-          }
-        ]
-      },
-      {
-        basePath: '/',
-        disableListen: true
-      }
-    )
-  );
+    app.use(
+      '/bull-arena',
+      Arena(
+        {
+          queues: [
+            {
+              name: TRANSCODE_QUEUE_NAME,
+              hostId: 'worker',
+              redis: process.env.REDIS_URL
+            },
+            {
+              name: OXFORD_API_QUEUE_NAME,
+              hostId: 'worker',
+              redis: process.env.REDIS_URL
+            }
+          ]
+        },
+        {
+          basePath: '/',
+          disableListen: true
+        }
+      )
+    );
 
-  const port = process.env.PORT || 3333;
-  await app.listen(port, () => {
-    console.log(`Listening on port ${port}`);
-  });
+    const port = process.env.PORT || 3333;
+    await app.listen(port, () => {
+      console.log(`Listening on port ${port}`);
+    });
+  }
 }
 
 bootstrap();

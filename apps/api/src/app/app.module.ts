@@ -36,8 +36,7 @@ const imports = [
   OxfordApiModule,
   ReferenceModule,
   AuthModule,
-  UsersModule,
-  TranscodeModule
+  UsersModule
 ];
 
 if (environment.production) {
@@ -46,6 +45,10 @@ if (environment.production) {
       rootPath: join(__dirname, '..', '..', '..', 'dist/apps/erya')
     })
   );
+}
+
+if (process.env.IS_WORKER_PROCESS_TYPE === 'yes') {
+  imports.push(TranscodeModule);
 }
 
 @Module({

@@ -12,7 +12,7 @@ import { map, startWith } from 'rxjs/operators';
 import gql from 'graphql-tag';
 import { Apollo, QueryRef } from 'apollo-angular';
 import { HydratedSense, SenseSignDtoInterface } from '@edfu/api-interfaces';
-import { ApolloQueryResult } from 'apollo-client';
+import { ApolloQueryResult, WatchQueryOptions } from 'apollo-client';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 import { SenseArrangerService } from './sense-arranger/sense-arranger.service';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
@@ -115,7 +115,8 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
       OxIdsResult,
       OxIdSearchVariables
     >({
-      query: OxIdSearchQuery
+      query: OxIdSearchQuery,
+      context: { method: 'GET' }
     });
 
     this.oxIds$ = this.oxIdsSearchRef.valueChanges.pipe(
@@ -147,7 +148,8 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
       SensesResult,
       SenseSearchVariables
     >({
-      query: SensesQuery
+      query: SensesQuery,
+      context: { method: 'GET' }
     });
 
     const SignsQuery = gql`
@@ -172,7 +174,8 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
       SignsResult,
       SignSearchVariables
     >({
-      query: SignsQuery
+      query: SignsQuery,
+      context: { method: 'GET' }
     });
 
     this.route.paramMap.subscribe((params: ParamMap) => {

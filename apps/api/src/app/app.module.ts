@@ -42,7 +42,8 @@ const imports = [
 if (environment.production) {
   imports.push(
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', '..', '..', 'dist/apps/erya')
+      rootPath: join(__dirname, '..', '..', '..', 'dist/apps/erya'),
+      exclude: ['/graphql*']
     })
   );
 }

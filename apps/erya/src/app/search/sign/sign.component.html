@@ -1,7 +1,9 @@
-<video autoplay loop playsinline [muted]="true">
-  <source
-    src="{{ mediaUrl }}"
-    (error)="onHtmlVideoError($event)"
-    type="video/mp4"
-  />
-</video>
+<figure  class="image" [ngClass]="{'is-16by9': !isRatioVertical, 'is-9by16': isRatioVertical}">
+  <video #videoSource autoplay loop playsinline [muted]="true" class="has-ratio" (loadedmetadata)="setRatio()" >
+    <source
+      src="{{mediaUrl}}"
+      (error)="onHtmlVideoError($event)"
+      type="video/mp4"
+    />
+  </video>
+</figure>

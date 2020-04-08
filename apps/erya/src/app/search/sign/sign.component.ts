@@ -1,4 +1,10 @@
-import { Component, Input } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  Input,
+  ViewChild
+} from '@angular/core';
 import { SignRecord, Transcoding } from '@edfu/api-interfaces';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
@@ -10,8 +16,17 @@ import { CDN_URI } from '../../constants';
   templateUrl: './sign.component.html'
 })
 export class SignComponent {
+  @ViewChild('videoSource') videoSource: ElementRef;
+
   public mediaUrl: string;
   private _sign: SignRecord;
+
+  isRatioVertical: boolean;
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.setRatio();
+  }
 
   constructor(
     private deviceService: DeviceDetectorService,
@@ -56,5 +71,17 @@ export class SignComponent {
     } else {
       return 1;
     }
+  }
+
+  setRatio() {
+    const isVideoVertical =
+      this.videoSource.nativeElement.videoHeight >
+      this.videoSource.nativeElement.videoWidth;
+    const isWindowHighest =
+      window.innerHeight / window.innerWidth >
+      this.videoSource.nativeElement.videoHeight /
+        this.videoSource.nativeElement.videoWidth;
+    this.isRatioVertical =
+      isVideoVertical && isWindowHighest;
   }
 }

@@ -21,7 +21,7 @@ export class SignComponent {
   public mediaUrl: string;
   private _sign: SignRecord;
 
-  isRatioVertical: boolean;
+  paddingTop: number;
 
   @HostListener('window:resize', ['$event'])
   onResize() {
@@ -77,11 +77,19 @@ export class SignComponent {
     const isVideoVertical =
       this.videoSource.nativeElement.videoHeight >
       this.videoSource.nativeElement.videoWidth;
-    const isWindowHighest =
-      window.innerHeight / window.innerWidth >
-      this.videoSource.nativeElement.videoHeight /
-        this.videoSource.nativeElement.videoWidth;
-    this.isRatioVertical =
-      isVideoVertical && isWindowHighest;
+    const isWindowHighest = window.innerHeight / window.innerWidth > 1;
+
+    if (isVideoVertical) {
+      const headerAndFooterHeight = 300;
+      const optimalPadding = 70;
+
+      if (isWindowHighest) {
+        this.paddingTop =
+          ((window.innerHeight - headerAndFooterHeight) / window.innerWidth) *
+          100;
+      } else {
+        this.paddingTop = optimalPadding;
+      }
+    }
   }
 }

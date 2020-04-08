@@ -1,4 +1,4 @@
-<figure  class="image" [ngClass]="{'is-16by9': !isRatioVertical, 'is-9by16': isRatioVertical}">
+<figure  class="image is-16by9" [ngStyle]="{'padding-top.%': paddingTop}">
   <video #videoSource autoplay loop playsinline [muted]="true" class="has-ratio" (loadedmetadata)="setRatio()" >
     <source
       src="{{mediaUrl}}"

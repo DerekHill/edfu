@@ -1,7 +1,7 @@
 import { HttpService, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-const BASE_URL = 'https://od-api.oxforddictionaries.com/api/v2/';
+const API_URL = 'https://od-api.oxforddictionaries.com/api/v2/';
 
 @Injectable()
 export class OxfordApiService {
@@ -11,12 +11,12 @@ export class OxfordApiService {
   ) {}
 
   getEntries(term: string): Promise<any> {
-    const url = `${BASE_URL}entries/en-gb/${term}?strictMatch=false`;
+    const url = `${API_URL}entries/en-gb/${term}?strictMatch=false`;
     return this.getResults(term, url);
   }
 
   getThesauruses(term: string): Promise<any> {
-    const url = `${BASE_URL}thesaurus/en-gb/${term}`;
+    const url = `${API_URL}thesaurus/en-gb/${term}`;
     return this.getResults(term, url);
   }
 

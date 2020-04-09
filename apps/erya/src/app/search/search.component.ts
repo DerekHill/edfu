@@ -199,7 +199,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.searchChars$.subscribe(input => {
       if (typeof input === 'string') {
-        this.oxIdsSearchRef.setVariables({
+        this.oxIdsSearchRef.refetch({
           searchString: input
         });
       } else if (typeof input === 'object') {
@@ -230,7 +230,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
     const newOxIdLower = oxId.toLowerCase();
     this.router.navigate([`/${SEARCH_COMPONENT_PATH}`, newOxIdLower]);
     this.searchInput.nativeElement.blur();
-    this.oxIdsSearchRef.setVariables({
+    this.oxIdsSearchRef.refetch({
       searchString: ''
     });
   }
@@ -240,7 +240,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
     if (senseId) {
       variables['senseId'] = senseId;
     }
-    this.sensesSearchRef.setVariables(variables);
+    this.sensesSearchRef.refetch(variables);
     this.focusSearch = false;
   }
 
@@ -250,7 +250,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
         relativeTo: this.route
       });
     }
-    this.signsSearchRef.setVariables({
+    this.signsSearchRef.refetch({
       senseId: sense.senseId
     });
     this.selectedSense = sense;

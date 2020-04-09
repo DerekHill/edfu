@@ -197,7 +197,7 @@ export class ContributeComponent implements OnInit, OnDestroy {
   }
 
   onSearchButtonPress(searchString: string) {
-    this.sensesFromApiSearchRef.setVariables({ searchString: searchString });
+    this.sensesFromApiSearchRef.refetch({ searchString: searchString });
   }
 
   async onSubmit() {

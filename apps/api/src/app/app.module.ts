@@ -16,6 +16,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { AuthController } from './auth/auth.controller';
 import { TranscodeModule } from './transcode/transcode.module';
+import { SPA_DIR } from './config/spa-version';
 
 const CONFIG_CONFIG =
   process.env.TRAVIS === 'true'
@@ -42,7 +43,7 @@ const imports = [
 if (environment.production) {
   imports.push(
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', '..', '..', 'dist/apps/erya'),
+      rootPath: join(__dirname, '..', '..', '..', SPA_DIR),
       exclude: ['/graphql*']
     })
   );

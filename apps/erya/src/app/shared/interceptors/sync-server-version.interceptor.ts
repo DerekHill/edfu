@@ -38,7 +38,6 @@ export class SyncServerVersionInterceptor implements HttpInterceptor {
             remoteVersion === NO_VERSION_FOUND ||
             localVersion === NO_VERSION_FOUND
           ) {
-            console.log(r);
             return r;
           }
 

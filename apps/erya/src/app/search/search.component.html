@@ -30,7 +30,10 @@
                 autoActiveFirstOption
                 (optionSelected)="onOxIdSelectViaDropdown($event.option.value)"
               >
-                <mat-option *ngFor="let oxId of oxIds$ | async" [value]="oxId">
+                <mat-option
+                  *ngFor="let oxId of oxIdsBs$ | async"
+                  [value]="oxId"
+                >
                   {{ oxId | removeUnderscores }}
                 </mat-option>
               </mat-autocomplete>
@@ -70,7 +73,7 @@
           </div>
           <div *ngSwitchCase="'moreThanOne'">
             <edfu-sense-selection
-              [senses]="senses$ | async"
+              [senses]="sensesBs$ | async"
               (senseEmitter)="onSenseSelect($event, true)"
             ></edfu-sense-selection>
           </div>

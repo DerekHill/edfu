@@ -1,3 +1,4 @@
+// Use `query` instead of `watchQuery` because of https://github.com/apollographql/apollo-feature-requests/issues/25
 import {
   Component,
   OnInit,
@@ -8,11 +9,11 @@ import {
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { startWith } from 'rxjs/operators';
 import gql from 'graphql-tag';
-import { Apollo, QueryRef } from 'apollo-angular';
+import { Apollo } from 'apollo-angular';
 import { HydratedSense, SenseSignDtoInterface } from '@edfu/api-interfaces';
-import { ApolloQueryResult, WatchQueryOptions } from 'apollo-client';
+import { ApolloQueryResult } from 'apollo-client';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 import { SenseArrangerService } from './sense-arranger/sense-arranger.service';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
@@ -20,24 +21,12 @@ import { SEARCH_COMPONENT_PATH } from '../constants';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
-interface OxIdSearchVariables {
-  searchString?: string;
-}
-
 interface OxIdsResult {
   oxIds: string[];
 }
 
-interface SenseSearchVariables {
-  oxId: string;
-}
-
 interface SensesResult {
   senses: HydratedSense[];
-}
-
-interface SignSearchVariables {
-  senseId: string;
 }
 
 interface SignsResult {
@@ -58,14 +47,8 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
   searchFormControl = new FormControl();
   searchChars$: Observable<string>;
 
-  oxIdsSearchRef: QueryRef<OxIdsResult, OxIdSearchVariables>;
-  oxIds$: Observable<string[]>;
-
-  sensesSearchRef: QueryRef<SensesResult, SenseSearchVariables>;
-  senses$: Observable<HydratedSense[]>;
-
-  signsSearchRef: QueryRef<SignsResult, SignSearchVariables>;
-  signs$: Observable<SenseSignDtoInterface[]>;
+  oxIdsBs$: BehaviorSubject<string[]>;
+  sensesBs$: BehaviorSubject<HydratedSense[]>;
   signsBs$: BehaviorSubject<SenseSignDtoInterface[]>;
 
   selectedSense: HydratedSense;
@@ -76,6 +59,49 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public senseCount = SenseCount.zero;
 
+  OxIdSearchQuery = gql`
+    query OxIdSearchQuery($searchString: String! = "") {
+      oxIds(searchString: $searchString, filter: true)
+    }
+  `;
+
+  SensesQuery = gql`
+    query SensesQuery($oxId: String! = "", $senseId: String! = "") {
+      senses(oxId: $oxId, filter: true, senseId: $senseId) {
+        oxId
+        homographC
+        ownEntryOxId
+        senseId
+        lexicalCategory
+        apiSenseIndex
+        example
+        definition
+        associationType
+        similarity
+        signs {
+          _id
+        }
+      }
+    }
+  `;
+
+  SignsQuery = gql`
+    query SignsQuery($senseId: String! = "") {
+      signs(senseId: $senseId) {
+        senseId
+        signId
+        sign {
+          _id
+          mnemonic
+          s3KeyOrig
+          transcodings {
+            s3Key
+            size
+          }
+        }
+      }
+    }
+  `;
   @ViewChild('search_input') searchInput: any;
 
   constructor(
@@ -101,82 +127,11 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
-    this.signsBs$ = new BehaviorSubject(null);
+    this.oxIdsBs$ = new BehaviorSubject([]);
+    this.sensesBs$ = new BehaviorSubject([]);
+    this.signsBs$ = new BehaviorSubject([]);
 
     this.searchChars$ = this.searchFormControl.valueChanges.pipe(startWith(''));
-
-    const OxIdSearchQuery = gql`
-      query OxIdSearchQuery($searchString: String! = "") {
-        oxIds(searchString: $searchString, filter: true)
-      }
-    `;
-
-    this.oxIdsSearchRef = this.apollo.watchQuery<
-      OxIdsResult,
-      OxIdSearchVariables
-    >({
-      query: OxIdSearchQuery,
-      context: { method: 'GET' }
-    });
-
-    this.oxIds$ = this.oxIdsSearchRef.valueChanges.pipe(
-      map((res: ApolloQueryResult<OxIdsResult>) => res.data.oxIds)
-    );
-
-    const SensesQuery = gql`
-      query SensesQuery($oxId: String! = "", $senseId: String! = "") {
-        senses(oxId: $oxId, filter: true, senseId: $senseId) {
-          oxId
-          homographC
-          ownEntryOxId
-          senseId
-          lexicalCategory
-          apiSenseIndex
-          example
-          definition
-          associationType
-          similarity
-          signs {
-            _id
-          }
-        }
-      }
-    `;
-
-    // Probably better way of avoiding error on initial subscription than setting defaults which get sent to the server
-    this.sensesSearchRef = this.apollo.watchQuery<
-      SensesResult,
-      SenseSearchVariables
-    >({
-      query: SensesQuery,
-      context: { method: 'GET' }
-    });
-
-    const SignsQuery = gql`
-      query SignsQuery($senseId: String! = "") {
-        signs(senseId: $senseId) {
-          senseId
-          signId
-          sign {
-            _id
-            mnemonic
-            s3KeyOrig
-            transcodings {
-              s3Key
-              size
-            }
-          }
-        }
-      }
-    `;
-
-    this.signsSearchRef = this.apollo.watchQuery<
-      SignsResult,
-      SignSearchVariables
-    >({
-      query: SignsQuery,
-      context: { method: 'GET' }
-    });
 
     this.route.paramMap.subscribe((params: ParamMap) => {
       const oxIdLower = params.get('oxIdLower');
@@ -187,27 +142,20 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     });
 
-    this.senses$ = this.sensesSearchRef.valueChanges.pipe(
-      map((res: ApolloQueryResult<SensesResult>) => res.data.senses),
-      map(senses => this.senseArranger.sortAndFilter(senses))
-    );
-
-    this.signs$ = this.signsSearchRef.valueChanges.pipe(
-      map((res: ApolloQueryResult<SignsResult>) => res.data.signs),
-      map(signs => this.filterOutDeletedSigns(signs))
-    );
-
     this.searchChars$.subscribe(input => {
-      if (typeof input === 'string') {
-        this.oxIdsSearchRef.refetch({
-          searchString: input
+      this.apollo
+        .query({
+          query: this.OxIdSearchQuery,
+          context: { method: 'GET' },
+          variables: { searchString: input }
+        })
+        .toPromise()
+        .then((res: ApolloQueryResult<OxIdsResult>) => {
+          this.oxIdsBs$.next(res.data.oxIds);
         });
-      } else if (typeof input === 'object') {
-        //   Do nothing
-      }
     });
 
-    this.senses$.subscribe((senses: HydratedSense[]) => {
+    this.sensesBs$.subscribe((senses: HydratedSense[]) => {
       if (senses.length > 1) {
         this.senseCount = SenseCount.moreThanOne;
       }
@@ -215,10 +163,6 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
         this.senseCount = SenseCount.one;
         this.onSenseSelect(senses[0]);
       }
-    });
-
-    this.signs$.subscribe(signs => {
-      this.signsBs$.next(signs);
     });
   }
 
@@ -230,18 +174,24 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
     const newOxIdLower = oxId.toLowerCase();
     this.router.navigate([`/${SEARCH_COMPONENT_PATH}`, newOxIdLower]);
     this.searchInput.nativeElement.blur();
-    this.oxIdsSearchRef.refetch({
-      searchString: ''
-    });
   }
 
   onVariablesSelectViaRouter(oxId: string, senseId?: string) {
+    this.focusSearch = false;
     const variables = { oxId: oxId };
     if (senseId) {
       variables['senseId'] = senseId;
     }
-    this.sensesSearchRef.refetch(variables);
-    this.focusSearch = false;
+    this.apollo
+      .query({
+        query: this.SensesQuery,
+        context: { method: 'GET' },
+        variables: variables
+      })
+      .toPromise()
+      .then((res: ApolloQueryResult<SensesResult>) => {
+        this.sensesBs$.next(this.senseArranger.sortAndFilter(res.data.senses));
+      });
   }
 
   onSenseSelect(sense: HydratedSense, updateUrl = false) {
@@ -250,9 +200,20 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
         relativeTo: this.route
       });
     }
-    this.signsSearchRef.refetch({
-      senseId: sense.senseId
-    });
+
+    this.apollo
+      .query({
+        query: this.SignsQuery,
+        context: { method: 'GET' },
+        variables: {
+          senseId: sense.senseId
+        }
+      })
+      .toPromise()
+      .then((res: ApolloQueryResult<SignsResult>) => {
+        this.signsBs$.next(this.filterOutDeletedSigns(res.data.signs));
+      });
+
     this.selectedSense = sense;
   }
 

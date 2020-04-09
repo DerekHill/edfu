@@ -19,6 +19,7 @@ import { AuthGuard } from './auth/auth.guard';
 import { DeviceDetectorModule } from 'ngx-device-detector';
 import { ResponseErrorInterceptor } from './shared/interceptors/response-error.interceptor';
 import { SEARCH_COMPONENT_PATH } from './constants';
+import { SyncServerVersionInterceptor } from './shared/interceptors/sync-server-version.interceptor';
 
 const appRoutes: Routes = [
   {
@@ -66,6 +67,11 @@ const appRoutes: Routes = [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ResponseErrorInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: SyncServerVersionInterceptor,
       multi: true
     }
   ],

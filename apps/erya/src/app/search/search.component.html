@@ -4,14 +4,14 @@
       <div class="columns is-centered">
         <div class="column is-two-thirds-desktop">
           <form>
-            <mat-form-field>
-              <mat-label>Search</mat-label>
+            <mat-form-field floatLabel="never">
+              <fa-icon matPrefix [icon]="['fas', 'search']"></fa-icon>
               <input
                 #search_input
                 type="text"
                 matInput
                 [formControl]="searchFormControl"
-                placeholder="Type here to search"
+                placeholder="Type word to start search"
                 [matAutocomplete]="auto"
               />
               <button
@@ -37,7 +37,6 @@
                   {{ oxId | removeUnderscores }}
                 </mat-option>
               </mat-autocomplete>
-              <fa-icon matSuffix [icon]="['fas', 'search']"></fa-icon>
             </mat-form-field>
           </form>
         </div>

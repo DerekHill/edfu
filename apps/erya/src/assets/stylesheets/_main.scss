@@ -9,24 +9,54 @@ mat-form-field {
 .sub-navbar {
   padding: 10px 0;
 
+  mat-form-field {
+    font-size: 20px;
+  }
+
+  .mat-form-field-prefix {
+    fa-icon {
+      color: $grey;
+    }
+  }
+
+  .mat-focused {
+    fa-icon {
+      color: $primary;
+    }
+  }
+
   .mat-form-field-flex {
     background-color: #ffffff;
-    padding: 5px;
+    padding: 5px 10px;
   }
 
-  .mat-form-field-appearance-legacy .mat-form-field-wrapper {
-    padding-bottom: 0;
+  .mat-form-field-prefix {
+    margin-right: 10px;
   }
 
-  .mat-form-field-appearance-legacy .mat-form-field-underline {
-    margin-bottom: -20px;
+  .mat-form-field-infix {
+    border-top: 0;
+    padding-left: 10px;
   }
 
-  .mat-form-field.mat-focused .mat-form-field-ripple {
-    background-color: #002147;
+  .mat-form-field-appearance-legacy {
+    .mat-form-field-underline {
+      bottom: 0;
+    }
+
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+    }
   }
-  .mat-form-field.mat-focused .mat-form-field-label {
-    color: #002147;
+
+  .mat-form-field.mat-focused {
+    .mat-form-field-ripple {
+      background-color: $info;
+    }
+
+    .mat-form-field-label {
+      color: $grey-light;
+    }
   }
 }
 

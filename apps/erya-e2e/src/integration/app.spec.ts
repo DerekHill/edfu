@@ -8,6 +8,6 @@ describe('erya', () => {
     cy.login('my-email@something.com', 'myPassword');
 
     // getGreeting().contains('Welcome to erya!');
-    getSearchBox().should('have.attr', 'placeholder', 'Type here to search');
+    getSearchBox().should('have.attr', 'placeholder', 'Type word to start search');
   });
 });

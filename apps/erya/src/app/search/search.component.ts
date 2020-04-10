@@ -218,6 +218,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   clearSearchField() {
+    this.searchFormControl.setValue('');
     this.router.navigate([`/${SEARCH_COMPONENT_PATH}`]);
   }
 

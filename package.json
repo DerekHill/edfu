@@ -70,7 +70,7 @@
     "apollo-cache-inmemory": "^1.6.5",
     "apollo-client": "^2.6.8",
     "apollo-link": "^1.2.11",
-    "apollo-link-error": "^1.1.12",
+    "apollo-link-error": "^1.1.13",
     "apollo-server-express": "^2.11.0",
     "aws-sdk": "^2.656.0",
     "bcryptjs": "^2.4.3",

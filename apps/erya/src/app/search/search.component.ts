@@ -20,6 +20,7 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { SEARCH_COMPONENT_PATH } from '../constants';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 interface OxIdsResult {
   oxIds: string[];
@@ -111,6 +112,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
     private route: ActivatedRoute,
     private router: Router,
     private cd: ChangeDetectorRef,
+    private deviceService: DeviceDetectorService,
     public library: FaIconLibrary
   ) {
     library.addIcons(faSearch);
@@ -225,7 +227,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnDestroy() {}
 
   ngAfterViewInit() {
-    if (this.focusSearch) {
+    if (this.focusSearch && this.deviceService.isDesktop()) {
       this.searchInput.nativeElement.focus();
       this.cd.detectChanges();
     } else {

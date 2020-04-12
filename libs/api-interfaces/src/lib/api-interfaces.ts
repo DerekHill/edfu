@@ -80,3 +80,9 @@ export interface VideoProperties {
 export interface Transcoding extends VideoProperties {
   s3Key: string;
 }
+
+export interface CreateUserDtoInterface {
+  readonly username: string;
+  readonly email: string;
+  password: string;
+}

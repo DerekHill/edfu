@@ -4,8 +4,13 @@ import { AuthService } from '../auth/auth.service';
 import { BasicUser } from '@edfu/api-interfaces';
 import { Observable } from 'rxjs';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faHome, faPlus, faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
-import { SEARCH_COMPONENT_PATH } from '../constants';
+import {
+  faHome,
+  faPlus,
+  faSignInAlt,
+  faSignOutAlt
+} from '@fortawesome/free-solid-svg-icons';
+import { SEARCH_COMPONENT_PATH, LOGIN_COMPONENT_PATH } from '../constants';
 
 @Component({
   selector: 'edfu-navbar',
@@ -14,6 +19,7 @@ import { SEARCH_COMPONENT_PATH } from '../constants';
 export class NavbarComponent {
   isMenuOpen = false;
   searchComponentPath = `/${SEARCH_COMPONENT_PATH}`;
+  loginComponentPath = `/${LOGIN_COMPONENT_PATH}`;
 
   currentUser$: Observable<BasicUser> = this.authService.currentUser$;
 

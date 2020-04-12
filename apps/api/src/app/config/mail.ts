@@ -3,7 +3,15 @@ import * as Mail from 'nodemailer/lib/mailer';
 
 let t;
 
-if (process.env.SENDGRID_USERNAME && process.env.SENDGRID_PASSWORD) {
+if (process.env.MAILGUN_SMTP_LOGIN && process.env.MAILGUN_SMTP_PASSWORD) {
+  t = createTransport({
+    service: 'Mailgun',
+    auth: {
+      user: process.env.MAILGUN_SMTP_LOGIN,
+      pass: process.env.MAILGUN_SMTP_PASSWORD
+    }
+  });
+} else if (process.env.SENDGRID_USERNAME && process.env.SENDGRID_PASSWORD) {
   t = createTransport({
     service: 'SendGrid',
     auth: {

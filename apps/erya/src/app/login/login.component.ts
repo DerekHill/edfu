@@ -8,6 +8,7 @@ import { AuthService } from '../auth/auth.service';
 import { first } from 'rxjs/operators';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
+import { SIGNUP_COMPONENT_PATH } from '../constants';
 
 @Component({
   selector: 'edfu-login',
@@ -19,6 +20,8 @@ export class LoginComponent implements OnInit {
   submitted = false;
   returnUrl: string;
   error = '';
+
+  signupComponentPath = `/${SIGNUP_COMPONENT_PATH}`;
 
   constructor(
     private formBuilder: FormBuilder,

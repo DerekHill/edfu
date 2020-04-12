@@ -3,7 +3,11 @@
 
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { BasicUser } from '@edfu/api-interfaces';
+import {
+  BasicUser,
+  CreateUserDtoInterface,
+  IResponse
+} from '@edfu/api-interfaces';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
@@ -24,9 +28,20 @@ export class AuthService {
     return this.currentUserBs$.value;
   }
 
+  signUp(user: CreateUserDtoInterface): Observable<any> {
+    const endpoint = `${environment.apiUri}/auth/register`;
+    return this.http.post<any>(endpoint, user).pipe(
+      map((res: IResponse) => {
+        console.log(res);
+        return res;
+      })
+    );
+  }
+
   login(email: string, password: string) {
+    const endpoint = `${environment.apiUri}/auth/login`;
     return this.http
-      .post<any>(`${environment.apiUri}/auth/login`, {
+      .post<any>(endpoint, {
         email,
         password
       })

@@ -18,7 +18,7 @@
                     />
                     <span class="icon is-small is-left">
                       <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
-    </span>
+                    </span>
                   </p>
                   <div
                     *ngIf="submitted && f.email.errors"
@@ -26,7 +26,7 @@
                   >
                     <p *ngIf="f.email.errors.required">Email is required</p>
                   </div>
-              </div>
+                </div>
 
                 <div class="field">
                   <p class="control has-icons-left">
@@ -41,7 +41,7 @@
                     />
                     <span class="icon is-small is-left">
                       <fa-icon [icon]="['fas', 'lock']"></fa-icon>
-    </span>
+                    </span>
                   </p>
                   <div
                     *ngIf="submitted && f.password.errors"
@@ -54,25 +54,30 @@
                 </div>
                 <div class="field">
                   <p class="control ">
-              <button
-                [disabled]="loading"
-                class="button is-primary is-fullwidth"
-              >
-                <span
-                  *ngIf="loading"
-                  class="spinner-border spinner-border-sm mr-1"
-                ></span>
-                Login
-              </button>
+                    <button
+                      [disabled]="loading"
+                      class="button is-primary is-fullwidth"
+                    >
+                      <span
+                        *ngIf="loading"
+                        class="spinner-border spinner-border-sm mr-1"
+                      ></span>
+                      Login
+                    </button>
                   </p>
-              <p *ngIf="error" class="help has-text-danger">
-                {{ error }}
-                </p>
-                </div></div>
+                  <p *ngIf="error" class="help has-text-danger">
+                    {{ error }}
+                  </p>
+                </div>
+              </div>
             </form>
-          </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 </section>
+Don't have an account?
+<a routerLink="{{ signupComponentPath }}">
+  Sign up
+</a>

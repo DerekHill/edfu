@@ -18,8 +18,13 @@ import { HttpErrorInterceptor } from './shared/interceptors/http-error.intercept
 import { AuthGuard } from './auth/auth.guard';
 import { DeviceDetectorModule } from 'ngx-device-detector';
 import { ResponseErrorInterceptor } from './shared/interceptors/response-error.interceptor';
-import { SEARCH_COMPONENT_PATH } from './constants';
+import {
+  SEARCH_COMPONENT_PATH,
+  LOGIN_COMPONENT_PATH,
+  SIGNUP_COMPONENT_PATH
+} from './constants';
 import { SyncServerVersionInterceptor } from './shared/interceptors/sync-server-version.interceptor';
+import { SignupComponent } from './login/signup.component';
 
 const appRoutes: Routes = [
   {
@@ -35,7 +40,8 @@ const appRoutes: Routes = [
     component: ContributeComponent,
     canActivate: [AuthGuard]
   },
-  { path: 'login', component: LoginComponent },
+  { path: LOGIN_COMPONENT_PATH, component: LoginComponent },
+  { path: SIGNUP_COMPONENT_PATH, component: SignupComponent },
   { path: '', redirectTo: `/${SEARCH_COMPONENT_PATH}`, pathMatch: 'full' },
   {
     path: '**',

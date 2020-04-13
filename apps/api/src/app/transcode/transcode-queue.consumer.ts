@@ -92,16 +92,16 @@ export class TranscodeQueueConsumer {
       }
     };
 
-    const promises = [];
+    const transcodings = [inputVideoTranscoding];
 
     for (const presetConfig of presetConfigs) {
-      promises.push(
-        this.transcodeWithPreset(s3KeyOrig, origVideoPath, presetConfig)
+      const transcoding = await this.transcodeWithPreset(
+        s3KeyOrig,
+        origVideoPath,
+        presetConfig
       );
+      transcodings.push(transcoding);
     }
-
-    const transcodings: Transcoding[] = await Promise.all(promises);
-    transcodings.push(inputVideoTranscoding);
 
     await fs.promises.unlink(origVideoPath);
 

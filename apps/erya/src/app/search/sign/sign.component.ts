@@ -37,17 +37,18 @@ export class SignComponent {
 
   @Input()
   set sign(sign: SignRecord) {
-    if (
-      sign &&
-      sign.transcodings &&
-      sign.transcodings.length &&
-      this.deviceService.isMobile()
-    ) {
-      const smallestTranscoding = sign.transcodings.sort(this.sortBySize)[0];
-      this.mediaUrl = this.generateMediaUrl(smallestTranscoding.s3Key);
+    let s3Key: string;
+    if (sign && sign.transcodings && sign.transcodings.length) {
+      const transcodings = sign.transcodings;
+      if (this.deviceService.isMobile()) {
+        s3Key = this._getMobileTranscoding(transcodings).s3Key;
+      } else {
+        s3Key = this._getDesktopTranscoding(transcodings).s3Key;
+      }
     } else {
-      this.mediaUrl = this.generateMediaUrl(sign.s3KeyOrig);
+      s3Key = sign.s3KeyOrig;
     }
+    this.mediaUrl = this.generateMediaUrl(s3Key);
     this._sign = sign;
   }
 
@@ -61,12 +62,32 @@ export class SignComponent {
     );
   }
 
+  _getMobileTranscoding(transcodings: Transcoding[]): Transcoding {
+    return transcodings.sort(this.sortByBitrate)[0];
+  }
+
+  _getDesktopTranscoding(transcodings: Transcoding[]): Transcoding {
+    const mp4Transcodings = transcodings.filter(transcoding =>
+      transcoding.s3Key.match(/\.mp4$/)
+    );
+
+    const biggestMp4Transcoding = mp4Transcodings
+      .sort(this.sortByBitrate)
+      .slice(-1)[0];
+
+    const biggestTranscoding = transcodings
+      .sort(this.sortByBitrate)
+      .slice(-1)[0];
+
+    return biggestMp4Transcoding || biggestTranscoding;
+  }
+
   private generateMediaUrl(key: string) {
     return `${CDN_URI}/${key}`;
   }
 
-  private sortBySize(a: Transcoding, b: Transcoding) {
-    if (a.size < b.size) {
+  private sortByBitrate(a: Transcoding, b: Transcoding) {
+    if (a.bitrate < b.bitrate) {
       return -1;
     } else {
       return 1;

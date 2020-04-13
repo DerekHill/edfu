@@ -137,9 +137,8 @@ export class AuthService {
         return !!savedUser;
       }
     } else {
-      throw new HttpException(
-        'LOGIN.EMAIL_CODE_NOT_VALID',
-        HttpStatus.FORBIDDEN
+      throw new Error(
+        `Error: emailVerificationModel not found for token: ${token}`
       );
     }
   }

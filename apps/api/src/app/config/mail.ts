@@ -20,15 +20,6 @@ if (
   // @ts-ignore. Host and port should be in the typings https://nodemailer.com/smtp/#examples
   t = createTransport(options);
   console.log('Created Mailgun transport');
-} else if (process.env.SENDGRID_USERNAME && process.env.SENDGRID_PASSWORD) {
-  t = createTransport({
-    service: 'SendGrid',
-    auth: {
-      user: process.env.SENDGRID_USERNAME,
-      pass: process.env.SENDGRID_PASSWORD
-    }
-  });
-  console.log('Created Sendgrid transport');
 } else if (
   process.env.MAILTRAP_SMTP_USERNAME &&
   process.env.MAILTRAP_SMTP_PASSWORD

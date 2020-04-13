@@ -86,7 +86,7 @@
     "graphql-tag": "^2.10.3",
     "mongoose": "^5.9.7",
     "nestjs-console": "^2.1.0",
-    "ngx-device-detector": "^1.4.1",
+    "ngx-device-detector": "^1.4.2",
     "nodemailer": "^6.4.6",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",

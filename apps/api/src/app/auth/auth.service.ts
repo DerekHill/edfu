@@ -103,10 +103,12 @@ export class AuthService {
           mailOptions,
           async (error: any, info: any) => {
             if (error) {
-              console.log('Message sent: %s', error);
+              console.log('Error sending message:');
+              console.log(error);
               return reject(false);
             }
-            console.log('Message sent: %s', info.messageId);
+            console.log('sendEmailVerification message sent:');
+            console.log(info);
             resolve(true);
           }
         );

@@ -28,12 +28,10 @@ export class SignupComponent implements OnInit {
   ngOnInit() {}
 
   registerUser() {
-    console.log(this.signupForm.value);
     this.authService
       .signUp(this.signupForm.value)
       .subscribe((res: IResponse) => {
         if (res.success) {
-          console.log(res);
           this.router.navigate([`/${LOGIN_COMPONENT_PATH}`]);
         } else {
           console.error(res);

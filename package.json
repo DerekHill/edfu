@@ -76,7 +76,7 @@
     "bcryptjs": "^2.4.3",
     "bull": "^3.13.0",
     "bull-arena": "^2.8.1",
-    "bulma": "^0.8.1",
+    "bulma": "^0.8.2",
     "class-transformer": "^0.2.3",
     "class-validator": "^0.11.1",
     "commander": "^4.1.1",

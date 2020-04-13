@@ -14,7 +14,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { ResponseSuccess, ResponseError } from '../common/dto/response.dto';
 import { UsersService } from '../users/users.service';
-import { IResponse } from '@edfu/api-interfaces';
+import { IResponse, PRODUCTION_BASE_URL } from '@edfu/api-interfaces';
 
 @Controller('auth')
 export class AuthController {
@@ -59,12 +59,15 @@ export class AuthController {
   }
 
   @Get('email/verify/:token')
-  public async verifyEmail(@Param() params): Promise<IResponse> {
+  public async verifyEmail(@Param() params): Promise<string> {
     try {
-      const isEmailVerified = await this.authService.verifyEmail(params.token);
-      return new ResponseSuccess('LOGIN.EMAIL_VERIFIED', isEmailVerified);
+      await this.authService.verifyEmail(params.token);
+      return `<p>Thank you for confirming your email.</p>
+              <p><a href="${PRODUCTION_BASE_URL}">Continue to site</a></p>`;
     } catch (error) {
-      return new ResponseError('LOGIN.ERROR', error);
+      console.error(error);
+      return `<p>We were not able to confirm your email.</p>
+              <p>Please contact us.</p>`;
     }
   }
 

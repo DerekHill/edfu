@@ -8,7 +8,7 @@ import {
   faHome,
   faPlus,
   faSignInAlt,
-  faSignOutAlt
+  faSignOutAlt, faUser
 } from '@fortawesome/free-solid-svg-icons';
 import { SEARCH_COMPONENT_PATH, LOGIN_COMPONENT_PATH } from '../constants';
 
@@ -28,7 +28,7 @@ export class NavbarComponent {
     private authService: AuthService,
     public library: FaIconLibrary
   ) {
-    library.addIcons(faSignInAlt, faSignOutAlt, faHome, faPlus);
+    library.addIcons(faSignInAlt, faSignOutAlt, faHome, faPlus, faUser);
   }
 
   toggleNavbar() {

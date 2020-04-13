@@ -35,16 +35,37 @@
           </a>
         </div>
       </div>
-      <a
-        *ngIf="currentUser$ | async; else logIn"
-        class="navbar-item"
-        (click)="logout()"
+      <div
+        class="navbar-item has-dropdown is-hoverable"
+        *ngIf="currentUser$ | async as user; else logIn"
       >
-        <span class="icon">
-          <fa-icon [icon]="['fas', 'sign-out-alt']"></fa-icon>
-        </span>
-        <span>Logout</span>
-      </a>
+        <a class="navbar-link">
+          <span class="icon">
+            <fa-icon [icon]="['fas', 'user']"></fa-icon>
+          </span>
+          <span>{{ user.username }}</span>
+        </a>
+
+        <div class="navbar-dropdown is-right">
+          <a class="navbar-item" (click)="logout()">
+            <span class="icon">
+              <fa-icon [icon]="['fas', 'sign-out-alt']"></fa-icon>
+            </span>
+            <span>Logout</span>
+          </a>
+        </div>
+      </div>
+      <!--      <span class="navbar-item" *ngIf="currentUser$ | async as user"> {{user.username}} </span>-->
+      <!--      <a-->
+      <!--        *ngIf="currentUser$ | async; else logIn"-->
+      <!--        class="navbar-item"-->
+      <!--        (click)="logout()"-->
+      <!--      >-->
+      <!--        <span class="icon">-->
+      <!--          <fa-icon [icon]="['fas', 'sign-out-alt']"></fa-icon>-->
+      <!--        </span>-->
+      <!--        <span>Logout</span>-->
+      <!--      </a>-->
 
       <ng-template #logIn>
         <a class="navbar-item" (click)="navigateTo(loginComponentPath)">

@@ -155,7 +155,7 @@ describe('TranscodeService', () => {
       const job = createBullJob(s3KeyOrig);
       const res = await service.transcode(job);
       expect(res.length).toBe(4);
-    });
+    }, 30000);
   });
 
   describe('addTranscodingsToSet()', () => {

@@ -125,7 +125,7 @@ export class AuthService {
 
   async verifyEmail(token: string): Promise<boolean> {
     const emailVerif = await this.emailVerificationModel.findOne({
-      emailToken: token
+      token: token
     });
     if (emailVerif && emailVerif.email) {
       const userFromDb = await this.usersService.findByEmail(emailVerif.email);

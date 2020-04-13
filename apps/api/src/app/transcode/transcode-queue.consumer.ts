@@ -22,15 +22,31 @@ const TEMP_DIR = './tmp';
 
 const FORMAT_EXTENSION = 'mp4';
 
-// https://www.dacast.com/blog/video-transcoding-service-mobile-bitrate/
-function mediumPreset(command: ffmpeg.FfmpegCommand) {
-  command
-    .format(FORMAT_EXTENSION)
-    .videoCodec('libx264')
-    .videoBitrate(900)
-    .size('480x?')
-    .outputOptions(['-movflags faststart', '-strict -2']); // `-strict -2` for ffmpeg version 2.8.15 on Travis where aac audio is experimental
+interface PresetConfig {
+  name: string;
+  longEdgePixels: number;
+  bitrate: number;
 }
+
+// https://support.google.com/youtube/answer/2853702
+// https://stackoverflow.com/a/24199025/1450420
+const presetConfigs: PresetConfig[] = [
+  {
+    name: '360p',
+    longEdgePixels: 640,
+    bitrate: 750
+  },
+  {
+    name: '480p',
+    longEdgePixels: 854,
+    bitrate: 1000
+  },
+  {
+    name: '720p',
+    longEdgePixels: 1280,
+    bitrate: 2500
+  }
+];
 
 @Processor(TRANSCODE_QUEUE_NAME)
 export class TranscodeQueueConsumer {
@@ -64,16 +80,47 @@ export class TranscodeQueueConsumer {
 
     await fs.promises.writeFile(origVideoPath, origFile);
 
-    const newKey = this._appendToName(s3KeyOrig, 1);
+    const inputVideoProps = await this._getSummaryStatsAndLog(
+      origVideoPath,
+      `${s3KeyOrig} input stats:`
+    );
+
+    const inputVideoTranscoding: Transcoding = {
+      ...inputVideoProps,
+      ...{
+        s3Key: s3KeyOrig
+      }
+    };
+
+    const promises = [];
+
+    for (const presetConfig of presetConfigs) {
+      promises.push(
+        this.transcodeWithPreset(s3KeyOrig, origVideoPath, presetConfig)
+      );
+    }
+
+    const transcodings: Transcoding[] = await Promise.all(promises);
+    transcodings.push(inputVideoTranscoding);
+
+    await fs.promises.unlink(origVideoPath);
+
+    await this._addTranscodingsToSet(s3KeyOrig, transcodings);
+
+    return transcodings;
+  }
+
+  private async transcodeWithPreset(
+    s3KeyOrig: string,
+    origVideoPath: string,
+    presetConfig: PresetConfig
+  ): Promise<Transcoding> {
+    const newKey = this._appendToName(s3KeyOrig, presetConfig.name);
 
     const newVideoPath = path.join(TEMP_DIR, newKey);
 
-    await this.runFfmpeg(origVideoPath, newVideoPath);
+    await this.runFfmpeg(origVideoPath, newVideoPath, presetConfig);
 
-    const inputVideoProps = await this._getSummaryStatsAndLog(
-      origVideoPath,
-      `${s3KeyOrig} input:`
-    );
     const ouputVideoProps = await this._getSummaryStatsAndLog(
       newVideoPath,
       `${newKey} output:`
@@ -83,27 +130,33 @@ export class TranscodeQueueConsumer {
 
     await this.s3Service.upload(newVideoFile, newKey);
 
-    await fs.promises.unlink(origVideoPath);
     await fs.promises.unlink(newVideoPath);
 
-    const transcodings = [
-      {
-        ...inputVideoProps,
-        ...{
-          s3Key: s3KeyOrig
-        }
-      },
-      {
-        ...ouputVideoProps,
-        ...{
-          s3Key: newKey
-        }
+    return {
+      ...ouputVideoProps,
+      ...{
+        s3Key: newKey
       }
-    ];
+    };
+  }
 
-    await this._addTranscodingsToSet(s3KeyOrig, transcodings);
+  private async generatePresetFn(
+    presetConfig: PresetConfig,
+    inputVideoPath: string
+  ) {
+    const isLandscape = await this.isLandscape(inputVideoPath);
 
-    return transcodings;
+    const size = isLandscape
+      ? `${presetConfig.longEdgePixels}x?`
+      : `?x${presetConfig.longEdgePixels}`;
+    return (command: ffmpeg.FfmpegCommand) => {
+      command
+        .format(FORMAT_EXTENSION)
+        .videoCodec('libx264')
+        .videoBitrate(presetConfig.bitrate)
+        .size(size)
+        .outputOptions(['-movflags faststart', '-strict -2']); // `-strict -2` for ffmpeg version 2.8.15 on Travis where aac audio is experimental
+    };
   }
 
   @OnQueueError()
@@ -123,10 +176,16 @@ export class TranscodeQueueConsumer {
     );
   }
 
-  async runFfmpeg(inputPath: string, outputPath: string): Promise<void> {
+  async runFfmpeg(
+    inputPath: string,
+    outputPath: string,
+    presetConfig: PresetConfig
+  ): Promise<void> {
+    const preset = await this.generatePresetFn(presetConfig, inputPath);
+
     return new Promise((resolve, reject) => {
       ffmpeg(inputPath)
-        .preset(mediumPreset)
+        .preset(preset)
         .on('start', commandLine => {
           console.log('start ffmpeg with command: ' + commandLine);
         })
@@ -210,6 +269,12 @@ export class TranscodeQueueConsumer {
   _appendToName(filename: string, toAppend: string | number): string {
     const bareName = path.parse(filename).name;
     return `${bareName}_${toAppend}.${FORMAT_EXTENSION}`;
+  }
+
+  private async isLandscape(filePath: string) {
+    const probe = await this.ffprobe(filePath);
+    const summary = this.summarizeFfprobe(probe);
+    return summary.width > summary.height;
   }
 
   private humanFileSize(bytes: number) {

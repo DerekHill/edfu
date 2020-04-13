@@ -136,8 +136,13 @@ describe('TranscodeService', () => {
   describe('runFfmpeg()', () => {
     it('transcodes video from one path to another', async () => {
       const outputPath = path.resolve(__dirname, './test/output.mp4');
+      const presetConfig = {
+        name: '360p',
+        longEdgePixels: 640,
+        bitrate: 750
+      };
       return expect(
-        service.runFfmpeg(TEST_VIDEO_PATH, outputPath)
+        service.runFfmpeg(TEST_VIDEO_PATH, outputPath, presetConfig)
       ).resolves.toBeUndefined();
     });
   });
@@ -149,7 +154,7 @@ describe('TranscodeService', () => {
 
       const job = createBullJob(s3KeyOrig);
       const res = await service.transcode(job);
-      expect(res.length).toBe(2);
+      expect(res.length).toBe(4);
     });
   });
 

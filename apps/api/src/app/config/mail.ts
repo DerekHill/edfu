@@ -3,14 +3,23 @@ import * as Mail from 'nodemailer/lib/mailer';
 
 let t;
 
-if (process.env.MAILGUN_SMTP_LOGIN && process.env.MAILGUN_SMTP_PASSWORD) {
-  t = createTransport({
-    service: 'Mailgun',
+if (
+  process.env.MAILGUN_SMTP_SERVER &&
+  process.env.MAILGUN_SMTP_PORT &&
+  process.env.MAILGUN_SMTP_LOGIN &&
+  process.env.MAILGUN_SMTP_PASSWORD
+) {
+  const options = {
+    host: process.env.MAILGUN_SMTP_SERVER,
+    port: process.env.MAILGUN_SMTP_PORT,
+    secure: true,
     auth: {
       user: process.env.MAILGUN_SMTP_LOGIN,
       pass: process.env.MAILGUN_SMTP_PASSWORD
     }
-  });
+  };
+  // @ts-ignore. Host and port should be in the typings https://nodemailer.com/smtp/#examples
+  t = createTransport(options);
 } else if (process.env.SENDGRID_USERNAME && process.env.SENDGRID_PASSWORD) {
   t = createTransport({
     service: 'SendGrid',

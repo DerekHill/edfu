@@ -14,6 +14,7 @@ import { transporter } from '../config/mail';
 import * as bcrypt from 'bcryptjs';
 import { ForgottenPassword } from './interfaces/forgottenpassword.interface';
 import { BasicUser } from '@edfu/api-interfaces';
+import { HttpErrorMessages } from '@edfu/enums';
 
 const EMAIL_VERIFICATION_TIMEOUT_MINUTES = 1;
 
@@ -31,9 +32,12 @@ export class AuthService {
   async validateUser(email: string, password: string) {
     const userFromDb = await this.usersService.findByEmail(email);
     if (!userFromDb)
-      throw new HttpException('LOGIN.USER_NOT_FOUND', HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        HttpErrorMessages.LOGIN__USER_NOT_FOUND,
+        HttpStatus.NOT_FOUND
+      );
     // if (!userFromDb.emailConfirmed)
-    //   throw new HttpException('LOGIN.EMAIL_NOT_VERIFIED', HttpStatus.FORBIDDEN);
+    //   throw new HttpException(HttpErrorMessages.LOGIN__EMAIL_NOT_VERIFIED, HttpStatus.FORBIDDEN);
     const isValidPass = await bcrypt.compare(password, userFromDb.password);
     if (isValidPass) {
       const user: BasicUser = {
@@ -43,7 +47,10 @@ export class AuthService {
       };
       return user;
     } else {
-      throw new HttpException('LOGIN.ERROR', HttpStatus.UNAUTHORIZED);
+      throw new HttpException(
+        HttpErrorMessages.LOGIN__GENERIC_ERROR,
+        HttpStatus.UNAUTHORIZED
+      );
     }
   }
 
@@ -67,7 +74,7 @@ export class AuthService {
         EMAIL_VERIFICATION_TIMEOUT_MINUTES
     ) {
       throw new HttpException(
-        'LOGIN.EMAIL_SENT_RECENTLY',
+        HttpErrorMessages.LOGIN__EMAIL_SENT_RECENTLY,
         HttpStatus.INTERNAL_SERVER_ERROR
       );
     } else {
@@ -117,7 +124,7 @@ export class AuthService {
       return sent;
     } else {
       throw new HttpException(
-        'REGISTER.USER_NOT_REGISTERED',
+        HttpErrorMessages.REGISTRATION__USER_NOT_REGISTERED,
         HttpStatus.FORBIDDEN
       );
     }
@@ -146,7 +153,10 @@ export class AuthService {
   async sendEmailForgotPassword(host: string, email: string): Promise<boolean> {
     const userFromDb = await this.usersService.findByEmail(email);
     if (!userFromDb)
-      throw new HttpException('LOGIN.USER_NOT_FOUND', HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        HttpErrorMessages.LOGIN__USER_NOT_FOUND,
+        HttpStatus.NOT_FOUND
+      );
 
     const tokenModel = await this.createForgottenPasswordToken(email);
 
@@ -175,7 +185,7 @@ export class AuthService {
       return sent;
     } else {
       throw new HttpException(
-        'REGISTER.USER_NOT_REGISTERED',
+        HttpErrorMessages.REGISTRATION__USER_NOT_REGISTERED,
         HttpStatus.FORBIDDEN
       );
     }
@@ -193,7 +203,7 @@ export class AuthService {
         15
     ) {
       throw new HttpException(
-        'RESET_PASSWORD.EMAIL_SENDED_RECENTLY',
+        HttpErrorMessages.RESET_PASSWORD__EMAIL_SENT_RECENTLY,
         HttpStatus.INTERNAL_SERVER_ERROR
       );
     } else {
@@ -210,7 +220,7 @@ export class AuthService {
         return forgottenPasswordModel;
       } else {
         throw new HttpException(
-          'LOGIN.ERROR.GENERIC_ERROR',
+          HttpErrorMessages.LOGIN__GENERIC_ERROR,
           HttpStatus.INTERNAL_SERVER_ERROR
         );
       }

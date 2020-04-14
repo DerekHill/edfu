@@ -6,15 +6,18 @@ import {
   Request,
   Get,
   Body,
-  Param
+  Param,
+  HttpException,
+  HttpStatus
 } from '@nestjs/common';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { CreateUserDto } from '../users/dto/create-user.dto';
-import { ResponseSuccess, ResponseError } from '../common/dto/response.dto';
+import { ResponseSuccess } from '../common/dto/response.dto';
 import { UsersService } from '../users/users.service';
 import { IResponse, PRODUCTION_BASE_URL } from '@edfu/api-interfaces';
+import { HttpErrorMessages } from '@edfu/enums';
 
 @Controller('auth')
 export class AuthController {
@@ -51,10 +54,21 @@ export class AuthController {
       if (sent) {
         return new ResponseSuccess('REGISTRATION.USER_REGISTERED_SUCCESSFULLY');
       } else {
-        return new ResponseError('REGISTRATION.ERROR.MAIL_NOT_SENT');
+        throw new HttpException(
+          HttpErrorMessages.REGISTRATION__MAIL_NOT_SENT,
+          HttpStatus.FORBIDDEN
+        );
       }
     } catch (error) {
-      return new ResponseError('REGISTRATION.ERROR.GENERIC_ERROR', error);
+      console.error(error);
+      if (error instanceof HttpException) {
+        throw error;
+      } else {
+        throw new HttpException(
+          HttpErrorMessages.REGISTRATION__GENERIC_ERROR,
+          HttpStatus.FORBIDDEN
+        );
+      }
     }
   }
 
@@ -85,10 +99,16 @@ export class AuthController {
       if (isEmailSent) {
         return new ResponseSuccess('LOGIN.EMAIL_RESENT', null);
       } else {
-        return new ResponseError('REGISTRATION.ERROR.MAIL_NOT_SENT');
+        throw new HttpException(
+          HttpErrorMessages.REGISTRATION__MAIL_NOT_SENT,
+          HttpStatus.INTERNAL_SERVER_ERROR
+        );
       }
     } catch (error) {
-      return new ResponseError('LOGIN.ERROR.SEND_EMAIL', error);
+      throw new HttpException(
+        HttpErrorMessages.REGISTRATION__GENERIC_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
   }
 
@@ -105,10 +125,16 @@ export class AuthController {
       if (isEmailSent) {
         return new ResponseSuccess('LOGIN.EMAIL_RESENT', null);
       } else {
-        return new ResponseError('REGISTRATION.ERROR.MAIL_NOT_SENT');
+        throw new HttpException(
+          HttpErrorMessages.REGISTRATION__MAIL_NOT_SENT,
+          HttpStatus.INTERNAL_SERVER_ERROR
+        );
       }
     } catch (error) {
-      return new ResponseError('LOGIN.ERROR.SEND_EMAIL', error);
+      throw new HttpException(
+        HttpErrorMessages.REGISTRATION__GENERIC_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
   }
 }

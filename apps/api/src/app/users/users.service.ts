@@ -6,6 +6,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserDocument } from './interfaces/user.interface';
 import { USER_COLLECTION_NAME } from '../constants';
+import { HttpErrorMessages } from '@edfu/enums';
 
 const SALT_ROUNDS = 10;
 
@@ -32,13 +33,13 @@ export class UsersService {
         return userRegistered;
       } else {
         throw new HttpException(
-          'REGISTRATION.USER_ALREADY_REGISTERED',
+          HttpErrorMessages.REGISTRATION__USER_ALREADY_REGISTERED,
           HttpStatus.FORBIDDEN
         );
       }
     } else {
       throw new HttpException(
-        'REGISTRATION.MISSING_MANDATORY_PARAMETERS',
+        HttpErrorMessages.REGISTRATION__MISSING_MANDATORY_PARAMETERS,
         HttpStatus.FORBIDDEN
       );
     }

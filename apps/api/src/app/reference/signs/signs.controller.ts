@@ -5,12 +5,13 @@ import {
   UploadedFile,
   UseGuards,
   Body,
-  ValidationPipe
+  ValidationPipe,
+  HttpException,
+  HttpStatus
 } from '@nestjs/common';
 
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
-import { ResponseError } from '../../common/dto/response.dto';
 import { videoFilter, copyExtension } from './utils/utils';
 import { S3Service } from '../../s3/s3.service';
 import { MAX_UPLOAD_SIZE_BYTES, BasicUser } from '@edfu/api-interfaces';
@@ -22,6 +23,7 @@ import { Queue } from 'bull';
 import { TranscodeJobData } from '../../transcode/interfaces/transcode-job-data.interface';
 import { SignsService } from './signs.service';
 import { UsersService } from '../../users/users.service';
+import { HttpErrorMessages } from '@edfu/enums';
 
 @Controller('signs')
 export class SignsController {
@@ -68,7 +70,10 @@ export class SignsController {
 
       return { ...sign.toObject(), ...{ s3KeyOrig: s3Key } };
     } else {
-      return new ResponseError('SIGNS.ERROR.NO_FILE_ATTACHED');
+      throw new HttpException(
+        HttpErrorMessages.SIGNS__NO_FILE_ATTACHED,
+        HttpStatus.BAD_REQUEST
+      );
     }
   }
 }

@@ -10,6 +10,7 @@
             <input
               #searchString
               (keyup.enter)="onSearchButtonPress(searchString.value)"
+              (keyup.backspace)="clearSearch()"
               autofocus
               class="input is-info"
               placeholder="Enter word or phrase"
@@ -35,7 +36,7 @@
         <br />
         <div
           class="is-inline-block is-fullwidth-er"
-          *ngIf="(senses$ | async)?.length"
+          *ngIf="(senses$ | async)?.length && !showLoader; else preloader"
         >
           <form [formGroup]="signFormGroup" (ngSubmit)="onSubmit()">
             <p class="is-size-5 has-text-weight-medium has-text-info">
@@ -203,6 +204,22 @@
             </button>
           </form>
         </div>
+        <ng-template #preloader>
+          <div *ngIf="showLoader" class="preloader">
+            LOADING...
+          </div>
+
+          <div
+            class="has-text-info is-size-5 has-text-centered"
+            *ngIf="showMessage(searchString.value)"
+          >
+            Sorry
+            <span class="has-text-weight-medium"
+              >“{{ searchString.value }}”</span
+            >
+            is not found, please try something different
+          </div>
+        </ng-template>
       </div>
     </div>
   </div>

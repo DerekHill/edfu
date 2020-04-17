@@ -115,6 +115,8 @@ export class ContributeComponent implements OnInit, OnDestroy {
   private checkboxControl: FormArray;
 
   subscription: Subscription;
+  showLoader = false;
+  showNotFoundMessage = false;
 
   constructor(
     private apollo: Apollo,
@@ -147,16 +149,19 @@ export class ContributeComponent implements OnInit, OnDestroy {
     this.sensesFromApiSearchRef = this.apollo.watchQuery<
       SensesFromApiResult,
       SensesFromApiSearchVariables
-    >({
+      >({
       query: SensesFromApiQuery
     });
 
     this.senses$ = this.sensesFromApiSearchRef.valueChanges.pipe(
       map(
-        (res: ApolloQueryResult<SensesFromApiResult>) => res.data.sensesFromApi
+        (res: ApolloQueryResult<SensesFromApiResult>) => {
+          this.showLoader = res.loading
+          return res.data.sensesFromApi
+        }
       ),
       map(senses => this.senseArranger.sortAndFilter(senses, false))
-    );
+  );
 
     this.senses$.subscribe(senses => {
       this.checkboxControl.clear();
@@ -196,7 +201,13 @@ export class ContributeComponent implements OnInit, OnDestroy {
     this.cd.markForCheck();
   }
 
+  clearSearch() {
+    this.showNotFoundMessage = false;
+    this.sensesFromApiSearchRef.refetch({ searchString: '' });
+  }
+
   onSearchButtonPress(searchString: string) {
+    this.showNotFoundMessage = true;
     this.sensesFromApiSearchRef.refetch({ searchString: searchString });
   }
 
@@ -237,6 +248,11 @@ export class ContributeComponent implements OnInit, OnDestroy {
     const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  }
+
+
+  showMessage(searchValue) {
+    return searchValue && this.showNotFoundMessage && !this.showLoader
   }
 
   ngOnDestroy() {

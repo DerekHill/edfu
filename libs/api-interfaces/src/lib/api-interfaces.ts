@@ -86,3 +86,21 @@ export interface CreateUserDtoInterface {
   readonly email: string;
   password: string;
 }
+
+export interface FindLikeParams {
+  readonly userId?: ObjectId;
+  readonly signId?: ObjectId;
+  readonly senseId?: string;
+}
+
+export interface ManageLikeParams extends FindLikeParams {
+  readonly userId: ObjectId;
+  readonly signId: ObjectId;
+  readonly senseId?: string;
+}
+
+export interface LikeRecordWithoutId extends ManageLikeParams {
+  readonly userId: ObjectId;
+  readonly signId: ObjectId;
+  readonly senseId: string;
+}

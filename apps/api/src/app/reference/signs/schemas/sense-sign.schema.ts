@@ -17,3 +17,4 @@ export const SenseSignSchema = new mongoose.Schema({
 });
 
 SenseSignSchema.index({ senseId: 1, signId: 1 }, { unique: true });
+SenseSignSchema.index({ signId: 1 });

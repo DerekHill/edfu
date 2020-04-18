@@ -5,6 +5,8 @@ export const ENTRY_SENSE_COLLECTION_NAME = 'EntrySense';
 export const SENSE_COLLECTION_NAME = 'Sense';
 export const SENSE_SIGN_COLLECTION_NAME = 'SenseSign';
 export const SIGN_COLLECTION_NAME = 'Sign';
+export const LIKE_COLLECTION_NAME = 'Like';
+
 export const TF_MODEL_NAME = 'TfModel';
 export const EMAIL_VERIFICATION_COLLECTION_NAME = 'EmailVerification';
 export const USER_COLLECTION_NAME = 'User';

@@ -32,8 +32,6 @@ import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
 
 const DEFAULT_OXID = 'oxId';
 const DEFAULT_SENSE_ID = 'senseId';
-const DEFAULT_SIGN_ID = new ObjectId();
-const DEFAULT_USER_ID = new ObjectId();
 
 @Injectable()
 export class ReferenceTestSetupService {
@@ -89,6 +87,7 @@ export class ReferenceTestSetupService {
     return this.senseModel.create({ ...defaults, ...params });
   }
 
+  // Remove in favour of SignTestSetupService
   createSenseSign(params: any): Promise<SenseSignRecord> {
     const defaults = {
       userId: new ObjectId(),
@@ -98,10 +97,11 @@ export class ReferenceTestSetupService {
     return this.senseSignModel.create({ ...defaults, ...params });
   }
 
+  // Remove in favour of SignTestSetupService
   createSign(params: any): Promise<SignRecord> {
     const defaults = {
-      _id: DEFAULT_SIGN_ID,
-      userId: DEFAULT_USER_ID,
+      _id: new ObjectId(),
+      userId: new ObjectId(),
       mnemonic: 'remember me',
       s3KeyOrig: '1234.mp4'
     };

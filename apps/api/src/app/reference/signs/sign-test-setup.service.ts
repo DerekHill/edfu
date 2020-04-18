@@ -11,6 +11,7 @@ import {
 } from './interfaces/sense-sign.interface';
 import { SignDocument } from './interfaces/sign.interface';
 import { SignRecord, SenseSignRecordWithoutId } from '@edfu/api-interfaces';
+import { ObjectId } from 'bson';
 
 @Injectable()
 export class SignTestSetupService {
@@ -21,13 +22,22 @@ export class SignTestSetupService {
     private readonly signModel: Model<SignDocument>
   ) {}
 
-  createSenseSign(
-    senseSign: SenseSignRecordWithoutId
-  ): Promise<SenseSignRecord> {
-    return this.senseSignModel.create(senseSign);
+  createSenseSign(params: any): Promise<SenseSignRecord> {
+    const defaults = {
+      userId: new ObjectId(),
+      senseId: new ObjectId(),
+      signId: new ObjectId()
+    };
+    return this.senseSignModel.create({ ...defaults, ...params });
   }
 
-  createSign(sign: SignRecord): Promise<SignRecord> {
-    return this.signModel.create(sign);
+  createSign(params: any): Promise<SignRecord> {
+    const defaults = {
+      _id: new ObjectId(),
+      userId: new ObjectId(),
+      mnemonic: 'remember me',
+      s3KeyOrig: '1234.mp4'
+    };
+    return this.signModel.create({ ...defaults, ...params });
   }
 }

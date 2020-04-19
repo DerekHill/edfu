@@ -21,12 +21,24 @@ enum LexicalCategory {
   other
 }
 
+type LikeDto {
+  userId: ID!
+  senseId: ID!
+  signId: ID!
+}
+
+type Mutation {
+  createLikes(senseId: ID, signId: ID!): [LikeDto!]!
+  removeLikes(senseId: ID, signId: ID!): [LikeDto!]!
+}
+
 type Query {
   hello: String!
   oxIds(filter: Boolean = false, searchString: String!): [String!]!
   senses(senseId: String = "", filter: Boolean = false, oxId: String!): [SenseForEntryDto!]!
   signs(senseId: String!): [SenseSignDto!]!
   sensesFromApi(searchString: String!): [SenseForEntryDto!]!
+  likes(senseId: ID, signId: ID): [LikeDto!]!
 }
 
 type SenseForEntryDto {

@@ -17,6 +17,7 @@ import { UsersModule } from './users/users.module';
 import { AuthController } from './auth/auth.controller';
 import { TranscodeModule } from './transcode/transcode.module';
 import { SPA_DIR } from './config/spa-version';
+import { SocialModule } from './social/social.module';
 
 const CONFIG_CONFIG =
   process.env.TRAVIS === 'true'
@@ -32,12 +33,17 @@ const imports = [
   MongooseModule.forRoot(process.env.MONGODB_URI, MONGOOSE_OPTIONS),
   GraphQLModule.forRoot({
     autoSchemaFile: 'schema.gql',
-    context: ({ req }) => ({ req })
+    context: ({ req }) => ({ req }),
+    formatError: error => {
+      console.error('Error', error);
+      return error;
+    }
   }),
   OxfordApiModule,
   ReferenceModule,
   AuthModule,
-  UsersModule
+  UsersModule,
+  SocialModule
 ];
 
 if (environment.production) {

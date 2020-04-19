@@ -1,9 +1,20 @@
-<figure  class="image is-16by9" [ngStyle]="{'padding-top.%': paddingTop}">
-  <video #videoSource autoplay loop playsinline [muted]="true" class="has-ratio" (loadedmetadata)="setRatio()" >
+<figure class="image is-16by9" [ngStyle]="{ 'padding-top.%': paddingTop }">
+  <video
+    #videoSource
+    autoplay
+    loop
+    playsinline
+    [muted]="true"
+    class="has-ratio"
+    (loadedmetadata)="setRatio()"
+  >
     <source
-      src="{{mediaUrl}}"
+      src="{{ mediaUrl }}"
       (error)="onHtmlVideoError($event)"
       type="video/mp4"
     />
   </video>
 </figure>
+<button (click)="onLikeClick()">Like</button>
+<button (click)="onUnlikeClick()">Unlike</button>
+{{ likeCountBs$ | async }}

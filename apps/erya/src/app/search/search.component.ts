@@ -53,6 +53,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
   signsBs$: BehaviorSubject<SenseSignDtoInterface[]>;
 
   selectedSense: HydratedSense;
+  explicitlySelectedSense: HydratedSense;
 
   routeOxIdLower$: Observable<string>;
   currentOxIdLower: string;
@@ -196,8 +197,11 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
-  onSenseSelect(sense: HydratedSense, updateUrl = false) {
-    if (updateUrl) {
+  onSenseSelect(sense: HydratedSense, senseExplicitySelected = false) {
+    this.selectedSense = sense;
+
+    if (senseExplicitySelected) {
+      this.explicitlySelectedSense = sense;
       this.router.navigate([{ senseId: sense.senseId }], {
         relativeTo: this.route
       });
@@ -215,8 +219,6 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
       .then((res: ApolloQueryResult<SignsResult>) => {
         this.signsBs$.next(this.filterOutDeletedSigns(res.data.signs));
       });
-
-    this.selectedSense = sense;
   }
 
   clearSearchField() {

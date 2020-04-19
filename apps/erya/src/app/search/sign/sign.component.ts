@@ -153,7 +153,7 @@ export class SignComponent implements OnInit {
           this.likesBs$.next(res.data.createLikes);
         });
     } else {
-      // prompt user that they need to sign in to like / dislike
+      // prompt user that they need to sign in to like
     }
   }
 
@@ -173,7 +173,7 @@ export class SignComponent implements OnInit {
           this.likesBs$.next(res.data.removeLikes);
         });
     } else {
-      // prompt user that they need to sign in to like / dislike
+      // prompt user that they need to sign in to like
     }
   }
 

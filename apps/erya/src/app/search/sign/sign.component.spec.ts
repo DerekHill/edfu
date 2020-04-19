@@ -5,6 +5,8 @@ import { SignRecord, Transcoding } from '@edfu/api-interfaces';
 import { MatListModule } from '@angular/material/list';
 import { DeviceDetectorModule } from 'ngx-device-detector';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { GraphQLModule } from '../../graphql.module';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('SignComponent', () => {
   let component: SignComponent;
@@ -16,7 +18,9 @@ describe('SignComponent', () => {
       imports: [
         MatListModule,
         DeviceDetectorModule.forRoot(),
-        FontAwesomeModule
+        FontAwesomeModule,
+        GraphQLModule,
+        HttpClientModule
       ]
     }).compileComponents();
   }));

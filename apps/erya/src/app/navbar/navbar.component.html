@@ -55,17 +55,6 @@
           </a>
         </div>
       </div>
-      <!--      <span class="navbar-item" *ngIf="currentUser$ | async as user"> {{user.username}} </span>-->
-      <!--      <a-->
-      <!--        *ngIf="currentUser$ | async; else logIn"-->
-      <!--        class="navbar-item"-->
-      <!--        (click)="logout()"-->
-      <!--      >-->
-      <!--        <span class="icon">-->
-      <!--          <fa-icon [icon]="['fas', 'sign-out-alt']"></fa-icon>-->
-      <!--        </span>-->
-      <!--        <span>Logout</span>-->
-      <!--      </a>-->
 
       <ng-template #logIn>
         <a class="navbar-item" (click)="navigateTo(loginComponentPath)">

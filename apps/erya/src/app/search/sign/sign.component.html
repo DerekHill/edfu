@@ -1,20 +1,4 @@
-<figure class="image is-16by9" [ngStyle]="{ 'padding-top.%': paddingTop }">
-  <video
-    #videoSource
-    autoplay
-    loop
-    playsinline
-    [muted]="true"
-    class="has-ratio"
-    (loadedmetadata)="setRatio()"
-  >
-    <source
-      src="{{ mediaUrl }}"
-      (error)="onHtmlVideoError($event)"
-      type="video/mp4"
-    />
-  </video>
-</figure>
+<edfu-player [mediaUrl]="mediaUrl"></edfu-player>
 <button (click)="onLikeClick()">Like</button>
 <button (click)="onUnlikeClick()">Unlike</button>
 {{ likeCountBs$ | async }}

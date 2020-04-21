@@ -5,7 +5,7 @@ import {
   OnDestroy,
   AfterViewInit,
   ViewChild,
-  ChangeDetectorRef
+  ChangeDetectorRef, ElementRef
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -104,7 +104,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     }
   `;
-  @ViewChild('search_input') searchInput: any;
+  @ViewChild('search_input') searchInput: ElementRef;
 
   constructor(
     private apollo: Apollo,

@@ -1,4 +1,11 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ChangeDetectorRef,
+  ViewChild,
+  ElementRef
+} from '@angular/core';
 import { Apollo, QueryRef } from 'apollo-angular';
 import { Observable, Subscription } from 'rxjs';
 import gql from 'graphql-tag';
@@ -29,6 +36,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 const endpoint = `${environment.apiUri}/signs`;
 
@@ -98,6 +106,9 @@ function fileTypeValidator(): ValidatorFn {
   templateUrl: './contribute.component.html'
 })
 export class ContributeComponent implements OnInit, OnDestroy {
+  @ViewChild('searchString') searchStringValue: ElementRef;
+  @ViewChild('addedSign') addedSignEl: ElementRef;
+
   sensesFromApiSearchRef: QueryRef<
     SensesFromApiResult,
     SensesFromApiSearchVariables
@@ -118,12 +129,16 @@ export class ContributeComponent implements OnInit, OnDestroy {
   showLoader = false;
   showNotFoundMessage = false;
 
+  uploadedSign: string;
+  videoURL: SafeResourceUrl;
+
   constructor(
     private apollo: Apollo,
     private http: HttpClient,
     private senseArranger: SenseArrangerService,
     private fb: FormBuilder,
     private cd: ChangeDetectorRef,
+    private sanitizer: DomSanitizer,
     public library: FaIconLibrary
   ) {
     library.addIcons(
@@ -149,19 +164,17 @@ export class ContributeComponent implements OnInit, OnDestroy {
     this.sensesFromApiSearchRef = this.apollo.watchQuery<
       SensesFromApiResult,
       SensesFromApiSearchVariables
-      >({
+    >({
       query: SensesFromApiQuery
     });
 
     this.senses$ = this.sensesFromApiSearchRef.valueChanges.pipe(
-      map(
-        (res: ApolloQueryResult<SensesFromApiResult>) => {
-          this.showLoader = res.loading
-          return res.data.sensesFromApi
-        }
-      ),
+      map((res: ApolloQueryResult<SensesFromApiResult>) => {
+        this.showLoader = res.loading;
+        return res.data.sensesFromApi;
+      }),
       map(senses => this.senseArranger.sortAndFilter(senses, false))
-  );
+    );
 
     this.senses$.subscribe(senses => {
       this.checkboxControl.clear();
@@ -188,6 +201,10 @@ export class ContributeComponent implements OnInit, OnDestroy {
     if (event.target.files && event.target.files.length) {
       const file = event.target.files.item(0);
       this.fileToUpload = file;
+      this.videoURL = this.sanitizer.bypassSecurityTrustResourceUrl(
+        URL.createObjectURL(file)
+      );
+
       this.signFormGroup.controls.file.markAsTouched();
       this.signFormGroup.patchValue({
         file: file
@@ -207,6 +224,8 @@ export class ContributeComponent implements OnInit, OnDestroy {
   }
 
   onSearchButtonPress(searchString: string) {
+    this.resetForm();
+    this.uploadedSign = null;
     this.showNotFoundMessage = true;
     this.sensesFromApiSearchRef.refetch({ searchString: searchString });
   }
@@ -234,7 +253,13 @@ export class ContributeComponent implements OnInit, OnDestroy {
         formData.append('senseIds[]', senseId);
       }
       await this.http.post<any>(endpoint, formData).toPromise();
+
       this.uploadStatus = UploadStatus.success;
+      this.uploadedSign = this.searchStringValue.nativeElement.value;
+      this.resetInput();
+      setTimeout(() => {
+        this.addedSignEl.nativeElement.scrollIntoView({ behavior: 'smooth' });
+      }, 0);
     } catch (error) {
       this.uploadStatus = UploadStatus.error;
       throw error;
@@ -250,9 +275,27 @@ export class ContributeComponent implements OnInit, OnDestroy {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   }
 
-
   showMessage(searchValue) {
-    return searchValue && this.showNotFoundMessage && !this.showLoader
+    return searchValue && this.showNotFoundMessage && !this.showLoader;
+  }
+
+  resetForm() {
+    this.signFormGroup.reset();
+    this.fileToUpload = null;
+    this.uploadStatus = UploadStatus.none;
+  }
+
+  resetInput() {
+    this.sensesFromApiSearchRef.refetch({ searchString: '' });
+    this.searchStringValue.nativeElement.value = '';
+  }
+
+  resetStates() {
+    this.resetForm();
+    this.resetInput();
+    this.uploadedSign = null;
+    this.searchStringValue.nativeElement.focus();
+    this.showNotFoundMessage = false;
   }
 
   ngOnDestroy() {

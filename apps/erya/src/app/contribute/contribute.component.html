@@ -2,7 +2,7 @@
   <div class="container">
     <div class="columns is-centered content">
       <div class="column is-two-thirds-desktop">
-        <p class="is-size-5 has-text-info has-text-weight-medium">
+        <p class="is-size-4 has-text-info has-text-weight-medium">
           Contribute your sign
         </p>
         <div class="field has-addons">
@@ -36,174 +36,205 @@
         <br />
         <div
           class="is-inline-block is-fullwidth-er"
-          *ngIf="(senses$ | async)?.length && !showLoader; else preloader"
+          *ngIf="(senses$ | async)?.length && !showLoader || uploadedSign; else preloader"
         >
           <form [formGroup]="signFormGroup" (ngSubmit)="onSubmit()">
-            <p class="is-size-5 has-text-weight-medium has-text-info">
-              Add your video
-            </p>
-            <div class="file has-name is-fullwidth">
-              <label class="file-label">
-                <input
-                  class="file-input"
-                  type="file"
-                  name="resume"
-                  accept="video/mp4, video/quicktime, video/x-msvideo"
-                  (change)="onFileChange($event)"
-                />
-                <span class="file-cta">
-                  <span class="file-icon">
-                    <fa-icon [icon]="['fas', 'upload']"></fa-icon>
+            <div *ngIf="uploadStatus !== 'success'">
+              <p class="is-size-5 has-text-weight-medium has-text-info">
+                Add your video
+              </p>
+              <div class="file has-name is-fullwidth">
+                <label class="file-label">
+                  <input
+                    class="file-input"
+                    type="file"
+                    name="resume"
+                    accept="video/mp4, video/quicktime, video/x-msvideo"
+                    (change)="onFileChange($event)"
+                  />
+                  <span class="file-cta">
+                    <span class="file-icon">
+                      <fa-icon [icon]="['fas', 'upload']"></fa-icon>
+                    </span>
+                    <span class="file-label">
+                      Select video…
+                    </span>
                   </span>
-                  <span class="file-label">
-                    Select video…
+                  <span class="file-name">
+                    <span *ngIf="fileToUpload; else filePlaceholder">{{
+                      fileToUpload.name
+                    }}</span>
+                    <ng-template #filePlaceholder>None selected</ng-template>
                   </span>
-                </span>
-                <span class="file-name">
-                  <span *ngIf="fileToUpload; else filePlaceholder">{{
-                    fileToUpload.name
-                  }}</span>
-                  <ng-template #filePlaceholder>None selected</ng-template>
-                </span>
-              </label>
-            </div>
-            <div
-              *ngIf="
-                signFormGroup.controls.file.invalid &&
-                signFormGroup.controls.file.touched
-              "
-            >
-              <p
-                class="help"
-                *ngIf="signFormGroup.controls.file.errors.required"
+                </label>
+              </div>
+              <div
+                *ngIf="
+                  signFormGroup.controls.file.invalid &&
+                  signFormGroup.controls.file.touched
+                "
               >
-                Please add a video
-              </p>
-              <p
-                class="help is-danger"
-                *ngIf="signFormGroup.controls.file.errors.fileSize"
-              >
-                Video is too large. The maximum size is
-                {{ maxUploadSizeFriendly }}
-              </p>
-              <p
-                class="help is-danger"
-                *ngIf="signFormGroup.controls.file.errors.fileType"
-              >
-                Video is of wrong type. Supported video formats are
-                {{ supportedVideoFormats }}
-              </p>
-            </div>
-            <br />
-            <div *ngIf="senses$ | async as senses">
-              <div *ngIf="senses.length > 1">
-                <br />
-                <p class="title is-size-5 has-text-weight-medium has-text-info">
-                  “{{ searchString.value }}” has different senses. Tick all the
-                  senses which apply to this sign.
-                  <sup class="has-text-grey has-text-weight-light"
-                    >required</sup
-                  >
+                <p
+                  class="help"
+                  *ngIf="signFormGroup.controls.file.errors.required"
+                >
+                  Please add a video
                 </p>
-
-                <div class="columns is-multiline">
-                  <div
-                    class="column is-one-third sense-column is-half-desktop is-one-third-widescreen"
-                    *ngFor="let sense of senses; let i = index"
-                    formArrayName="senseIds"
+                <p
+                  class="help is-danger"
+                  *ngIf="signFormGroup.controls.file.errors.fileSize"
+                >
+                  Video is too large. The maximum size is
+                  {{ maxUploadSizeFriendly }}
+                </p>
+                <p
+                  class="help is-danger"
+                  *ngIf="signFormGroup.controls.file.errors.fileType"
+                >
+                  Video is of wrong type. Supported video formats are
+                  {{ supportedVideoFormats }}
+                </p>
+              </div>
+              <br />
+              <div *ngIf="senses$ | async as senses">
+                <div *ngIf="senses.length > 1">
+                  <br />
+                  <p
+                    class="title is-size-5 has-text-weight-medium has-text-info"
                   >
-                    <input
-                      type="checkbox"
-                      class="sense-input"
-                      [formControlName]="i"
-                      [id]="i"
-                    />
-                    <label class="box" [for]="i">
-                      <span
-                        ><span class="has-text-weight-bold">
-                          {{ sense.oxId | removeUnderscores }} </span
-                        ><span class="has-text-grey has-text-weight-medium">{{
-                          sense.lexicalCategory
-                        }}</span></span
-                      >
-                      <span
-                        *ngIf="sense.example"
-                        class="sense-text-padding has-text-grey is-italic"
-                        [innerHTML]="
-                          sense.example | highlightEntry: sense.ownEntryOxId
-                        "
-                      ></span>
-                      <span
-                        [ngClass]="{
-                          'sense-definition': sense.example,
-                          'sense-text-padding': !sense.example
-                        }"
-                      >
-                        {{ sense.definition }}</span
-                      >
-                    </label>
+                    “{{ searchString.value }}” has different senses. Tick all
+                    the senses which apply to this sign
+                    <sup class="has-text-grey has-text-weight-light"
+                      >required</sup
+                    >
+                  </p>
+
+                  <div class="columns is-multiline">
+                    <div
+                      class="column is-one-third sense-column is-half-desktop is-one-third-widescreen"
+                      *ngFor="let sense of senses; let i = index"
+                      formArrayName="senseIds"
+                    >
+                      <input
+                        type="checkbox"
+                        class="sense-input"
+                        [formControlName]="i"
+                        [id]="i"
+                      />
+                      <label class="box" [for]="i">
+                        <span
+                          ><span class="has-text-weight-bold">
+                            {{ sense.oxId | removeUnderscores }} </span
+                          ><span class="has-text-grey has-text-weight-medium">{{
+                            sense.lexicalCategory
+                          }}</span></span
+                        >
+                        <span
+                          *ngIf="sense.example"
+                          class="sense-text-padding has-text-grey is-italic"
+                          [innerHTML]="
+                            sense.example | highlightEntry: sense.ownEntryOxId
+                          "
+                        ></span>
+                        <span
+                          [ngClass]="{
+                            'sense-definition': sense.example,
+                            'sense-text-padding': !sense.example
+                          }"
+                        >
+                          {{ sense.definition }}</span
+                        >
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <br />
-            <p class="is-size-5 has-text-weight-medium has-text-info">
-              Short description to help people remember the sign
-              <sup class="has-text-grey has-text-weight-light">optional</sup>
-            </p>
+              <br />
+              <p class="is-size-5 has-text-weight-medium has-text-info">
+                Short description to help people remember the sign
+                <sup class="has-text-grey has-text-weight-light">optional</sup>
+              </p>
 
-            <div class="field">
-              <div class="control  is-expanded">
-                <input
-                  class="input"
-                  type="text"
-                  formControlName="mnemonic"
-                  placeholder="Enter description"
-                />
+              <div class="field">
+                <div class="control  is-expanded">
+                  <input
+                    class="input"
+                    type="text"
+                    formControlName="mnemonic"
+                    placeholder="Enter description"
+                  />
+                </div>
               </div>
+              <p class="has-text-grey-dark">
+                E.g. "open the curtains" describes the sign for "good morning"
+              </p>
+              <br />
             </div>
-            <p class="has-text-grey-dark">
-              E.g. "open the curtains" describes the sign for "good morning"
-            </p>
-            <br />
-            <button
-              class="is-pulled-right button is-primary is-fullwidth-mobile is-medium upload-sign-button"
-              type="submit"
-              [disabled]="signFormGroup.invalid"
-              [ngClass]="{
-                'is-primary':
-                  uploadStatus === 'none' ||
-                  uploadStatus === 'creating' ||
-                  uploadStatus === 'uploading',
-                'is-success': uploadStatus === 'success',
-                'is-danger': uploadStatus === 'error'
-              }"
-            >
-              <span class="icon" *ngIf="uploadStatus !== 'none'">
-                <i
-                  *ngIf="
-                    uploadStatus === 'uploading' || uploadStatus === 'creating'
-                  "
-                  class="loader"
-                ></i>
+            <div *ngIf="uploadStatus === 'success'"  #addedSign>
+              <p class="has-text-success is-size-5 has-text-weight-medium">
+                Sign “{{ uploadedSign }}” successfully uploaded
+              </p>
 
-                <fa-icon
-                  *ngIf="uploadStatus === 'success'"
-                  [icon]="['fas', 'check-circle']"
-                ></fa-icon>
-                <fa-icon
-                  *ngIf="uploadStatus === 'error'"
-                  [icon]="['fas', 'exclamation-circle']"
-                ></fa-icon>
-              </span>
-              <span *ngIf="uploadStatus === 'none'">Upload your sign</span>
-              <span *ngIf="uploadStatus === 'uploading'">Uploading...</span>
-              <span *ngIf="uploadStatus === 'creating'">Creating...</span>
-              <span *ngIf="uploadStatus === 'success'">Done! </span>
-              <span *ngIf="uploadStatus === 'error'">Something went wrong</span>
-            </button>
+              <edfu-player [mediaUrl]="videoURL"></edfu-player>
+              <p
+                *ngIf="signFormGroup.value.mnemonic"
+                class="has-text-grey has-text-centered"
+              >
+                {{ signFormGroup.value.mnemonic }}
+              </p>
+              <br />
+            </div>
+            <div class="buttons is-pulled-right is-fullwidth-mobile">
+              <button
+                class="button is-primary is-fullwidth-mobile is-medium upload-sign-button"
+                type="submit"
+                [disabled]="signFormGroup.invalid"
+                [ngClass]="{
+                  'is-primary':
+                    uploadStatus === 'none' ||
+                    uploadStatus === 'creating' ||
+                    uploadStatus === 'uploading',
+                  'is-success is-inverted is-done': uploadStatus === 'success',
+                  'is-danger': uploadStatus === 'error'
+                }"
+              >
+                <span class="icon" *ngIf="uploadStatus !== 'none'">
+                  <i
+                    *ngIf="
+                      uploadStatus === 'uploading' ||
+                      uploadStatus === 'creating'
+                    "
+                    class="loader"
+                  ></i>
+
+                  <fa-icon
+                    *ngIf="uploadStatus === 'success'"
+                    [icon]="['fas', 'check-circle']"
+                  ></fa-icon>
+                  <fa-icon
+                    *ngIf="uploadStatus === 'error'"
+                    [icon]="['fas', 'exclamation-circle']"
+                  ></fa-icon>
+                </span>
+                <span *ngIf="uploadStatus === 'none'">Upload your sign</span>
+                <span *ngIf="uploadStatus === 'uploading'">Uploading...</span>
+                <span *ngIf="uploadStatus === 'creating'">Creating...</span>
+                <span *ngIf="uploadStatus === 'success'">Done! </span>
+                <span *ngIf="uploadStatus === 'error'"
+                  >Something went wrong</span
+                >
+              </button>
+              <button
+                class="button is-primary is-medium is-fullwidth-mobile"
+                *ngIf="uploadStatus === 'success'"
+                (click)="resetStates()"
+              >
+                Upload another sign
+              </button>
+            </div>
           </form>
         </div>
+
         <ng-template #preloader>
           <div *ngIf="showLoader" class="preloader">
             LOADING...

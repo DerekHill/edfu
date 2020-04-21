@@ -7,6 +7,7 @@ import { DeviceDetectorModule } from 'ngx-device-detector';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { GraphQLModule } from '../../graphql.module';
 import { HttpClientModule } from '@angular/common/http';
+import { SharedModule } from '../../shared/shared.module';
 
 describe('SignComponent', () => {
   let component: SignComponent;
@@ -20,7 +21,8 @@ describe('SignComponent', () => {
         DeviceDetectorModule.forRoot(),
         FontAwesomeModule,
         GraphQLModule,
-        HttpClientModule
+        HttpClientModule,
+        SharedModule
       ]
     }).compileComponents();
   }));

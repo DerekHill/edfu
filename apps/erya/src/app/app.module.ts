@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { GraphQLModule } from './graphql.module';
 import { RouterModule, Routes } from '@angular/router';
 import { ContributeComponent } from './contribute/contribute.component';
@@ -63,6 +63,7 @@ const appRoutes: Routes = [
     BrowserModule,
     HttpClientModule,
     NoopAnimationsModule,
+    BrowserAnimationsModule,
     GraphQLModule,
     HotkeyModule.forRoot(),
     DeviceDetectorModule.forRoot()

@@ -1,0 +1,15 @@
+{{ likeCountBs$ | async }}
+<a
+  class="has-text-danger"
+  *ngIf="(likesBs$ | async).length > 0; else addLike"
+  (click)="onUnlikeClick()"
+  @pulseAnimation
+>
+  <fa-icon [icon]="['fas', 'heart']" size="lg"></fa-icon
+></a>
+<ng-template #addLike>
+  <a (click)="onLikeClick()" class="has-text-grey"
+    ><fa-icon [icon]="['far', 'heart']" size="lg"></fa-icon
+  ></a>
+</ng-template>
+

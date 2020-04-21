@@ -125,9 +125,10 @@ input.sense-input {
 }
 
 @media screen and (max-width: 768px), print {
-  .button.is-fullwidth-mobile {
+  .is-fullwidth-mobile {
     display: flex;
     width: 100%;
+    margin-right: 0 !important;
   }
 }
 
@@ -136,4 +137,9 @@ input.sense-input {
     border-bottom-color: $white;
     border-left-color: $white;
   }
+}
+
+.button.is-done[disabled] {
+  opacity: 1;
+  cursor: default;
 }

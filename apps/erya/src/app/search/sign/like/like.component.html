@@ -13,3 +13,31 @@
   ></a>
 </ng-template>
 
+<edfu-modal id="modal-sign-in">
+  <h3 class="title is-size-4 has-text-centered has-text-weight-medium">
+    Please login first
+  </h3>
+  <div class="field">
+    <p class="control ">
+      <a
+        class="is-fullwidth button is-primary"
+        routerLink="{{ loginComponentPath }}"
+      >
+        Login
+      </a>
+    </p>
+  </div>
+  <div class="field">
+    <p class="has-text-centered">Don't have an account?</p>
+  </div>
+  <div class="field">
+    <p class="control ">
+      <a
+        class="is-fullwidth button is-primary is-outlined"
+        routerLink="{{ signupComponentPath }}"
+      >
+        Sign up
+      </a>
+    </p>
+  </div>
+</edfu-modal>

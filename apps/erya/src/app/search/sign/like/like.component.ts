@@ -1,18 +1,23 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit
+} from '@angular/core';
 import {
   LikeRecordWithoutId
 } from '@edfu/api-interfaces';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faHeart as farHeart } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as fasHeart } from '@fortawesome/free-regular-svg-icons';
-
+import { CDN_URI, LOGIN_COMPONENT_PATH, SIGNUP_COMPONENT_PATH } from '../../../constants';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { ApolloQueryResult } from 'apollo-client';
 import { BehaviorSubject } from 'rxjs';
 import { AuthService } from '../../../auth/auth.service';
-import { pulseAnimation } from '../../../animations/pulse.animation';
+import {pulseAnimation} from '../../../animations/pulse.animation';
 import { query, transition, trigger, useAnimation } from '@angular/animations';
+import { ModalService } from '../../../shared/components/modal/modal.service';
 
 const GetLikesQuery = gql`
   query GetLikesQuery($signId: ID!) {
@@ -77,16 +82,20 @@ interface RemoveLikesResult {
   ]
 })
 export class LikeComponent implements OnInit {
+
   public likesBs$: BehaviorSubject<LikeRecordWithoutId[]>;
   public likeCountBs$: BehaviorSubject<number>;
 
   @Input() signId;
   @Input() sense;
+  signupComponentPath = `/${SIGNUP_COMPONENT_PATH}`;
+  loginComponentPath = `/${LOGIN_COMPONENT_PATH}`;
 
   constructor(
     private library: FaIconLibrary,
     private authService: AuthService,
-    private apollo: Apollo
+    private apollo: Apollo,
+    private modalService: ModalService
   ) {
     library.addIcons(farHeart, fasHeart);
   }
@@ -100,6 +109,8 @@ export class LikeComponent implements OnInit {
       this.setLikeCount(likes);
     });
   }
+
+
 
   getLikes() {
     this.apollo
@@ -132,6 +143,7 @@ export class LikeComponent implements OnInit {
           this.likesBs$.next(res.data.createLikes);
         });
     } else {
+      this.openModal('modal-sign-in')
     }
   }
 
@@ -151,6 +163,7 @@ export class LikeComponent implements OnInit {
           this.likesBs$.next(res.data.removeLikes);
         });
     } else {
+      this.openModal('modal-sign-in')
     }
   }
 
@@ -182,6 +195,10 @@ export class LikeComponent implements OnInit {
       (rv[x[key]] = rv[x[key]] || []).push(x);
       return rv;
     }, {});
+  }
+
+  openModal(id: string) {
+    this.modalService.open(id);
   }
 
 }

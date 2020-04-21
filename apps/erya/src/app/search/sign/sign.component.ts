@@ -1,7 +1,6 @@
 import {
   Component,
   ElementRef,
-  HostListener,
   Input,
   ViewChild,
   OnInit
@@ -73,14 +72,8 @@ export class SignComponent implements OnInit {
   private likesBs$: BehaviorSubject<LikeRecordWithoutId[]>;
   public likeCountBs$: BehaviorSubject<number>;
 
-  paddingTop: number;
-
   @Input() sense: HydratedSense;
 
-  @HostListener('window:resize', ['$event'])
-  onResize() {
-    this.setRatio();
-  }
 
   constructor(
     private deviceService: DeviceDetectorService,
@@ -242,26 +235,6 @@ export class SignComponent implements OnInit {
       return -1;
     } else {
       return 1;
-    }
-  }
-
-  setRatio() {
-    const isVideoVertical =
-      this.videoSource.nativeElement.videoHeight >
-      this.videoSource.nativeElement.videoWidth;
-    const isWindowHighest = window.innerHeight / window.innerWidth > 1;
-
-    if (isVideoVertical) {
-      const headerAndFooterHeight = 300;
-      const optimalPadding = 70;
-
-      if (isWindowHighest) {
-        this.paddingTop =
-          ((window.innerHeight - headerAndFooterHeight) / window.innerWidth) *
-          100;
-      } else {
-        this.paddingTop = optimalPadding;
-      }
     }
   }
 }

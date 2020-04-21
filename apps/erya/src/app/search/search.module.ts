@@ -14,9 +14,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { SharedModule } from '../shared/shared.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SenseSelectionComponent } from './sense-selection/sense-selection.component';
+import { LikeComponent } from './sign/like/like.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
-  declarations: [SearchComponent, SignComponent, SenseSelectionComponent],
+  declarations: [SearchComponent, SignComponent, SenseSelectionComponent, LikeComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -26,6 +28,7 @@ import { SenseSelectionComponent } from './sense-selection/sense-selection.compo
     MatInputModule,
     MatIconModule,
     MatButtonModule,
+    RouterModule,
     HotkeyModule,
     SharedModule,
     FontAwesomeModule

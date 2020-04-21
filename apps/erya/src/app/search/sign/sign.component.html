@@ -1,4 +1,4 @@
 <edfu-player [mediaUrl]="mediaUrl"></edfu-player>
-<button (click)="onLikeClick()">Like</button>
-<button (click)="onUnlikeClick()">Unlike</button>
-{{ likeCountBs$ | async }}
+<figure class="has-text-right has-likes">
+  <edfu-like [signId]="sign._id" [sense]="sense"></edfu-like>
+</figure>

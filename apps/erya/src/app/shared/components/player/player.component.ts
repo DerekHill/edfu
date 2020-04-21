@@ -3,8 +3,7 @@ import {
   ElementRef,
   HostListener,
   Input,
-  ViewChild,
-  OnInit
+  ViewChild
 } from '@angular/core';
 import { SafeResourceUrl } from '@angular/platform-browser';
 
@@ -12,7 +11,7 @@ import { SafeResourceUrl } from '@angular/platform-browser';
   selector: 'edfu-player',
   templateUrl: './player.component.html'
 })
-export class PlayerComponent implements OnInit {
+export class PlayerComponent {
   @ViewChild('videoSource') videoSource: ElementRef;
 
   paddingTop: number;
@@ -23,14 +22,6 @@ export class PlayerComponent implements OnInit {
   onResize() {
     this.setRatio();
   }
-
-  constructor(
-  ) {
-  }
-
-  ngOnInit() {
-  }
-
 
   onHtmlVideoError(event: { target: HTMLInputElement }) {
     throw new Error(

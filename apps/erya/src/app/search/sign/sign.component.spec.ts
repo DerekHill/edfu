@@ -8,6 +8,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { GraphQLModule } from '../../graphql.module';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from '../../shared/shared.module';
+import { LikeComponent } from './like/like.component';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('SignComponent', () => {
   let component: SignComponent;
@@ -15,13 +17,14 @@ describe('SignComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [SignComponent],
+      declarations: [SignComponent, LikeComponent],
       imports: [
         MatListModule,
         DeviceDetectorModule.forRoot(),
         FontAwesomeModule,
         GraphQLModule,
         HttpClientModule,
+        RouterTestingModule,
         SharedModule
       ]
     }).compileComponents();

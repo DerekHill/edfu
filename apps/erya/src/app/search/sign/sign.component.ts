@@ -21,77 +21,26 @@ import { ApolloQueryResult } from 'apollo-client';
 import { BehaviorSubject } from 'rxjs';
 import { AuthService } from '../../auth/auth.service';
 
-const GetLikesQuery = gql`
-  query GetLikesQuery($signId: ID!) {
-    likes(signId: $signId) {
-      userId
-      senseId
-    }
-  }
-`;
-
-const CreateLikesMutation = gql`
-  mutation CreateLikesMutation($signId: ID!, $senseId: ID) {
-    createLikes(signId: $signId, senseId: $senseId) {
-      userId
-      senseId
-    }
-  }
-`;
-
-const RemoveLikesMutation = gql`
-  mutation RemoveLikesMutation($signId: ID!, $senseId: ID) {
-    removeLikes(signId: $signId, senseId: $senseId) {
-      userId
-      senseId
-    }
-  }
-`;
-
-interface LikesResult {
-  likes: LikeRecordWithoutId[];
-}
-
-interface CreateLikesResult {
-  createLikes: LikeRecordWithoutId[];
-}
-
-interface RemoveLikesResult {
-  removeLikes: LikeRecordWithoutId[];
-}
-
 @Component({
   selector: 'edfu-sign',
   templateUrl: './sign.component.html'
 })
 export class SignComponent implements OnInit {
-  @ViewChild('videoSource') videoSource: ElementRef;
-
   public mediaUrl: string;
-  private _sign: SignRecord;
-  private likesBs$: BehaviorSubject<LikeRecordWithoutId[]>;
-  public likeCountBs$: BehaviorSubject<number>;
+  public _sign: SignRecord;
 
   @Input() sense: HydratedSense;
 
 
   constructor(
     private deviceService: DeviceDetectorService,
-    private library: FaIconLibrary,
     private authService: AuthService,
     private apollo: Apollo
   ) {
-    library.addIcons(faPlay);
   }
 
   ngOnInit() {
-    this.likesBs$ = new BehaviorSubject([]);
-    this.likeCountBs$ = new BehaviorSubject(null);
-    this.getLikes();
 
-    this.likesBs$.subscribe(likes => {
-      this.setLikeCount(likes);
-    });
   }
 
   @Input()
@@ -115,74 +64,6 @@ export class SignComponent implements OnInit {
     return this._sign;
   }
 
-  getLikes() {
-    this.apollo
-      .query({
-        query: GetLikesQuery,
-        context: { method: 'GET' },
-        variables: {
-          signId: this._sign._id
-        }
-      })
-      .toPromise()
-      .then((res: ApolloQueryResult<LikesResult>) => {
-        this.likesBs$.next(res.data.likes);
-      });
-  }
-
-  createLike() {
-    if (this.authService.currentUserValue) {
-      const variables = {
-        signId: this._sign._id,
-        senseId: this.sense && this.sense.senseId
-      };
-      this.apollo
-        .mutate({
-          mutation: CreateLikesMutation,
-          variables: variables
-        })
-        .toPromise()
-        .then((res: ApolloQueryResult<CreateLikesResult>) => {
-          this.likesBs$.next(res.data.createLikes);
-        });
-    } else {
-      // prompt user that they need to sign in to like
-    }
-  }
-
-  removeLike() {
-    if (this.authService.currentUserValue) {
-      const variables = {
-        signId: this._sign._id,
-        senseId: this.sense && this.sense.senseId
-      };
-      this.apollo
-        .mutate({
-          mutation: RemoveLikesMutation,
-          variables: variables
-        })
-        .toPromise()
-        .then((res: ApolloQueryResult<RemoveLikesResult>) => {
-          this.likesBs$.next(res.data.removeLikes);
-        });
-    } else {
-      // prompt user that they need to sign in to like
-    }
-  }
-
-  onLikeClick() {
-    this.createLike();
-  }
-
-  onUnlikeClick() {
-    this.removeLike();
-  }
-
-  onHtmlVideoError(event: { target: HTMLInputElement }) {
-    throw new Error(
-      `htmlVideo error for video: ${this.mediaUrl}, mediaUrl: ${event.target.src}`
-    );
-  }
 
   _getMobileTranscoding(transcodings: Transcoding[]): Transcoding {
     return transcodings.sort(this.sortByBitrate)[0];
@@ -204,27 +85,6 @@ export class SignComponent implements OnInit {
     return biggestMp4Transcoding || biggestTranscoding;
   }
 
-  private setLikeCount(likes: LikeRecordWithoutId[]): void {
-    if (this.sense) {
-      this.likeCountBs$.next(
-        likes.filter(like => like.senseId === this.sense.senseId).length
-      );
-    } else {
-      const grouped = this.groupBy(likes, 'senseId');
-      const arrays: number[][] = Object.values(grouped);
-      const maxLikes = arrays.reduce((acc: number, curr: number[]) => {
-        return Math.max(acc, curr.length);
-      }, 0);
-      this.likeCountBs$.next(maxLikes);
-    }
-  }
-
-  private groupBy(xs: any[], key: string) {
-    return xs.reduce((rv, x) => {
-      (rv[x[key]] = rv[x[key]] || []).push(x);
-      return rv;
-    }, {});
-  }
 
   private generateMediaUrl(key: string) {
     return `${CDN_URI}/${key}`;

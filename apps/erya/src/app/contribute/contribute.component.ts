@@ -45,7 +45,7 @@ interface SensesFromApiSearchVariables {
 }
 
 interface SensesFromApiResult {
-  sensesFromApi: HydratedSense[];
+  hydratedSensesLex: HydratedSense[];
 }
 
 enum UploadStatus {
@@ -56,9 +56,9 @@ enum UploadStatus {
   error = 'error'
 }
 
-const SensesFromApiQuery = gql`
-  query SensesFromApiQuery($searchString: String! = "") {
-    sensesFromApi(searchString: $searchString) {
+const HydratedSensesLexQuery = gql`
+  query HydratedSensesLexQuery($searchString: String! = "") {
+    hydratedSensesLex(searchString: $searchString) {
       oxId
       homographC
       ownEntryOxId
@@ -109,7 +109,7 @@ export class ContributeComponent implements OnInit, OnDestroy {
   @ViewChild('searchString') searchStringValue: ElementRef;
   @ViewChild('addedSign') addedSignEl: ElementRef;
 
-  sensesFromApiSearchRef: QueryRef<
+  hydratedSensesSearchRef: QueryRef<
     SensesFromApiResult,
     SensesFromApiSearchVariables
   >;
@@ -161,17 +161,17 @@ export class ContributeComponent implements OnInit, OnDestroy {
 
     this.checkboxControl = this.signFormGroup.controls.senseIds as FormArray;
 
-    this.sensesFromApiSearchRef = this.apollo.watchQuery<
+    this.hydratedSensesSearchRef = this.apollo.watchQuery<
       SensesFromApiResult,
       SensesFromApiSearchVariables
     >({
-      query: SensesFromApiQuery
+      query: HydratedSensesLexQuery
     });
 
-    this.senses$ = this.sensesFromApiSearchRef.valueChanges.pipe(
+    this.senses$ = this.hydratedSensesSearchRef.valueChanges.pipe(
       map((res: ApolloQueryResult<SensesFromApiResult>) => {
         this.showLoader = res.loading;
-        return res.data.sensesFromApi;
+        return res.data.hydratedSensesLex;
       }),
       map(senses => this.senseArranger.sortAndFilter(senses, false))
     );
@@ -220,14 +220,14 @@ export class ContributeComponent implements OnInit, OnDestroy {
 
   clearSearch() {
     this.showNotFoundMessage = false;
-    this.sensesFromApiSearchRef.refetch({ searchString: '' });
+    this.hydratedSensesSearchRef.refetch({ searchString: '' });
   }
 
   onSearchButtonPress(searchString: string) {
     this.resetForm();
     this.uploadedSign = null;
     this.showNotFoundMessage = true;
-    this.sensesFromApiSearchRef.refetch({ searchString: searchString });
+    this.hydratedSensesSearchRef.refetch({ searchString: searchString });
   }
 
   async onSubmit() {
@@ -286,7 +286,7 @@ export class ContributeComponent implements OnInit, OnDestroy {
   }
 
   resetInput() {
-    this.sensesFromApiSearchRef.refetch({ searchString: '' });
+    this.hydratedSensesSearchRef.refetch({ searchString: '' });
     this.searchStringValue.nativeElement.value = '';
   }
 

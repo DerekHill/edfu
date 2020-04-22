@@ -35,13 +35,14 @@ type Mutation {
 type Query {
   hello: String!
   oxIds(filter: Boolean = false, searchString: String!): [String!]!
-  senses(senseId: String = "", filter: Boolean = false, oxId: String!): [SenseForEntryDto!]!
-  signs(senseId: String!): [SenseSignDto!]!
-  sensesFromApi(searchString: String!): [SenseForEntryDto!]!
+  hydratedSensesExisting(senseId: String = "", filter: Boolean = false, oxId: String!): [SenseHydratedDto!]!
+  senseSigns(senseId: String!): [SenseSignForwardDto!]!
+  hydratedSensesLex(searchString: String!): [SenseHydratedDto!]!
+  signs: [SignDto!]!
   likes(senseId: ID, signId: ID): [LikeDto!]!
 }
 
-type SenseForEntryDto {
+type SenseHydratedDto {
   oxId: String!
   homographC: Float!
   ownEntryOxId: String!
@@ -56,7 +57,24 @@ type SenseForEntryDto {
   signs: [SignDto!]
 }
 
-type SenseSignDto {
+type SensePureDto {
+  ownEntryOxId: String!
+  ownEntryHomographC: Float!
+  senseId: ID!
+  lexicalCategory: LexicalCategory!
+  apiSenseIndex: Float!
+  example: String
+  dictionaryOrThesaurus: DictionaryOrThesaurus!
+}
+
+type SenseSignBackDto {
+  userId: ID!
+  senseId: ID!
+  signId: ID!
+  sense: SensePureDto!
+}
+
+type SenseSignForwardDto {
   userId: ID!
   senseId: ID!
   signId: ID!
@@ -68,7 +86,8 @@ type SignDto {
   userId: ID!
   mnemonic: String!
   s3KeyOrig: String!
-  transcodings: [TranscodingDto!]!
+  transcodings: [TranscodingDto!]
+  senseSigns: [SenseSignBackDto!]
 }
 
 type TranscodingDto {

@@ -24,13 +24,6 @@ export class SignsService {
     private readonly signModel: Model<SignDocument>
   ) {}
 
-  getSenseSigns(senseId: string): Promise<SenseSignRecord[]> {
-    return this.senseSignModel
-      .find({ senseId: senseId })
-      .lean()
-      .exec();
-  }
-
   findOneSign(_id: ObjectId): Promise<SignRecord> {
     return this.signModel
       .findById(_id)

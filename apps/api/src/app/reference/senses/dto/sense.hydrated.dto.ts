@@ -12,7 +12,7 @@ registerEnumType(LexicalCategory, {
 });
 
 @ObjectType()
-export class SenseForEntryDto implements HydratedSense {
+export class SenseHydratedDto implements HydratedSense {
   @Field()
   readonly oxId: string;
 

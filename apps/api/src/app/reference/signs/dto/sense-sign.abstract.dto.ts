@@ -4,7 +4,7 @@ import { SignDto } from './sign.dto';
 import { SenseSignDtoInterface } from '@edfu/api-interfaces';
 
 @ObjectType()
-export class SenseSignDto implements SenseSignDtoInterface {
+export class SenseSignAbstractDto implements SenseSignDtoInterface {
   @Field(type => ID)
   readonly userId: ObjectId;
 
@@ -13,7 +13,4 @@ export class SenseSignDto implements SenseSignDtoInterface {
 
   @Field(type => ID)
   readonly signId: ObjectId;
-
-  @Field(type => SignDto, { nullable: true })
-  readonly sign?: SignDto;
 }

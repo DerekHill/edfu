@@ -4,42 +4,39 @@ import { LikesService } from './likes/likes.service';
 import { FindLikeArgs } from './likes/dto/find-like.args';
 import { ManageLikeArgs } from './likes/dto/manage-like.args';
 import { UseGuards } from '@nestjs/common';
-import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
+import { GqlPassportAuthGuard } from '../auth/guards/gql-passport.auth.guard';
 import { CurrentUserGraphQL } from '../common/decorators/current-user.decorator';
 import { BasicUser } from '@edfu/api-interfaces';
-import { UsersService } from '../users/users.service';
+import { GqlHydrateUserAuthGuard } from '../auth/guards/gql-hydrate-user-auth.guard';
 
 @Resolver(of => LikeDto)
 export class SocialResolver {
-  constructor(
-    private readonly service: LikesService,
-    private readonly usersService: UsersService
-  ) {}
+  constructor(private readonly service: LikesService) {}
 
   @Query(returns => [LikeDto], { name: 'likes' })
   getLikes(@Args() args: FindLikeArgs): Promise<LikeDto[]> {
     return this.service.find(args);
   }
 
-  @UseGuards(GqlAuthGuard)
+  @UseGuards(GqlHydrateUserAuthGuard)
+  @UseGuards(GqlPassportAuthGuard)
   @Mutation(returns => [LikeDto])
   async createLikes(
     @CurrentUserGraphQL() user: BasicUser,
     @Args() args: ManageLikeArgs
   ) {
-    const fullUser = await this.usersService.findByEmail(user.email);
-    await this.service.create({ ...args, ...{ userId: fullUser._id } });
+    await this.service.create({ ...args, ...{ userId: user._id } });
     return this.service.find({ signId: args.signId });
   }
 
-  @UseGuards(GqlAuthGuard)
+  @UseGuards(GqlHydrateUserAuthGuard)
+  @UseGuards(GqlPassportAuthGuard)
   @Mutation(returns => [LikeDto])
   async removeLikes(
     @CurrentUserGraphQL() user: BasicUser,
     @Args() args: ManageLikeArgs
   ) {
-    const fullUser = await this.usersService.findByEmail(user.email);
-    await this.service.remove({ ...args, ...{ userId: fullUser._id } });
+    await this.service.remove({ ...args, ...{ userId: user._id } });
     return this.service.find({ signId: args.signId });
   }
 }

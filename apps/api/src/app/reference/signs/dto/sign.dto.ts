@@ -2,6 +2,7 @@ import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { ObjectId } from 'bson';
 import { SignRecord, Transcoding } from '@edfu/api-interfaces';
 import { TranscodingDto } from './transcoding.dto';
+import { SenseSignBackDto } from './sense-sign.back.dto';
 
 @ObjectType()
 export class SignDto implements SignRecord {
@@ -17,6 +18,9 @@ export class SignDto implements SignRecord {
   @Field()
   readonly s3KeyOrig: string;
 
-  @Field(type => [TranscodingDto])
-  readonly transcodings: Transcoding[];
+  @Field(type => [TranscodingDto], { nullable: true })
+  readonly transcodings?: Transcoding[];
+
+  @Field(type => [SenseSignBackDto], { nullable: true })
+  readonly senseSigns?: SenseSignBackDto[];
 }

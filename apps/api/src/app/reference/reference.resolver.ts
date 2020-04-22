@@ -1,14 +1,14 @@
 import { Resolver, Query, Args, Root, ResolveField } from '@nestjs/graphql';
 import { ReferenceService } from './reference.service';
-import { SenseForEntryDto } from './senses/dto/sense.dto';
-import { SenseSignDto } from './signs/dto/sense-sign.dto';
+import { SenseHydratedDto } from './senses/dto/sense.hydrated.dto';
+import { SenseSignForwardDto } from './signs/dto/sense-sign.forward.dto';
 import { SignDto } from './signs/dto/sign.dto';
 
-@Resolver(of => SenseForEntryDto)
+@Resolver(() => SenseHydratedDto)
 export class DictionaryResolver {
   constructor(private readonly service: ReferenceService) {}
 
-  @Query(returns => [String], { name: 'oxIds' })
+  @Query(() => [String], { name: 'oxIds' })
   getOxIds(
     @Args('searchString') searchString: string,
     @Args({ name: 'filter', type: () => Boolean, defaultValue: false })
@@ -17,14 +17,14 @@ export class DictionaryResolver {
     return this.service.searchOxIds(searchString, filter);
   }
 
-  @Query(returns => [SenseForEntryDto], { name: 'senses' })
-  getSensesFromExisting(
+  @Query(() => [SenseHydratedDto], { name: 'hydratedSensesExisting' })
+  getHydratedSensesExisting(
     @Args('oxId') oxId: string,
     @Args({ name: 'filter', type: () => Boolean, defaultValue: false })
     filter: boolean,
     @Args({ name: 'senseId', type: () => String, defaultValue: '' })
     senseId: string
-  ): Promise<SenseForEntryDto[]> {
+  ): Promise<SenseHydratedDto[]> {
     return this.service.sensesForOxIdCaseInsensitive({
       oxId: oxId,
       senseId: senseId,
@@ -32,22 +32,23 @@ export class DictionaryResolver {
     });
   }
 
-  @ResolveField(returns => [SignDto])
-  signs(@Root() ss: SenseForEntryDto) {
-    return this.service.getSigns(ss.senseId);
+  @ResolveField(() => [SignDto])
+  signs(@Root() ss: SenseHydratedDto) {
+    return this.service.getSignsByAssociation(ss.senseId);
   }
 }
 
-@Resolver(of => SenseSignDto)
-export class SignsResolver {
+@Resolver(() => SenseSignForwardDto)
+export class SenseSignsForwardResolver {
   constructor(private readonly service: ReferenceService) {}
-  @Query(returns => [SenseSignDto], { name: 'signs' })
-  getSigns(@Args('senseId') senseId: string): Promise<SenseSignDto[]> {
-    return this.service.getSenseSigns(senseId);
+
+  @Query(() => [SenseSignForwardDto], { name: 'senseSigns' })
+  getSigns(@Args('senseId') senseId: string): Promise<SenseSignForwardDto[]> {
+    return this.service.getSenseSigns({ senseId: senseId });
   }
 
-  @ResolveField(returns => SignDto)
-  sign(@Root() ss: SenseSignDto) {
+  @ResolveField(() => SignDto)
+  sign(@Root() ss: SenseSignForwardDto) {
     return this.service.findOneSign(ss.signId);
   }
 }

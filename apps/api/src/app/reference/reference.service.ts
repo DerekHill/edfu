@@ -10,14 +10,17 @@ import {
 } from '../constants';
 import { EntryDocument } from './entries/interfaces/entry.interface';
 import { Model } from 'mongoose';
-import { SenseForEntryDto } from './senses/dto/sense.dto';
+import { SenseHydratedDto } from './senses/dto/sense.hydrated.dto';
 import { EntrySenseDocument } from './entry-senses/interfaces/entry-sense.interface';
-import { SenseDocument } from './senses/interfaces/sense.interface';
+import {
+  SenseDocument,
+  SharedSenseRecordWithoutId
+} from './senses/interfaces/sense.interface';
 import {
   SenseSignRecord,
   SenseSignDocument
 } from './signs/interfaces/sense-sign.interface';
-import { SignRecord } from '@edfu/api-interfaces';
+import { SignRecord, SenseSignRecordWithoutId } from '@edfu/api-interfaces';
 import { SignDocument } from './signs/interfaces/sign.interface';
 import { ObjectId } from 'bson';
 import * as pluralize from 'mongoose-legacy-pluralize';
@@ -114,7 +117,7 @@ export class ReferenceService {
     }
 
     if (filter) {
-      return this.searchOxIdsWithSigns(chars);
+      return this.searchOxIdsThatHaveSigns(chars);
     } else {
       return this.searchOxIdsAll(chars);
     }
@@ -125,7 +128,7 @@ export class ReferenceService {
     senseId = null,
     filterForHasSign = true,
     filterForDictionarySenses = false
-  }: SensesForOxIdCaseInsensitiveParams): Promise<SenseForEntryDto[]> {
+  }: SensesForOxIdCaseInsensitiveParams): Promise<SenseHydratedDto[]> {
     const query = { oxId: oxId };
 
     if (senseId) {
@@ -192,14 +195,19 @@ export class ReferenceService {
       .exec();
   }
 
-  getSenseSigns(senseId: string): Promise<SenseSignRecord[]> {
+  getSenseSigns(
+    params: Partial<SenseSignRecordWithoutId>
+  ): Promise<SenseSignRecord[]> {
+    if (!(params.senseId || params.signId || params.userId)) {
+      throw new Error('Some kind of param should be specified');
+    }
     return this.senseSignModel
-      .find({ senseId: senseId })
+      .find(params)
       .lean()
       .exec();
   }
 
-  getSigns(senseId: string): Promise<SignRecord[]> {
+  getSignsByAssociation(senseId: string): Promise<SignRecord[]> {
     const match = [{ $match: { senseId: senseId } }];
 
     const project = [
@@ -217,9 +225,20 @@ export class ReferenceService {
     return this.senseSignModel.aggregate(pipeline).exec();
   }
 
+  getSignsForUser(userId: ObjectId): Promise<SignRecord[]> {
+    return this.signModel.find({ userId: userId }).exec();
+  }
+
   findOneSign(_id: ObjectId): Promise<SignRecord> {
     return this.signModel
       .findById(_id)
+      .lean()
+      .exec();
+  }
+
+  findSenseById(senseId: string): Promise<SharedSenseRecordWithoutId[]> {
+    return this.senseModel
+      .findOne({ senseId: senseId })
       .lean()
       .exec();
   }
@@ -260,7 +279,7 @@ export class ReferenceService {
     return [...new Set(ids)];
   }
 
-  private async searchOxIdsWithSigns(chars: string): Promise<string[]> {
+  private async searchOxIdsThatHaveSigns(chars: string): Promise<string[]> {
     const match = [
       {
         $match: { word: { $regex: `^${chars}`, $options: '$i' } }

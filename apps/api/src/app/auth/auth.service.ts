@@ -15,6 +15,7 @@ import * as bcrypt from 'bcryptjs';
 import { ForgottenPassword } from './interfaces/forgottenpassword.interface';
 import { BasicUser } from '@edfu/api-interfaces';
 import { HttpErrorMessages } from '@edfu/enums';
+import { UserDocument } from '../users/interfaces/user.interface';
 
 const EMAIL_VERIFICATION_TIMEOUT_MINUTES = 1;
 
@@ -29,7 +30,7 @@ export class AuthService {
     private readonly jwtService: JwtService
   ) {}
 
-  async validateUser(email: string, password: string) {
+  async validateUserLocal(email: string, password: string): Promise<BasicUser> {
     const userFromDb = await this.usersService.findByEmail(email);
     if (!userFromDb)
       throw new HttpException(
@@ -40,12 +41,7 @@ export class AuthService {
     //   throw new HttpException(HttpErrorMessages.LOGIN__EMAIL_NOT_VERIFIED, HttpStatus.FORBIDDEN);
     const isValidPass = await bcrypt.compare(password, userFromDb.password);
     if (isValidPass) {
-      const user: BasicUser = {
-        email: userFromDb.email,
-        username: userFromDb.username,
-        roles: userFromDb.roles
-      };
-      return user;
+      return this.extractBasicUser(userFromDb);
     } else {
       throw new HttpException(
         HttpErrorMessages.LOGIN__GENERIC_ERROR,
@@ -54,7 +50,26 @@ export class AuthService {
     }
   }
 
-  async login(user: BasicUser): Promise<BasicUser> {
+  private extractBasicUser(user: UserDocument): BasicUser {
+    return {
+      _id: user._id,
+      email: user.email,
+      username: user.username,
+      roles: user.roles
+    };
+  }
+
+  async validateTokenAndFetchUser(token: string): Promise<BasicUser> {
+    try {
+      const { email } = this.jwtService.verify(token);
+      const userFromDb = await this.usersService.findByEmail(email);
+      return this.extractBasicUser(userFromDb);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  async loginGenerateToken(user: BasicUser): Promise<BasicUser> {
     const payload = { email: user.email, sub: user.email };
     return {
       ...user,

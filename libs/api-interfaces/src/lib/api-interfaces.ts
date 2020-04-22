@@ -54,6 +54,7 @@ export interface HydratedSense
 }
 
 export interface BasicUser {
+  readonly _id: ObjectId;
   readonly email: string;
   readonly username: string;
   readonly roles: string[];
@@ -93,12 +94,14 @@ export interface FindLikeParams {
   readonly senseId?: string;
 }
 
+// Refactor https://www.typescriptlang.org/docs/handbook/utility-types.html
 export interface ManageLikeParams extends FindLikeParams {
   readonly userId: ObjectId;
   readonly signId: ObjectId;
   readonly senseId?: string;
 }
 
+// Refactor https://www.typescriptlang.org/docs/handbook/utility-types.html
 export interface LikeRecordWithoutId extends ManageLikeParams {
   readonly userId: ObjectId;
   readonly signId: ObjectId;

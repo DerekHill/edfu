@@ -5,7 +5,7 @@ import { LIKE_COLLECTION_NAME, SENSE_SIGN_COLLECTION_NAME } from '../constants';
 import { SocialResolver } from './social.resolver';
 import { LikesService } from './likes/likes.service';
 import { SenseSignSchema } from '../reference/signs/schemas/sense-sign.schema';
-import { UsersModule } from '../users/users.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
@@ -13,7 +13,7 @@ import { UsersModule } from '../users/users.module';
       { name: LIKE_COLLECTION_NAME, schema: LikeSchema },
       { name: SENSE_SIGN_COLLECTION_NAME, schema: SenseSignSchema }
     ]),
-    UsersModule
+    AuthModule
   ],
   controllers: [],
   providers: [LikesService, SocialResolver],

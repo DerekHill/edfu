@@ -70,7 +70,7 @@ describe('ReferenceService', () => {
     });
   });
 
-  describe('getSigns', () => {
+  describe('getSignsByAssociation', () => {
     it('gets signs for senseId', async () => {
       const SENSE_ID = 'sense_id';
       const SIGN_ID = new ObjectId();
@@ -82,7 +82,7 @@ describe('ReferenceService', () => {
       await setupService.createSign({
         _id: SIGN_ID
       });
-      const res = await service.getSigns(SENSE_ID);
+      const res = await service.getSignsByAssociation(SENSE_ID);
       expect(res[0]._id).toEqual(SIGN_ID);
     });
   });

@@ -2,7 +2,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
+import {
+  BrowserAnimationsModule,
+  NoopAnimationsModule
+} from '@angular/platform-browser/animations';
 import { GraphQLModule } from './graphql.module';
 import { RouterModule, Routes } from '@angular/router';
 import { ContributeComponent } from './contribute/contribute.component';
@@ -25,6 +28,7 @@ import {
 } from './constants';
 import { SyncServerVersionInterceptor } from './shared/interceptors/sync-server-version.interceptor';
 import { SignupComponent } from './login/signup.component';
+import { ManageComponent } from './contribute/manage.component';
 
 const appRoutes: Routes = [
   {
@@ -38,6 +42,11 @@ const appRoutes: Routes = [
   {
     path: 'contribute',
     component: ContributeComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'manage',
+    component: ManageComponent,
     canActivate: [AuthGuard]
   },
   { path: LOGIN_COMPONENT_PATH, component: LoginComponent },

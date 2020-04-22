@@ -22,9 +22,16 @@ import { EntrySensesService } from './entry-senses/entry-senses.service';
 import { EntrySenseSchema } from './entry-senses/schemas/entry-sense.schema';
 import { SimilarityService } from './similarity/similarity.service';
 import { SenseSignSchema } from './signs/schemas/sense-sign.schema';
-import { DictionaryResolver, SignsResolver } from './reference.resolver';
+import {
+  DictionaryResolver,
+  SenseSignsForwardResolver
+} from './reference.resolver';
 import { ReferenceService } from './reference.service';
-import { LexicographerResolver } from './lexicographer.resolver';
+import {
+  LexicographerResolver,
+  SignsResolver,
+  SenseSignsBackResolver
+} from './lexicographer.resolver';
 import { UsersModule } from '../users/users.module';
 import { S3Service } from '../s3/s3.service';
 import { S3Module } from '../s3/s3.module';
@@ -32,6 +39,7 @@ import { SitemapController } from './sitemap/sitemap.controller';
 import { BullModule } from '@nestjs/bull';
 import { SignsController } from './signs/signs.controller';
 import { OxfordApiQueueConsumer } from './entries/oxford-api-queue.consumer';
+import { AuthModule } from '../auth/auth.module';
 
 class TfUseMock {
   embed(sentences: string[]) {
@@ -63,7 +71,8 @@ class TfUseMock {
         redis: process.env.REDIS_URL,
         limiter: { max: 200, duration: 60 * 1000 } // 500 is max, 250 triggers warning, keep allowance of unqueued request
       }
-    )
+    ),
+    AuthModule
   ],
   providers: [
     EntriesService,
@@ -72,6 +81,8 @@ class TfUseMock {
     DictionaryResolver,
     LexicographerResolver,
     SignsResolver,
+    SenseSignsForwardResolver,
+    SenseSignsBackResolver,
     EntriesResolver,
     SignsService,
     EntrySensesService,

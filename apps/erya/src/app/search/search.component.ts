@@ -5,7 +5,8 @@ import {
   OnDestroy,
   AfterViewInit,
   ViewChild,
-  ChangeDetectorRef, ElementRef
+  ChangeDetectorRef,
+  ElementRef
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -27,11 +28,11 @@ interface OxIdsResult {
 }
 
 interface SensesResult {
-  senses: HydratedSense[];
+  hydratedSensesExisting: HydratedSense[];
 }
 
-interface SignsResult {
-  signs: SenseSignDtoInterface[];
+interface SenseSignsResult {
+  senseSigns: SenseSignDtoInterface[];
 }
 
 enum SenseCount {
@@ -67,9 +68,9 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   `;
 
-  SensesQuery = gql`
-    query SensesQuery($oxId: String! = "", $senseId: String! = "") {
-      senses(oxId: $oxId, filter: true, senseId: $senseId) {
+  HydratedSensesRefQuery = gql`
+    query HydratedSensesRefQuery($oxId: String! = "", $senseId: String! = "") {
+      hydratedSensesExisting(oxId: $oxId, filter: true, senseId: $senseId) {
         oxId
         homographC
         ownEntryOxId
@@ -87,9 +88,9 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   `;
 
-  SignsQuery = gql`
-    query SignsQuery($senseId: String! = "") {
-      signs(senseId: $senseId) {
+  SenseSignsQuery = gql`
+    query SenseSignsQuery($senseId: String! = "") {
+      senseSigns(senseId: $senseId) {
         senseId
         signId
         sign {
@@ -187,13 +188,15 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     this.apollo
       .query({
-        query: this.SensesQuery,
+        query: this.HydratedSensesRefQuery,
         context: { method: 'GET' },
         variables: variables
       })
       .toPromise()
       .then((res: ApolloQueryResult<SensesResult>) => {
-        this.sensesBs$.next(this.senseArranger.sortAndFilter(res.data.senses));
+        this.sensesBs$.next(
+          this.senseArranger.sortAndFilter(res.data.hydratedSensesExisting)
+        );
       });
   }
 
@@ -209,15 +212,15 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.apollo
       .query({
-        query: this.SignsQuery,
+        query: this.SenseSignsQuery,
         context: { method: 'GET' },
         variables: {
           senseId: sense.senseId
         }
       })
       .toPromise()
-      .then((res: ApolloQueryResult<SignsResult>) => {
-        this.signsBs$.next(this.filterOutDeletedSigns(res.data.signs));
+      .then((res: ApolloQueryResult<SenseSignsResult>) => {
+        this.signsBs$.next(this.filterOutDeletedSigns(res.data.senseSigns));
       });
   }
 

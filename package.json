@@ -57,7 +57,7 @@
     "@nestjs/platform-express": "^7.0.8",
     "@nestjs/serve-static": "^2.1.0",
     "@nrwl/angular": "8.12.2",
-    "@sentry/browser": "^5.15.4",
+    "@sentry/browser": "^5.15.5",
     "@tensorflow-models/universal-sentence-encoder": "^1.2.2",
     "@tensorflow/tfjs": "^1.7.3",
     "@types/bcryptjs": "^2.4.2",

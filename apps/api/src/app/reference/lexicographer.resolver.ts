@@ -4,7 +4,9 @@ import {
   Args,
   ResolveField,
   Root,
-  Parent
+  Parent,
+  Mutation,
+  ID
 } from '@nestjs/graphql';
 import { ReferenceService } from './reference.service';
 import { SenseHydratedDto } from './senses/dto/sense.hydrated.dto';
@@ -17,6 +19,7 @@ import { BasicUser } from '@edfu/api-interfaces';
 import { CurrentUserGraphQL } from '../common/decorators/current-user.decorator';
 import { SenseSignBackDto } from './signs/dto/sense-sign.back.dto';
 import { SensePureDto } from './senses/dto/sense.pure.dto';
+import { ObjectId } from 'bson';
 
 @Resolver('Lexicographer')
 @UseGuards(GqlPassportAuthGuard)
@@ -59,6 +62,18 @@ export class SignsResolver {
   @ResolveField(() => [SenseSignBackDto])
   senseSigns(@Root() sign: SignDto) {
     return this.referenceService.getSenseSigns({ signId: sign._id });
+  }
+
+  @Mutation(returns => Boolean)
+  async deleteSign(
+    @CurrentUserGraphQL() user: BasicUser,
+    @Args({ name: 'signId', type: () => ID }) signId: ObjectId
+  ) {
+    await this.referenceService.deleteSignAndAssociations({
+      _id: signId,
+      userId: user._id
+    });
+    return true;
   }
 }
 

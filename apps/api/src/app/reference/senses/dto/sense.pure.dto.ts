@@ -9,16 +9,25 @@ import {
 export class SensePureDto implements SensePureDtoInterface {
   @Field()
   readonly ownEntryOxId: string;
+
   @Field()
   readonly ownEntryHomographC: number;
+
   @Field(type => ID)
   readonly senseId: string;
+
   @Field(type => LexicalCategory)
   readonly lexicalCategory: LexicalCategory;
+
   @Field()
   readonly apiSenseIndex: number;
+
   @Field({ nullable: true })
   readonly example?: string;
+
+  @Field({ nullable: true })
+  readonly definition?: string;
+
   @Field(type => DictionaryOrThesaurus)
   readonly dictionaryOrThesaurus: DictionaryOrThesaurus;
 }

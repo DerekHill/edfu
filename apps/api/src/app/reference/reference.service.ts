@@ -19,7 +19,8 @@ import {
   SenseHydratedDtoInterface,
   SenseSignRecord,
   SenseSignDocument,
-  SignDocument
+  SignDocument,
+  DeleteSignParams
 } from '@edfu/api-interfaces';
 import { ObjectId } from 'bson';
 import * as pluralize from 'mongoose-legacy-pluralize';
@@ -231,6 +232,12 @@ export class ReferenceService {
       .findById(_id)
       .lean()
       .exec();
+  }
+
+  async deleteSignAndAssociations(params: DeleteSignParams) {
+    await this.signModel.findOneAndRemove(params);
+    return this.senseSignModel.deleteMany({ signId: params._id });
+    // Could also delete S3 objects
   }
 
   findSenseById(senseId: string): Promise<AllSenseParams[]> {

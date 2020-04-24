@@ -28,6 +28,7 @@ type LikeDto {
 }
 
 type Mutation {
+  deleteSign(signId: ID!): Boolean!
   createLikes(senseId: ID, signId: ID!): [LikeDto!]!
   removeLikes(senseId: ID, signId: ID!): [LikeDto!]!
 }
@@ -64,6 +65,7 @@ type SensePureDto {
   lexicalCategory: LexicalCategory!
   apiSenseIndex: Float!
   example: String
+  definition: String
   dictionaryOrThesaurus: DictionaryOrThesaurus!
 }
 
@@ -84,7 +86,7 @@ type SenseSignForwardDto {
 type SignDto {
   _id: ID!
   userId: ID!
-  mnemonic: String!
+  mnemonic: String
   s3KeyOrig: String!
   transcodings: [TranscodingDto!]
   senseSigns: [SenseSignBackDto!]

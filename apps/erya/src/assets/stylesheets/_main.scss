@@ -147,3 +147,13 @@ input.sense-input {
 .content figure.has-likes:not(:first-child) {
   margin-top: 0;
 }
+
+.svg-icon-left {
+  margin-right: 5px;
+}
+
+.likes-number {
+  padding-left: 10px;
+  line-height: 30px;
+  display: inline-block;
+}

@@ -1,18 +1,27 @@
-{{ likeCountBs$ | async }}
 <a
-  class="has-text-danger"
+  class="button is-small"
   *ngIf="(likesBs$ | async).length > 0; else addLike"
   (click)="onUnlikeClick()"
   @pulseAnimation
 >
-  <fa-icon [icon]="['fas', 'heart']" size="lg"></fa-icon
-></a>
+  <fa-icon
+    class="has-text-danger svg-icon-left"
+    [icon]="['fas', 'heart']"
+    size="lg"
+  ></fa-icon
+  ><span>Like</span></a
+>
 <ng-template #addLike>
-  <a (click)="onLikeClick()" class="has-text-grey"
-    ><fa-icon [icon]="['far', 'heart']" size="lg"></fa-icon
-  ></a>
+  <a (click)="onLikeClick()" class="has-text-grey button is-small"
+    ><fa-icon
+      [icon]="['far', 'heart']"
+      size="lg"
+      class="svg-icon-left"
+    ></fa-icon>
+    <span>Like</span></a
+  >
 </ng-template>
-
+<div class="likes-number has-text-grey">{{ likeCountBs$ | async }}</div>
 <edfu-modal id="modal-sign-in">
   <h3 class="title is-size-4 has-text-centered has-text-weight-medium">
     Please login first

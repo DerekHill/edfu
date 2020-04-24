@@ -16,8 +16,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@edfu/api-interfaces": ["libs/api-interfaces/src/index.ts"],
-      "@edfu/enums": ["libs/enums/src/index.ts"]
+      "@edfu/api-interfaces": ["libs/api-interfaces/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

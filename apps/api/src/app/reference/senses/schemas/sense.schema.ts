@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { DICTIONARY_OR_THESAURUS_ALL_VALUES } from '@edfu/enums';
+import { DICTIONARY_OR_THESAURUS_ALL_VALUES } from '@edfu/api-interfaces';
 
 export const SenseSchema = new mongoose.Schema({
   senseId: {

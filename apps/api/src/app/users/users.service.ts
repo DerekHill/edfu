@@ -4,9 +4,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcryptjs';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { UserDocument } from './interfaces/user.interface';
 import { USER_COLLECTION_NAME } from '../constants';
-import { HttpErrorMessages } from '@edfu/enums';
+import { HttpErrorMessages, UserDocument } from '@edfu/api-interfaces';
 
 const SALT_ROUNDS = 10;
 

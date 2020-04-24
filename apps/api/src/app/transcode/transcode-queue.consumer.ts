@@ -11,12 +11,15 @@ import { TRANSCODE_QUEUE_NAME, SIGN_COLLECTION_NAME } from '../constants';
 import { S3Service } from '../s3/s3.service';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { SignDocument } from '../reference/signs/interfaces/sign.interface';
 import * as fs from 'fs';
 import * as path from 'path';
 import { Job } from 'bull';
 import { TranscodeJobData } from './interfaces/transcode-job-data.interface';
-import { Transcoding, VideoProperties } from '@edfu/api-interfaces';
+import {
+  Transcoding,
+  VideoProperties,
+  SignDocument
+} from '@edfu/api-interfaces';
 
 const TEMP_DIR = './tmp';
 

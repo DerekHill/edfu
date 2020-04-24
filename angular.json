@@ -230,31 +230,6 @@
           }
         }
       }
-    },
-    "enums": {
-      "root": "libs/enums",
-      "sourceRoot": "libs/enums/src",
-      "projectType": "library",
-      "schematics": {},
-      "architect": {
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "libs/enums/tsconfig.lib.json",
-              "libs/enums/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!libs/enums/**"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/enums/jest.config.js",
-            "tsConfig": "libs/enums/tsconfig.spec.json"
-          }
-        }
-      }
     }
   },
   "cli": {

@@ -9,26 +9,23 @@ import {
 } from '../constants';
 import { Model } from 'mongoose';
 import {
-  SenseSignDocument,
-  SenseSignRecord
-} from './signs/interfaces/sense-sign.interface';
-import { SignDocument } from './signs/interfaces/sign.interface';
-import { SignRecord } from '@edfu/api-interfaces';
-import {
+  SignRecord,
   EntryDocument,
-  EntryRecord
-} from './entries/interfaces/entry.interface';
+  EntryRecord,
+  HeadwordOrPhrase,
+  SenseDocument,
+  DictionarySenseParams,
+  SenseSignDocument,
+  SenseSignRecord,
+  SignDocument
+} from '@edfu/api-interfaces';
+import { ObjectId } from 'bson';
 import {
+  DictionaryOrThesaurus,
+  LexicalCategory,
   EntrySenseDocument,
   EntrySenseRecord
-} from './entry-senses/interfaces/entry-sense.interface';
-import {
-  SenseDocument,
-  DictionarySenseRecordWithoutId
-} from './senses/interfaces/sense.interface';
-import { HeadwordOrPhrase } from '../enums';
-import { ObjectId } from 'bson';
-import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
+} from '@edfu/api-interfaces';
 
 const DEFAULT_OXID = 'oxId';
 const DEFAULT_SENSE_ID = 'senseId';
@@ -73,7 +70,7 @@ export class ReferenceTestSetupService {
   }
 
   createSense(params: any): Promise<SenseDocument> {
-    const defaults: DictionarySenseRecordWithoutId = {
+    const defaults: DictionarySenseParams = {
       senseId: DEFAULT_SENSE_ID,
       ownEntryOxId: 'jump',
       ownEntryHomographC: 0,

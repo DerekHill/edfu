@@ -8,23 +8,22 @@ import {
   SENSE_SIGN_COLLECTION_NAME,
   SIGN_COLLECTION_NAME
 } from '../constants';
-import { EntryDocument } from './entries/interfaces/entry.interface';
 import { Model } from 'mongoose';
-import { SenseHydratedDto } from './senses/dto/sense.hydrated.dto';
-import { EntrySenseDocument } from './entry-senses/interfaces/entry-sense.interface';
 import {
+  SignRecord,
+  SenseSignParams,
+  AllSenseParams,
+  EntryDocument,
+  EntrySenseDocument,
   SenseDocument,
-  SharedSenseRecordWithoutId
-} from './senses/interfaces/sense.interface';
-import {
+  SenseHydratedDtoInterface,
   SenseSignRecord,
-  SenseSignDocument
-} from './signs/interfaces/sense-sign.interface';
-import { SignRecord, SenseSignRecordWithoutId } from '@edfu/api-interfaces';
-import { SignDocument } from './signs/interfaces/sign.interface';
+  SenseSignDocument,
+  SignDocument
+} from '@edfu/api-interfaces';
 import { ObjectId } from 'bson';
 import * as pluralize from 'mongoose-legacy-pluralize';
-import { DictionaryOrThesaurus } from '@edfu/enums';
+import { DictionaryOrThesaurus } from '@edfu/api-interfaces';
 
 const OXIDS_LIMIT = 100;
 const SITEMAP_URL_LIMIT = 50_000;
@@ -128,7 +127,7 @@ export class ReferenceService {
     senseId = null,
     filterForHasSign = true,
     filterForDictionarySenses = false
-  }: SensesForOxIdCaseInsensitiveParams): Promise<SenseHydratedDto[]> {
+  }: SensesForOxIdCaseInsensitiveParams): Promise<SenseHydratedDtoInterface[]> {
     const query = { oxId: oxId };
 
     if (senseId) {
@@ -195,9 +194,7 @@ export class ReferenceService {
       .exec();
   }
 
-  getSenseSigns(
-    params: Partial<SenseSignRecordWithoutId>
-  ): Promise<SenseSignRecord[]> {
+  getSenseSigns(params: Partial<SenseSignParams>): Promise<SenseSignRecord[]> {
     if (!(params.senseId || params.signId || params.userId)) {
       throw new Error('Some kind of param should be specified');
     }
@@ -236,7 +233,7 @@ export class ReferenceService {
       .exec();
   }
 
-  findSenseById(senseId: string): Promise<SharedSenseRecordWithoutId[]> {
+  findSenseById(senseId: string): Promise<AllSenseParams[]> {
     return this.senseModel
       .findOne({ senseId: senseId })
       .lean()

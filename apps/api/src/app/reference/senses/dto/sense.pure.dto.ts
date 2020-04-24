@@ -1,9 +1,12 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
-import { SharedSenseRecordWithoutId } from '../interfaces/sense.interface';
+import {
+  DictionaryOrThesaurus,
+  LexicalCategory,
+  SensePureDtoInterface
+} from '@edfu/api-interfaces';
 
 @ObjectType()
-export class SensePureDto implements SharedSenseRecordWithoutId {
+export class SensePureDto implements SensePureDtoInterface {
   @Field()
   readonly ownEntryOxId: string;
   @Field()
@@ -15,7 +18,7 @@ export class SensePureDto implements SharedSenseRecordWithoutId {
   @Field()
   readonly apiSenseIndex: number;
   @Field({ nullable: true })
-  readonly example: string;
+  readonly example?: string;
   @Field(type => DictionaryOrThesaurus)
   readonly dictionaryOrThesaurus: DictionaryOrThesaurus;
 }

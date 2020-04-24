@@ -1,6 +1,9 @@
-import { ObjectType, Field, Int, ID, registerEnumType } from '@nestjs/graphql';
-import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
-import { HydratedSense } from '@edfu/api-interfaces';
+import { ObjectType, Field, ID, registerEnumType } from '@nestjs/graphql';
+import {
+  DictionaryOrThesaurus,
+  LexicalCategory,
+  SenseHydratedDtoInterface
+} from '@edfu/api-interfaces';
 import { SignDto } from '../../signs/dto/sign.dto';
 
 registerEnumType(DictionaryOrThesaurus, {
@@ -12,7 +15,7 @@ registerEnumType(LexicalCategory, {
 });
 
 @ObjectType()
-export class SenseHydratedDto implements HydratedSense {
+export class SenseHydratedDto implements SenseHydratedDtoInterface {
   @Field()
   readonly oxId: string;
 
@@ -35,10 +38,10 @@ export class SenseHydratedDto implements HydratedSense {
   readonly apiSenseIndex: number;
 
   @Field({ nullable: true })
-  readonly example: string;
+  readonly example?: string;
 
   @Field({ nullable: true })
-  readonly definition: string;
+  readonly definition?: string;
 
   @Field(type => DictionaryOrThesaurus)
   readonly associationType: DictionaryOrThesaurus;
@@ -47,5 +50,5 @@ export class SenseHydratedDto implements HydratedSense {
   readonly similarity: number;
 
   @Field(type => [SignDto], { nullable: true })
-  readonly signs: SignDto[];
+  readonly signs?: SignDto[];
 }

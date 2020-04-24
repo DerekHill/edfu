@@ -9,19 +9,21 @@ import {
 } from '../../constants';
 import { Model } from 'mongoose';
 import {
+  DictionaryOrThesaurus,
+  LexicalCategory,
+  HeadwordOrPhrase,
+  EntryParams,
   EntryDocument,
-  EntryRecordWithoutId
-} from '../../reference/entries/interfaces/entry.interface';
-import {
-  DictionarySenseRecordWithoutId,
-  ThesaurusSenseRecordWithoutId,
+  DictionarySenseParams,
+  ThesaurusSenseParams,
   SenseDocument
-} from '../../reference/senses/interfaces/sense.interface';
-import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
-import { HeadwordOrPhrase } from '../../enums';
-import { EntrySenseRecordWithoutId } from '../../reference/entry-senses/interfaces/entry-sense.interface';
+} from '@edfu/api-interfaces';
 import { ObjectId } from 'bson';
-import { SignRecord, SenseSignRecordWithoutId } from '@edfu/api-interfaces';
+import {
+  SignRecord,
+  SenseSignParams,
+  EntrySenseParams
+} from '@edfu/api-interfaces';
 import { UsersService } from '../../users/users.service';
 
 const FOOD = 'food';
@@ -118,7 +120,7 @@ const SIGN_ID_FAST_ABSTAIN = new ObjectId('00000000000000000000001B');
 
 const FRED_USER_ID = new ObjectId('000000000000000000010001');
 
-const ENTRIES: EntryRecordWithoutId[] = [
+const ENTRIES: EntryParams[] = [
   {
     oxId: FOOD,
     homographC: 0,
@@ -177,7 +179,7 @@ const ENTRIES: EntryRecordWithoutId[] = [
   }
 ];
 
-const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
+const DICTIONARY_SENSES: DictionarySenseParams[] = [
   {
     senseId: FOOD_0_DICT_NOU_SENSE_1_ID,
     ownEntryOxId: FOOD,
@@ -476,7 +478,7 @@ const DICTIONARY_SENSES: DictionarySenseRecordWithoutId[] = [
   }
 ];
 
-const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
+const THESAURUS_SENSES: ThesaurusSenseParams[] = [
   {
     senseId: FOOD_0_THES_NOU_SENSE_2_ID,
     ownEntryOxId: FOOD,
@@ -853,7 +855,7 @@ const THESAURUS_SENSES: ThesaurusSenseRecordWithoutId[] = [
   }
 ];
 
-const ENTRY_SENSES: EntrySenseRecordWithoutId[] = [
+const ENTRY_SENSES: EntrySenseParams[] = [
   {
     oxId: FOOD,
     homographC: 0,
@@ -1088,7 +1090,7 @@ const ENTRY_SENSES: EntrySenseRecordWithoutId[] = [
   }
 ];
 
-const SENSE_SIGNS: SenseSignRecordWithoutId[] = [
+const SENSE_SIGNS: SenseSignParams[] = [
   {
     userId: FRED_USER_ID,
     senseId: 'm_en_gbus0423120.004',
@@ -1497,21 +1499,19 @@ export class FixturesService {
     );
   }
 
-  entryConditionsGenerator(obj: EntryRecordWithoutId) {
+  entryConditionsGenerator(obj: EntryParams) {
     return { oxId: obj.oxId, homographC: obj.homographC };
   }
 
-  senseConditionsGenerator(
-    obj: DictionarySenseRecordWithoutId | ThesaurusSenseRecordWithoutId
-  ) {
+  senseConditionsGenerator(obj: DictionarySenseParams | ThesaurusSenseParams) {
     return { senseId: obj.senseId };
   }
 
-  entrySenseConditionsGenerator(obj: EntrySenseRecordWithoutId) {
+  entrySenseConditionsGenerator(obj: EntrySenseParams) {
     return { oxId: obj.oxId, homographC: obj.homographC, senseId: obj.senseId };
   }
 
-  senseSignConditionsGenerator(obj: SenseSignRecordWithoutId) {
+  senseSignConditionsGenerator(obj: SenseSignParams) {
     return {
       senseId: obj.senseId,
       signId: obj.signId

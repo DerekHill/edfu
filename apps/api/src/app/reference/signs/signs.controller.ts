@@ -23,7 +23,7 @@ import { Queue } from 'bull';
 import { TranscodeJobData } from '../../transcode/interfaces/transcode-job-data.interface';
 import { SignsService } from './signs.service';
 import { UsersService } from '../../users/users.service';
-import { HttpErrorMessages } from '@edfu/enums';
+import { HttpErrorMessages } from '@edfu/api-interfaces';
 
 @Controller('signs')
 export class SignsController {

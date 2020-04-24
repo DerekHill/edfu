@@ -38,3 +38,8 @@ export enum HttpErrorMessages {
   SIGNS__NO_FILE_ATTACHED = 'LOGIN__EMAIL_SENT_RECENTLY',
   EDFU__GENERIC_ERROR = 'EDFU__GENERIC_ERROR'
 }
+
+export enum HeadwordOrPhrase {
+  headword = 'headword',
+  phrase = 'phrase'
+}

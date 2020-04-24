@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { HydratedSense } from '@edfu/api-interfaces';
+import { SenseHydratedDtoInterface } from '@edfu/api-interfaces';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 
@@ -8,14 +8,14 @@ import { faEye } from '@fortawesome/free-solid-svg-icons';
   templateUrl: './sense-selection.component.html'
 })
 export class SenseSelectionComponent {
-  @Input() senses: HydratedSense[];
-  @Output() senseEmitter = new EventEmitter<HydratedSense>();
+  @Input() senses: SenseHydratedDtoInterface[];
+  @Output() senseEmitter = new EventEmitter<SenseHydratedDtoInterface>();
 
   constructor(public library: FaIconLibrary) {
     library.addIcons(faEye);
   }
 
-  onSenseClick(event, sense: HydratedSense) {
+  onSenseClick(event, sense: SenseHydratedDtoInterface) {
     this.senseEmitter.emit(sense);
   }
 }

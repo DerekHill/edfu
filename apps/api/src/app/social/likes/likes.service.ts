@@ -5,9 +5,13 @@ import {
   SENSE_SIGN_COLLECTION_NAME
 } from '../../constants';
 import { Model } from 'mongoose';
-import { LikeDocument, LikeRecord } from './interfaces/like.interface';
-import { ManageLikeParams, FindLikeParams } from '@edfu/api-interfaces';
-import { SenseSignDocument } from '../../reference/signs/interfaces/sense-sign.interface';
+import {
+  ManageLikeParams,
+  FindLikeParams,
+  LikeDocument,
+  LikeRecord,
+  SenseSignDocument
+} from '@edfu/api-interfaces';
 import { ObjectId } from 'bson';
 
 @Injectable()

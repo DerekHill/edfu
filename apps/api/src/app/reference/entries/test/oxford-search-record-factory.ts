@@ -1,6 +1,6 @@
 import { OxfordSearchRecord } from '../../../oxford-searches/interfaces/oxford-search.interface';
 import { ObjectId } from 'bson';
-import { HeadwordOrPhrase } from '../../../enums';
+import { HeadwordOrPhrase } from '@edfu/api-interfaces';
 
 export const createEntrySearchRecord = (
   word: string,

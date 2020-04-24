@@ -17,7 +17,7 @@ import { CreateUserDto } from '../users/dto/create-user.dto';
 import { ResponseSuccess } from '../common/dto/response.dto';
 import { UsersService } from '../users/users.service';
 import { IResponse, PRODUCTION_BASE_URL } from '@edfu/api-interfaces';
-import { HttpErrorMessages } from '@edfu/enums';
+import { HttpErrorMessages } from '@edfu/api-interfaces';
 
 @Controller('auth')
 export class AuthController {

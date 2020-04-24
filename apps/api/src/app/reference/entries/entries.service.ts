@@ -8,22 +8,22 @@ import {
 } from '../../constants';
 import { Model } from 'mongoose';
 import {
-  EntryRecord,
-  EntryDocument,
-  EntryRecordWithoutId
-} from './interfaces/entry.interface';
-import {
   EntrySearchesService,
   ThesaurusSearchesService
 } from '../../oxford-searches/oxford-searches.service';
 import { OxfordSearchRecord } from '../../oxford-searches/interfaces/oxford-search.interface';
 import { SensesService } from '../senses/senses.service';
-import { LexicalCategory, DictionaryOrThesaurus } from '@edfu/enums';
 import {
+  LexicalCategory,
+  DictionaryOrThesaurus,
+  EntryDocument,
+  EntryRecord,
+  EntryParams,
+  HeadwordOrPhrase,
   DictionarySenseRecord,
   ThesaurusSenseRecord
-} from '../senses/interfaces/sense.interface';
-import { HeadwordOrPhrase } from '../../enums';
+} from '@edfu/api-interfaces';
+
 import { EntrySensesService } from '../entry-senses/entry-senses.service';
 import { SimilarityService } from '../similarity/similarity.service';
 import { UniqueEntry } from '@edfu/api-interfaces';
@@ -321,7 +321,7 @@ export class EntriesService {
       homographC: record.homographC
     };
 
-    const entry: EntryRecordWithoutId = {
+    const entry: EntryParams = {
       ...conditions,
       ...{
         word: record.result.word,

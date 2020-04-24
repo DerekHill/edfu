@@ -13,9 +13,8 @@ import {
 import { transporter } from '../config/mail';
 import * as bcrypt from 'bcryptjs';
 import { ForgottenPassword } from './interfaces/forgottenpassword.interface';
-import { BasicUser } from '@edfu/api-interfaces';
-import { HttpErrorMessages } from '@edfu/enums';
-import { UserDocument } from '../users/interfaces/user.interface';
+import { BasicUser, UserDocument } from '@edfu/api-interfaces';
+import { HttpErrorMessages } from '@edfu/api-interfaces';
 
 const EMAIL_VERIFICATION_TIMEOUT_MINUTES = 1;
 

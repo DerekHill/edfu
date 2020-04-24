@@ -21,17 +21,19 @@ import {
   createThesaurusSearchRecord
 } from './test/oxford-search-record-factory';
 import {
+  DictionaryOrThesaurus,
+  LexicalCategory,
+  HeadwordOrPhrase,
+  EntryDocument,
+  EntryRecord,
+  EntrySenseRecord,
   DictionarySenseRecord,
   ThesaurusSenseRecord,
   LinkedSensePairing
-} from '../senses/interfaces/sense.interface';
-import { HeadwordOrPhrase } from '../../enums';
-import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
-import { EntrySenseRecord } from '../entry-senses/interfaces/entry-sense.interface';
+} from '@edfu/api-interfaces';
 import { EntrySensesService } from '../entry-senses/entry-senses.service';
 import { SimilarityService } from '../similarity/similarity.service';
 import { Injectable } from '@nestjs/common';
-import { EntryDocument, EntryRecord } from './interfaces/entry.interface';
 import { Model } from 'mongoose';
 import { BullModule } from '@nestjs/bull';
 

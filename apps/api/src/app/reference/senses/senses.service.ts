@@ -9,12 +9,15 @@ import {
   SenseDocument,
   DictionarySenseRecord,
   ThesaurusSenseRecord,
-  SharedSenseRecordWithoutId,
-  DictionarySenseRecordWithoutId,
-  ThesaurusSenseRecordWithoutId,
+  DictionarySenseParams,
+  ThesaurusSenseParams,
   LinkedSensePairing
-} from './interfaces/sense.interface';
-import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
+} from '@edfu/api-interfaces';
+import {
+  DictionaryOrThesaurus,
+  LexicalCategory,
+  AllSenseParams
+} from '@edfu/api-interfaces';
 import { oc } from 'ts-optchain';
 import {
   OxSense,
@@ -50,7 +53,7 @@ export class SensesService {
   ): Promise<DictionarySenseRecord> {
     const senseId = this.extractSenseId(oxSense);
 
-    const sense: DictionarySenseRecordWithoutId = {
+    const sense: DictionarySenseParams = {
       ownEntryOxId: ownEntryOxId,
       ownEntryHomographC: ownEntryHomographC,
       dictionaryOrThesaurus: DictionaryOrThesaurus.dictionary,
@@ -84,7 +87,7 @@ export class SensesService {
   ): Promise<ThesaurusSenseRecord> {
     const senseId = this.extractSenseId(oxSense);
 
-    const sense: ThesaurusSenseRecordWithoutId = {
+    const sense: ThesaurusSenseParams = {
       ownEntryOxId: ownEntryOxId,
       ownEntryHomographC: ownEntryHomographC,
       dictionaryOrThesaurus: DictionaryOrThesaurus.thesaurus,
@@ -100,7 +103,7 @@ export class SensesService {
 
   async findOneAndUpdate<
     T extends ThesaurusSenseRecord | DictionarySenseRecord
-  >(senseId: string, sense: SharedSenseRecordWithoutId): Promise<T> {
+  >(senseId: string, sense: AllSenseParams): Promise<T> {
     const conditions = { senseId: senseId };
 
     try {

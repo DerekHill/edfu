@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { SignComponent } from './sign.component';
 import { ObjectId } from 'bson';
-import { SignRecord, Transcoding } from '@edfu/api-interfaces';
+import { SignDtoInterface, Transcoding } from '@edfu/api-interfaces';
 import { MatListModule } from '@angular/material/list';
 import { DeviceDetectorModule } from 'ngx-device-detector';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -31,7 +31,7 @@ describe('SignComponent', () => {
   }));
 
   beforeEach(() => {
-    const signData: SignRecord = {
+    const signData: SignDtoInterface = {
       _id: new ObjectId(),
       userId: new ObjectId(),
       mnemonic: 'remember me',

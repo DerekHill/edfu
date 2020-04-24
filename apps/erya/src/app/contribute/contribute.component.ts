@@ -10,10 +10,10 @@ import { Apollo, QueryRef } from 'apollo-angular';
 import { Observable, Subscription } from 'rxjs';
 import gql from 'graphql-tag';
 import {
-  HydratedSense,
   MAX_UPLOAD_SIZE_BYTES,
   VALID_VIDEO_FILE_REGEX,
-  SUPPORTED_VIDEO_FORMATS_STRING
+  SUPPORTED_VIDEO_FORMATS_STRING,
+  SenseHydratedDtoInterface
 } from '@edfu/api-interfaces';
 import { map } from 'rxjs/operators';
 import { ApolloQueryResult } from 'apollo-client';
@@ -40,12 +40,12 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 const endpoint = `${environment.apiUri}/signs`;
 
-interface SensesFromApiSearchVariables {
+interface HydratedSensesLexSearchVariables {
   searchString?: string;
 }
 
-interface SensesFromApiResult {
-  hydratedSensesLex: HydratedSense[];
+interface HydratedSensesLexResult {
+  hydratedSensesLex: SenseHydratedDtoInterface[];
 }
 
 enum UploadStatus {
@@ -110,12 +110,12 @@ export class ContributeComponent implements OnInit, OnDestroy {
   @ViewChild('addedSign') addedSignEl: ElementRef;
 
   hydratedSensesSearchRef: QueryRef<
-    SensesFromApiResult,
-    SensesFromApiSearchVariables
+    HydratedSensesLexResult,
+    HydratedSensesLexSearchVariables
   >;
 
-  senses$: Observable<HydratedSense[]>;
-  senses: HydratedSense[];
+  senses$: Observable<SenseHydratedDtoInterface[]>;
+  senses: SenseHydratedDtoInterface[];
 
   public signFormGroup: FormGroup;
   public fileToUpload: File = null;
@@ -162,14 +162,14 @@ export class ContributeComponent implements OnInit, OnDestroy {
     this.checkboxControl = this.signFormGroup.controls.senseIds as FormArray;
 
     this.hydratedSensesSearchRef = this.apollo.watchQuery<
-      SensesFromApiResult,
-      SensesFromApiSearchVariables
+      HydratedSensesLexResult,
+      HydratedSensesLexSearchVariables
     >({
       query: HydratedSensesLexQuery
     });
 
     this.senses$ = this.hydratedSensesSearchRef.valueChanges.pipe(
-      map((res: ApolloQueryResult<SensesFromApiResult>) => {
+      map((res: ApolloQueryResult<HydratedSensesLexResult>) => {
         this.showLoader = res.loading;
         return res.data.hydratedSensesLex;
       }),

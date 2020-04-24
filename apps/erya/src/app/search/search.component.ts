@@ -13,7 +13,10 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { startWith } from 'rxjs/operators';
 import gql from 'graphql-tag';
 import { Apollo } from 'apollo-angular';
-import { HydratedSense, SenseSignDtoInterface } from '@edfu/api-interfaces';
+import {
+  SenseHydratedDtoInterface,
+  SenseSignDtoInterface
+} from '@edfu/api-interfaces';
 import { ApolloQueryResult } from 'apollo-client';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 import { SenseArrangerService } from './sense-arranger/sense-arranger.service';
@@ -28,7 +31,7 @@ interface OxIdsResult {
 }
 
 interface SensesResult {
-  hydratedSensesExisting: HydratedSense[];
+  hydratedSensesExisting: SenseHydratedDtoInterface[];
 }
 
 interface SenseSignsResult {
@@ -50,11 +53,11 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
   searchChars$: Observable<string>;
 
   oxIdsBs$: BehaviorSubject<string[]>;
-  sensesBs$: BehaviorSubject<HydratedSense[]>;
+  sensesBs$: BehaviorSubject<SenseHydratedDtoInterface[]>;
   signsBs$: BehaviorSubject<SenseSignDtoInterface[]>;
 
-  selectedSense: HydratedSense;
-  explicitlySelectedSense: HydratedSense;
+  selectedSense: SenseHydratedDtoInterface;
+  explicitlySelectedSense: SenseHydratedDtoInterface;
 
   routeOxIdLower$: Observable<string>;
   currentOxIdLower: string;
@@ -159,7 +162,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     });
 
-    this.sensesBs$.subscribe((senses: HydratedSense[]) => {
+    this.sensesBs$.subscribe((senses: SenseHydratedDtoInterface[]) => {
       if (senses.length > 1) {
         this.senseCount = SenseCount.moreThanOne;
       }
@@ -200,7 +203,10 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
-  onSenseSelect(sense: HydratedSense, senseExplicitySelected = false) {
+  onSenseSelect(
+    sense: SenseHydratedDtoInterface,
+    senseExplicitySelected = false
+  ) {
     this.selectedSense = sense;
 
     if (senseExplicitySelected) {

@@ -1,25 +1,11 @@
-import {
-  Component,
-  ElementRef,
-  Input,
-  ViewChild,
-  OnInit
-} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   SignRecord,
   Transcoding,
-  HydratedSense,
-  LikeRecordWithoutId
+  SenseHydratedDtoInterface
 } from '@edfu/api-interfaces';
 import { DeviceDetectorService } from 'ngx-device-detector';
-import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { CDN_URI } from '../../constants';
-import { Apollo } from 'apollo-angular';
-import gql from 'graphql-tag';
-import { ApolloQueryResult } from 'apollo-client';
-import { BehaviorSubject } from 'rxjs';
-import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'edfu-sign',
@@ -29,19 +15,11 @@ export class SignComponent implements OnInit {
   public mediaUrl: string;
   public _sign: SignRecord;
 
-  @Input() sense: HydratedSense;
+  @Input() sense: SenseHydratedDtoInterface;
 
+  constructor(private deviceService: DeviceDetectorService) {}
 
-  constructor(
-    private deviceService: DeviceDetectorService,
-    private authService: AuthService,
-    private apollo: Apollo
-  ) {
-  }
-
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
 
   @Input()
   set sign(sign: SignRecord) {
@@ -64,7 +42,6 @@ export class SignComponent implements OnInit {
     return this._sign;
   }
 
-
   _getMobileTranscoding(transcodings: Transcoding[]): Transcoding {
     return transcodings.sort(this.sortByBitrate)[0];
   }
@@ -84,7 +61,6 @@ export class SignComponent implements OnInit {
 
     return biggestMp4Transcoding || biggestTranscoding;
   }
-
 
   private generateMediaUrl(key: string) {
     return `${CDN_URI}/${key}`;

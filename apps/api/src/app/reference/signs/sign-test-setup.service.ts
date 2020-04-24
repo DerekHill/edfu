@@ -6,11 +6,11 @@ import {
 } from '../../constants';
 import { Model } from 'mongoose';
 import {
+  SignRecord,
   SenseSignDocument,
-  SenseSignRecord
-} from './interfaces/sense-sign.interface';
-import { SignDocument } from './interfaces/sign.interface';
-import { SignRecord, SenseSignRecordWithoutId } from '@edfu/api-interfaces';
+  SenseSignRecord,
+  SignDocument
+} from '@edfu/api-interfaces';
 import { ObjectId } from 'bson';
 
 @Injectable()

@@ -5,18 +5,19 @@ import { TestDatabaseModule } from '../../config/test-database.module';
 import { MongooseModule, InjectModel } from '@nestjs/mongoose';
 import { SenseSchema } from './schemas/sense.schema';
 import { SENSE_COLLECTION_NAME, ENTRY_COLLECTION_NAME } from '../../constants';
-import { LexicalCategory, DictionaryOrThesaurus } from '@edfu/enums';
-import { OxSense } from '../../oxford-api/interfaces/oxford-api.interface';
-import { EntrySchema } from '../entries/schemas/entry.schema';
-import { EntrySenseRecord } from '../entry-senses/interfaces/entry-sense.interface';
-import { EntrySensesService } from '../entry-senses/entry-senses.service';
 import {
+  LexicalCategory,
+  DictionaryOrThesaurus,
+  AllSenseParams,
+  EntrySenseRecord,
   ThesaurusSenseRecord,
   SenseDocument,
-  SharedSenseRecordWithoutId,
-  DictionarySenseRecordWithoutId,
+  DictionarySenseParams,
   LinkedSensePairing
-} from './interfaces/sense.interface';
+} from '@edfu/api-interfaces';
+import { OxSense } from '../../oxford-api/interfaces/oxford-api.interface';
+import { EntrySchema } from '../entries/schemas/entry.schema';
+import { EntrySensesService } from '../entry-senses/entry-senses.service';
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 
@@ -27,9 +28,7 @@ class SensesTestSetupService {
     private readonly senseModel: Model<SenseDocument>
   ) {}
 
-  create(
-    sense: SharedSenseRecordWithoutId
-  ): Promise<SharedSenseRecordWithoutId> {
+  create(sense: AllSenseParams): Promise<AllSenseParams> {
     return this.senseModel.create(sense);
   }
 }
@@ -112,7 +111,7 @@ describe('SensesService', () => {
     it('finds linked dictionary sense by thesaurusSenseIds', async () => {
       const DICTIONARY_SENSE_ID = 'dictionarySenseId';
       const THESAURUS_SENSE_ID = 'thesaurusSenseId';
-      const dictionarySense: DictionarySenseRecordWithoutId = {
+      const dictionarySense: DictionarySenseParams = {
         senseId: DICTIONARY_SENSE_ID,
         ownEntryOxId: 'jump',
         ownEntryHomographC: 0,

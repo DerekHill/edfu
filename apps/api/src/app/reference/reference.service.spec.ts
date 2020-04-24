@@ -16,7 +16,7 @@ import { SenseSignSchema } from './signs/schemas/sense-sign.schema';
 import { SignSchema } from './signs/schemas/sign.schema';
 import { ReferenceTestSetupService } from './reference-test-setup.service';
 import { ObjectId } from 'bson';
-import { DictionaryOrThesaurus } from '@edfu/enums';
+import { DictionaryOrThesaurus } from '@edfu/api-interfaces';
 
 describe('ReferenceService', () => {
   let service: ReferenceService;

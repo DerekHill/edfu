@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConsoleModule } from 'nestjs-console';
 import { MongooseModule } from '@nestjs/mongoose';
 import { OxfordApiModule } from './oxford-api/oxford-api.module';
@@ -61,7 +59,6 @@ if (process.env.IS_WORKER_PROCESS_TYPE === 'yes') {
 
 @Module({
   imports: imports,
-  controllers: [AppController, AuthController],
-  providers: [AppService]
+  controllers: [AuthController]
 })
 export class AppModule {}

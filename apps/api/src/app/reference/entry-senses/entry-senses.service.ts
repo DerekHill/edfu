@@ -6,10 +6,10 @@ import {
 } from '../../constants';
 import { Model } from 'mongoose';
 import {
-  EntrySenseDocument,
-  EntrySenseRecord
-} from './interfaces/entry-sense.interface';
-import { DictionaryOrThesaurus } from '@edfu/enums';
+  DictionaryOrThesaurus,
+  EntrySenseRecord,
+  EntrySenseDocument
+} from '@edfu/api-interfaces';
 
 @Injectable()
 export class EntrySensesService {

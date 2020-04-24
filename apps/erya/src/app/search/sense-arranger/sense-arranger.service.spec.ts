@@ -1,9 +1,9 @@
 import { SenseArrangerService } from './sense-arranger.service';
-import { HydratedSense, SignRecord } from '@edfu/api-interfaces';
-import { LexicalCategory, DictionaryOrThesaurus } from '@edfu/enums';
+import { SenseHydratedDtoInterface, SignRecord } from '@edfu/api-interfaces';
+import { LexicalCategory, DictionaryOrThesaurus } from '@edfu/api-interfaces';
 import { ObjectId } from 'bson';
 
-const createSense = (params: any): HydratedSense => {
+const createSense = (params: any): SenseHydratedDtoInterface => {
   const defaults = {
     oxId: 'oxId',
     homographC: 0,
@@ -33,7 +33,7 @@ describe('SenseArrangerService', () => {
           mnemonic: 'remember me',
           s3KeyOrig: '1234'
         };
-        const senses: HydratedSense[] = [
+        const senses: SenseHydratedDtoInterface[] = [
           createSense({
             signs: []
           }),
@@ -52,7 +52,7 @@ describe('SenseArrangerService', () => {
           mnemonic: 'remember me',
           s3KeyOrig: '1234'
         };
-        const senses: HydratedSense[] = [
+        const senses: SenseHydratedDtoInterface[] = [
           createSense({
             signs: [sign]
           }),
@@ -70,7 +70,7 @@ describe('SenseArrangerService', () => {
 
     describe('_removeThesaurusSensesIfHaveDictionarySense()', () => {
       it('filters out thesaurus senses if there is a dictionary sense present', () => {
-        const senses: HydratedSense[] = [
+        const senses: SenseHydratedDtoInterface[] = [
           createSense({
             associationType: DictionaryOrThesaurus.dictionary
           }),
@@ -83,7 +83,7 @@ describe('SenseArrangerService', () => {
       });
 
       it('returns all senses if there is no thesaurus sense present', () => {
-        const senses: HydratedSense[] = [
+        const senses: SenseHydratedDtoInterface[] = [
           createSense({
             associationType: DictionaryOrThesaurus.dictionary
           }),

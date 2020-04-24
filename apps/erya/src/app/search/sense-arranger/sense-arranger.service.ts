@@ -1,16 +1,10 @@
-import { HydratedSense, SignRecord, UniqueEntry } from '@edfu/api-interfaces';
-import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/enums';
+import {
+  SenseHydratedDtoInterface,
+  SignDtoInterface
+} from '@edfu/api-interfaces';
+import { DictionaryOrThesaurus, LexicalCategory } from '@edfu/api-interfaces';
 
 const MAX_SENSES_LIMIT = 20;
-
-export interface SenseGroup {
-  lexicalCategory: LexicalCategory;
-  senses: HydratedSense[];
-}
-
-export interface UniqueEntryWithSenseGroups extends UniqueEntry {
-  senseGroups: SenseGroup[];
-}
 
 const lexicalCategoryOrder = [
   LexicalCategory.noun,
@@ -27,7 +21,10 @@ const lexicalCategoryOrder = [
 ];
 
 export class SenseArrangerService {
-  sortAndFilter(senses: HydratedSense[], filter = true): HydratedSense[] {
+  sortAndFilter(
+    senses: SenseHydratedDtoInterface[],
+    filter = true
+  ): SenseHydratedDtoInterface[] {
     senses = senses.sort(this._compareSensesByHomographSenseIndexAndSimilarity);
 
     if (filter) {
@@ -39,8 +36,8 @@ export class SenseArrangerService {
   }
 
   _compareSensesByHomographSenseIndexAndSimilarity(
-    a: HydratedSense,
-    b: HydratedSense
+    a: SenseHydratedDtoInterface,
+    b: SenseHydratedDtoInterface
   ) {
     if (a.homographC !== b.homographC) {
       if (a.homographC < b.homographC) {
@@ -75,7 +72,9 @@ export class SenseArrangerService {
     }
   }
 
-  _filterForSensesWithDifferentSigns(senses: HydratedSense[]): HydratedSense[] {
+  _filterForSensesWithDifferentSigns(
+    senses: SenseHydratedDtoInterface[]
+  ): SenseHydratedDtoInterface[] {
     const allSignsIds = new Set();
     return senses.filter(sense => {
       if (this._noNewSigns(allSignsIds, sense.signs)) {
@@ -86,7 +85,7 @@ export class SenseArrangerService {
     });
   }
 
-  _noNewSigns(allSignsIds: Set<any>, signs: SignRecord[]): boolean {
+  _noNewSigns(allSignsIds: Set<any>, signs: SignDtoInterface[]): boolean {
     const intersection = new Set(
       [...signs].filter(sign => allSignsIds.has(sign._id))
     );
@@ -94,24 +93,15 @@ export class SenseArrangerService {
     return intersection.size === signs.length;
   }
 
-  _applyMaxSensesLimit(senses: HydratedSense[]): HydratedSense[] {
+  _applyMaxSensesLimit(
+    senses: SenseHydratedDtoInterface[]
+  ): SenseHydratedDtoInterface[] {
     return senses.slice(0, MAX_SENSES_LIMIT);
   }
 
-  _extractRelevantSensesPreservingOrder(
-    senses: HydratedSense[],
-    uniqueEntry: UniqueEntry
-  ): HydratedSense[] {
-    return senses.filter(
-      sense =>
-        sense.oxId === uniqueEntry.oxId &&
-        sense.homographC === uniqueEntry.homographC
-    );
-  }
-
   _removeThesaurusSensesIfHaveDictionarySense(
-    senses: HydratedSense[]
-  ): HydratedSense[] {
+    senses: SenseHydratedDtoInterface[]
+  ): SenseHydratedDtoInterface[] {
     const dictionarySenses = senses.filter(
       sense => sense.associationType === DictionaryOrThesaurus.dictionary
     );

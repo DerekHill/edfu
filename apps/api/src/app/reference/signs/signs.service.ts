@@ -6,13 +6,14 @@ import {
   MONGO_DUPLICATE_ERROR_CODE
 } from '../../constants';
 import { Model } from 'mongoose';
-import { SignDocument } from './interfaces/sign.interface';
-import {
-  SenseSignDocument,
-  SenseSignRecord
-} from './interfaces/sense-sign.interface';
 import { ObjectId } from 'bson';
-import { SignRecord, SenseSignRecordWithoutId } from '@edfu/api-interfaces';
+import {
+  SignRecord,
+  SenseSignParams,
+  SenseSignDocument,
+  SenseSignRecord,
+  SignDocument
+} from '@edfu/api-interfaces';
 import { CreateSignDto } from './dto/create-sign.dto';
 
 @Injectable()
@@ -62,7 +63,7 @@ export class SignsService {
   }
 
   private async findOrCreateSenseSign(
-    senseSign: SenseSignRecordWithoutId
+    senseSign: SenseSignParams
   ): Promise<SenseSignRecord> {
     try {
       return await this.senseSignModel

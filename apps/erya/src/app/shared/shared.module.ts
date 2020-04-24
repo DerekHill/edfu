@@ -5,6 +5,8 @@ import { OxIdThesaurusPipe } from './pipes/ox-id-thesaurus.pipe';
 import { PlayerComponent } from './components/player/player.component';
 import { CommonModule } from '@angular/common';
 import { ModalComponent } from './components/modal/modal.component';
+import { IdToDatePipe } from './pipes/id-to-date.pipe';
+import { TimeAgoPipe } from './pipes/time-ago.pipe';
 
 @NgModule({
   imports: [CommonModule],
@@ -12,6 +14,8 @@ import { ModalComponent } from './components/modal/modal.component';
     RemoveUnderscoresPipe,
     HighlightEntryPipe,
     OxIdThesaurusPipe,
+    IdToDatePipe,
+    TimeAgoPipe,
     PlayerComponent,
     ModalComponent
   ],
@@ -19,8 +23,10 @@ import { ModalComponent } from './components/modal/modal.component';
     RemoveUnderscoresPipe,
     HighlightEntryPipe,
     OxIdThesaurusPipe,
+    IdToDatePipe,
     PlayerComponent,
-    ModalComponent
+    ModalComponent,
+    TimeAgoPipe
   ]
 })
 export class SharedModule {}

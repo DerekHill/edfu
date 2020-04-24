@@ -1,6 +1,7 @@
 import { IsString, IsNotEmpty } from 'class-validator';
+import { SignParams } from '@edfu/api-interfaces';
 
-export class CreateSignDto {
+export class CreateSignDto implements Omit<SignParams, 'userId' | 's3KeyOrig'> {
   @IsString()
   mnemonic?: string;
 

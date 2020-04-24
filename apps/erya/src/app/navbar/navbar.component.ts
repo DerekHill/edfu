@@ -8,9 +8,14 @@ import {
   faHome,
   faPlus,
   faSignInAlt,
-  faSignOutAlt, faUser
+  faSignOutAlt,
+  faUser
 } from '@fortawesome/free-solid-svg-icons';
-import { SEARCH_COMPONENT_PATH, LOGIN_COMPONENT_PATH } from '../constants';
+import {
+  SEARCH_COMPONENT_PATH,
+  LOGIN_COMPONENT_PATH,
+  CONTRIBUTE_COMPONENT_PATH
+} from '../constants';
 
 @Component({
   selector: 'edfu-navbar',
@@ -20,6 +25,7 @@ export class NavbarComponent {
   isMenuOpen = false;
   searchComponentPath = `/${SEARCH_COMPONENT_PATH}`;
   loginComponentPath = `/${LOGIN_COMPONENT_PATH}`;
+  contributeComponentPath = `/${CONTRIBUTE_COMPONENT_PATH}`;
 
   currentUser$: Observable<BasicUser> = this.authService.currentUser$;
 

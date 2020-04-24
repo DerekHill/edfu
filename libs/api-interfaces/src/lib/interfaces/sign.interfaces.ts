@@ -2,11 +2,16 @@ import { ObjectId } from 'bson';
 import { SenseSignDtoInterface } from '@edfu/api-interfaces';
 import { Document } from 'mongoose';
 
-interface SignParams {
+export interface SignParams {
   readonly userId: ObjectId;
-  readonly mnemonic: string;
   readonly s3KeyOrig: string;
+  readonly mnemonic?: string;
   readonly transcodings?: Transcoding[];
+}
+
+export interface DeleteSignParams {
+  _id: ObjectId;
+  userId: ObjectId;
 }
 
 export interface SignRecord extends SignParams {

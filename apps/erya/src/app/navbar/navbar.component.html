@@ -27,7 +27,10 @@
     <div class="navbar-end">
       <div class="navbar-item">
         <div class="buttons">
-          <a class="button is-info" (click)="navigateTo('/contribute')">
+          <a
+            class="button is-info"
+            (click)="navigateTo(contributeComponentPath)"
+          >
             <span class="icon"
               ><fa-icon [icon]="['fas', 'plus']"></fa-icon
             ></span>

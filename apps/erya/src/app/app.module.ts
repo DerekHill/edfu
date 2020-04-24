@@ -24,7 +24,8 @@ import { ResponseErrorInterceptor } from './shared/interceptors/response-error.i
 import {
   SEARCH_COMPONENT_PATH,
   LOGIN_COMPONENT_PATH,
-  SIGNUP_COMPONENT_PATH
+  SIGNUP_COMPONENT_PATH,
+  CONTRIBUTE_COMPONENT_PATH
 } from './constants';
 import { SyncServerVersionInterceptor } from './shared/interceptors/sync-server-version.interceptor';
 import { SignupComponent } from './login/signup.component';
@@ -40,7 +41,7 @@ const appRoutes: Routes = [
     component: SearchComponent
   },
   {
-    path: 'contribute',
+    path: CONTRIBUTE_COMPONENT_PATH,
     component: ContributeComponent,
     canActivate: [AuthGuard]
   },

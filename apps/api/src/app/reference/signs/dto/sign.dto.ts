@@ -12,8 +12,8 @@ export class SignDto implements SignDtoInterface {
   @Field(type => ID)
   userId: ObjectId;
 
-  @Field()
-  readonly mnemonic: string;
+  @Field({ nullable: true })
+  readonly mnemonic?: string;
 
   @Field()
   readonly s3KeyOrig: string;

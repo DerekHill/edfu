@@ -18,6 +18,7 @@ import { AuthService } from '../../../auth/auth.service';
 import { pulseAnimation } from '../../../animations/pulse.animation';
 import { query, transition, trigger, useAnimation } from '@angular/animations';
 import { ModalService } from '../../../shared/components/modal/modal.service';
+import { ActivatedRoute } from '@angular/router';
 
 const GetLikesQuery = gql`
   query GetLikesQuery($signId: ID!) {
@@ -95,7 +96,8 @@ export class LikeComponent implements OnInit {
     private library: FaIconLibrary,
     private authService: AuthService,
     private apollo: Apollo,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private route: ActivatedRoute
   ) {
     library.addIcons(farHeart, fasHeart);
   }
@@ -218,5 +220,9 @@ export class LikeComponent implements OnInit {
 
   openModal(id: string) {
     this.modalService.open(id);
+  }
+
+  getReturnUrl() {
+    return this.route.snapshot.url.join('/');
   }
 }

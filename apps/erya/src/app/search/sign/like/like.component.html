@@ -30,7 +30,7 @@
     <p class="control ">
       <a
         class="is-fullwidth button is-primary"
-        routerLink="{{ loginComponentPath }}"
+        routerLink="{{ loginComponentPath }}" [queryParams]="{returnUrl: getReturnUrl()}"
       >
         Login
       </a>

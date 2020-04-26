@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import {
-  SignRecord,
+  SignDtoInterface,
   Transcoding,
   SenseHydratedDtoInterface
 } from '@edfu/api-interfaces';
@@ -13,7 +13,7 @@ import { CDN_URI } from '../../constants';
 })
 export class SignComponent implements OnInit {
   public mediaUrl: string;
-  public _sign: SignRecord;
+  public _sign: SignDtoInterface;
 
   @Input() sense: SenseHydratedDtoInterface;
 
@@ -22,7 +22,7 @@ export class SignComponent implements OnInit {
   ngOnInit() {}
 
   @Input()
-  set sign(sign: SignRecord) {
+  set sign(sign: SignDtoInterface) {
     let s3Key: string;
     if (sign && sign.transcodings && sign.transcodings.length) {
       const transcodings = sign.transcodings;
@@ -38,7 +38,7 @@ export class SignComponent implements OnInit {
     this._sign = sign;
   }
 
-  get sign(): SignRecord {
+  get sign(): SignDtoInterface {
     return this._sign;
   }
 

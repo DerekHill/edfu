@@ -1,5 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { LikeDtoInterface } from '@edfu/api-interfaces';
+import {
+  LikeDtoInterface,
+  SenseHydratedDtoInterface
+} from '@edfu/api-interfaces';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faHeart as farHeart } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as fasHeart } from '@fortawesome/free-regular-svg-icons';
@@ -81,9 +84,10 @@ interface RemoveLikesResult {
 export class LikeComponent implements OnInit {
   public likesBs$: BehaviorSubject<LikeDtoInterface[]>;
   public likeCountBs$: BehaviorSubject<number>;
+  public currentUserHasLikedBs$: BehaviorSubject<boolean>;
 
-  @Input() signId;
-  @Input() sense;
+  @Input() signId: string;
+  @Input() sense: SenseHydratedDtoInterface;
   signupComponentPath = `/${SIGNUP_COMPONENT_PATH}`;
   loginComponentPath = `/${LOGIN_COMPONENT_PATH}`;
 
@@ -99,10 +103,12 @@ export class LikeComponent implements OnInit {
   ngOnInit() {
     this.likesBs$ = new BehaviorSubject([]);
     this.likeCountBs$ = new BehaviorSubject(null);
+    this.currentUserHasLikedBs$ = new BehaviorSubject(false);
     this.getLikes();
 
     this.likesBs$.subscribe(likes => {
       this.setLikeCount(likes);
+      this.setCurrentUserHasLiked(likes);
     });
   }
 
@@ -181,6 +187,25 @@ export class LikeComponent implements OnInit {
         return Math.max(acc, curr.length);
       }, 0);
       this.likeCountBs$.next(maxLikes);
+    }
+  }
+
+  private setCurrentUserHasLiked(likes: LikeDtoInterface[]): void {
+    const currentUser = this.authService.currentUserValue;
+    if (currentUser) {
+      const currentUserLikes = likes.filter(like => {
+        if (this.sense) {
+          return (
+            like.userId === currentUser._id &&
+            like.senseId === this.sense.senseId
+          );
+        } else {
+          return like.userId === currentUser._id;
+        }
+      });
+      this.currentUserHasLikedBs$.next(!!currentUserLikes.length);
+    } else {
+      this.currentUserHasLikedBs$.next(false);
     }
   }
 

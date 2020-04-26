@@ -45,7 +45,7 @@ export class AuthController {
   ): Promise<IResponse> {
     try {
       const newUser = await this.usersService.createNewUser(createUserDto);
-
+      console.log('New user registered', newUser);
       await this.authService.createEmailToken(newUser.email);
       const sent = await this.authService.sendEmailVerification(
         req.headers.host,

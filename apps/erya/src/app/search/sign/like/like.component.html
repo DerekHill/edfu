@@ -1,6 +1,6 @@
 <a
   class="button is-small"
-  *ngIf="(likesBs$ | async).length > 0; else addLike"
+  *ngIf="currentUserHasLikedBs$ | async; else addLike"
   (click)="onUnlikeClick()"
   @pulseAnimation
 >

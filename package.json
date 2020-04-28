@@ -93,7 +93,7 @@
     "passport-local": "^1.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~6.5.5",
-    "sitemap": "^6.1.1",
+    "sitemap": "^6.1.2",
     "ts-optchain": "^0.1.8",
     "tslib": "^1.11.1",
     "utility-types": "^3.10.0",

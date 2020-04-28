@@ -77,11 +77,13 @@ export class TranscodeQueueConsumer {
 
     console.log(`Transcoding job ${job.id} for key ${s3KeyOrig}`);
 
-    const origFile = await this.s3Service.getObject(s3KeyOrig);
+    let origFile = await this.s3Service.getObject(s3KeyOrig);
 
     const origVideoPath = path.join(TEMP_DIR, s3KeyOrig);
 
     await fs.promises.writeFile(origVideoPath, origFile);
+
+    origFile = undefined;
 
     const inputVideoProps = await this._getSummaryStatsAndLog(
       origVideoPath,
@@ -129,9 +131,11 @@ export class TranscodeQueueConsumer {
       `${newKey} output:`
     );
 
-    const newVideoFile = await fs.promises.readFile(newVideoPath);
+    let newVideoFile = await fs.promises.readFile(newVideoPath);
 
     await this.s3Service.upload(newVideoFile, newKey);
+
+    newVideoFile = undefined;
 
     await fs.promises.unlink(newVideoPath);
 

@@ -63,7 +63,7 @@
     "@types/bcryptjs": "^2.4.2",
     "@types/fluent-ffmpeg": "file:local-types/fluent-ffmpeg",
     "@types/nodemailer": "^6.4.0",
-    "@types/supertest": "^2.0.8",
+    "@types/supertest": "^2.0.9",
     "angular2-hotkeys": "^2.2.0",
     "apollo-angular": "^1.9.1",
     "apollo-angular-link-http": "^1.10.0",

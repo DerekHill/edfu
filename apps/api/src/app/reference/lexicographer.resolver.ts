@@ -31,11 +31,15 @@ export class LexicographerResolver {
 
   @Query(() => [SenseHydratedDto], { name: 'hydratedSensesLex' })
   async getHydratedSensesLex(
+    @CurrentUserGraphQL() user: BasicUser,
     @Args('searchString') searchString: string
   ): Promise<SenseHydratedDto[]> {
     if (!searchString) {
       return [];
     }
+    console.log(
+      `findOrCreateAndKickoffRelatedEntries by ${user.email} for ${searchString} `
+    );
     const entries = await this.entriesService.findOrCreateAndKickoffRelatedEntries(
       searchString
     );

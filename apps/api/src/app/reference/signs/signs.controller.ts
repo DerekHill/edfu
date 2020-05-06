@@ -59,7 +59,9 @@ export class SignsController {
 
       await Promise.all([
         this.s3Service.upload(videoFile.buffer, s3Key).then(upload => {
-          console.log('Uploaded to S3 with key:', upload.Key);
+          console.log(
+            `New sign for ${user.email} uploaded to S3 with key ${upload.Key}`
+          );
         }),
         this.signsService.findSignByIdAndUpdate(sign._id, { s3KeyOrig: s3Key })
       ]);

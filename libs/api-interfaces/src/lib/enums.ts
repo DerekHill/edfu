@@ -38,7 +38,7 @@ export enum HttpErrorMessages {
   LOGIN__EMAIL_NOT_VERIFIED = 'Your email is not verified. Please check your inbox for instructions',
   LOGIN__GENERIC_ERROR = 'Something goes wrong',
   LOGIN__WRONG_PASSWORD = 'Password is wrong',
-  LOGIN__EMAIL_SENT_RECENTLY = 'Email already registered and confirmation email sent recently',
+  LOGIN__EMAIL_SENT_RECENTLY = 'Provided email already registered. Confirmation instructions sent to you',
   SIGNS__NO_FILE_ATTACHED = 'Sign video not attached',
   EDFU__GENERIC_ERROR = 'Something goes wrong'
 }

@@ -43,8 +43,8 @@ export class AuthService {
       return this.extractBasicUser(userFromDb);
     } else {
       throw new HttpException(
-        HttpErrorMessages.LOGIN__GENERIC_ERROR,
-        HttpStatus.UNAUTHORIZED
+        HttpErrorMessages.LOGIN__WRONG_PASSWORD,
+        HttpStatus.UNPROCESSABLE_ENTITY
       );
     }
   }

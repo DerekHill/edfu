@@ -14,7 +14,10 @@
                       formControlName="email"
                       placeholder="Email"
                       class="input"
-                      [ngClass]="{ 'is-danger': submitted && f.email.errors }"
+                      [ngClass]="{
+                        'is-danger':
+                          (submitted && f.email.errors) || isEmailError()
+                      }"
                     />
                     <span class="icon is-small is-left">
                       <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
@@ -36,7 +39,8 @@
                       placeholder="Password"
                       class="input"
                       [ngClass]="{
-                        'is-danger': submitted && f.password.errors
+                        'is-danger':
+                          (submitted && f.password.errors) || isPasswordError()
                       }"
                     />
                     <span class="icon is-small is-left">
@@ -55,7 +59,7 @@
                 <div class="field">
                   <p class="control ">
                     <button
-                      [disabled]="loading"
+                      [disabled]="loading || loginForm.invalid"
                       class="button is-primary is-fullwidth"
                     >
                       <span
@@ -64,9 +68,6 @@
                       ></span>
                       Login
                     </button>
-                  </p>
-                  <p *ngIf="error" class="help has-text-danger">
-                    {{ error }}
                   </p>
                 </div>
                 <div class="field">

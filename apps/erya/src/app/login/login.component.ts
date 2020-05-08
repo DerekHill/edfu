@@ -9,6 +9,9 @@ import { first } from 'rxjs/operators';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
 import { SIGNUP_COMPONENT_PATH } from '../constants';
+import { AlertChannelService } from '../alerts/alert-channel.service';
+import { AlertType } from '../alerts/alerts.typings';
+import { HttpErrorMessages } from '@edfu/api-interfaces';
 
 @Component({
   selector: 'edfu-login',
@@ -28,7 +31,8 @@ export class LoginComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
-    public library: FaIconLibrary
+    public library: FaIconLibrary,
+    private alerts: AlertChannelService
   ) {
     library.addIcons(faLock, faEnvelope);
     if (this.authService.currentUserValue) {
@@ -66,9 +70,22 @@ export class LoginComponent implements OnInit {
         },
         error => {
           console.log(error); // need to handle errors
-          this.error = error.statusText;
+          this.error = error.error.message;
+          this.alerts.push({
+            type: AlertType.danger,
+            text: `${this.error}`,
+            dismissible: true
+          });
           this.loading = false;
         }
       );
+  }
+
+  isPasswordError() {
+    return this.error === HttpErrorMessages.LOGIN__WRONG_PASSWORD;
+  }
+
+  isEmailError() {
+    return this.error === HttpErrorMessages.LOGIN__USER_NOT_FOUND;
   }
 }

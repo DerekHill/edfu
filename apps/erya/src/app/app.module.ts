@@ -30,6 +30,7 @@ import {
 import { SyncServerVersionInterceptor } from './shared/interceptors/sync-server-version.interceptor';
 import { SignupComponent } from './login/signup.component';
 import { ManageComponent } from './contribute/manage.component';
+import { AlertsModule } from './alerts/alerts.module';
 
 const appRoutes: Routes = [
   {
@@ -66,6 +67,7 @@ const appRoutes: Routes = [
     LoginModule,
     SearchModule,
     NavbarModule,
+    AlertsModule,
     RouterModule.forRoot(
       appRoutes
       //   { enableTracing: true } // <-- debugging purposes only

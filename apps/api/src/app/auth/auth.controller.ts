@@ -16,7 +16,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { ResponseSuccess } from '../common/dto/response.dto';
 import { UsersService } from '../users/users.service';
-import { IResponse, PRODUCTION_BASE_URL } from '@edfu/api-interfaces';
+import { HttpSuccsessMessages, IResponse, PRODUCTION_BASE_URL } from '@edfu/api-interfaces';
 import { HttpErrorMessages } from '@edfu/api-interfaces';
 
 @Controller('auth')
@@ -52,7 +52,7 @@ export class AuthController {
         newUser.email
       );
       if (sent) {
-        return new ResponseSuccess('REGISTRATION.USER_REGISTERED_SUCCESSFULLY');
+        return new ResponseSuccess(HttpSuccsessMessages.REGISTRATION__USER_REGISTERED_SUCCESSFULLY);
       } else {
         throw new HttpException(
           HttpErrorMessages.REGISTRATION__MAIL_NOT_SENT,

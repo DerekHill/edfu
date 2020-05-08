@@ -11,6 +11,8 @@ import {
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { AlertType } from '../alerts/alerts.typings';
+import { AlertChannelService } from '../alerts/alert-channel.service';
 
 const CURRENT_USER_KEY = 'currentUser';
 
@@ -18,7 +20,7 @@ const CURRENT_USER_KEY = 'currentUser';
 export class AuthService {
   private currentUserBs$: BehaviorSubject<BasicUser>;
   public currentUser$: Observable<BasicUser>;
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private alerts: AlertChannelService) {
     this.currentUserBs$ = new BehaviorSubject<BasicUser>(
       JSON.parse(localStorage.getItem(CURRENT_USER_KEY))
     );
@@ -57,5 +59,10 @@ export class AuthService {
   logout() {
     localStorage.removeItem(CURRENT_USER_KEY);
     this.currentUserBs$.next(null);
+    this.alerts.push({
+      type: AlertType.info,
+      text: `Logged out successfully`,
+      dismissible: true
+    });
   }
 }

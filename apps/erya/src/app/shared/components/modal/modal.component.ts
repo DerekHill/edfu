@@ -28,7 +28,6 @@ export class ModalComponent implements OnInit, OnDestroy {
     document.body.appendChild(this.element);
 
     this.element.addEventListener('click', el => {
-      console.log(el.target.className);
       if (el.target.className === 'modal-background' || el.target.className === 'modal-close is-large') {
         this.close();
       }
@@ -44,7 +43,6 @@ export class ModalComponent implements OnInit, OnDestroy {
 
   open(): void {
     this.element.firstChild.classList.add('is-active');
-    console.log(this.element.firstChild);
   }
 
   close(): void {

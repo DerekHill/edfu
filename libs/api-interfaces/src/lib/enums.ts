@@ -24,19 +24,23 @@ export enum LexicalCategory {
   other = 'other'
 }
 
+export enum HttpSuccsessMessages {
+  REGISTRATION__USER_REGISTERED_SUCCESSFULLY= 'Registered successfully'
+}
 export enum HttpErrorMessages {
-  REGISTRATION__USER_ALREADY_REGISTERED = 'REGISTRATION__USER_ALREADY_REGISTERED',
-  REGISTRATION__USER_NOT_REGISTERED = 'REGISTRATION__USER_NOT_REGISTERED',
-  REGISTRATION__MISSING_MANDATORY_PARAMETERS = 'REGISTRATION__MISSING_MANDATORY_PARAMETERS',
-  REGISTRATION__MAIL_NOT_SENT = 'REGISTRATION__MAIL_NOT_SENT',
-  REGISTRATION__GENERIC_ERROR = 'REGISTRATION__GENERIC_ERROR',
-  RESET_PASSWORD__EMAIL_SENT_RECENTLY = 'RESET_PASSWORD__EMAIL_SENT_RECENTLY',
-  LOGIN__USER_NOT_FOUND = 'LOGIN__USER_NOT_FOUND',
-  LOGIN__EMAIL_NOT_VERIFIED = 'LOGIN__EMAIL_NOT_VERIFIED',
-  LOGIN__GENERIC_ERROR = 'LOGIN__GENERIC_ERROR',
-  LOGIN__EMAIL_SENT_RECENTLY = 'LOGIN__EMAIL_SENT_RECENTLY',
-  SIGNS__NO_FILE_ATTACHED = 'LOGIN__EMAIL_SENT_RECENTLY',
-  EDFU__GENERIC_ERROR = 'EDFU__GENERIC_ERROR'
+  REGISTRATION__USER_ALREADY_REGISTERED = 'User already exist',
+  REGISTRATION__USER_NOT_REGISTERED = 'Something goes wrong. User not registered',
+  REGISTRATION__MISSING_MANDATORY_PARAMETERS = 'Please fill out all fields',
+  REGISTRATION__MAIL_NOT_SENT = 'Something goes wrong. Email was not sent.',
+  REGISTRATION__GENERIC_ERROR = 'Something goes wrong',
+  RESET_PASSWORD__EMAIL_SENT_RECENTLY = 'Emails with instructions is sent',
+  LOGIN__USER_NOT_FOUND = 'Email not found',
+  LOGIN__EMAIL_NOT_VERIFIED = 'Your email is not verified. Please check your inbox for instructions',
+  LOGIN__GENERIC_ERROR = 'Something goes wrong',
+  LOGIN__WRONG_PASSWORD = 'Password is wrong',
+  LOGIN__EMAIL_SENT_RECENTLY = 'Provided email already registered. Confirmation instructions was sent to you',
+  SIGNS__NO_FILE_ATTACHED = 'Sign video not attached',
+  EDFU__GENERIC_ERROR = 'Something goes wrong'
 }
 
 export enum HeadwordOrPhrase {

@@ -58,7 +58,7 @@
                 <div class="field">
                   <p class="control ">
                     <button
-                      [disabled]="loading"
+                      [disabled]="loading || signupForm.invalid"
                       class="button is-primary is-fullwidth"
                     >
                       <span

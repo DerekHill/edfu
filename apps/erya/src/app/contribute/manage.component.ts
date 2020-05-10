@@ -10,6 +10,8 @@ import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { faEye } from '@fortawesome/free-regular-svg-icons';
 import { ModalService } from '../shared/components/modal/modal.service';
+import { AlertType } from '../alerts/alerts.typings';
+import { AlertChannelService } from '../alerts/alert-channel.service';
 
 interface SignsResult {
   signs: SignDtoInterface[];
@@ -43,7 +45,8 @@ export class ManageComponent implements OnInit {
   constructor(
     private apollo: Apollo,
     private library: FaIconLibrary,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private alerts: AlertChannelService
   ) {
     library.addIcons(faEye, faTrashAlt);
   }
@@ -97,7 +100,14 @@ export class ManageComponent implements OnInit {
         }
       })
       .toPromise()
-      .then(res => console.log(res));
+      .then(res => {
+        this.alerts.push({
+          type: AlertType.success,
+          text: `Sign deleted successfully`,
+          dismissible: true
+        });
+        console.log(res)
+      });
   }
   private openModal(id: string) {
     this.modalService.open(id);

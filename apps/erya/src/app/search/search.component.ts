@@ -62,6 +62,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
   routeOxIdLower$: Observable<string>;
   currentOxIdLower: string;
   focusSearch = true;
+  showedSigns = 1;
 
   public senseCount = SenseCount.zero;
 
@@ -228,6 +229,8 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
       .then((res: ApolloQueryResult<SenseSignsResult>) => {
         this.signsBs$.next(this.filterOutDeletedSigns(res.data.senseSigns));
       });
+
+    this.showedSigns = 1
   }
 
   clearSearchField() {
@@ -251,5 +254,9 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
     senseSigns: SenseSignDtoInterface[]
   ): SenseSignDtoInterface[] {
     return senseSigns.filter(senseSign => senseSign.sign);
+  }
+
+  showAllSigns(allSigns: number) {
+    this.showedSigns = allSigns;
   }
 }

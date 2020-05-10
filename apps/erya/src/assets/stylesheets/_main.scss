@@ -157,3 +157,13 @@ input.sense-input {
   line-height: 30px;
   display: inline-block;
 }
+.media.manage-list {
+  margin-top: 0;
+  padding-top: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  &:nth-child(odd) {
+    background-color: $white-ter;
+  }
+}

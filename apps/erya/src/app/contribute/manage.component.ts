@@ -6,6 +6,12 @@ import { ApolloQueryResult } from 'apollo-client';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SEARCH_COMPONENT_PATH, CONTRIBUTE_COMPONENT_PATH } from '../constants';
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faEye } from '@fortawesome/free-regular-svg-icons';
+import { ModalService } from '../shared/components/modal/modal.service';
+import { AlertType } from '../alerts/alerts.typings';
+import { AlertChannelService } from '../alerts/alert-channel.service';
 
 interface SignsResult {
   signs: SignDtoInterface[];
@@ -36,7 +42,14 @@ const DeleteSignMutation = gql`
   templateUrl: './manage.component.html'
 })
 export class ManageComponent implements OnInit {
-  constructor(private apollo: Apollo) {}
+  constructor(
+    private apollo: Apollo,
+    private library: FaIconLibrary,
+    private modalService: ModalService,
+    private alerts: AlertChannelService
+  ) {
+    library.addIcons(faEye, faTrashAlt);
+  }
 
   signs$: Observable<SignDtoInterface[]>;
   signsBs$: BehaviorSubject<SignDtoInterface[]>;
@@ -45,6 +58,8 @@ export class ManageComponent implements OnInit {
 
   searchComponentPath = `/${SEARCH_COMPONENT_PATH}`;
   contributeComponentPath = `/${CONTRIBUTE_COMPONENT_PATH}`;
+
+  signToDelete: SignDtoInterface;
 
   ngOnInit() {
     this.signsBs$ = new BehaviorSubject([]);
@@ -61,8 +76,14 @@ export class ManageComponent implements OnInit {
   }
 
   onDeleteButtonClick(sign: SignDtoInterface) {
-    this.deleteSignRemotely(sign._id);
-    this.deleteSignLocally(sign._id);
+    this.openModal('delete-sign-modal');
+    this.signToDelete = sign;
+  }
+
+  deleteSign() {
+    this.deleteSignRemotely(this.signToDelete._id);
+    this.deleteSignLocally(this.signToDelete._id);
+    this.closeModal();
   }
 
   private deleteSignLocally(signId: string) {
@@ -79,6 +100,20 @@ export class ManageComponent implements OnInit {
         }
       })
       .toPromise()
-      .then(res => console.log(res));
+      .then(res => {
+        this.alerts.push({
+          type: AlertType.success,
+          text: `Sign deleted successfully`,
+          dismissible: true
+        });
+        console.log(res)
+      });
+  }
+  private openModal(id: string) {
+    this.modalService.open(id);
+  }
+
+  closeModal() {
+    this.modalService.close('delete-sign-modal');
   }
 }

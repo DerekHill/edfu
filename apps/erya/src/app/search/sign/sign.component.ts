@@ -7,31 +7,40 @@ import {
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { CDN_URI } from '../../constants';
 import { Meta, Title } from '@angular/platform-browser';
+import { OxIdThesaurusPipe } from '../../shared/pipes/ox-id-thesaurus.pipe';
+import { RemoveUnderscoresPipe } from '../../shared/pipes/remove-underscores.pipe';
 
 @Component({
   selector: 'edfu-sign',
-  templateUrl: './sign.component.html'
+  templateUrl: './sign.component.html',
+  providers: [OxIdThesaurusPipe, RemoveUnderscoresPipe]
 })
 export class SignComponent implements OnInit {
   public mediaUrl: string;
   public _sign: SignDtoInterface;
 
   @Input() sense: SenseHydratedDtoInterface;
-  @Input() selectedSense: string;
+  @Input() selectedSense: SenseHydratedDtoInterface;
 
   constructor(
     private deviceService: DeviceDetectorService,
     private titleService: Title,
-    private metaTagService: Meta
+    private metaTagService: Meta,
+    private oxIdThesaurus: OxIdThesaurusPipe,
+    private removeUnderscores: RemoveUnderscoresPipe
   ) {}
 
   ngOnInit() {
+    const signWord = this.removeUnderscores.transform(
+      this.oxIdThesaurus.transform(this.selectedSense)
+    );
+
     this.titleService.setTitle(
-      `${this.selectedSense} | Sign for ${this.selectedSense}`
+      `${signWord} | Sign for ${signWord}`
     );
     this.metaTagService.updateTag({
       name: 'description',
-      content: `Makaton Sign for ${this.selectedSense}`
+      content: `Makaton Sign for ${signWord} - ${this.selectedSense.definition}`
     });
   }
 

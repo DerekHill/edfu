@@ -65,7 +65,7 @@
                     class="column is-full"
                     *ngFor="let senseSign of signs | slice: 0:showedSigns"
                     [sign]="senseSign.sign"
-                    [selectedSense]="selectedSense | oxIdThesaurus | removeUnderscores"
+                    [selectedSense]="selectedSense"
                     [sense]="explicitlySelectedSense"
                   ></edfu-sign>
                 </div>

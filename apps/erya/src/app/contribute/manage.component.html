@@ -1,22 +1,62 @@
-<div *ngIf="(signsBs$ | async).length; else elseBlock">
-  <div *ngFor="let sign of signsBs$ | async">
-    <b>{{ sign.senseSigns[0].sense.ownEntryOxId }}</b>
-    <p>Created {{ sign._id | idToDate | timeAgo }}</p>
-    <a
-      [routerLink]="[
-        searchComponentPath,
-        sign.senseSigns[0].sense.ownEntryOxId
-      ]"
-      [queryParams]="{ senseId: sign.senseSigns[0].senseId }"
-    >
-      View all signs for {{ sign.senseSigns[0].sense.ownEntryOxId }}
-    </a>
-    <button (click)="onDeleteButtonClick(sign)">Delete sign</button>
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-two-thirds">
+        <div *ngIf="(signsBs$ | async).length; else elseBlock">
+          <div class="media manage-list" *ngFor="let sign of signsBs$ | async">
+            <div class="media-content">
+              <div class="content">
+                <div class="columns  is-vcentered">
+                  <div class="column">
+                    <strong>{{ sign.senseSigns[0].sense.ownEntryOxId }}</strong
+                    ><span class="has-text-grey">
+                      • created {{ sign._id | idToDate | timeAgo }} • </span
+                    ><edfu-likes-counter
+                      [sense]="sign.senseSigns[0].sense"
+                      [signId]="sign._id"
+                    ></edfu-likes-counter>
+                  </div>
+                  <div class="column">
+                    <div class="buttons is-pulled-right">
+                      <a
+                        class="button is-info"
+                        [routerLink]="[
+                          searchComponentPath,
+                          sign.senseSigns[0].sense.ownEntryOxId
+                        ]"
+                        [queryParams]="{ senseId: sign.senseSigns[0].senseId }"
+                      >
+                        <fa-icon
+                          class="svg-icon-left"
+                          [icon]="['far', 'eye']"
+                        ></fa-icon>
+                        View signs
+                      </a>
+                      <button
+                        class="button is-danger"
+                        (click)="onDeleteButtonClick(sign)"
+                      >
+                        <span class="icon"
+                          ><fa-icon [icon]="['fas', 'trash-alt']"></fa-icon
+                        ></span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <nav class="level is-mobile">
+                <div class="level-left"></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+        <ng-template #elseBlock
+          >You have no signs.
+          <a [routerLink]="[contributeComponentPath]">
+            Upload your first sign
+          </a>
+        </ng-template>
+      </div>
+    </div>
   </div>
-</div>
-<ng-template #elseBlock
-  >You have no signs.
-  <a [routerLink]="[contributeComponentPath]">
-    Upload your first sign
-  </a>
-</ng-template>
+</section>

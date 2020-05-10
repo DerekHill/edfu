@@ -6,6 +6,9 @@ import { ApolloQueryResult } from 'apollo-client';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SEARCH_COMPONENT_PATH, CONTRIBUTE_COMPONENT_PATH } from '../constants';
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faEye } from '@fortawesome/free-regular-svg-icons';
 
 interface SignsResult {
   signs: SignDtoInterface[];
@@ -36,7 +39,9 @@ const DeleteSignMutation = gql`
   templateUrl: './manage.component.html'
 })
 export class ManageComponent implements OnInit {
-  constructor(private apollo: Apollo) {}
+  constructor(private apollo: Apollo, private library: FaIconLibrary) {
+    library.addIcons(faEye, faTrashAlt);
+  }
 
   signs$: Observable<SignDtoInterface[]>;
   signsBs$: BehaviorSubject<SignDtoInterface[]>;

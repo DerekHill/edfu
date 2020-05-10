@@ -9,9 +9,10 @@ import { SharedModule } from '../shared/shared.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ManageComponent } from './manage.component';
 import { RouterModule } from '@angular/router';
+import { LikesCounterComponent } from './likes-counter/likes-counter.component';
 
 @NgModule({
-  declarations: [ContributeComponent, ManageComponent],
+  declarations: [ContributeComponent, ManageComponent, LikesCounterComponent],
   imports: [
     CommonModule,
     FormsModule,

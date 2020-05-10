@@ -60,3 +60,14 @@
     </div>
   </div>
 </section>
+<edfu-modal id="delete-sign-modal">
+  <h3 class="title is-size-4 has-text-centered has-text-weight-medium">
+    Are you sure?
+  </h3>
+  <div class="buttons">
+    <button class="button is-danger is-fullwidth" (click)="deleteSign()">
+      Yes, delete
+    </button>
+    <button class="button is-fullwidth" (click)="closeModal()">Cancel</button>
+  </div>
+</edfu-modal>

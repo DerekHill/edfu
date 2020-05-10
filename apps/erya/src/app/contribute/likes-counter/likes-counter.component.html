@@ -1,1 +1,7 @@
-<span class="has-text-grey">likes: {{ likeCountBs$ | async }}</span>
+<span class="has-text-grey"
+  >{{ likeCountBs$ | async }}
+  <span [ngPlural]="likeCountBs$ | async">
+    <ng-template ngPluralCase="=1">like</ng-template>
+    <ng-template ngPluralCase="other">likes</ng-template>
+  </span></span
+>

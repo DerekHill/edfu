@@ -81,8 +81,8 @@
                       </span>
                       {{ signs.length - 1 }} more
                       <span [ngPlural]="signs.length - 1">
-                        <ng-template ngPluralCase="=1">sign</ng-template>
-                        <ng-template ngPluralCase="other">signs</ng-template>
+                        <ng-template ngPluralCase="=1">variant</ng-template>
+                        <ng-template ngPluralCase="other">variants</ng-template>
                       </span>
                       for
                       <strong>{{
@@ -93,7 +93,7 @@
                       class="button is-primary is-outlined"
                       (click)="showAllSigns(signs.length)"
                     >
-                      Show all signs
+                      Show all variants
                     </button>
                   </div>
                   <br />

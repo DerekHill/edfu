@@ -6,6 +6,7 @@ import {
 } from '@edfu/api-interfaces';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { CDN_URI } from '../../constants';
+import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'edfu-sign',
@@ -16,10 +17,23 @@ export class SignComponent implements OnInit {
   public _sign: SignDtoInterface;
 
   @Input() sense: SenseHydratedDtoInterface;
+  @Input() selectedSense: string;
 
-  constructor(private deviceService: DeviceDetectorService) {}
+  constructor(
+    private deviceService: DeviceDetectorService,
+    private titleService: Title,
+    private metaTagService: Meta
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.titleService.setTitle(
+      `${this.selectedSense} | Sign for ${this.selectedSense}`
+    );
+    this.metaTagService.updateTag({
+      name: 'description',
+      content: `Makaton Sign for ${this.selectedSense}`
+    });
+  }
 
   @Input()
   set sign(sign: SignDtoInterface) {

@@ -1,5 +1,7 @@
 <edfu-player [mediaUrl]="mediaUrl"></edfu-player>
-<p class="has-text-centered is-size-5 has-text-grey" *ngIf="sign.mnemonic">{{sign.mnemonic}}</p>
+<p class="has-text-centered is-size-5 has-text-grey" *ngIf="sign.mnemonic">
+  {{ sign.mnemonic }}
+</p>
 <figure class="has-likes has-text-left">
   <edfu-like [signId]="sign._id" [sense]="sense"></edfu-like>
 </figure>

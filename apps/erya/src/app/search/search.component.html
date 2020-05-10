@@ -63,10 +63,41 @@
                 >
                   <edfu-sign
                     class="column is-full"
-                    *ngFor="let senseSign of signs"
+                    *ngFor="let senseSign of signs | slice: 0:showedSigns"
                     [sign]="senseSign.sign"
                     [sense]="explicitlySelectedSense"
                   ></edfu-sign>
+                </div>
+                <div class="columns" *ngIf="signsBs$ | async as signs">
+                  <div
+                    class="column has-text-centered"
+                    *ngIf="signs.length > 1 && showedSigns === 1"
+                  >
+                    <p>
+                      There
+                      <span [ngPlural]="signs.length - 1">
+                        <ng-template ngPluralCase="=1">is</ng-template>
+                        <ng-template ngPluralCase="other">are</ng-template>
+                      </span>
+                      {{ signs.length - 1 }} more
+                      <span [ngPlural]="signs.length - 1">
+                        <ng-template ngPluralCase="=1">sign</ng-template>
+                        <ng-template ngPluralCase="other">signs</ng-template>
+                      </span>
+                      for
+                      <strong>{{
+                        selectedSense | oxIdThesaurus | removeUnderscores
+                      }}</strong>
+                    </p>
+                    <button
+                      class="button is-primary is-outlined"
+                      (click)="showAllSigns(signs.length)"
+                    >
+                      Show all signs
+                    </button>
+                  </div>
+                  <br />
+                  <br />
                 </div>
               </div>
             </ng-container>

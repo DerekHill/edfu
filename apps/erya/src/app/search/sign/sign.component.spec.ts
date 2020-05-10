@@ -1,7 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { SignComponent } from './sign.component';
 import { ObjectId } from 'bson';
-import { SignDtoInterface, Transcoding } from '@edfu/api-interfaces';
+import {
+  DictionaryOrThesaurus,
+  LexicalCategory,
+  SenseHydratedDtoInterface,
+  SignDtoInterface,
+  Transcoding
+} from '@edfu/api-interfaces';
 import { MatListModule } from '@angular/material/list';
 import { DeviceDetectorModule } from 'ngx-device-detector';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -37,9 +43,26 @@ describe('SignComponent', () => {
       mnemonic: 'remember me',
       s3KeyOrig: '1234.mp4'
     };
+
+    const senseData: SenseHydratedDtoInterface = {
+      ownEntryHomographC: 0,
+      oxId: 'good_morning',
+      homographC: 0,
+      ownEntryOxId: 'good_morning',
+      senseId: 'm_en_gbus0423120.004',
+      lexicalCategory: LexicalCategory.interjection,
+      apiSenseIndex: 0,
+      example: null,
+      definition:
+        'expressing good wishes on meeting or parting during the morning.',
+      associationType: DictionaryOrThesaurus.dictionary,
+      similarity: 1,
+      signs: []
+    };
     fixture = TestBed.createComponent(SignComponent);
     component = fixture.componentInstance;
     component.sign = signData;
+    component.selectedSense = senseData;
     fixture.detectChanges();
   });
 

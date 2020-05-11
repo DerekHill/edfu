@@ -42,7 +42,13 @@ export class NavbarComponent {
   }
 
   navigateTo(route) {
-    this.router.navigate([route]).then(() => (this.isMenuOpen = false));
+    let returnUrlParams = {};
+    if (route === this.loginComponentPath) {
+      returnUrlParams = { returnUrl: this.router.url };
+    }
+    this.router
+      .navigate([route], { queryParams: returnUrlParams })
+      .then(() => (this.isMenuOpen = false));
   }
 
   logout() {

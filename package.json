@@ -68,7 +68,7 @@
     "apollo-angular": "^1.9.1",
     "apollo-angular-link-http": "^1.10.0",
     "apollo-cache-inmemory": "^1.6.5",
-    "apollo-client": "^2.6.8",
+    "apollo-client": "^2.6.9",
     "apollo-link": "^1.2.14",
     "apollo-link-error": "^1.1.12",
     "apollo-server-express": "^2.13.0",

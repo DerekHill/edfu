@@ -74,7 +74,7 @@
     "apollo-server-express": "^2.13.0",
     "aws-sdk": "^2.672.0",
     "bcryptjs": "^2.4.3",
-    "bull": "^3.13.0",
+    "bull": "^3.20.0",
     "bull-arena": "^2.8.1",
     "bulma": "^0.8.2",
     "class-transformer": "^0.2.3",
